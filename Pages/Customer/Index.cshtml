@@ -1,0 +1,59 @@
+﻿@page
+@model Estimator.IndexModel
+
+@{
+    ViewData["Title"] = "Заказчики";
+}
+
+<h1>Заказчики:</h1>
+
+<p>
+    <a asp-page="Create">Создать</a>
+</p>
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Поиск по имени:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Поиск" class="btn btn-primary" /> |
+            <a asp-page="./Index">Полный список</a>
+        </p>
+    </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+                    @Html.DisplayNameFor(model => model.Customer[0].Name)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer[0].INN)
+                <!-- https://www.rusprofile.ru/search?query= -->
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Customer)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <!-- @Html.DisplayFor(modelItem => item.INN)-->
+                    <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.INN) target="_blank">@Html.DisplayFor(modelItem => item.INN)</a>
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.CustomerID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.CustomerID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.CustomerID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

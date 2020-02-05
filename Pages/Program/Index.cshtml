@@ -1,0 +1,105 @@
+﻿@page "{id:int?}"
+@model Estimator.Pages.Program.IndexModel
+
+@{
+    ViewData["Title"] = "Программы испытаний";
+}
+
+<h1>Программы испытаний</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Наименование</th>
+            <th>Описание</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProgramData.Programs)
+        {
+            string selectedRow = "";
+            if (item.TestProgramID == Model.TestProgramID)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-page="./Index" asp-route-id="@item.TestProgramID">Select</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.TestProgramID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.TestProgramID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.TestProgramID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@if (Model.ProgramData.Elements != null)
+{
+    <h3>Классы ЭКБ выбранной программы</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Наименование типа</th>
+            <th>Порядок</th>
+        </tr>
+
+        @foreach (var item in Model.ProgramData.Elements)
+        {
+            string selectedRow = "";
+            if (item.ElementTypeID == Model.ElementTypeID)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    <a asp-page="./Index" asp-route-elementTypeID="@item.ElementTypeID">Select</a>
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Order
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+    @if (Model.ProgramData.ChainItems != null)
+    {
+        <h3>
+            Цепочка испытаний для выбранногго типа ЭКБ
+        </h3>
+        <table class="table">
+            <tr>
+                <th>Наименование</th>
+                <th>Код</th>
+            </tr>
+            @foreach (var item in Model.ProgramData.ChainItems)
+            {
+                <tr>
+                    <td>
+                        @item.Operation.Name
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Operation.Code)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+}

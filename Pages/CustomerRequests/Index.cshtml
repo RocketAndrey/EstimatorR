@@ -1,0 +1,103 @@
+﻿@page
+@model Estimator.Pages.CustomerRequests.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Создать заявку</a>
+</p>
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Искать:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Поиск" class="btn btn-primary" /> |
+            <a asp-page="./Index">Очистить поиск</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestNumber)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+
+                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestDate)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerRequestList[0].Description)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.ProgramSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+
+                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].ProgramName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.CustomerSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+
+                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerName)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CustomerRequestList)
+        {
+            <tr>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.RequestNumber)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProgramName)
+                </td>
+                <td>
+                    <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
+                    <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
+                </td>
+                <td>
+
+                    <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.CustomerRequestList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.CustomerRequestList.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.CustomerRequestList.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Назад
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.CustomerRequestList.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Вперед
+</a>

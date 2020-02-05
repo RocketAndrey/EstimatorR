@@ -1,0 +1,117 @@
+﻿@page
+@model Estimator.Pages.CustomerRequests.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<!--<h1>Edit</h1>-->
+
+<h4>Редактирование заявки</h4>
+<hr />
+<div class="row">
+    
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="CustomerRequest.CustomerRequestID" />
+        <table class="table">
+            <tr>
+                <td>
+
+                    <label asp-for="CustomerRequest.RequestNumber" class="control-label"></label>
+
+                </td>
+                <td>
+
+                    <input asp-for="CustomerRequest.RequestNumber" class="form-control" />
+                    <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
+
+                </td>
+                <td>
+
+                    <label asp-for="CustomerRequest.RequestDate" class="control-label"></label>
+
+
+                </td>
+                <td>
+
+                    <input asp-for="CustomerRequest.RequestDate" class="form-control" />
+                    <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="CustomerRequest.Program.Name" class="control-label"></label>
+                </td>
+                <td>
+                    <select asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID" disabled="disabled"></select>
+                    <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
+                </td>
+                <td><label asp-for="CustomerRequest.Customer.Name" class="control-label"></label></td>
+                <td>
+                    <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+                    <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <label asp-for="CustomerRequest.Description" class="control-label"></label>
+
+
+                </td>
+                <td colspan="3">
+
+                    <textarea asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3"></textarea>
+                    <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
+
+                </td>
+            </tr>
+
+        </table>
+        <h4>Перечень ЭКБ:</h4>
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount)</th>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].ItemCount)</th>
+            </tr>
+
+            @for (int i = 0; i < Model.AssignedElementsList.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="AssignedElementsList[i].RequestElementTypeID" />
+                        @Html.DisplayFor(model => model.AssignedElementsList[i].Name)
+                    </td>
+                    <td>
+                        <input asp-for="AssignedElementsList[i].BatchCount" class="form-control" />
+                        <span asp-validation-for="AssignedElementsList[i].BatchCount" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="AssignedElementsList[i].ItemCount" class="form-control" />
+                        <span asp-validation-for="AssignedElementsList[i].ItemCount" class="text-danger"></span>
+
+                    </td>
+                </tr>
+            }
+        </table>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+
+
+    </form>
+  
+</div>
+
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
