@@ -7,9 +7,6 @@
 
 <h1>Программы испытаний</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 
 <table class="table">
     <thead>
@@ -29,16 +26,13 @@
             }
             <tr class="@selectedRow">
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-page="./Index" asp-route-id="@item.TestProgramID">@Html.DisplayFor(modelItem => item.Name)</a>   
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-page="./Index" asp-route-id="@item.TestProgramID">Select</a> |
-                    <a asp-page="./Edit" asp-route-id="@item.TestProgramID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.TestProgramID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.TestProgramID">Delete</a>
+                 
                 </td>
             </tr>
         }
@@ -51,7 +45,6 @@
     <h3>Классы ЭКБ выбранной программы</h3>
     <table class="table">
         <tr>
-            <th></th>
             <th>Наименование типа</th>
             <th>Порядок</th>
         </tr>
@@ -65,11 +58,9 @@
             }
             <tr class="@selectedRow">
                 <td>
-                    <a asp-page="./Index" asp-route-elementTypeID="@item.ElementTypeID">Select</a>
+                    <a asp-page="./Index" asp-route-elementTypeID="@item.ElementTypeID"> @item.Name</a>
                 </td>
-                <td>
-                    @item.Name
-                </td>
+      
                 <td>
                     @item.Order
                 </td>
@@ -93,7 +84,8 @@
             {
                 <tr>
                     <td>
-                        @item.Operation.Name
+ 
+                        <a asp-page="./Edit" asp-route-testChainItemID="@item.TestChainItemID"> @item.Operation.Name</a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Operation.Code)

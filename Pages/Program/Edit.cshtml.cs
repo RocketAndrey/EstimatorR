@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Estimator.Data;
 using Estimator.Models;
+using Estimator.Models.ViewModels;
 
 namespace Estimator.Pages.Program
 {
@@ -19,23 +20,50 @@ namespace Estimator.Pages.Program
         {
             _context = context;
         }
-
-        [BindProperty]
+      
         public TestProgram TestProgram { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public TestChainItem TestChainItem { get; set; }
+        public List<TestActionView> TestActionViewList { get; set; }
+        public async Task<IActionResult> OnGetAsync(int? testChainItemID)
         {
-            if (id == null)
+            if (testChainItemID == null)
             {
                 return NotFound();
             }
 
-            TestProgram = await _context.TestPrograms.FirstOrDefaultAsync(m => m.TestProgramID == id);
+            TestChainItem = await _context.TestChainItems
+                .Include(e=>e.Operation)
+                .Include(e=>e.TestActions)
+                    .ThenInclude(e=>e.Qualification)
+                .Include(e=>e.ElementType)
+                     .ThenInclude(e => e.Program)
+                .FirstOrDefaultAsync(m => m.TestChainItemID == testChainItemID);
 
-            if (TestProgram == null)
-            {
-                return NotFound();
-            }
+            TestActionViewList = new List<TestActionView>();
+
+            
+                foreach (var item in TestChainItem.TestActions)
+                {
+                TestActionViewList.Add(new TestActionView
+                    {
+                        TestChainItemID=item.TestChainItemID,
+                        TestActionID=item.TestActionID,
+                        QualificationName=item.Qualification.Name,
+                        BatchLabor=item.BatchLabor,
+                        ItemLabor=item.ItemLabor,
+                        KitLabor=item.KitLabor
+                    });
+                }
+
+        
+            ///  TestProgram = await _context.TestPrograms.FirstOrDefaultAsync(m => m.TestProgramID == id);
+
+            // /  if (TestProgram == null)
+            // {
+            //   return NotFound();
+            //  }
             return Page();
         }
 

@@ -32,6 +32,10 @@ namespace Estimator.Models
         /// трудоёмкость в минутах для одного изделия
         /// </summary>
         public int ItemLabor { get; set; }
+        /// <summary>
+        /// Трудоемкость изготовления оснастки (для операций изготовления оснастки)
+        /// </summary>
+        public int KitLabor { get; set; }
 
     }
 }
