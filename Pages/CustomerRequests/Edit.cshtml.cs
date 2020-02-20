@@ -13,9 +13,13 @@ using Estimator.Models.ViewModels;
 
 namespace Estimator.Pages.CustomerRequests
 {
-    public class EditModel :CustomerRequestPageModel
+    public class EditModel :PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
+
+
+        public List<AssignedRequestElementType> AssignedElementsList;
+        public List<RequestOperationGroupView> RequestOperationGroupViews;
 
         public EditModel(Estimator.Data.EstimatorContext context)
         {
@@ -40,12 +44,11 @@ namespace Estimator.Pages.CustomerRequests
                     .ThenInclude(c=>c.ElementType)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
-            PopulateAssignedElementTypes(_context, CustomerRequest);
-            //Сортировка
-          
-
-           // RequestElementTypes = await rET.ToListAsync();
-
+            // запролняем типы элементов
+            PopulateAssignedElementTypes( CustomerRequest);
+            //Заполняем операции
+            PopulateOperations(CustomerRequest);
+        
             if (CustomerRequest == null)
             {
                 return NotFound();
@@ -59,38 +62,139 @@ namespace Estimator.Pages.CustomerRequests
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(AssignedRequestElementType[] elementTypes)
+        public async Task<IActionResult> OnPostAsync(int? id, AssignedRequestElementType[] elementTypes, RequestOperationGroupView[] requestOperationGroupViews)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            foreach (var e in elementTypes)
+            if (id==null)
             {
-              //  AssignedElementsList[]
+                return NotFound();
             }
+            int i = elementTypes.Count();
 
-            _context.Attach(CustomerRequest).State = EntityState.Modified;
+            //получаем текущую заявку
+            var requestToUpdate= await _context.CustomerRequests
+                .Include(c => c.Customer)
+                .Include(c => c.Program)
+                    .ThenInclude(c => c.ElementntTypes)
+                .Include(c => c.RequestElementTypes)
+                    .ThenInclude(c => c.ElementType)
+                  .Include(c => c.RequestElementTypes)
+                    .ThenInclude(c => c.RequestOperations)
+                        .ThenInclude(c=>c.TestChainItem)
+                .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
-            try
+            if (requestToUpdate==null)
             {
+                // заявка не найдена
+                return NotFound();
+            }
+            // Обновляет извлеченную сущность CustomerRequest, используя значения из связывателя модели. TryUpdateModel позволяет предотвратить чрезмерную передачу данных.
+            if (await TryUpdateModelAsync<CustomerRequest>(
+                requestToUpdate,
+                "CustomerRequest",
+                i => i.RequestNumber,
+                i => i.RequestDate,
+                i => i.CustomerID,
+                 i => i.Description)
+                )
+            {
+                UpdateAssignedElementTypes(elementTypes, requestToUpdate);
+                UpdateRequestOperations(requestOperationGroupViews, requestToUpdate);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!CustomerRequestExists(CustomerRequest.CustomerRequestID))
+                // не получилось обновить 
+                PopulateAssignedElementTypes( requestToUpdate);
+                return Page();
+            }
+            
+
+               
+        }
+       
+        public void PopulateAssignedElementTypes( CustomerRequest customerRequest)
+        {
+
+            IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID);
+            //сортируем
+            elementTypesIQ = elementTypesIQ.OrderBy(r => r.ElementType.Order);
+            AssignedElementsList = new List<AssignedRequestElementType>();
+            if (elementTypesIQ != null)
+            {
+                foreach (var item in elementTypesIQ)
                 {
-                    return NotFound();
+                    AssignedElementsList.Add(new AssignedRequestElementType
+                    {
+                        RequestElementTypeID = item.RequestElementTypeID,
+                        Name = item.ElementType.Name,
+                        BatchCount = item.BatchCount,
+                        ItemCount = item.ItemCount
+                    });
                 }
-                else
+
+            }
+
+
+        }
+        /// <summary>
+        /// операции текущей заявки
+        /// </summary>
+        /// <param name="customerRequest"></param>
+        public void PopulateOperations(CustomerRequest customerRequest)
+           
+        {
+            string query = "SELECT [Operation].OperationID,[Operation].Name, [IsExecute],[ExecuteCount],[TestChainItem].[Order] " +
+                            "FROM[RequestOperation],[TestChainItem],[Operation],[dbo].[RequestElementType] WHERE[RequestOperation].[TestChainItemID]= [TestChainItem].TestChainItemID "+
+                                "and[dbo].[Operation].OperationID= [TestChainItem].OperationID and[RequestOperation].RequestElementTypeID=[dbo].[RequestElementType].RequestElementTypeID " +
+                                "and [RequestElementType].CustomerRequestID ={0}  GROUP BY[Operation].OperationID, [Operation].Name,[ExecuteCount],   [IsExecute],[TestChainItem].[Order] ORDER BY[TestChainItem].[Order]";
+            RequestOperationGroupViews = _context.RequestOperationGroupViews.FromSqlRaw(query, customerRequest.CustomerRequestID).ToList();
+
+        }
+        public void UpdateAssignedElementTypes(AssignedRequestElementType[] elementTypes, CustomerRequest customerRequestToUpdate)
+        {
+          //  IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequestToUpdate.CustomerRequestID);
+            foreach (var element in customerRequestToUpdate.RequestElementTypes)
+            {
+                foreach (var updElement in elementTypes)
                 {
-                    throw;
+                    if (element.RequestElementTypeID == updElement.RequestElementTypeID)
+                    {
+                        element.BatchCount = updElement.BatchCount;
+                        element.ItemCount = updElement.ItemCount;
+                        element.KitCount = updElement.MissingKitCount;
+                    }
                 }
             }
 
-            return RedirectToPage("./Index");
         }
+        public void UpdateRequestOperations(RequestOperationGroupView[] operationTypes, CustomerRequest customerRequestToUpdate)
+        {
+          //  IQueryable<RequestElementType> retIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequestToUpdate.CustomerRequestID)
+            //    .Include(s => s.RequestOperations);
 
+                                                     
+            foreach (var element in customerRequestToUpdate.RequestElementTypes)
+            {
+                foreach (var operation in element.RequestOperations)
+                {
+                    foreach (var updElement in operationTypes)
+                    {
+                        if (operation.TestChainItem.OperationID == updElement.OperationID)
+                        {
+                            operation.IsExecute = updElement.IsExecute;
+                            operation.ExecuteCount = updElement.ExecuteCount;
+                        }
+                    }
+                }
+             
+            }
+
+        }
         private bool CustomerRequestExists(int id)
         {
             return _context.CustomerRequests.Any(e => e.CustomerRequestID == id);

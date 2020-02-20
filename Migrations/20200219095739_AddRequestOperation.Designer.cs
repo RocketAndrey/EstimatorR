@@ -4,14 +4,16 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200219095739_AddRequestOperation")]
+    partial class AddRequestOperation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,34 +207,6 @@ namespace Estimator.Migrations
                     b.ToTable("RequestElementType");
                 });
 
-            modelBuilder.Entity("Estimator.Models.RequestOperation", b =>
-                {
-                    b.Property<int>("RequestOperationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ExecuteCount")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsExecute")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RequestElementTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TestChainItemID")
-                        .HasColumnType("int");
-
-                    b.HasKey("RequestOperationID");
-
-                    b.HasIndex("RequestElementTypeID");
-
-                    b.HasIndex("TestChainItemID");
-
-                    b.ToTable("RequestOperation");
-                });
-
             modelBuilder.Entity("Estimator.Models.TestAction", b =>
                 {
                     b.Property<int>("TestActionID")
@@ -355,19 +329,6 @@ namespace Estimator.Migrations
                     b.HasOne("Estimator.Models.ElementType", "ElementType")
                         .WithMany()
                         .HasForeignKey("ElementTypeID");
-                });
-
-            modelBuilder.Entity("Estimator.Models.RequestOperation", b =>
-                {
-                    b.HasOne("Estimator.Models.RequestElementType", "RequestElementType")
-                        .WithMany("RequestOperations")
-                        .HasForeignKey("RequestElementTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Estimator.Models.TestChainItem", "TestChainItem")
-                        .WithMany()
-                        .HasForeignKey("TestChainItemID");
                 });
 
             modelBuilder.Entity("Estimator.Models.TestAction", b =>

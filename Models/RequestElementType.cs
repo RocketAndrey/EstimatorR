@@ -20,6 +20,9 @@ namespace Estimator.Models
 
         public int BatchCount { get; set; }
         public int ItemCount { get; set; }
+        public int KitCount { get; set; }
         public int Order { get; set; }
+
+        public IEnumerable<RequestOperation > RequestOperations  { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Estimator.Models;
+using Estimator.Models.ViewModels;
 
 namespace Estimator.Data
 {
@@ -27,6 +28,7 @@ namespace Estimator.Data
         public DbSet<Estimator.Models.Qualification> Qualifications { get; set; }
         public DbSet<Estimator.Models.TestChainItem> TestChainItems { get; set; }
         public DbSet<Estimator.Models.RequestElementType> RequestElementTypes { get; set; }
+        public DbSet<Estimator.Models.ViewModels.RequestOperationGroupView> RequestOperationGroupViews { get; set; }
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>().ToTable("Customer");
@@ -39,10 +41,13 @@ namespace Estimator.Data
             //Добавляем цепочки испытаний (миграция AddTestChains)
           
             modelBuilder.Entity<TestAction>().ToTable("TestAction");
+            modelBuilder.Entity<RequestOperationGroupView>().HasNoKey();
+
             modelBuilder.Entity<Qualification>().ToTable("Qualification");
             
             modelBuilder.Entity<TestChainItem>().ToTable("TestChainItem");
             modelBuilder.Entity<RequestElementType>().ToTable("RequestElementType");
+            modelBuilder.Entity<RequestOperation>().ToTable("RequestOperation");
 
 
         }

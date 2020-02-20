@@ -50,6 +50,8 @@ namespace Estimator.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
+                        .ThenInclude (e=>e.ChainItems)
+                            .ThenInclude (r=>r.Operation)
                 .Include(c => c.RequestElementTypes)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
@@ -64,9 +66,26 @@ namespace Estimator.CustomerRequests
                     r.BatchCount = 0;
                     r.ItemCount = 0;
                     r.Order = e.Order;
+
+                    List<RequestOperation> operations = new List<RequestOperation>();
+
+                    foreach (TestChainItem tci in e.ChainItems)
+                    {
+                        RequestOperation rO = new RequestOperation();
+                        rO.TestChainItem = tci;
+                        rO.RequestElementType = r;
+                        rO.IsExecute = tci.Operation.IsExecuteDefault;
+                        rO.ExecuteCount = 1;
+                        operations.Add(rO);
+
+                        r.RequestOperations = operations;
+
+                    }
                     CustomerRequest.RequestElementTypes.Add(r);
 
                 }
+
+                
                 CustomerRequest.IsProceed = true;
             }
 

@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200124120001_AddRequestElementType.cs" />
     <Compile Remove="Migrations\20200124120001_AddRequestElementType.Designer.cs" />
+    <Compile Remove="Migrations\20200219100113_AddRequestOperation2.cs" />
+    <Compile Remove="Migrations\20200219100113_AddRequestOperation2.Designer.cs" />
+    <Compile Remove="Migrations\20200219102759_CorrectRequestOperation.cs" />
+    <Compile Remove="Migrations\20200219102759_CorrectRequestOperation.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

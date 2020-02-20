@@ -21,30 +21,7 @@ namespace Estimator.Pages.CustomerRequests
         /// <summary>
         /// Типы ЭКБ для заявки
         /// </summary>
-        public List<AssignedRequestElementType> AssignedElementsList;
-
-        public void PopulateAssignedElementTypes(EstimatorContext _context, CustomerRequest customerRequest)
-        {
-
-            IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID);
-            //сортируем
-            elementTypesIQ= elementTypesIQ.OrderBy(r => r.ElementType.Order);
-            AssignedElementsList = new List<AssignedRequestElementType>();
-            if (elementTypesIQ != null)
-            {
-                foreach (var item in elementTypesIQ)
-                {
-                    AssignedElementsList.Add(new AssignedRequestElementType
-                    {
-                        RequestElementTypeID = item.RequestElementTypeID,
-                        Name = item.ElementType.Name,
-                        BatchCount = item.BatchCount,
-                        ItemCount = item.ItemCount
-                    });
-                }
-               
-            }
-        }
+        
 
     }
 }

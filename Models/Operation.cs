@@ -27,5 +27,9 @@ namespace Estimator.Models
         [Required]
         [Display(Name = "ДПО")]
         public bool DPO { get; set; }
+        /// <summary>
+        ///  выполняется по умолчанию
+        /// </summary>
+        public bool IsExecuteDefault { get; set; }
     }
 }

@@ -26,7 +26,11 @@ namespace Estimator.Models
         public string Description { get; set; }
 
         public bool AllowEditChain { get; set; }
+        /// <summary>
+        /// типы элементов программы испытний
+        /// </summary>
         public ICollection<ElementType> ElementntTypes { get; set; }
+       
 
     }
 }

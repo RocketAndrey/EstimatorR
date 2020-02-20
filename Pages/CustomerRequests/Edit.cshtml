@@ -76,24 +76,59 @@
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount)</th>
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].ItemCount)</th>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].MissingKitCount)</th>
             </tr>
 
             @for (int i = 0; i < Model.AssignedElementsList.Count; i++)
             {
                 <tr>
                     <td>
-                        <input type="hidden" asp-for="AssignedElementsList[i].RequestElementTypeID" />
+                        <input type="hidden" name="elementTypes[@i].RequestElementTypeID" value="@Model.AssignedElementsList[i].RequestElementTypeID" />
                         @Html.DisplayFor(model => model.AssignedElementsList[i].Name)
                     </td>
                     <td>
-                        <input asp-for="AssignedElementsList[i].BatchCount" class="form-control" />
+                        <input asp-for="@Model.AssignedElementsList[i].BatchCount" class="form-control" name="elementTypes[@i].BatchCount" />
                         <span asp-validation-for="AssignedElementsList[i].BatchCount" class="text-danger"></span>
                     </td>
                     <td>
-                        <input asp-for="AssignedElementsList[i].ItemCount" class="form-control" />
+                        <input asp-for="@Model.AssignedElementsList[i].ItemCount" name="elementTypes[@i].ItemCount" class="form-control" />
                         <span asp-validation-for="AssignedElementsList[i].ItemCount" class="text-danger"></span>
 
                     </td>
+                    <td>
+                        <input asp-for="@Model.AssignedElementsList[i].MissingKitCount" name="elementTypes[@i].MissingKitCount" class="form-control" />
+                        <span asp-validation-for="AssignedElementsList[i].MissingKitCount" class="text-danger"></span>
+
+                    </td>
+                </tr>
+            }
+        </table>
+        <h4>Операции:</h4>
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].IsExecute)</th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].ExecuteCount)</th>
+
+            </tr>
+
+            @for (int i = 0; i < Model.RequestOperationGroupViews.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" name="requestOperationGroupViews[@i].OperationID" value="@Model.RequestOperationGroupViews[i].OperationID" />
+                        @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
+                    </td>
+                    <td>
+                        <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-control" name="requestOperationGroupViews[@i].IsExecute" />
+                 
+                    </td>
+                    <td>
+                        <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="requestOperationGroupViews[@i].ExecuteCount" class="form-control" />
+                        <span asp-validation-for="RequestOperationGroupViews[i].ExecuteCount" class="text-danger"></span>
+
+                    </td>
+        
                 </tr>
             }
         </table>
