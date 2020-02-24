@@ -15,13 +15,41 @@ namespace Estimator.Pages.Program
     public class EditModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
+        public  int PreviosTestChainItemID
+        {
+            get
+            {
+                return TestChainItem.TestChainItemID - 1;
+                    
+            }
+        }
+        public  int NextTestChainItemID
+        {
+            get
+            {
+                return TestChainItem.TestChainItemID + 1;
 
+            }
+        }
+        public string HeaderText
+        {
+            get
+            {
+                if (TestChainItem!=null)
+                {
+                    return TestChainItem.Operation.Code + ": " + TestChainItem.Operation.Name;
+                }
+                else
+                {
+                    return String.Empty ;
+                }
+            }
+        }
         public EditModel(Estimator.Data.EstimatorContext context)
         {
             _context = context;
         }
-      
-        public TestProgram TestProgram { get; set; }
+     
 
         [BindProperty]
         public TestChainItem TestChainItem { get; set; }
@@ -34,12 +62,16 @@ namespace Estimator.Pages.Program
             }
 
             TestChainItem = await _context.TestChainItems
-                .Include(e=>e.Operation)
-                .Include(e=>e.TestActions)
-                    .ThenInclude(e=>e.Qualification)
-                .Include(e=>e.ElementType)
+                .Include(e => e.Operation)
+                .Include(e => e.TestActions)
+                    .ThenInclude(e => e.Qualification)
+                .Include(e => e.ElementType)
                      .ThenInclude(e => e.Program)
                 .FirstOrDefaultAsync(m => m.TestChainItemID == testChainItemID);
+            if (TestChainItem == null)
+            {
+                return NotFound();
+            }
 
             TestActionViewList = new List<TestActionView>();
 
@@ -58,25 +90,51 @@ namespace Estimator.Pages.Program
                 }
 
         
-            ///  TestProgram = await _context.TestPrograms.FirstOrDefaultAsync(m => m.TestProgramID == id);
-
-            // /  if (TestProgram == null)
-            // {
-            //   return NotFound();
-            //  }
+      
             return Page();
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? testChainItemID, TestActionView[] views)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            if (testChainItemID == null)
+            {
+                return NotFound();
+            }
 
-            _context.Attach(TestProgram).State = EntityState.Modified;
+            var testChainItemToUpdate = await _context.TestChainItems
+                .Include(e => e.Operation)
+                .Include(e => e.TestActions)
+                    .ThenInclude(e => e.Qualification)
+                .Include(e => e.ElementType)
+                     .ThenInclude(e => e.Program)
+                .FirstOrDefaultAsync(m => m.TestChainItemID == testChainItemID);
+
+            if (testChainItemToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var element in testChainItemToUpdate.TestActions)
+            {
+                foreach (var updElement in views)
+                {
+                    if (element.TestActionID == updElement.TestActionID)
+                    {
+                        element.ItemLabor = updElement.ItemLabor;
+                        element.KitLabor = updElement.KitLabor;
+                        element.BatchLabor = updElement.BatchLabor;
+                    }
+                }
+            }
+           
+
+            _context.Attach(testChainItemToUpdate).State = EntityState.Modified;
 
             try
             {
@@ -84,7 +142,7 @@ namespace Estimator.Pages.Program
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TestProgramExists(TestProgram.TestProgramID))
+                if (!TestChainItemExists(testChainItemToUpdate.TestChainItemID))
                 {
                     return NotFound();
                 }
@@ -94,12 +152,12 @@ namespace Estimator.Pages.Program
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Edit", new { testChainItemID = testChainItemToUpdate.TestChainItemID });
         }
 
-        private bool TestProgramExists(int id)
+        private bool TestChainItemExists(int id)
         {
-            return _context.TestPrograms.Any(e => e.TestProgramID == id);
+            return _context.TestChainItems.Any(e => e.TestChainItemID == id);
         }
     }
 }

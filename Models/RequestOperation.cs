@@ -32,6 +32,9 @@ namespace Estimator.Models
         /// Сколько раз делать, например 2 давления
         /// </summary>
         public int ExecuteCount { get; set; }
-
+        /// <summary>
+        /// Выборка для испытаний , -1 - 100%, 0- не используется
+        /// </summary>
+        public int SampleCount { get; set; }
     }
 }

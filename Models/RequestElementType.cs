@@ -17,10 +17,22 @@ namespace Estimator.Models
 
         public int CustomerRequestID { get; set; }
         public CustomerRequest CustomerRequest { get; set; }
-
+        /// <summary>
+        /// Колличество партиий
+        /// </summary>
         public int BatchCount { get; set; }
+        /// <summary>
+        /// Коилличестово изделий
+        /// </summary>
         public int ItemCount { get; set; }
+        /// <summary>
+        /// Количество недостающей оснастки
+        /// </summary>
         public int KitCount { get; set; }
+       
+        /// <summary>
+        /// 
+        /// </summary>
         public int Order { get; set; }
 
         public IEnumerable<RequestOperation > RequestOperations  { get; set; }

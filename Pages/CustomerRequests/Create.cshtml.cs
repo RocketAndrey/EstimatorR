@@ -75,6 +75,7 @@ namespace Estimator.CustomerRequests
                         rO.TestChainItem = tci;
                         rO.RequestElementType = r;
                         rO.IsExecute = tci.Operation.IsExecuteDefault;
+                        rO.SampleCount = tci.Operation.SampleCount;
                         rO.ExecuteCount = 1;
                         operations.Add(rO);
 

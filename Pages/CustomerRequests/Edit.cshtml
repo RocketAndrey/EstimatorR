@@ -12,6 +12,7 @@
 <div class="row">
     
     <form method="post">
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="CustomerRequest.CustomerRequestID" />
         <table class="table">
@@ -106,9 +107,12 @@
         <h4>Операции:</h4>
         <table class="table">
             <tr>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].OperationGroupCode)</th>
                 <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].Name)</th>
                 <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].IsExecute)</th>
                 <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].ExecuteCount)</th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].SampleCount)</th>
+
 
             </tr>
 
@@ -116,29 +120,35 @@
             {
                 <tr>
                     <td>
+                        @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
+                    </td>
+
+                    <td>
                         <input type="hidden" name="requestOperationGroupViews[@i].OperationID" value="@Model.RequestOperationGroupViews[i].OperationID" />
                         @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
                     </td>
                     <td>
-                        <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-control" name="requestOperationGroupViews[@i].IsExecute" />
-                 
+                        <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" />
+
                     </td>
                     <td>
                         <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="requestOperationGroupViews[@i].ExecuteCount" class="form-control" />
                         <span asp-validation-for="RequestOperationGroupViews[i].ExecuteCount" class="text-danger"></span>
 
                     </td>
-        
+                    <td>
+                        <input asp-for="@Model.RequestOperationGroupViews[i].SampleCount" name="requestOperationGroupViews[@i].SampleCount" class="form-control" />
+                        <span asp-validation-for="RequestOperationGroupViews[i].SampleCount" class="text-danger"></span>
+
+                    </td>
+
                 </tr>
             }
-        </table>
+            </table>
         <div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-
-
-
-    </form>
+</form>
   
 </div>
 

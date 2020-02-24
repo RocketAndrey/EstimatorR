@@ -31,5 +31,15 @@ namespace Estimator.Models
         ///  выполняется по умолчанию
         /// </summary>
         public bool IsExecuteDefault { get; set; }
+        /// <summary>
+        ///Объём выборки в шт. по умолчанию для операции,-1= 100%, 0-операчия не используется
+        /// </summary>
+        [Required]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Объём выборки это число!")]
+        [Display(Name = "Объём выборки, шт")]
+        public int SampleCount { get; set; }
+
+        public int ?OperationGroupID { get; set; }
+        public OperationGroup OperationGroup { get; set; }
     }
 }

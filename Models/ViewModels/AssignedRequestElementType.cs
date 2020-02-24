@@ -22,9 +22,10 @@ namespace Estimator.Models.ViewModels
         [Display(Name = "Штук")]
         public int ItemCount { get; set; }
         [Required]
-        [RegularExpression("^[0-9]+$", ErrorMessage = "Колличество остастки штук это число!")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Колличество остастки это число!")]
         [Display(Name = "Нет остнастки, типов")]
         public int MissingKitCount { get; set; }
+      
         public int Order { get; set; }
     }
 }

@@ -29,6 +29,9 @@ namespace Estimator.Data
         public DbSet<Estimator.Models.TestChainItem> TestChainItems { get; set; }
         public DbSet<Estimator.Models.RequestElementType> RequestElementTypes { get; set; }
         public DbSet<Estimator.Models.ViewModels.RequestOperationGroupView> RequestOperationGroupViews { get; set; }
+        public DbSet<Estimator.Models.OperationGroup> OperationGroups { get; set; }
+        public DbSet <Estimator.Models.CompanyHistory> CompanyHistories { get; set; }
+        public DbSet<Estimator.Models.StaffItem> Staff { get; set; }
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>().ToTable("Customer");
@@ -48,8 +51,9 @@ namespace Estimator.Data
             modelBuilder.Entity<TestChainItem>().ToTable("TestChainItem");
             modelBuilder.Entity<RequestElementType>().ToTable("RequestElementType");
             modelBuilder.Entity<RequestOperation>().ToTable("RequestOperation");
-
-
+            modelBuilder.Entity<OperationGroup>().ToTable("OperationGroup");
+            modelBuilder.Entity<CompanyHistory>().ToTable("CompanyHistory");
+            modelBuilder.Entity<StaffItem>().ToTable("StaffItem");
         }
     }
 }
