@@ -35,6 +35,7 @@ namespace Estimator.Models
         public int CustomerID { get; set; }
         public Customer Customer { get; set; }
 
-        public ICollection<RequestElementType> RequestElementTypes { get; set; }
+        public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
+        public IEnumerable<Element> Elements { get; set; }
     }
 }

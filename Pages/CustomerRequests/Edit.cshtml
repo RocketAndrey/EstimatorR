@@ -1,77 +1,83 @@
-﻿@page
+﻿
+@page
+
 @model Estimator.Pages.CustomerRequests.EditModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<!--<h1>Edit</h1>-->
+
 
 <h4>Редактирование заявки</h4>
 <hr />
-<div class="row">
-    
-    <form method="post">
-
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="CustomerRequest.CustomerRequestID" />
-        <table class="table">
-            <tr>
-                <td>
-
-                    <label asp-for="CustomerRequest.RequestNumber" class="control-label"></label>
-
-                </td>
-                <td>
-
-                    <input asp-for="CustomerRequest.RequestNumber" class="form-control" />
-                    <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
-
-                </td>
-                <td>
-
-                    <label asp-for="CustomerRequest.RequestDate" class="control-label"></label>
 
 
-                </td>
-                <td>
+<form method="post">
 
-                    <input asp-for="CustomerRequest.RequestDate" class="form-control" />
-                    <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CustomerRequest.CustomerRequestID" />
+    <table class="table">
+        <tr>
+            <td>
 
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label asp-for="CustomerRequest.Program.Name" class="control-label"></label>
-                </td>
-                <td>
-                    <select asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID" disabled="disabled"></select>
-                    <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
-                </td>
-                <td><label asp-for="CustomerRequest.Customer.Name" class="control-label"></label></td>
-                <td>
-                    <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
-                    <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
+                <label asp-for="CustomerRequest.RequestNumber" class="control-label"></label>
 
-                    <label asp-for="CustomerRequest.Description" class="control-label"></label>
+            </td>
+            <td>
+
+                <input asp-for="CustomerRequest.RequestNumber" class="form-control" />
+                <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
+
+            </td>
+            <td>
+
+                <label asp-for="CustomerRequest.RequestDate" class="control-label"></label>
 
 
-                </td>
-                <td colspan="3">
+            </td>
+            <td>
 
-                    <textarea asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3"></textarea>
-                    <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
+                <input asp-for="CustomerRequest.RequestDate" class="form-control" />
+                <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
 
-                </td>
-            </tr>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label asp-for="CustomerRequest.Program.Name" class="control-label"></label>
+            </td>
+            <td>
+                <select asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID" disabled="disabled"></select>
+                <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
+            </td>
+            <td><label asp-for="CustomerRequest.Customer.Name" class="control-label"></label></td>
+            <td>
+                <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+                <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
 
-        </table>
+                <label asp-for="CustomerRequest.Description" class="control-label"></label>
+
+
+            </td>
+            <td colspan="3">
+
+                <textarea asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3"></textarea>
+                <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
+
+            </td>
+        </tr>
+
+    </table>
+
+    <a href="#hiddenList" onclick="viewDIV('hiddenList'); return false">
         <h4>Перечень ЭКБ:</h4>
+    </a>
+    <div id="hiddenList" style="display:block;">
         <table class="table">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
@@ -104,7 +110,12 @@
                 </tr>
             }
         </table>
+    </div>
+
+    <a href="#hiddenOper" onclick="viewDIV('hiddenOper'); return false">
         <h4>Операции:</h4>
+    </a>
+    <div id="hiddenOper" style="display:block;">
         <table class="table">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].OperationGroupCode)</th>
@@ -118,7 +129,9 @@
 
             @for (int i = 0; i < Model.RequestOperationGroupViews.Count; i++)
             {
-                <tr>
+
+                string selectedRow = Model.RequestOperationGroupViews[i].IsExecute ? "table-success" : "";
+                <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID">
                     <td>
                         @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
                     </td>
@@ -128,7 +141,7 @@
                         @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
                     </td>
                     <td>
-                        <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" />
+                        <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />
 
                     </td>
                     <td>
@@ -144,19 +157,39 @@
 
                 </tr>
             }
-            </table>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
+        </table>
+    </div>
+    <div class="form-group">
+        <a asp-page="./Index"
+           class="btn btn-primary">
+            Список
+        </a>
+
+        <a asp-page="./Details" asp-route-id="@Model.CustomerRequest.CustomerRequestID"
+           class="btn btn-primary">
+            Загрузить
+        </a>
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+    </div>
+
 </form>
-  
-</div>
 
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+   <script>function viewDIV(n) {
+           style = document.getElementById(n).style;
+           style.display = (style.display == 'block') ? 'none' : 'block';
+       }
+       function showSelected(n) {
+           var item = document.getElementById(n);
+           if (item.classList.contains('table-success')) {
+               item.classList.remove('table-success');
+           }
+           else {
+               item.classList.add('table-success');
+           }
+       }
+</script>

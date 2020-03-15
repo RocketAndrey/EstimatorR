@@ -36,6 +36,18 @@ namespace Estimator.Models
         /// Трудоемкость изготовления оснастки (для операций изготовления оснастки)
         /// </summary>
         public int KitLabor { get; set; }
+        /// <summary>
+        /// Трудоемкось для данной специальности 
+        /// </summary>
+        /// <param name="banchCount"></param>
+        /// <param name="itemCount"></param>
+        /// <param name="kitCount"></param>
+        /// <returns></returns>
+        public int LaborSummary(int banchCount,int itemCount,int kitCount)
+        {
+            
+                return banchCount * BatchLabor + itemCount * ItemLabor + kitCount * KitLabor;
+        }
 
     }
 }

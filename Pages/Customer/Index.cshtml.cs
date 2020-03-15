@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Estimator.Data;
 using Estimator.Models;
 
-namespace Estimator
+namespace Estimator.Pages.Customers
 {
     public class IndexModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace Estimator
             _context = context;
         }
 
-        public IList<Customer> Customer { get;set; }
+        public IList<Estimator.Models.Customer> Customer { get;set; }
 
         public async Task OnGetAsync(string sortOrder, string searchString)
 
@@ -34,7 +34,7 @@ namespace Estimator
             // Фильтрация
             CurrentFilter = searchString;
             //все заказчики
-            IQueryable<Customer> custmersIQ = from s in _context.Customers
+            IQueryable<Estimator.Models.Customer> custmersIQ = from s in _context.Customers
                                               select s;
             
             if (!String.IsNullOrEmpty(searchString))

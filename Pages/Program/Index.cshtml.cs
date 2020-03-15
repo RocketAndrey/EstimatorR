@@ -36,6 +36,9 @@ namespace Estimator.Pages.Program
                     .Include(i => i.ElementntTypes)
                         .ThenInclude(i=>i.ChainItems)
                             .ThenInclude(i=>i.Operation)
+                     .Include(i=>i.ElementntTypes)
+                        .ThenInclude(i => i.ChainItems)
+                            .ThenInclude(r=>r.TestActions)
                     .AsNoTracking()
                     .OrderBy(i => i.Name)
                     .ToListAsync();
@@ -55,7 +58,8 @@ namespace Estimator.Pages.Program
                 {
                     ElementTypeID = elementTypeID.Value;
                     var selectedElenentType = ProgramData.Elements
-                        .Where(x => x.ElementTypeID == elementTypeID).Single();
+                        .Where(x => x.ElementTypeID == elementTypeID)
+                        .Single();
                     ProgramData.ChainItems = selectedElenentType.ChainItems;
                 }
                

@@ -1,14 +1,12 @@
 ﻿@page
-@model Estimator.CustomerRequests.DetailsModel
+@model Estimator.Pages.CustomerRequests.DetailsModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>CustomerRequest</h4>
+    <h4>Загрузка перечня из xlsx</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -43,7 +41,13 @@
         </dd>
     </dl>
 </div>
-<div>
+<form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <input type="file" name="uploadedFile" class="btn" accept="Excel/xlsx,Excel/xls" />
+        <input type="submit" value="Загрузить" class="btn btn-primary" />
+        <br />
+
+    </div>
     <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID">Edit</a> |
     <a asp-page="./Index">Back to List</a>
-</div>
+</form>

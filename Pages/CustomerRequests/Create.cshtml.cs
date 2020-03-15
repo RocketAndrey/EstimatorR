@@ -57,6 +57,7 @@ namespace Estimator.CustomerRequests
 
             if (!CustomerRequest.IsProceed)
             {
+                List<RequestElementType> retList = new List<RequestElementType>();
 
                 foreach (ElementType e in CustomerRequest.Program.ElementntTypes)
 
@@ -67,7 +68,7 @@ namespace Estimator.CustomerRequests
                     r.ItemCount = 0;
                     r.Order = e.Order;
 
-                    List<RequestOperation> operations = new List<RequestOperation>();
+                    List<RequestOperation> roList = new List<RequestOperation>();
 
                     foreach (TestChainItem tci in e.ChainItems)
                     {
@@ -77,16 +78,18 @@ namespace Estimator.CustomerRequests
                         rO.IsExecute = tci.Operation.IsExecuteDefault;
                         rO.SampleCount = tci.Operation.SampleCount;
                         rO.ExecuteCount = 1;
-                        operations.Add(rO);
+                        roList.Add(rO);
 
-                        r.RequestOperations = operations;
+                        r.RequestOperations = roList;
 
                     }
-                    CustomerRequest.RequestElementTypes.Add(r);
+                    retList.Add(r);
+                   
 
                 }
+                CustomerRequest.RequestElementTypes = retList;
 
-                
+
                 CustomerRequest.IsProceed = true;
             }
 

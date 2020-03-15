@@ -8,7 +8,7 @@ namespace Estimator.Models
     // шаг технологической цепочки
     public class TestChainItem
     {
-     
+
         public int TestChainItemID { get; set; }
         public int ElementTypeID { get; set; }
         /// <summary>
@@ -27,5 +27,31 @@ namespace Estimator.Models
         /// </summary>
         public int Order { get; set; }
         public IEnumerable<TestAction> TestActions { get; set; }
+        /// <summary>
+        /// трудоемкость операции для 1 изделия, 1 партия, 1 оснастка. Описывает вес операции
+        /// </summary>
+  
+        public int LaborWeight
+        {
+            get 
+
+            {
+                int result = 0;
+
+                if (TestActions != null)
+                {
+                    foreach (var item in TestActions)
+                    {
+                        result = result + item.BatchLabor + item.ItemLabor + item.KitLabor;
+                    }
+                    return result;
+                }
+                else
+                {
+                    return -1;
+                }
+            
+            }
+        }
     }
 }

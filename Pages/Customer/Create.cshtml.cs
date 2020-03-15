@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Estimator.Data;
 using Estimator.Models;
 
-namespace Estimator
+namespace Estimator.Pages.Customers
 {
     public class CreateModel : PageModel
     {
@@ -25,7 +25,7 @@ namespace Estimator
         }
 
         [BindProperty]
-        public Customer Customer { get; set; }
+        public Estimator.Models.Customer Customer { get; set; }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

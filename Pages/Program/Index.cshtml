@@ -77,12 +77,16 @@
         </h3>
         <table class="table">
             <tr>
+                <th>Вес</th>
                 <th>Наименование</th>
                 <th>Код</th>
             </tr>
             @foreach (var item in Model.ProgramData.ChainItems)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaborWeight)
+                    </td>
                     <td>
  
                         <a asp-page="./Edit" asp-route-testChainItemID="@item.TestChainItemID"> @item.Operation.Name</a>

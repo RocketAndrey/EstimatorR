@@ -9,26 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using Estimator.Data;
 using Estimator.Models;
 using Estimator.Models.ViewModels;
-
+using Microsoft.AspNetCore.Hosting;
 
 namespace Estimator.Pages.CustomerRequests
 {
-    public class EditModel :PageModel
+    public class EditModel :CustomerRequestPageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
-
-
-        public List<AssignedRequestElementType> AssignedElementsList;
-        public List<RequestOperationGroupView> RequestOperationGroupViews;
-
-        public EditModel(Estimator.Data.EstimatorContext context)
+        
+        public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
-        [BindProperty]
-        public CustomerRequest CustomerRequest { get; set; }
-       // public IList <RequestElementType> RequestElementTypes { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -115,46 +108,9 @@ namespace Estimator.Pages.CustomerRequests
 
                
         }
+      
        
-        public void PopulateAssignedElementTypes( CustomerRequest customerRequest)
-        {
-
-            IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID);
-            //сортируем
-            elementTypesIQ = elementTypesIQ.OrderBy(r => r.ElementType.Order);
-            AssignedElementsList = new List<AssignedRequestElementType>();
-            if (elementTypesIQ != null)
-            {
-                foreach (var item in elementTypesIQ)
-                {
-                    AssignedElementsList.Add(new AssignedRequestElementType
-                    {
-                        RequestElementTypeID = item.RequestElementTypeID,
-                        Name = item.ElementType.Name,
-                        BatchCount = item.BatchCount,
-                        ItemCount = item.ItemCount
-                       
-                    });
-                }
-
-            }
-
-
-        }
-        /// <summary>
-        /// операции текущей заявки
-        /// </summary>
-        /// <param name="customerRequest"></param>
-        public void PopulateOperations(CustomerRequest customerRequest)
-           
-        {
-            string query = "SELECT [Operation].OperationID,[Operation].Name,[RequestOperation].SampleCount, [IsExecute],[ExecuteCount],[TestChainItem].[Order] ,[OperationGroup].Code as OperationGroupCode " +
-                            "FROM[RequestOperation],[TestChainItem],[Operation],[dbo].[RequestElementType],[OperationGroup] WHERE[RequestOperation].[TestChainItemID]= [TestChainItem].TestChainItemID " +
-                                "and[dbo].[Operation].OperationID= [TestChainItem].OperationID and[RequestOperation].RequestElementTypeID=[dbo].[RequestElementType].RequestElementTypeID " +
-                                "and [RequestElementType].CustomerRequestID ={0} and [OperationGroup].OperationGroupID=[Operation].OperationGroupID GROUP BY[Operation].OperationID, [Operation].Name,[RequestOperation].SampleCount,[ExecuteCount], [OperationGroup].Code,  [IsExecute],[TestChainItem].[Order] ORDER BY[TestChainItem].[Order]";
-            RequestOperationGroupViews = _context.RequestOperationGroupViews.FromSqlRaw(query, customerRequest.CustomerRequestID).ToList();
-
-        }
+          
         public void UpdateAssignedElementTypes(AssignedRequestElementType[] elementTypes, CustomerRequest customerRequestToUpdate)
         {
           //  IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequestToUpdate.CustomerRequestID);
@@ -174,9 +130,7 @@ namespace Estimator.Pages.CustomerRequests
         }
         public void UpdateRequestOperations(RequestOperationGroupView[] operationTypes, CustomerRequest customerRequestToUpdate)
         {
-          //  IQueryable<RequestElementType> retIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequestToUpdate.CustomerRequestID)
-            //    .Include(s => s.RequestOperations);
-
+       
                                                      
             foreach (var element in customerRequestToUpdate.RequestElementTypes)
             {

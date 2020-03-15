@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Estimator.Data;
 using Estimator.Models;
 
-namespace Estimator
+namespace Estimator.Pages.Customers
 {
     public class DeleteModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace Estimator
         }
 
         [BindProperty]
-        public Customer Customer { get; set; }
+        public Estimator.Models.Customer Customer { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
