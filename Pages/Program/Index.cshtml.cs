@@ -21,6 +21,7 @@ namespace Estimator.Pages.Program
         }
 
         public IList<TestProgram> TestProgram { get;set; }
+        public IList<ElementType> ElementTypesSort { get; set; }
         public ProgramIndexData ProgramData { get; set; }
         public int TestProgramID { get; set; }
         public int ElementTypeID { get; set; }
@@ -49,9 +50,9 @@ namespace Estimator.Pages.Program
                    // Instructor instructor = InstructorData.Instructors
                     TestProgram program= ProgramData.Programs
                         .Where(i => i.TestProgramID == id.Value).Single();
-                    
-                    ProgramData.Elements = program.ElementntTypes.OrderBy(e => e.Order);
-
+                    ProgramData.Elements = program.ElementntTypes;
+                    ElementTypesSort =  program.ElementntTypes.OrderBy(e => e.Order).ToList();
+                  
 
                 }
                 if (elementTypeID!=null)
@@ -60,7 +61,7 @@ namespace Estimator.Pages.Program
                     var selectedElenentType = ProgramData.Elements
                         .Where(x => x.ElementTypeID == elementTypeID)
                         .Single();
-                    ProgramData.ChainItems = selectedElenentType.ChainItems;
+                    ProgramData.ChainItems = selectedElenentType.ChainItems.OrderBy(e=>e.Order);
                 }
                
             }

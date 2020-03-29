@@ -17,9 +17,10 @@ namespace Estimator.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-             RedirectToPage("./CustomerRequest/Index");
+              RedirectToPage("./CustomerRequest/Index");
+            return Page();
         }
     }
 }

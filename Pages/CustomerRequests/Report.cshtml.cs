@@ -10,25 +10,33 @@ using Estimator.Data;
 using Estimator.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Estimator.Pages.CustomerRequests
 {
     public class ReportModel : CustomerRequestPageModel
     {
         
-
+        public int Mode { get; set;}
         public ReportModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
             _appEnvironment = appEnvironment;
+            Mode = 2;
         }
        
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id,int? mode)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+            if (mode==null)
+            {
+                Mode = 1;
+            }
+            else 
+            { 
+                Mode = mode.Value;
             }
 
             CustomerRequest = await _context.CustomerRequests
@@ -39,16 +47,24 @@ namespace Estimator.Pages.CustomerRequests
                     .ThenInclude(e=>e.RequestOperations)
                         .ThenInclude(e=>e.TestChainItem)
                             .ThenInclude(e=>e.TestActions)  
-                .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
-              
+                               .ThenInclude (i=>i.Qualification)
+                   .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.Operation)
+                                .ThenInclude(e=>e.OperationGroup)
 
+                .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+         
             if (CustomerRequest == null)
             {
                 return NotFound();
             }
-            // запролняем типы элементов
-            PopulateAssignedElementTypes(CustomerRequest);
+            //сортируем
+            CustomerRequest.RequestElementTypes= CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
 
+           // foreach (var item in CustomerRequest.OperationGroups)
+  
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(IFormFile uploadedFile)

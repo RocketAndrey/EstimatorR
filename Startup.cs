@@ -26,7 +26,7 @@ namespace Estimator
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-           
+       
             services.AddDbContext<EstimatorContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EstimatorContext")));
         }

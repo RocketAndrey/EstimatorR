@@ -6,19 +6,21 @@
 }
 
 <h1>Заявки:</h1>
-
-<p>
-    <a asp-page="Create">Создать заявку</a>
-</p>
 <form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Искать:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Поиск" class="btn btn-primary" /> |
-            <a asp-page="./Index">Очистить поиск</a>
-        </p>
-    </div>
+    
+    <table class="table">
+        <tr>
+            <td align="left">
+                <a asp-page="Create" class="btn btn-primary" >Создать заявку</a>
+            </td>
+            <td align="right">
+                Искать:
+                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="Поиск" class="btn btn-primary" /> |
+                <a asp-page="./Index" class="btn btn-primary">Очистить поиск</a>
+            </td>
+        </tr>
+    </table>
 </form>
 <table class="table">
     <thead>

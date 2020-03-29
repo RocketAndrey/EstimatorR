@@ -15,7 +15,7 @@ namespace Estimator.Models
         public int ElementTypeID { get; set; }
         [Required]
         [StringLength(150)]
-        [Display(Name = "Тип")]
+        [Display(Name = "Тип ЭКБ")]
         public string Name { get; set; }
         public int Order { get; set; }
         public int ProgramID { get; set; }

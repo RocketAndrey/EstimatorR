@@ -5,9 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Customer</h4>
+<h4>Редактирование заказчика</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,15 +23,12 @@
                 <span asp-validation-for="Customer.INN" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <a asp-page="./Index"class="btn btn-primary" >К списку</a><input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

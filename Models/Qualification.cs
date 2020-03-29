@@ -14,6 +14,7 @@ namespace Estimator.Models
         public int QualificationID { get; set; }
         [Required]
         [StringLength(50)]
+        [Display(Name = "Специальность")]
         public string Name { get; set; }
        
     }

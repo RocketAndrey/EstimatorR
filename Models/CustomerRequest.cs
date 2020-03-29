@@ -36,6 +36,75 @@ namespace Estimator.Models
         public Customer Customer { get; set; }
 
         public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
+
+      [NotMapped]
+        public List<RequestOperationGroup> OperationGroups
+        {
+
+            get
+
+            {
+                if (RequestElementTypes != null)
+                {
+
+
+                    Dictionary<string, RequestOperationGroup> returnGroup = new Dictionary<string, RequestOperationGroup>();
+                    //перебираем все типы ЭКБ
+
+                    foreach (var itemRET in RequestElementTypes)
+                    {
+                        //перебираем операции для данного типа ЭРИ
+                        if (itemRET.RequestOperations != null)
+                        {
+                            foreach (var itenRO in itemRET.RequestOperations)
+                            {
+                                RequestOperationGroup itemROG;
+                                //Если нет такой группы то добавляем её
+                                if (itenRO.TestChainItem.Operation != null)
+                                {
+                                    if (!returnGroup.ContainsKey(itenRO.TestChainItem.Operation.OperationGroup.Code))
+                                    {
+                                        itemROG = new RequestOperationGroup();
+                                        itemROG.OperationGroupID = itenRO.TestChainItem.Operation.OperationGroup.OperationGroupID;
+                                        itemROG.Code = itenRO.TestChainItem.Operation.OperationGroup.Code;
+                                        itemROG.Name = itenRO.TestChainItem.Operation.OperationGroup.Name;
+                                        returnGroup.Add(itenRO.TestChainItem.Operation.OperationGroup.Code, itemROG);
+
+                                    }
+                                    RequestQualLaborSummary itemRQLS;
+
+                                    foreach (var itemTA in itenRO.TestChainItem.TestActions)
+                                    {
+                                        if (!returnGroup[itenRO.TestChainItem.Operation.OperationGroup.Code].IsQualificationInList(itemTA.Qualification.Name))
+                                        {
+                                            itemRQLS = new RequestQualLaborSummary();
+                                            itemRQLS.QualificationID = itemTA.QualificationID;
+                                            itemRQLS.Name = itemTA.Qualification.Name;
+                                            returnGroup[itenRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Add(itemRQLS);
+
+                                        }
+                                        //Cкладываем трудоёмкости по специальностям
+                                        returnGroup[itenRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).LaborSummary += itemTA.LaborSummary(itemRET.BatchCount, itemRET.ItemCount, itemRET.KitCount);
+
+
+                                    }
+                                }
+
+
+                            }
+                        }
+                     }
+                 
+                    return returnGroup.Values.ToList();
+
+                }
+                else
+                { return null; }
+            }
+      
+        }
         public IEnumerable<Element> Elements { get; set; }
+        
+      
     }
 }

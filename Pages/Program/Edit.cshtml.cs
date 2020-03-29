@@ -119,6 +119,7 @@ namespace Estimator.Pages.Program
             {
                 return NotFound();
             }
+            testChainItemToUpdate.Description = TestChainItem.Description;
 
             foreach (var element in testChainItemToUpdate.TestActions)
             {

@@ -69,14 +69,11 @@
 
             </table>
             <div class="form-group">
-                <input type="submit" value="Создать" class="btn-primary" />
+                <a asp-page="Index" class="btn btn-primary">К списку</a>
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>
-
-<div>
-    <a asp-page="Index">К списку</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

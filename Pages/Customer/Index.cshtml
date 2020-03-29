@@ -6,19 +6,20 @@
 }
 
 <h1>Заказчики:</h1>
-
-<p>
-    <a asp-page="Create">Создать</a>
-</p>
 <form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Поиск по имени:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Поиск" class="btn btn-primary" /> |
-            <a asp-page="./Index">Полный список</a>
-        </p>
-    </div>
+    <table class="table">
+        <tr>
+            <td align="left">
+                <a asp-page="Create" class="btn btn-primary">Создать заявку</a>
+            </td>
+            <td align="right">
+                Искать:
+                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="Поиск" class="btn btn-primary" /> |
+                <a asp-page="./Index" class="btn btn-primary">Очистить поиск</a>
+            </td>
+        </tr>
+    </table>
 </form>
 
 

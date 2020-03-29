@@ -17,6 +17,7 @@ namespace Estimator.Models
         public string Code { get; set; }
         [Required]
         [StringLength(100)]
+
         public string Name { get; set; }
     }
 }

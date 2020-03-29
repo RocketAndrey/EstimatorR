@@ -40,7 +40,7 @@
 </table>
 
 
-@if (Model.ProgramData.Elements != null)
+@if (Model.ElementTypesSort != null)
 {
     <h3>Классы ЭКБ выбранной программы</h3>
     <table class="table">
@@ -49,7 +49,7 @@
             <th>Порядок</th>
         </tr>
 
-        @foreach (var item in Model.ProgramData.Elements)
+        @foreach (var item in Model.ElementTypesSort)
         {
             string selectedRow = "";
             if (item.ElementTypeID == Model.ElementTypeID)

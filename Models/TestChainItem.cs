@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Estimator.Models
 {
@@ -53,5 +54,9 @@ namespace Estimator.Models
             
             }
         }
+        [StringLength(1000)]
+        [DisplayFormat(NullDisplayText = "Нет описания")]
+        public String Description { get; set; }
+
     }
 }
