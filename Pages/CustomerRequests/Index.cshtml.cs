@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Estimator.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
-using Estimator.Models.ViewModels;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -15,18 +12,18 @@ namespace Estimator.Pages.CustomerRequests
     {
         private readonly Estimator.Data.EstimatorContext _context;
         public PaginatedList<CustomerRequestView> CustomerRequestList { get; set; }
-       // public PaginatedList<CustomerRequestView> CustomerRequestViews { get; set; }
+        // public PaginatedList<CustomerRequestView> CustomerRequestViews { get; set; }
         public string DateSort { get; set; }
         public string ProgramSort { get; set; }
-        public  string CustomerSort { get; set; }
+        public string CustomerSort { get; set; }
         public string CurrentSort { get; set; }
         public string CurrentFilter { get; set; }
         public IndexModel(Estimator.Data.EstimatorContext context)
         {
             _context = context;
         }
-        
-        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString , int? pageIndex)
+
+        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
         {
             CurrentSort = sortOrder;
 
@@ -53,8 +50,8 @@ namespace Estimator.Pages.CustomerRequests
                     ProgramName = p.Program.Name
                 }).ToListAsync();
 
-          
-            DateSort=String.IsNullOrEmpty(sortOrder)? "Date_desc" : "";
+
+            DateSort = String.IsNullOrEmpty(sortOrder) ? "Date_desc" : "";
             ProgramSort = sortOrder == "Program" ? "Program_desc" : "Program";
             CustomerSort = sortOrder == "Customer" ? "Customer_desc" : "Customer";
 
@@ -89,12 +86,12 @@ namespace Estimator.Pages.CustomerRequests
                     break;
             }
 
-           
+
 
             int pageSize = 20;
-            CustomerRequestList =  await PaginatedList<CustomerRequestView>.CreateAsync(
+            CustomerRequestList = await PaginatedList<CustomerRequestView>.CreateAsync(
                 customerRequestViewsIQ.ToList(), pageIndex ?? 1, pageSize);
-            
+
         }
     }
 }

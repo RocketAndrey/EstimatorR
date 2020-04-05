@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace Estimator.Models
@@ -31,13 +29,13 @@ namespace Estimator.Models
         /// <summary>
         /// трудоемкость операции для 1 изделия, 1 партия, 1 оснастка. Описывает вес операции
         /// </summary>
-  
-        public int LaborWeight
+
+        public decimal LaborWeight
         {
-            get 
+            get
 
             {
-                int result = 0;
+                decimal result = 0;
 
                 if (TestActions != null)
                 {
@@ -51,12 +49,14 @@ namespace Estimator.Models
                 {
                     return -1;
                 }
-            
+
             }
         }
         [StringLength(1000)]
         [DisplayFormat(NullDisplayText = "Нет описания")]
         public String Description { get; set; }
+        [Display(Name = "Группировка")]
+        public int GroupOperation { get; set; }
 
     }
 }

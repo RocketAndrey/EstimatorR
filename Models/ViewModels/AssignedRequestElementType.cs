@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 namespace Estimator.Models.ViewModels
 {
-   
+
     public class AssignedRequestElementType
     {
         public int RequestElementTypeID { get; set; }
 
         [Display(Name = "Тип ЭКБ")]
-        public  string Name { get; set; }
+        public string Name { get; set; }
         [Required]
         [RegularExpression("^[0-9]+$", ErrorMessage = "Колличество партий это число!")]
         [Display(Name = "Партий")]
@@ -25,7 +20,7 @@ namespace Estimator.Models.ViewModels
         [RegularExpression("^[0-9]+$", ErrorMessage = "Колличество остастки это число!")]
         [Display(Name = "Нет остнастки, типов")]
         public int MissingKitCount { get; set; }
-      
+
         public int Order { get; set; }
     }
 }

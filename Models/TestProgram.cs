@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 namespace Estimator.Models
 {
     public class TestProgram
-        // Программа испытаний
+    // Программа испытаний
     {
         public int TestProgramID { get; set; }
 
         /// <summary>
         /// Программа испытаний
         /// </summary>
-     
+
         [Required]
         [StringLength(50, ErrorMessage = "Наименование не может быть более 50 символов.")]
         [Display(Name = "Программа")]
@@ -30,7 +26,7 @@ namespace Estimator.Models
         /// типы элементов программы испытний
         /// </summary>
         public ICollection<ElementType> ElementntTypes { get; set; }
-       
+
 
     }
 }

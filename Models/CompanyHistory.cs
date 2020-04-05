@@ -1,60 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace Estimator.Models
 {
     /// <summary>
     /// Описывае компанию
     /// </summary>
+
     public class CompanyHistory
     {
-        public int CompanyHistoryID { get; set; }
-        public string CompanyName 
+        public CompanyHistory()
         {
-            get
-            {
-                return "АО КБ Ракета";
+            //YearOfNorms = 2019;
 
-            }
-         }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+            //OverHead = 1.8636M;
+            //PensionTax = 0.302M;
+            //Margin = 0.198M;
+
+            //CalcFactors = new List<CalcFactor>(3);
+            ///// Трудопотери 5%
+            //CalcFactors.Add(new CalcFactor() { CompanyHistory = this, FactorName = "FactorLaborLoss", FactorValue = 1.05M });
+            ///// Ежедневнная подготовка/уборка рабочего места (20 мин.день) 
+            //CalcFactors.Add(new CalcFactor() { CompanyHistory = this, FactorName = "FactorWorkplace", FactorValue = 1.043M });
+            ///// Технологические перерываы согласно СанПиН 2.2.2.542-96 10 мин/час
+            //CalcFactors.Add(new CalcFactor() { CompanyHistory = this, FactorName = "FactorLaborLoss", FactorValue = 1.05M });
+        }
+        public int CompanyHistoryID { get; set; }
+        public string CompanyName
+        {
+            get;set;
+        }
+        /// <summary>
+        /// Год для которого используются нормативы при раччёте;
+        /// </summary>
+        public int YearOfNorms { get; set; }
         /// <summary>
         /// Процент накладных расходов
         /// </summary>
-        public double OverHead { get; set; }
+        public decimal OverHead { get; set; }
         /// <summary>
         /// Процент прибыли
         /// </summary>
-        public double Margin { get; set; }
+        public decimal Margin { get; set; }
         /// <summary>
         /// Налог  на социальное страхование
         /// </summary>
-        public double PensionTax { get; set; }
-        public ICollection<StaffItem> Staff { get; set; }
+        public decimal PensionTax { get; set; }
+        public List<StaffItem> Staff { get; set; }
         /// <summary>
         /// Трудопотери 5%
         /// </summary>
-        public double FactorLaborLoss 
+        public List<CalcFactor> CalcFactors { get; set; }
+
+        public decimal TotalFactor
         {
-            get { return 1.05; }
+            get
+            {
+                decimal result;
+                result = 1;
+                if (CalcFactors != null)
+                {
+                    foreach (var it in CalcFactors)
+                    {
+                        result *= it.FactorValue;
+                    }
+                }
+                return result;
+            }
         }
-        /// <summary>
-        /// Ежедневнная подготовка/уборка рабочего места (20 мин.день) 
-        /// </summary>
-        public double FactorWorkplace
+
+        public decimal GetSalary(int qualID)
         {
-            get  { return 1.043; }
-        }
-        /// <summary>
-        /// Технологические перерываы согласно СанПиН 2.2.2.542-96 10 мин/час
-        /// </summary>
-        public double FactorBreak
-        {
-            get { return 1.05; }
+            foreach (var item in Staff)
+            {
+                if (item.QualificationID==qualID )
+                {
+                    return item.Salary;
+                }
+            }
+            return 0;
         }
     }
 }

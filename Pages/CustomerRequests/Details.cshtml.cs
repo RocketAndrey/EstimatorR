@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
 namespace Estimator.Pages.CustomerRequests
 {
     public class DetailsModel : CustomerRequestPageModel
     {
-       
+
         public DetailsModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
             _appEnvironment = appEnvironment;
         }
-     
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -34,7 +28,7 @@ namespace Estimator.Pages.CustomerRequests
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
-              
+
 
             if (CustomerRequest == null)
             {

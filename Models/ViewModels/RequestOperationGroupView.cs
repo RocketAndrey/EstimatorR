@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Estimator.Models.ViewModels
 {
@@ -10,14 +6,14 @@ namespace Estimator.Models.ViewModels
     {
         public int OperationID { get; set; }
         [Display(Name = "Наименование")]
-        public string Name {get;set;}
+        public string Name { get; set; }
         [Display(Name = "Выполняется?")]
-        public bool IsExecute{get;set;}
+        public bool IsExecute { get; set; }
         [Display(Name = "Кол-во операций")]
-        public int ExecuteCount{get;set;}
+        public int ExecuteCount { get; set; }
 
         [Required]
-        [RegularExpression("^[0-9]+$", ErrorMessage = "Объём выборки это число!")]
+        /// [RegularExpression("^[0-9]+$", ErrorMessage = "Объём выборки это число!")]
         [Display(Name = "Объём выборки, шт")]
         public int SampleCount { get; set; }
 

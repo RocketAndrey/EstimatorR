@@ -4,22 +4,24 @@
     ViewData["Title"] = "Home page";
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-        <a asp-page="./Index" class="btn btn-primary">btn-primary</a>
-        <a asp-page="./Index" class="btn">btn</a>
-        <a asp-page="./Index" class="btn btn-block">btn-block</a>
-        <a asp-page="./Index" class="btn btn-danger">btn-danger</a>
-        <a asp-page="./Index" class="btn btn-dark">btn-dark</a>
-        <a asp-page="./Index" class="btn btn-group">btn-group</a>
-        <a asp-page="./Index" class="btn btn-group-lg">btn-group-lg</a>
-        <a asp-page="./Index" class="btn btn-group-sm">btn-group-sm</a>
-        <a asp-page="./Index" class="btn btn-group-toggle">btn-group-toggle</a>
-        <a asp-page="./Index" class="btn btn-group-vertical">btn-group-vertical</a>
-        <a asp-page="./Index" class="btn btn-info">btn-info</a>
-        <a asp-page="./Index" class="btn btn-lg">btn-lg</a>
-        <a asp-page="./Index" class="btn btn-light">btn-light</a>
-        <a asp-page="./Index" class="btn btn-secondary">btn-secondary</a>
-        <a asp-page="./Index" class="btn btn-toolbar">btn-toolbar</a>
-    </div>
+        <h1 class="display-4">Калькулятор трудоёмкости  испытаний</h1>
+        <article>
+            <div class="form-group">
+                <h4>
+                    Версия 1.4.
+                </h4>
+                <ol>
+                    <li>В отчет добавлены итоговые суммы партий,  изделий и отсутствующих оснасток, добавлена средняя зарплта;</li>
+                    <li>Загрузка нормативов предприятия из базы данных;</li>
+                    <li>Загрузка коэфициентов расчета,(трудопотери , технологические перерывы и т.п.) из базы данных;</li>
+                    <li> В формулу расчета трудоемкости добавлены коэфиценты расчета;</li>
+                    <li>
+                        Добавлена группировка для операции (используется  если на операции одновременно испытывается несколко изделий).
+                        Сколько в камеру одновременно влазит- столько и вводят в поле группа;
+                    </li>
+                    <li>Группировка операций добавлена в формулу расчёта;</li>
+                    <li>Год для которого используют нормативы вводят в файле конфигурации приложения;</li>
+                </ol>
+
+            </div>
+        </article>

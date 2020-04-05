@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Estimator.Models
+﻿namespace Estimator.Models
 {
     public class StaffItem
     {
@@ -22,6 +17,6 @@ namespace Estimator.Models
         /// <summary>
         /// Средняя зарплата специалиста за 1 час работы
         /// </summary>
-        public float Salary { get; set; }
+        public decimal Salary { get; set; }
     }
 }

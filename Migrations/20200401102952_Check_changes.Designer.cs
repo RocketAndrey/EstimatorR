@@ -4,43 +4,22 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200401102952_Check_changes")]
+    partial class Check_changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Estimator.Models.CalcFactor", b =>
-                {
-                    b.Property<int>("CalcFactorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CompanyHistoryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FactorName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("FactorValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("CalcFactorID");
-
-                    b.HasIndex("CompanyHistoryID");
-
-                    b.ToTable("CalcFactor");
-                });
 
             modelBuilder.Entity("Estimator.Models.ClassECB", b =>
                 {
@@ -66,20 +45,20 @@ namespace Estimator.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Margin")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Margin")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("OverHead")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("OverHead")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("PensionTax")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("PensionTax")
+                        .HasColumnType("float");
 
-                    b.Property<int>("YearOfNorms")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("CompanyHistoryID");
 
@@ -361,8 +340,8 @@ namespace Estimator.Migrations
                     b.Property<int>("QualificationID")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("Salary")
+                        .HasColumnType("real");
 
                     b.HasKey("StaffItemID");
 
@@ -383,8 +362,8 @@ namespace Estimator.Migrations
                     b.Property<int>("BatchLabor")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ItemLabor")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ItemLabor")
+                        .HasColumnType("int");
 
                     b.Property<int>("KitLabor")
                         .HasColumnType("int");
@@ -416,9 +395,6 @@ namespace Estimator.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<int>("ElementTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupOperation")
                         .HasColumnType("int");
 
                     b.Property<int>("OperationID")
@@ -487,15 +463,6 @@ namespace Estimator.Migrations
                     b.ToTable("RequestOperationGroupViews");
                 });
 
-            modelBuilder.Entity("Estimator.Models.CalcFactor", b =>
-                {
-                    b.HasOne("Estimator.Models.CompanyHistory", "CompanyHistory")
-                        .WithMany("CalcFactors")
-                        .HasForeignKey("CompanyHistoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Estimator.Models.CustomerRequest", b =>
                 {
                     b.HasOne("Estimator.Models.Customer", "Customer")
@@ -544,7 +511,7 @@ namespace Estimator.Migrations
 
             modelBuilder.Entity("Estimator.Models.RequestElementType", b =>
                 {
-                    b.HasOne("Estimator.Models.CustomerRequest", "CustomerRequest")
+                    b.HasOne("Estimator.Models.CustomerRequest", null)
                         .WithMany("RequestElementTypes")
                         .HasForeignKey("CustomerRequestID")
                         .OnDelete(DeleteBehavior.Cascade)

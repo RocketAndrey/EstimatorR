@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Estimator.Models;
+using Estimator.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
-using Estimator.Models.ViewModels;
 
 namespace Estimator.Pages.Program
 {
@@ -20,7 +17,7 @@ namespace Estimator.Pages.Program
             _context = context;
         }
 
-        public IList<TestProgram> TestProgram { get;set; }
+        public IList<TestProgram> TestProgram { get; set; }
         public IList<ElementType> ElementTypesSort { get; set; }
         public ProgramIndexData ProgramData { get; set; }
         public int TestProgramID { get; set; }
@@ -32,14 +29,14 @@ namespace Estimator.Pages.Program
             TestProgram = await _context.TestPrograms.ToListAsync();
 
             {
-                ProgramData = new  ProgramIndexData();
+                ProgramData = new ProgramIndexData();
                 ProgramData.Programs = await _context.TestPrograms
                     .Include(i => i.ElementntTypes)
-                        .ThenInclude(i=>i.ChainItems)
-                            .ThenInclude(i=>i.Operation)
-                     .Include(i=>i.ElementntTypes)
                         .ThenInclude(i => i.ChainItems)
-                            .ThenInclude(r=>r.TestActions)
+                            .ThenInclude(i => i.Operation)
+                     .Include(i => i.ElementntTypes)
+                        .ThenInclude(i => i.ChainItems)
+                            .ThenInclude(r => r.TestActions)
                     .AsNoTracking()
                     .OrderBy(i => i.Name)
                     .ToListAsync();
@@ -47,23 +44,23 @@ namespace Estimator.Pages.Program
                 if (id != null)
                 {
                     TestProgramID = id.Value;
-                   // Instructor instructor = InstructorData.Instructors
-                    TestProgram program= ProgramData.Programs
+                    // Instructor instructor = InstructorData.Instructors
+                    TestProgram program = ProgramData.Programs
                         .Where(i => i.TestProgramID == id.Value).Single();
                     ProgramData.Elements = program.ElementntTypes;
-                    ElementTypesSort =  program.ElementntTypes.OrderBy(e => e.Order).ToList();
-                  
+                    ElementTypesSort = program.ElementntTypes.OrderBy(e => e.Order).ToList();
+
 
                 }
-                if (elementTypeID!=null)
+                if (elementTypeID != null)
                 {
                     ElementTypeID = elementTypeID.Value;
                     var selectedElenentType = ProgramData.Elements
                         .Where(x => x.ElementTypeID == elementTypeID)
                         .Single();
-                    ProgramData.ChainItems = selectedElenentType.ChainItems.OrderBy(e=>e.Order);
+                    ProgramData.ChainItems = selectedElenentType.ChainItems.OrderBy(e => e.Order);
                 }
-               
+
             }
         }
     }

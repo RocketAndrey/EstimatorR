@@ -1,29 +1,27 @@
-﻿using System;
+﻿using Estimator.Models;
+using Estimator.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
-using Estimator.Models.ViewModels;
 
 namespace Estimator.Pages.Program
 {
     public class EditModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
-        public  int PreviosTestChainItemID
+        public int PreviosTestChainItemID
         {
             get
             {
                 return TestChainItem.TestChainItemID - 1;
-                    
+
             }
         }
-        public  int NextTestChainItemID
+        public int NextTestChainItemID
         {
             get
             {
@@ -35,13 +33,13 @@ namespace Estimator.Pages.Program
         {
             get
             {
-                if (TestChainItem!=null)
+                if (TestChainItem != null)
                 {
                     return TestChainItem.Operation.Code + ": " + TestChainItem.Operation.Name;
                 }
                 else
                 {
-                    return String.Empty ;
+                    return String.Empty;
                 }
             }
         }
@@ -49,7 +47,7 @@ namespace Estimator.Pages.Program
         {
             _context = context;
         }
-     
+
 
         [BindProperty]
         public TestChainItem TestChainItem { get; set; }
@@ -75,22 +73,22 @@ namespace Estimator.Pages.Program
 
             TestActionViewList = new List<TestActionView>();
 
-            
-                foreach (var item in TestChainItem.TestActions)
-                {
-                TestActionViewList.Add(new TestActionView
-                    {
-                        TestChainItemID=item.TestChainItemID,
-                        TestActionID=item.TestActionID,
-                        QualificationName=item.Qualification.Name,
-                        BatchLabor=item.BatchLabor,
-                        ItemLabor=item.ItemLabor,
-                        KitLabor=item.KitLabor
-                    });
-                }
 
-        
-      
+            foreach (var item in TestChainItem.TestActions)
+            {
+                TestActionViewList.Add(new TestActionView
+                {
+                    TestChainItemID = item.TestChainItemID,
+                    TestActionID = item.TestActionID,
+                    QualificationName = item.Qualification.Name,
+                    BatchLabor = item.BatchLabor,
+                    ItemLabor = item.ItemLabor.ToString(),
+                    KitLabor = item.KitLabor
+                });
+            }
+
+
+
             return Page();
         }
 
@@ -127,13 +125,13 @@ namespace Estimator.Pages.Program
                 {
                     if (element.TestActionID == updElement.TestActionID)
                     {
-                        element.ItemLabor = updElement.ItemLabor;
+                        element.ItemLabor = Decimal.Parse(updElement.ItemLabor != null ? updElement.ItemLabor : "0,00");
                         element.KitLabor = updElement.KitLabor;
                         element.BatchLabor = updElement.BatchLabor;
                     }
                 }
             }
-           
+
 
             _context.Attach(testChainItemToUpdate).State = EntityState.Modified;
 

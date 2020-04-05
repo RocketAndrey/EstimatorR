@@ -4,20 +4,37 @@ using System.ComponentModel.DataAnnotations;
 namespace Estimator.Models
 {
     /// <summary>
-    /// Группа испытаний конкретной заявки закзчика 
+    /// Трудоёмкости по операциям 
     /// </summary>
-    public class RequestOperationGroup : OperationGroup
+    public class RequestOperationLaborSummary
     {
-        public CustomerRequest CustomerRequest; 
-        public RequestOperationGroup(CustomerRequest request)
+        public CustomerRequest CustomerRequest;
+        public RequestOperationLaborSummary(CustomerRequest request)
         {
             CustomerRequest = request;
             QualificationLaborSummary = new List<RequestQualLaborSummary>();
         }
         /// <summary>
-        /// Трудоёмкость по специальностям для данной группы испытаний (ВК, ДИ и т.д.)
+        /// Трудоёмкость по специальностям для данной операции
         /// </summary>
         public List<RequestQualLaborSummary> QualificationLaborSummary { get; set; }
+
+        public int OperationID { get; set; }
+        [Display(Name = "Код")]
+        public string OperationCode { get; set; }
+        [Display(Name = "Операция")]
+        public string OperationName { get; set; }
+
+        public int Order { get; set; }
+        public bool IsQualificationInList(string qualificationName)
+        {
+            foreach (var item in QualificationLaborSummary)
+            {
+                if (item.Name == qualificationName) { return true; }
+
+            }
+            return false;
+        }
         /// <summary>
         /// Суммарная трудоёмкось по всем специальностям 
         /// </summary>
@@ -53,7 +70,7 @@ namespace Estimator.Models
                 {
                     foreach (var itemRQLS in QualificationLaborSummary)
                     {
-                        result += (itemRQLS.LaborSummary / 60)  * CustomerRequest.CompanyHistory.GetSalary(itemRQLS.QualificationID);
+                        result += (itemRQLS.LaborSummary / 60) * CustomerRequest.CompanyHistory.GetSalary( itemRQLS.QualificationID);
                     }
 
                 }
@@ -61,17 +78,5 @@ namespace Estimator.Models
 
             }
         }
-
-        public bool IsQualificationInList(string qualificationName)
-        {
-            foreach (var item in QualificationLaborSummary)
-            {
-                if (item.Name == qualificationName) { return true; }
-
-            }
-            return false;
-        }
-
-
     }
 }

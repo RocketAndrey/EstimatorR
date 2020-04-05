@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Estimator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Estimator.CustomerRequests
 {
@@ -22,8 +19,8 @@ namespace Estimator.CustomerRequests
 
         public IActionResult OnGet()
         {
-        ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
-        ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
             return Page();
         }
 
@@ -39,10 +36,10 @@ namespace Estimator.CustomerRequests
                 return Page();
             }
 
-         
+
             _context.CustomerRequests.Add(CustomerRequest);
-            
-           // await _context.SaveChangesAsync();
+
+            // await _context.SaveChangesAsync();
             int num = _context.SaveChanges();
             int id = CustomerRequest.CustomerRequestID;
 
@@ -50,8 +47,8 @@ namespace Estimator.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
-                        .ThenInclude (e=>e.ChainItems)
-                            .ThenInclude (r=>r.Operation)
+                        .ThenInclude(e => e.ChainItems)
+                            .ThenInclude(r => r.Operation)
                 .Include(c => c.RequestElementTypes)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
@@ -84,7 +81,7 @@ namespace Estimator.CustomerRequests
 
                     }
                     retList.Add(r);
-                   
+
 
                 }
                 CustomerRequest.RequestElementTypes = retList;
@@ -93,11 +90,11 @@ namespace Estimator.CustomerRequests
                 CustomerRequest.IsProceed = true;
             }
 
-             num = _context.SaveChanges();
+            num = _context.SaveChanges();
 
             return RedirectToPage("./Edit", new { id = id });
 
-         
+
         }
     }
 }

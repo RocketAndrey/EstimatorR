@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Estimator.Pages
 {
@@ -38,8 +37,8 @@ namespace Estimator.Pages
         public static async Task<PaginatedList<T>> CreateAsync(
             IList<T> source, int pageIndex, int pageSize)
         {
-            var count =  source.Count;
-            var items =  source.Skip(
+            var count = source.Count;
+            var items = source.Skip(
                 (pageIndex - 1) * pageSize)
                 .Take(pageSize).ToList();
             return new PaginatedList<T>(items, count, pageIndex, pageSize);

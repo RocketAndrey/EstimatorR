@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
+﻿using Estimator.Models;
 using Estimator.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -19,11 +16,14 @@ namespace Estimator.Pages.CustomerRequests
     public class CustomerRequestPageModel : PageModel
 
     {
-        protected  Estimator.Data.EstimatorContext _context;
-        protected  IWebHostEnvironment _appEnvironment;
+        protected Estimator.Data.EstimatorContext _context;
+        protected IWebHostEnvironment _appEnvironment;
+        protected IConfiguration _configuration;
 
         [BindProperty]
         public CustomerRequest CustomerRequest { get; set; }
+
+        public CompanyHistory CompanyHistory { get; set; }
         public List<AssignedRequestElementType> AssignedElementsList;
         public List<RequestOperationGroupView> RequestOperationGroupViews;
         /// <summary>
@@ -56,7 +56,8 @@ namespace Estimator.Pages.CustomerRequests
                         RequestElementTypeID = item.RequestElementTypeID,
                         Name = item.ElementType.Name,
                         BatchCount = item.BatchCount,
-                        ItemCount = item.ItemCount
+                        ItemCount = item.ItemCount,
+                        MissingKitCount = item.KitCount
 
                     });
                 }
@@ -66,5 +67,14 @@ namespace Estimator.Pages.CustomerRequests
 
         }
 
+        protected async void setCompanyHistory(int year)
+        {
+            CustomerRequest.CompanyHistory = await _context.CompanyHistories
+               .Include(c => c.Staff)
+                    .ThenInclude(e => e.Qualification)
+               .Include(c => c.CalcFactors)
+               .FirstOrDefaultAsync(m => m.YearOfNorms == year);
+
+        }
     }
 }

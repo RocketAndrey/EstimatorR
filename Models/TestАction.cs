@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Estimator.Models
+﻿namespace Estimator.Models
 {
     /// <summary>
     /// Описывает 1 шаг технологической цепочки т.е. трудоемкость конкретной  квалификации работника
@@ -11,7 +6,7 @@ namespace Estimator.Models
     /// </summary>
     public class TestAction
     {
-       public int TestActionID { get; set; }
+        public int TestActionID { get; set; }
         public int QualificationID { get; set; }
         /// <summary>
         /// Квалификация работника выполняющего операцию
@@ -23,7 +18,7 @@ namespace Estimator.Models
         /// Шаг технологической цепочки
         /// </summary>
         public TestChainItem TestChainItem { get; set; }
-        
+
         /// <summary>
         /// трудоёмкость в минутах для партии
         /// </summary>
@@ -31,7 +26,7 @@ namespace Estimator.Models
         /// <summary>
         /// трудоёмкость в минутах для одного изделия
         /// </summary>
-        public int ItemLabor { get; set; }
+        public decimal ItemLabor { get; set; }
         /// <summary>
         /// Трудоемкость изготовления оснастки (для операций изготовления оснастки)
         /// </summary>
@@ -43,11 +38,7 @@ namespace Estimator.Models
         /// <param name="itemCount"></param>
         /// <param name="kitCount"></param>
         /// <returns></returns>
-        public int LaborSummary(int banchCount,int itemCount,int kitCount)
-        {
-            
-                return banchCount * BatchLabor + itemCount * ItemLabor + kitCount * KitLabor;
-        }
+     
 
     }
 }

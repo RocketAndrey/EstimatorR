@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 namespace Estimator.Models
 {
     /// <summary>
@@ -15,6 +10,6 @@ namespace Estimator.Models
         [Required]
         [StringLength(50)]
         [Display(Name = "Наименование")]
-        public string Name { get; set;  }
+        public string Name { get; set; }
     }
 }

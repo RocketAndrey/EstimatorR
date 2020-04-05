@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Estimator.Models
@@ -17,7 +15,10 @@ namespace Estimator.Models
         public ElementType ElementType { get; set; }
 
         public int CustomerRequestID { get; set; }
-        /// Колличество партиий        public CustomerRequest CustomerRequest { get; set; }
+        public CustomerRequest CustomerRequest { get; set; }
+
+        /// Колличество партиий        
+
         /// <summary>
 
         /// </summary>
@@ -31,7 +32,7 @@ namespace Estimator.Models
         /// <summary>
         /// Количество недостающей оснастки
         /// </summary>
-         [Display(Name = "Нет остнастки, типов")]
+        [Display(Name = "Нет остнастки, типов")]
         public int KitCount { get; set; }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace Estimator.Models
 
         public IEnumerable<RequestOperation> RequestOperations { get; set; }
         /// <summary>
-        /// Возвращает коллескцию специальностей с трудоемкостями
+        /// Возвращает коллескцию специальностей с трудоемкостями дл я данного типа
         /// </summary>
 
         [NotMapped]
@@ -61,8 +62,8 @@ namespace Estimator.Models
                         if (itemRO.TestChainItem != null)
                         {
                             //перебераем все шаги технологической цепочки
-                            if(itemRO.TestChainItem.TestActions!=null)
-                                {
+                            if (itemRO.TestChainItem.TestActions != null)
+                            {
                                 foreach (TestAction itemAc in itemRO.TestChainItem.TestActions)
                                 {
                                     RequestQualLaborSummary itemRQLS;
@@ -74,15 +75,37 @@ namespace Estimator.Models
                                         itemRQLS = new RequestQualLaborSummary();
                                         itemRQLS.LaborSummary = 0;
                                         itemRQLS.Name = itemAc.Qualification.Name;
+                                        itemRQLS.CustomerRequest = CustomerRequest;
                                         returnSummary.Add(itemAc.Qualification.Name, itemRQLS);
                                     }
                                     if (itemRO.IsExecute)
                                     {
-                                        // добавляем трудоемкость для данной специальности;
+                                        //Вычисляем объём выборки
+                                        int sampleCount;
+                                        switch (itemRO.SampleCount)
+                                        {
+                                            case -1:
+                                                //100%
+                                                sampleCount = itemRO.RequestElementType.ItemCount;
+                                                break;
+                                            default:
+                                                // берем объём выборки из заявки, если 0 то с выборкой ничего не делают()
+                                                sampleCount = itemRO.SampleCount;
+                                                break;
 
-                                        returnSummary[itemAc.Qualification.Name].LaborSummary += (itemRO.RequestElementType.BatchCount * itemAc.BatchLabor +
-                                            itemRO.RequestElementType.ItemCount * itemAc.ItemLabor +
-                                            itemRO.RequestElementType.KitCount * itemAc.KitLabor) * itemRO.ExecuteCount;
+                                        }
+                                        int groupOperationCount = 0;
+                                        int result = 0;
+                                        groupOperationCount = Math.DivRem(sampleCount, itemRO.TestChainItem.GroupOperation, out result);
+                                        if (result != 0)
+                                        {
+                                            groupOperationCount += 1;
+                                        }
+                                        // добавляем трудоемкость для данной специальности;
+                                        returnSummary[itemAc.Qualification.Name].LaborSummary +=( (itemRO.RequestElementType.BatchCount * itemAc.BatchLabor +
+                                           groupOperationCount * itemAc.ItemLabor +
+                                            itemRO.RequestElementType.KitCount * itemAc.KitLabor) * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0))
+                                            * CustomerRequest.CompanyHistory.TotalFactor;
 
                                     }
 
@@ -101,7 +124,7 @@ namespace Estimator.Models
         }
         [Display(Name = "Трудоёмкость,час")]
         [DisplayFormat(DataFormatString = "{0:0.00}")]
-        public decimal LaborSummary 
+        public decimal LaborSummary
         {
             get
             {
@@ -112,9 +135,9 @@ namespace Estimator.Models
                 {
                     result += itemRQLS.Value.LaborSummary;
                 }
-                return result/60;
+                return result / 60;
             }
         }
 
-    }  
+    }
 }

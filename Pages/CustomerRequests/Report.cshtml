@@ -6,90 +6,110 @@
 }
 
 <div>
-    <h4>Расчёт стоимости испытаний
-  
-            <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1">По группам</a>&nbsp;|&nbsp;
-            <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2">По типам</a>&nbsp;|&nbsp;
-            <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3">По испытаниям</a>
+    <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1">Структура цены</a>&nbsp;|&nbsp;
+    <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2">По группам</a>&nbsp;|&nbsp;
+    <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3">По типам</a>&nbsp;|&nbsp;
+    <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="4">По испытаниям</a>
+
+    <h4>
+        Расчёт стоимости испытаний:
     </h4>
     <br />
 
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.RequestNumber)
+            Заявка:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CustomerRequest.RequestNumber)
+            @String.Concat(Model.CustomerRequest.RequestNumber, " от ", @Model.CustomerRequest.RequestDate.ToShortDateString())
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.RequestDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CustomerRequest.RequestDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CustomerRequest.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.Program)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CustomerRequest.Program.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.Customer.Name)
+            Заказчик:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CustomerRequest.Customer.Name)
         </dd>
+        <dt class="col-sm-2">
+            Программа испытаний:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CustomerRequest.Program.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Описание:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CustomerRequest.Description)
+        </dd>
+
     </dl>
 
 </div>
 
-    <h4>Сведения о перечне ЭКБ:</h4>
+@if (Model.Mode == 1)
+{
+    <h4>Структура цены:</h4>
     <br />
-    <table class="table">
-
+    <table class=" table table-bordered">
         <tr>
-            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
-            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
-            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
+            <th>№ п/п </th>
+            <th>Наименование статей калькуляции </th>
+            <th>Плановые затраты </th>
         </tr>
-
-        @foreach (var item in Model.CustomerRequest.RequestElementTypes)
-        {
-            <tr>
-                <td>
-                    @item.ElementType.Name
-                </td>
-                <td>
-                    @item.BatchCount
-                </td>
-                <td>
-                    @item.ItemCount
-                </td>
-                <td>
-                    @item.KitCount
-                </td>
-            </tr>
-
-        }
-
+        <tr>
+            <td>2</td>
+            <td>Затраты на оплату труда основных производственных рабочих (непосредственных исполнителей) - всего:</td>
+            <td>@Model.CustomerRequest.TotalSalary.ToString("N2") </td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Страховые взносы на обязательное социальное страхование</td>
+            <td>@Model.CustomerRequest.PensionTax.ToString("N2") </td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>Общехозяйственные затраты</td>
+            <td>@Model.CustomerRequest.OverHead.ToString("N2") </td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Производственная себестоимость</td>
+            <td>@Model.CustomerRequest.InputCost.ToString("N2") </td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>Прибыль</td>
+            <td>@Model.CustomerRequest.Margin.ToString("N2") </td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>Цена(без НДС)</td>
+            <td>@Model.CustomerRequest.TotalCost.ToString("N2") </td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>Трудоемкость(чел/час)</td>
+            <td>@Model.CustomerRequest.TotalLabor.ToString("N2") </td>
+        <tr>
+            <td>19</td>
+            <td>Средняя заработная плата(мес)</td>
+            <td>@Model.CustomerRequest.AverageSalary.ToString("N2") </td>
+        </tr>
+        </tr>
     </table>
+}
 
-@if (Model.Mode == 2)
+
+
+@if (Model.Mode == 3)
 {
     <h4>Трудоёмкость по типам ЭКБ:</h4>
     <br />
-    <table class="table">
+    <table class="table table-bordered">
 
         <tr>
             <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
-            
+
             @foreach (var itemOG in Model.CustomerRequest.RequestElementTypes.ToList()[0].QualificationLaborSummary)
             {
                 <th>
@@ -102,99 +122,237 @@
 
         @foreach (var item in Model.CustomerRequest.RequestElementTypes)
         {
-            <tr>
-                <td>
-                    @item.ElementType.Name
-                </td>
+            if (item.BatchCount > 0)
+            {
+                <tr>
+                    <td>
+                        @item.ElementType.Name
+                    </td>
                     @foreach (var itemQ in item.QualificationLaborSummary)
                     {
                         <td>
-                             @String.Format("{0:0.00}", itemQ.Value.LaborSummary/60)
+                            @String.Format("{0:0.00}", itemQ.Value.LaborSummary / 60)
 
                         </td>
-                     }
-            <td>
-                @String.Format("{0:0.00}", item.LaborSummary)
+                    }
+                    <td>
+                        @String.Format("{0:0.00}", item.LaborSummary)
 
-            </td>
-            </tr>
+                    </td>
+                </tr>
+            }
 
         }
-        <tfoot >
+        <tfoot>
             <tr class="thead-dark">
-                <td>Итого:</td>
-                @foreach (var itemOG in Model.CustomerRequest.RequestElementTypes.ToList()[0].QualificationLaborSummary)
+                <td><b>Итого трудоёмкость,  час:</b></td>
+                @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
                 {
-            <td>
-                @String.Format("{0:0.00}", itemOG.Value.GetRequestQualificationLaborSummary(Model.CustomerRequest) / 60)
-            </td>
+                    <td>
+                        <b>
+                            @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
+                        </b>
+                    </td>
                 }
                 <td>
-
+                    <b>
+                        @Model.CustomerRequest.TotalLabor.ToString("N2")
+                    </b>
                 </td>
             </tr>
+        </tfoot>
+    </table>
+}
 
+
+@if (Model.Mode == 2)
+{
+    <h4>Трудоёмкость по группам испытаний:</h4>
+    <br />
+    <table class="table table-bordered">
+
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
+            @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
+            {
+                <th>
+                    @itemOG.Name
+                </th>
+            }
+
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].LaborSummary)</th>
+
+        </tr>
+
+        @foreach (var item in Model.CustomerRequest.OperationGroups)
+        {
+            if (item.LaborSummary > 0)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    @foreach (var itemOG in item.QualificationLaborSummary)
+                    {
+                        <td>
+                            @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
+                        </td>
+                    }
+                    <td>
+                        @String.Format("{0:0.00}", item.LaborSummary / 60)
+                    </td>
+                </tr>
+            }
+
+        }
+
+
+        
+        <tfoot>
+            <tr class="thead-dark">
+                <td><b>Итого трудоёмкость,  час:</b></td>
+                @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
+                {
+                    <td>
+                        <b>
+                        @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
+                            </b>
+                    </td>
+                }
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalLabor.ToString("N2") 
+                    </b>
+                </td>
+            </tr>
+            </tfoot>
+    </table>
+}
+
+
+@if (Model.Mode == 4)
+{
+    <h4>Трудоёмкость по операциям:</h4>
+    <br />
+    <table class="table table-bordered">
+
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].OperationCode)</th>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].OperationName)</th>
+            @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
+            {
+                <th>
+                    @itemOG.Name
+                </th>
+            }
+
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].LaborSummary)</th>
+
+        </tr>
+
+        @foreach (var item in Model.CustomerRequest.OperationSummary)
+        {
+            if (item.LaborSummary > 0)
+            {
+                <tr>
+                    <td>
+                        @item.OperationCode
+                    </td>
+                    <td>
+                        @item.OperationName
+                    </td>
+                    @foreach (var itemOG in item.QualificationLaborSummary)
+                    {
+                        <td>
+                            @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
+                        </td>
+                    }
+                    <td>
+                        @String.Format("{0:0.00}", item.LaborSummary / 60)
+                    </td>
+                </tr>
+            }
+
+        }
+        <tfoot>
+            <tr class="thead-dark">
+                <td></td>
+                <td><b>Итого трудоёмкость,  час:</b></td>
+                @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
+                {
+                    <td>
+                        <b>
+                            @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
+                        </b>
+                    </td>
+                }
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalLabor.ToString("N2")
+                    </b>
+                </td>
+            </tr>
         </tfoot>
 
     </table>
 }
-@if (Model.Mode == 1)
-{
-<h4>Трудоёмкость по группам испытаний:</h4>
+<h4>Сведения о перечне ЭКБ:</h4>
 <br />
-<table class="table">
-
+<table class="table table-bordered">
+    
     <tr>
-        <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
-        @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
-        {
-            <th>
-                @itemOG.Name
-            </th>
-        }
-
-        <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].LaborSummary)</th>
+        <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
+        <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
+        <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
     </tr>
-
-    @foreach (var item in Model.CustomerRequest.OperationGroups)
+    <tbody>
+        @foreach (var item in Model.CustomerRequest.RequestElementTypes)
     {
+        @if (item.BatchCount > 0)
+        {
         <tr>
             <td>
-                @item.Name
+                @item.ElementType.Name
             </td>
-            @foreach (var itemOG in item.QualificationLaborSummary)
-            {
-                <td>
-                    @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
-                </td>
-            }
             <td>
-                @String.Format("{0:0.00}", item.LaborSummary)
+                @item.BatchCount
             </td>
-
+            <td>
+                @item.ItemCount
+            </td>
+            <td>
+                @item.KitCount
+            </td>
         </tr>
+        }
 
     }
-    <tfoot>
-    <tfoot>
-        <tr class="thead-dark">
-            <td>Итого:</td>
-            @foreach (var itemOG in Model.CustomerRequest.RequestElementTypes.ToList()[0].QualificationLaborSummary)
-            {
-                <td>
-                    @String.Format("{0:0.00}", itemOG.Value.GetRequestQualificationLaborSummary(Model.CustomerRequest) / 60)
-                </td>
-            }
-            <td>
-            </td>
-        </tr>
+    </tbody>
+<tfoot>
+    
+    <tr>
+        <td><b>Итого:</b></td>
+        <td>
+            <b>
+                @Model.CustomerRequest.TotalBanchCount
+            </b>
+        </td>
+        <td>
+            <b>
+                @Model.CustomerRequest.TotalItemCount
+            </b>
+        </td>
+        <td>
+            <b>
+                @Model.CustomerRequest.TotalKitCount
+            </b>
 
-    </tfoot>
-
-    </tfoot>
-
+        </td>
+    </tr>
+</tfoot>
 </table>
-}
+
 <form method="post" enctype="multipart/form-data">
 
     <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID">Edit</a> |

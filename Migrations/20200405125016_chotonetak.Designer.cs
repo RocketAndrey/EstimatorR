@@ -4,14 +4,16 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200405125016_chotonetak")]
+    partial class chotonetak
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,9 +418,6 @@ namespace Estimator.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<int>("ElementTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupOperation")
                         .HasColumnType("int");
 
                     b.Property<int>("OperationID")

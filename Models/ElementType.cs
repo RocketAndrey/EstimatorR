@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 namespace Estimator.Models
 {
 
@@ -22,7 +18,7 @@ namespace Estimator.Models
         public TestProgram Program { get; set; }
         public int ClassECBID { get; set; }
 
-        public ClassECB Class { get; set;  }
-        public IEnumerable<TestChainItem> ChainItems { get; set;  }
+        public ClassECB Class { get; set; }
+        public IEnumerable<TestChainItem> ChainItems { get; set; }
     }
 }

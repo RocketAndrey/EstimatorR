@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Estimator.Data;
-using Estimator.Models;
+﻿using Estimator.Models;
 using Estimator.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Estimator.Pages.CustomerRequests
 {
-    public class EditModel :CustomerRequestPageModel
+    public class EditModel : CustomerRequestPageModel
     {
-        
+
         public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
@@ -33,23 +29,23 @@ namespace Estimator.Pages.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
-                .Include(c=>c.RequestElementTypes)
-                    .ThenInclude(c=>c.ElementType)
+                .Include(c => c.RequestElementTypes)
+                    .ThenInclude(c => c.ElementType)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
             // запролняем типы элементов
-            PopulateAssignedElementTypes( CustomerRequest);
+            PopulateAssignedElementTypes(CustomerRequest);
             //Заполняем операции
             PopulateOperations(CustomerRequest);
-        
+
             if (CustomerRequest == null)
             {
                 return NotFound();
             }
             // Добавляем типы элементов для новой заявки
-           
-           ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
-           ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
+
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
             return Page();
         }
 
@@ -59,15 +55,17 @@ namespace Estimator.Pages.CustomerRequests
         {
             if (!ModelState.IsValid)
             {
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
                 return Page();
             }
-            if (id==null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             //получаем текущую заявку
-            var requestToUpdate= await _context.CustomerRequests
+            var requestToUpdate = await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
@@ -75,10 +73,10 @@ namespace Estimator.Pages.CustomerRequests
                     .ThenInclude(c => c.ElementType)
                   .Include(c => c.RequestElementTypes)
                     .ThenInclude(c => c.RequestOperations)
-                        .ThenInclude(c=>c.TestChainItem)
+                        .ThenInclude(c => c.TestChainItem)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
-            if (requestToUpdate==null)
+            if (requestToUpdate == null)
             {
                 // заявка не найдена
                 return NotFound();
@@ -94,26 +92,30 @@ namespace Estimator.Pages.CustomerRequests
                 )
             {
                 UpdateAssignedElementTypes(elementTypes, requestToUpdate);
-                UpdateRequestOperations(requestOperationGroupViews, requestToUpdate);
+
+                if (requestToUpdate.Program.AllowEditChain)
+                {
+                    UpdateRequestOperations(requestOperationGroupViews, requestToUpdate);
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
             }
             else
             {
                 // не получилось обновить 
-                PopulateAssignedElementTypes( requestToUpdate);
+                PopulateAssignedElementTypes(requestToUpdate);
                 return Page();
             }
-            
 
-               
+
+
         }
-      
-       
-          
+
+
+
         public void UpdateAssignedElementTypes(AssignedRequestElementType[] elementTypes, CustomerRequest customerRequestToUpdate)
         {
-          //  IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequestToUpdate.CustomerRequestID);
+            //  IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequestToUpdate.CustomerRequestID);
             foreach (var element in customerRequestToUpdate.RequestElementTypes)
             {
                 foreach (var updElement in elementTypes)
@@ -130,8 +132,8 @@ namespace Estimator.Pages.CustomerRequests
         }
         public void UpdateRequestOperations(RequestOperationGroupView[] operationTypes, CustomerRequest customerRequestToUpdate)
         {
-       
-                                                     
+
+
             foreach (var element in customerRequestToUpdate.RequestElementTypes)
             {
                 foreach (var operation in element.RequestOperations)
@@ -146,7 +148,7 @@ namespace Estimator.Pages.CustomerRequests
                         }
                     }
                 }
-             
+
             }
 
         }

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>def06cf4-5dc4-4979-8015-56c18797f5a7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,8 @@
     <Compile Remove="Migrations\20200219100113_AddRequestOperation2.Designer.cs" />
     <Compile Remove="Migrations\20200219102759_CorrectRequestOperation.cs" />
     <Compile Remove="Migrations\20200219102759_CorrectRequestOperation.Designer.cs" />
+    <Compile Remove="Migrations\20200401081918_test.cs" />
+    <Compile Remove="Migrations\20200401081918_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
