@@ -79,10 +79,10 @@ namespace Estimator.Pages.CustomerRequests
                     customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList();
                     break;
                 case "Date_desc":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList();
+                    customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList();
                     break;
                 default:
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList();
+                    customerRequestViewsIQ = customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList();
                     break;
             }
 

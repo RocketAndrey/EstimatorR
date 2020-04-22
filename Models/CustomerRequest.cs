@@ -16,6 +16,7 @@ namespace Estimator.Models
         public CustomerRequest()
         {
             CompanyHistory = new CompanyHistory();
+            RequestDate = DateTime.Now;
         }
 
         public int CustomerRequestID { get; set; }
@@ -60,7 +61,7 @@ namespace Estimator.Models
                 foreach (var itemRET in RequestElementTypes)
                 {
 
-                    if (itemRET.RequestOperations != null)
+                    if (itemRET.RequestOperations != null & itemRET.ItemCount> 0 )
                     {
                         //перебираем операции для данного типа ЭРИ
                         foreach (var itemRO in itemRET.RequestOperations)
@@ -143,7 +144,10 @@ namespace Estimator.Models
                                         {
                                             groupOperationCount += 1;
                                         }
-
+                                        if (itemRO.RequestElementType.ItemCount == 0)
+                                        {
+                                            groupOperationCount = 0;
+                                        }
                                         ///какой - то кривой способ
                                         // добавляем трудоемкость для данной специальности;
                                         labor = ((itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) +
@@ -171,8 +175,8 @@ namespace Estimator.Models
             }
             else
             {
-                _operationSummary= null;
-                _operationGroups = null;
+                _operationSummary= new List<RequestOperationLaborSummary>();
+                _operationGroups = new List<RequestOperationGroup>();
             }
 
         }
@@ -184,32 +188,30 @@ namespace Estimator.Models
             {
                 Dictionary<string, RequestQualLaborSummary> returnGroup = new Dictionary<string, RequestQualLaborSummary>();
                 if (OperationGroups != null)
-                { 
-                        foreach (var itemOG in OperationGroups)
+                {
+                    foreach (var itemOG in OperationGroups)
+                    {
+                        foreach (var itemQ in itemOG.QualificationLaborSummary)
                         {
-                            foreach (var itemQ in itemOG.QualificationLaborSummary)
+                            if (!returnGroup.ContainsKey(itemQ.QualificationID.ToString()))
                             {
-                                if (!returnGroup.ContainsKey(itemQ.QualificationID.ToString()))
-                                {
                                 RequestQualLaborSummary item = new RequestQualLaborSummary();
                                 item.LaborSummary = 0;
                                 item.Name = itemQ.Name;
-                                item.QualificationID = item.QualificationID;
+                                item.QualificationID = itemQ.QualificationID;
                                 item.CustomerRequest = this;
-                        
+
                                 returnGroup.Add(itemQ.QualificationID.ToString(), item);
-                                }
-                                returnGroup[itemQ.QualificationID.ToString()].LaborSummary += itemQ.LaborSummary;
                             }
-
+                            returnGroup[itemQ.QualificationID.ToString()].LaborSummary += itemQ.LaborSummary;
                         }
+                    }
                     return returnGroup.Values.ToList();
-
                 }
                 else
                 { return null; }
-            }
 
+            }
         }
 
         [NotMapped]
@@ -237,8 +239,11 @@ namespace Estimator.Models
                 return _operationGroups;
             }
         }
+        /// <summary>
+        /// Основная заработная плата
+        /// </summary>
         [NotMapped]
-        public decimal TotalSalary
+        public decimal BasicSalary
         {
             get
             {
@@ -256,7 +261,28 @@ namespace Estimator.Models
                 return result;
             }
         }
-      
+        /// <summary>
+        /// Дополнительная заработная плата
+        /// </summary>
+        [NotMapped]
+        public decimal TotalSalary
+        {
+            get
+            {
+                return AdditionalSalary + BasicSalary;
+            }
+        }
+        /// <summary>
+        /// Дополнительная заработная плата
+        /// </summary>
+        [NotMapped]
+        public decimal AdditionalSalary
+        {
+            get
+            {
+                return CompanyHistory.AdditionalSalary * BasicSalary;
+            }
+        }
         /// <summary>
         /// Средняя заработная плата
         /// </summary>
@@ -267,7 +293,7 @@ namespace Estimator.Models
             {
                 if (TotalLabor > 0)
                 {
-                    return TotalSalary / (TotalLabor / 168);
+                    return BasicSalary / (TotalLabor / 168);
                 }
                 else
                 { return 0; }
@@ -282,10 +308,10 @@ namespace Estimator.Models
         {
             get
             {
-                return CompanyHistory.OverHead/100 * TotalSalary;
+                return CompanyHistory.OverHead/100 * BasicSalary;
             }
         }
-        
+      
         [NotMapped]
         public decimal PensionTax
         {
@@ -394,6 +420,34 @@ namespace Estimator.Models
 
             }
         }
+        [NotMapped]
+        public decimal AveragePartCost
+        {
+            get
+            {
+                if (TotalBanchCount> 0)
+                        {
+                    return (TotalCost / TotalBanchCount);
+                }
+                else
+                {
+                    return 0;
+
+                    }
+            }
+        }
+        /// <summary>
+        /// соотношение заработной платы к итоговой стоимости 
+        /// </summary>
+        [NotMapped]
+        public decimal TotalRatio 
+        {
+            get
+            {
+                return CompanyHistory.TotalRatio ;
+            }
+        }
+
         public IEnumerable<Element> Elements { get; set; }
 
 

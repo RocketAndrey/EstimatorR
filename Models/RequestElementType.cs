@@ -50,7 +50,7 @@ namespace Estimator.Models
         {
             get
             {
-                if (RequestOperations != null)
+                if (RequestOperations != null & ItemCount>0 )
 
                 {
                     Dictionary<string, RequestQualLaborSummary> returnSummary = new Dictionary<string, RequestQualLaborSummary>();
@@ -97,9 +97,14 @@ namespace Estimator.Models
                                         int groupOperationCount = 0;
                                         int result = 0;
                                         groupOperationCount = Math.DivRem(sampleCount, itemRO.TestChainItem.GroupOperation, out result);
+
                                         if (result != 0)
                                         {
                                             groupOperationCount += 1;
+                                        }
+                                        if ( itemRO.RequestElementType.ItemCount==0)
+                                        {
+                                            groupOperationCount = 0;
                                         }
                                         // добавляем трудоемкость для данной специальности;
                                         returnSummary[itemAc.Qualification.Name].LaborSummary +=( (itemRO.RequestElementType.BatchCount * itemAc.BatchLabor +
@@ -118,7 +123,7 @@ namespace Estimator.Models
                 }
                 else
                 {
-                    return null;
+                    return new Dictionary<string, RequestQualLaborSummary>();
                 }
             }
         }

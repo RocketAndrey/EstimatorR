@@ -28,16 +28,16 @@
             @Html.DisplayFor(model => model.CustomerRequest.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.Program)
+            @Html.DisplayNameFor(model => model.CustomerRequest.Program.Name)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CustomerRequest.Program.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerRequest.Customer)
+            @Html.DisplayNameFor(model => model.CustomerRequest.Customer.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CustomerRequest.Customer.INN)
+            @Html.DisplayFor(model => model.CustomerRequest.Customer.Name)
         </dd>
     </dl>
     

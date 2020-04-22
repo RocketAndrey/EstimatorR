@@ -54,5 +54,6 @@ namespace Estimator.Data
             modelBuilder.Entity<CalcFactor>().ToTable("CalcFactor");
             modelBuilder.Entity<StaffItem>().ToTable("StaffItem");
         }
+        public DbSet<Estimator.Models.ElementImport> ElementImports { get; set; }
     }
 }

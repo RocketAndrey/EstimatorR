@@ -22,7 +22,6 @@ namespace Estimator.Models
         /// Суммарная трудоёмкось по всем специальностям 
         /// </summary>
         [Display(Name = "Итого, час")]
-
         public decimal LaborSummary
         {
             get
@@ -35,6 +34,30 @@ namespace Estimator.Models
                     foreach (var itemRQLS in QualificationLaborSummary)
                     {
                         result += itemRQLS.LaborSummary;
+                    }
+
+                }
+                return result;
+
+            }
+        }
+        /// <summary>
+        /// Суммарная стоимость по всем специальностям 
+        /// </summary>
+        [Display(Name = "Итого, руб")]
+
+        public decimal CostSummary
+        {
+            get
+
+            {
+                decimal result;
+                result = 0;
+                if (QualificationLaborSummary != null)
+                {
+                    foreach (var itemRQLS in QualificationLaborSummary)
+                    {
+                        result += itemRQLS.CostSummary;
                     }
 
                 }

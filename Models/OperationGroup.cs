@@ -13,7 +13,7 @@ namespace Estimator.Models
         public string Code { get; set; }
         [Required]
         [StringLength(100)]
-
+        [Display(Name = "Группа испытаний")]
         public string Name { get; set; }
     }
 }

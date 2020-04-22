@@ -19,7 +19,18 @@ namespace Estimator.Models
         {
             get
             {
-                return (RequestQualSalarySummary / 60) * CustomerRequest.CompanyHistory.GetSalary(QualificationID);
+                return (LaborSummary / 60) * CustomerRequest.CompanyHistory.GetSalary(QualificationID);
+            }
+        }
+        /// <summary>
+        /// Итоговая суммарна я стоимость работ в разрезе данной специальности
+        /// </summary>
+
+        public decimal CostSummary 
+        { 
+            get
+            {
+                return RequestQualSalarySummary * CustomerRequest.TotalRatio;
             }
         }
 

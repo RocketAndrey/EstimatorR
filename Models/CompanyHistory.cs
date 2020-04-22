@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Estimator.Models
 {
     /// <summary>
@@ -31,21 +31,25 @@ namespace Estimator.Models
             get;set;
         }
         /// <summary>
-        /// Год для которого используются нормативы при раччёте;
+        /// Год для которого используются нормативы при расчёте;
         /// </summary>
         public int YearOfNorms { get; set; }
         /// <summary>
-        /// Процент накладных расходов
+        /// Накладные расходы (в % от основной заработной платы)
         /// </summary>
         public decimal OverHead { get; set; }
         /// <summary>
-        /// Процент прибыли
+        ///  Рентабельность (в %) от собственной себестоимости  
         /// </summary>
         public decimal Margin { get; set; }
         /// <summary>
-        /// Налог  на социальное страхование
+        ///Страховые взносы (в % от основной и дополнительной заработной платы) 
         /// </summary>
         public decimal PensionTax { get; set; }
+        /// <summary>
+        /// Дополнительная заработная плата (в % от основной заработной платы)
+        /// </summary>
+        public decimal AdditionalSalary { get; set;  }
         public List<StaffItem> Staff { get; set; }
         /// <summary>
         /// Трудопотери 5%
@@ -79,6 +83,17 @@ namespace Estimator.Models
                 }
             }
             return 0;
+        }
+        /// <summary>
+        /// Cоотношение заработной платы к итоговой стоимости 
+        /// </summary>
+        [NotMapped]
+        public decimal TotalRatio
+        {
+            get
+            {
+                return (1 + AdditionalSalary / 100 + (1 + AdditionalSalary / 100) * PensionTax / 100 + OverHead / 100) * (1 + Margin / 100);
+            }
         }
     }
 }

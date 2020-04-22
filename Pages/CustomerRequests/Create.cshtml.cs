@@ -21,6 +21,7 @@ namespace Estimator.CustomerRequests
         {
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
             ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
+            CustomerRequest = new CustomerRequest();
             return Page();
         }
 
@@ -51,6 +52,8 @@ namespace Estimator.CustomerRequests
                             .ThenInclude(r => r.Operation)
                 .Include(c => c.RequestElementTypes)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+
+
 
             if (!CustomerRequest.IsProceed)
             {

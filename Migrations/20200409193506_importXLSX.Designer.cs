@@ -4,14 +4,16 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200409193506_importXLSX")]
+    partial class importXLSX
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,9 +204,6 @@ namespace Estimator.Migrations
 
                     b.Property<int>("ElementTypeKeyColumn")
                         .HasColumnType("int");
-
-                    b.Property<bool>("FirstRowIsHeader")
-                        .HasColumnType("bit");
 
                     b.HasKey("ElementImportID");
 

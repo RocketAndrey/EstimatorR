@@ -10,13 +10,13 @@
     <table class="table">
         <tr>
             <td align="left">
-                <a asp-page="Create" class="btn btn-primary">Создать заявку</a>
+                <a asp-page="Create">Создать</a>
             </td>
             <td align="right">
                 Искать:
                 <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="Поиск" class="btn btn-primary" /> |
-                <a asp-page="./Index" class="btn btn-primary">Очистить поиск</a>
+                <input type="submit" value="Поиск"/> |
+                <a asp-page="./Index">Очистить поиск</a>
             </td>
         </tr>
     </table>

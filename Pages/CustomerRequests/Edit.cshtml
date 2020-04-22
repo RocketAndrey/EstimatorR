@@ -7,12 +7,14 @@
     ViewData["Title"] = "Edit";
 }
 
+<table>
+    <tr>
+        <td><a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/contract2.png" width="32" height="32" /></a></td>
+        <td> <h4>&nbsp;Редактирование заявки</h4></td>
+    </tr>
+</table>
 
-
-<h4>Редактирование заявки</h4>
 <hr />
-
-
 <form method="post">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -77,15 +79,21 @@
     <a href="#hiddenList" onclick="viewDIV('hiddenList'); return false">
         <h4>Перечень ЭКБ:</h4>
     </a>
+
+    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID"
+       class="btn">
+        импорт
+    </a>
+
     <div id="hiddenList" style="display:block;">
 
 
         <table class="table">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount)</th>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].ItemCount)</th>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].MissingKitCount)</th>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount), <b>N<sub>парт</sub> </b> </th>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].ItemCount), <b>N<sub>штук</sub> </b> </th>
+                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].MissingKitCount), <b>N<sub>осн</sub> </b> </th>
             </tr>
 
             @for (int i = 0; i < Model.AssignedElementsList.Count; i++)
@@ -115,61 +123,62 @@
 
     </div>
 
- @if (Model.CustomerRequest.Program.AllowEditChain)
- {
+    @if (Model.CustomerRequest.Program.AllowEditChain)
+    {
 
-    <a href="#hiddenOper" onclick="viewDIV('hiddenOper'); return false">
-        <h4>Операции:</h4>
-    </a>
+        <a href="#hiddenOper" onclick="viewDIV('hiddenOper'); return false">
+            <h4>Операции:</h4>
+        </a>
 
-    <div id="hiddenOper" style="display:block;">
-
-
-        <table class="table">
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].OperationGroupCode)</th>
-                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].Name)</th>
-                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].IsExecute)</th>
-                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].ExecuteCount)</th>
-                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].SampleCount)</th>
+        <div id="hiddenOper" style="display:block;">
 
 
-            </tr>
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].OperationGroupCode)</th>
+                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].IsExecute)</th>
+                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].ExecuteCount), <b>K<sub>повтор</sub> </b> </th>
+                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].SampleCount), <b>n </b> </th>
 
-            @for (int i = 0; i < Model.RequestOperationGroupViews.Count; i++)
-            {
-
-                string selectedRow = Model.RequestOperationGroupViews[i].IsExecute ? "table-success" : "";
-                <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID">
-                    <td>
-                        @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
-                    </td>
-
-                    <td>
-                        <input type="hidden" name="requestOperationGroupViews[@i].OperationID" value="@Model.RequestOperationGroupViews[i].OperationID" />
-                        @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
-                    </td>
-                    <td>
-                        <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />
-
-                    </td>
-                    <td>
-                        <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="RequestOperationGroupViews[@i].ExecuteCount" class="form-control" />
-                        <span asp-validation-for="@Model.RequestOperationGroupViews[@i].ExecuteCount" class="text-danger"></span>
-
-                    </td>
-                    <td>
-                        <input asp-for="@Model.RequestOperationGroupViews[i].SampleCount" name="RequestOperationGroupViews[@i].SampleCount" class="form-control" />
-                        <span asp-validation-for="@Model.RequestOperationGroupViews[i].SampleCount" class="text-danger"></span>
-
-                    </td>
 
                 </tr>
-            }
-        </table>
 
-    </div>
- }
+                @for (int i = 0; i < Model.RequestOperationGroupViews.Count; i++)
+                {
+
+                    string selectedRow = Model.RequestOperationGroupViews[i].IsExecute ? "table-success" : "";
+
+                    <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID">
+                        <td>
+                            @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
+                        </td>
+
+                        <td>
+                            <input type="hidden" name="requestOperationGroupViews[@i].OperationID" value="@Model.RequestOperationGroupViews[i].OperationID" />
+                            @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
+                        </td>
+                        <td>
+                            <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />
+
+                        </td>
+                        <td>
+                            <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="RequestOperationGroupViews[@i].ExecuteCount" class="form-control" />
+                            <span asp-validation-for="@Model.RequestOperationGroupViews[@i].ExecuteCount" class="text-danger"></span>
+
+                        </td>
+                        <td>
+                            <input asp-for="@Model.RequestOperationGroupViews[i].SampleCount" name="RequestOperationGroupViews[@i].SampleCount" class="form-control" />
+                            <span asp-validation-for="@Model.RequestOperationGroupViews[i].SampleCount" class="text-danger"></span>
+
+                        </td>
+
+                    </tr>
+                }
+            </table>
+
+        </div>
+    }
 
 
     <div class="form-group">
@@ -194,18 +203,19 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-   <script>function viewDIV(n) {
-           style = document.getElementById(n).style;
-           style.display = (style.display == 'block') ? 'none' : 'block';
-       }
+<script>
+    function viewDIV(n) {
+        style = document.getElementById(n).style;
+        style.display = (style.display == 'block') ? 'none' : 'block';
+    }
 
-       function showSelected(n) {
-           var item = document.getElementById(n);
-           if (item.classList.contains('table-success')) {
-               item.classList.remove('table-success');
-           }
-           else {
-               item.classList.add('table-success');
-           }
-       }
+    function showSelected(n) {
+        var item = document.getElementById(n);
+        if (item.classList.contains('table-success')) {
+            item.classList.remove('table-success');
+        }
+        else {
+            item.classList.add('table-success');
+        }
+    }
 </script>

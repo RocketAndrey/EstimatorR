@@ -4,14 +4,16 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200406153859_AdditionalSalary")]
+    partial class AdditionalSalary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,41 +178,6 @@ namespace Estimator.Migrations
                     b.HasIndex("CustomerRequestID");
 
                     b.ToTable("Element");
-                });
-
-            modelBuilder.Entity("Estimator.Models.ElementImport", b =>
-                {
-                    b.Property<int>("ElementImportID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CustomerRequestID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElementCountColumn")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElementDatasheetColumn")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElementManufacturingColumn")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElementNameColumn")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElementTypeKeyColumn")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("FirstRowIsHeader")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ElementImportID");
-
-                    b.HasIndex("CustomerRequestID");
-
-                    b.ToTable("ElementImports");
                 });
 
             modelBuilder.Entity("Estimator.Models.ElementType", b =>
@@ -525,38 +492,6 @@ namespace Estimator.Migrations
                     b.ToTable("RequestOperationGroupViews");
                 });
 
-            modelBuilder.Entity("Estimator.Models.XLSXElementType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ElementCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ElementDatasheet")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ElementImportID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ElementManufacturing")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ElementName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ElementTypeKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ElementImportID");
-
-                    b.ToTable("XLSXElementType");
-                });
-
             modelBuilder.Entity("Estimator.Models.CalcFactor", b =>
                 {
                     b.HasOne("Estimator.Models.CompanyHistory", "CompanyHistory")
@@ -585,15 +520,6 @@ namespace Estimator.Migrations
                 {
                     b.HasOne("Estimator.Models.CustomerRequest", "CustomerRequest")
                         .WithMany("Elements")
-                        .HasForeignKey("CustomerRequestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Estimator.Models.ElementImport", b =>
-                {
-                    b.HasOne("Estimator.Models.CustomerRequest", "CustomerRequest")
-                        .WithMany()
                         .HasForeignKey("CustomerRequestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -688,15 +614,6 @@ namespace Estimator.Migrations
                     b.HasOne("Estimator.Models.Operation", "Operation")
                         .WithMany()
                         .HasForeignKey("OperationID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Estimator.Models.XLSXElementType", b =>
-                {
-                    b.HasOne("Estimator.Models.ElementImport", "ElementImport")
-                        .WithMany("XLSXElementTypes")
-                        .HasForeignKey("ElementImportID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

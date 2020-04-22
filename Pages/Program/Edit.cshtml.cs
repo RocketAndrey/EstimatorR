@@ -13,22 +13,7 @@ namespace Estimator.Pages.Program
     public class EditModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
-        public int PreviosTestChainItemID
-        {
-            get
-            {
-                return TestChainItem.TestChainItemID - 1;
-
-            }
-        }
-        public int NextTestChainItemID
-        {
-            get
-            {
-                return TestChainItem.TestChainItemID + 1;
-
-            }
-        }
+        
         public string HeaderText
         {
             get
@@ -61,6 +46,9 @@ namespace Estimator.Pages.Program
 
             TestChainItem = await _context.TestChainItems
                 .Include(e => e.Operation)
+                .Include(e=>e.ElementType)
+                    .ThenInclude(e=>e.ChainItems)
+                        .ThenInclude(c=>c.Operation)
                 .Include(e => e.TestActions)
                     .ThenInclude(e => e.Qualification)
                 .Include(e => e.ElementType)
@@ -70,6 +58,8 @@ namespace Estimator.Pages.Program
             {
                 return NotFound();
             }
+
+            TestChainItem.ElementType.ChainItems=  TestChainItem.ElementType.ChainItems.OrderBy(e => e.Order);
 
             TestActionViewList = new List<TestActionView>();
 
@@ -118,6 +108,7 @@ namespace Estimator.Pages.Program
                 return NotFound();
             }
             testChainItemToUpdate.Description = TestChainItem.Description;
+            testChainItemToUpdate.GroupOperation = TestChainItem.GroupOperation;
 
             foreach (var element in testChainItemToUpdate.TestActions)
             {

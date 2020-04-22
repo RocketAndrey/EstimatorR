@@ -12,14 +12,20 @@
 <hr />
 
 <div class="row">
-
+    @foreach (var chainitem in Model.TestChainItem.ElementType.ChainItems)
+    {
+        <a asp-page="./Edit"
+           asp-route-testChainItemID="@chainitem.TestChainItemID" title="@chainitem.Operation.Name">
+            @chainitem.Operation.Code |
+        </a>
+    }
     <form method="post">
         <table class="table">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].QualificationName)</th>
-                <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].BatchLabor)</th>
-                <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].ItemLabor)</th>
-                <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].KitLabor)</th>
+                <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].BatchLabor), <b>T<sub>парт</sub> </b> </th>
+                <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].ItemLabor), <b>T<sub>штук</sub> </b> </th>
+                <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].KitLabor), <b>T<sub>осн</sub> </b> </th>
             </tr>
 
             @for (int i = 0; i < Model.TestActionViewList.Count; i++)
@@ -44,16 +50,16 @@
                     </td>
                 </tr>
             }
-        <tr>
-            <td>
-                @Html.DisplayNameFor(model => model.TestChainItem.GroupOperation)
-            </td>
-            <td>
-                <input asp-for="TestChainItem.GroupOperation" class="form-control">
-                <span asp-validation-for="TestChainItem.Description" class="text-danger"></span>
-            </td>
-            <td colspan="2"></td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.TestChainItem.GroupOperation),&ensp; <b> G<sub></sub> </b>
+                </td>
+                <td>
+                    <input asp-for="TestChainItem.GroupOperation" class="form-control">
+                    <span asp-validation-for="TestChainItem.GroupOperation" class="text-danger"></span>
+                </td>
+                <td colspan="2"></td>
+            </tr>
             <tr>
                 <td colspan=" 4">
                     <textarea asp-for="TestChainItem.Description" class="form-control" cols="50" rows="10"></textarea>
@@ -63,23 +69,15 @@
         </table>
 
 
-        <a asp-page="./Edit"
-           asp-route-testChainItemID="@Model.PreviosTestChainItemID"
+        <a asp-page="./Index"
+           asp-route-id="@Model.TestChainItem.ElementType.ProgramID" asp-route-elementTypeID="@Model.TestChainItem.ElementTypeID"
            class="btn btn-primary">
-            Назад
+            к списку
         </a>
         <input type="submit" value="Сохранить" class="btn btn-primary" />
-        <a asp-page="./Edit"
-           asp-route-testChainItemID="@Model.NextTestChainItemID"
-           class="btn btn-primary">
-            Вперед
-        </a>
+        
     </form>
 
-</div>
-
-<div>
-    <a asp-page="./Index" asp-route-id="@Model.TestChainItem.ElementType.ProgramID" asp-route-elementTypeID="@Model.TestChainItem.ElementTypeID">Back to List</a>
 </div>
 
 @section Scripts {
