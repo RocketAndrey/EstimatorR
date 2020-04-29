@@ -2,18 +2,26 @@
 @model Estimator.Pages.CustomerRequests.ReportModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Расчёт стоимости по заявке";
 }
 
     <div>
+        <h4>
+         
+        </h4>
+        <table>
+            <tr>
+                <td><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src= "~/Request.png" width="32" height="32" /></a></td>
+                <td> <h4>&nbsp;Расчёт стоимости испытаний:</h4></td>
+            </tr>
+        </table>
+        <br />
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1">Структура цены</a>&nbsp;|&nbsp;
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2">По группам</a>&nbsp;|&nbsp;
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3">По типам</a>&nbsp;|&nbsp;
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="4">По испытаниям</a>&nbsp;|&nbsp;
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="5">Стоимость по группам</a>
-        <h4>
-            Расчёт стоимости испытаний:
-        </h4>
+
         <br />
 
         <dl class="row">
@@ -441,7 +449,7 @@
     </table>
 
     <form method="post" enctype="multipart/form-data">
+        <a asp-page="./Index" class="btn btn-primary" >Список</a>|
+        <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-primary" >Редактировать</a> 
 
-        <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID">Edit</a> |
-        <a asp-page="./Index">Back to List</a>
     </form>

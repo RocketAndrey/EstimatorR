@@ -10,21 +10,33 @@ namespace Estimator.Models
     {
         public XLSXElementType()
         {
-            Deleted = false;
+            InList = true;
         }
         public int ID { get; set; }
         public int ElementImportID { get; set; }
         public ElementImport ElementImport { get; set; }
         public string ElementName { get; set; }
         public string ElementDatasheet { get; set; }
-        public string ElementManufacturing { get; set;}
+
         public string ElementTypeKey { get; set; }
 
         public int ElementCount { get; set; }
 
         [NotMapped]
-        public bool Deleted { get; set; }
+        public bool InList { get; set; }
 
+        public int? ElementTypeID { get; set; }
+
+        [NotMapped]
+        public bool Valid { get; set; }
+        [NotMapped]
+        public string ErrorMessage
+        {
+            get;
+            set;
+        }
+        [NotMapped]
+        public string ElementTypeName { get; set; }
 
     }
 }

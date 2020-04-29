@@ -73,6 +73,21 @@
 
             </td>
         </tr>
+        <tr>
+            <td colspan="3">
+                @if (Model.ElementImport != null)
+                {
+                    @if (Model.ElementImport.FileUploaded)
+                    {
+                        <a href="@Model.ElementImport.FileWWWPath  " + ".xlsx"><img src="~/xlsx.png" width="32" height="32" /></a>
+                    }
+                }
+            </td>
+            <td align="right"><a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID"
+   class="btn btn-primary">
+    Импортировать перечень 
+</a></td>
+        </tr>
 
     </table>
 
@@ -80,10 +95,7 @@
         <h4>Перечень ЭКБ:</h4>
     </a>
 
-    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID"
-       class="btn">
-        импорт
-    </a>
+    
 
     <div id="hiddenList" style="display:block;">
 
@@ -149,7 +161,7 @@
 
                     string selectedRow = Model.RequestOperationGroupViews[i].IsExecute ? "table-success" : "";
 
-                    <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID">
+                    <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID" >
                         <td>
                             @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
                         </td>
@@ -187,11 +199,6 @@
            class="btn btn-primary">
             Список
         </a>
-        <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID"
-           class="btn btn-primary">
-            Отчет
-        </a>
-
         <input type="submit" value="Сохранить" class="btn btn-primary" />
 
     </div>

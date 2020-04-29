@@ -75,11 +75,14 @@ namespace Estimator.Models
 
         public decimal GetSalary(int qualID)
         {
-            foreach (var item in Staff)
+            if (Staff != null)
             {
-                if (item.QualificationID==qualID )
+                foreach (var item in Staff)
                 {
-                    return item.Salary;
+                    if (item.QualificationID == qualID)
+                    {
+                        return item.Salary;
+                    }
                 }
             }
             return 0;

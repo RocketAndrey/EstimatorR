@@ -4,14 +4,16 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200422191841_elementkey")]
+    partial class elementkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,14 +196,14 @@ namespace Estimator.Migrations
                     b.Property<int>("ElementDatasheetColumn")
                         .HasColumnType("int");
 
+                    b.Property<int>("ElementManufacturingColumn")
+                        .HasColumnType("int");
+
                     b.Property<int>("ElementNameColumn")
                         .HasColumnType("int");
 
                     b.Property<int>("ElementTypeKeyColumn")
                         .HasColumnType("int");
-
-                    b.Property<bool>("FileUploaded")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("FirstRowIsHeader")
                         .HasColumnType("bit");
@@ -561,11 +563,11 @@ namespace Estimator.Migrations
                     b.Property<int>("ElementImportID")
                         .HasColumnType("int");
 
-                    b.Property<string>("ElementName")
+                    b.Property<string>("ElementManufacturing")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ElementTypeID")
-                        .HasColumnType("int");
+                    b.Property<string>("ElementName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ElementTypeKey")
                         .HasColumnType("nvarchar(max)");

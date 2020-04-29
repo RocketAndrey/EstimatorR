@@ -30,6 +30,7 @@ namespace Estimator.Data
         public DbSet<Estimator.Models.StaffItem> Staff { get; set; }
 
         public DbSet<Estimator.Models.CalcFactor> CalcFactors { get; set; }
+        public DbSet <Estimator.Models.XLSXElementType> XLSXElementTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>().ToTable("Customer");
@@ -53,6 +54,7 @@ namespace Estimator.Data
             modelBuilder.Entity<CompanyHistory>().ToTable("CompanyHistory");
             modelBuilder.Entity<CalcFactor>().ToTable("CalcFactor");
             modelBuilder.Entity<StaffItem>().ToTable("StaffItem");
+            modelBuilder.Entity<XLSXElementType>().ToTable("XLSXElementType");
         }
         public DbSet<Estimator.Models.ElementImport> ElementImports { get; set; }
     }

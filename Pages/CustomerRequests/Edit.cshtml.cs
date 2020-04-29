@@ -17,7 +17,7 @@ namespace Estimator.Pages.CustomerRequests
             _context = context;
             _appEnvironment = appEnvironment;
         }
-
+        public ElementImport ElementImport;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -32,6 +32,9 @@ namespace Estimator.Pages.CustomerRequests
                 .Include(c => c.RequestElementTypes)
                     .ThenInclude(c => c.ElementType)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+
+            ElementImport = _context.ElementImports
+                   .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
 
             // запролняем типы элементов
             PopulateAssignedElementTypes(CustomerRequest);
@@ -63,7 +66,9 @@ namespace Estimator.Pages.CustomerRequests
             {
                 return NotFound();
             }
-
+            //Элемент импорт тоже пригодиться
+            ElementImport = _context.ElementImports
+               .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
             //получаем текущую заявку
             var requestToUpdate = await _context.CustomerRequests
                 .Include(c => c.Customer)
@@ -98,7 +103,7 @@ namespace Estimator.Pages.CustomerRequests
                     UpdateRequestOperations(requestOperationGroupViews, requestToUpdate);
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToPage("./Index");
+                return RedirectToPage("./report", new {id = id });
             }
             else
             {

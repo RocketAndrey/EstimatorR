@@ -20,5 +20,9 @@ namespace Estimator.Models
 
         public ClassECB Class { get; set; }
         public IEnumerable<TestChainItem> ChainItems { get; set; }
+        /// <summary>
+        /// Коллекция ключей
+        /// </summary>
+        public List<ElementKey> Keys { get; set; }
     }
 }

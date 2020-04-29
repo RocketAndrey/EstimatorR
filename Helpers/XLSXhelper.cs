@@ -55,7 +55,7 @@ namespace Estimator.Helpers
                                     string refKey = importSettings.ElementTypeKeyColumn.ToString() + row.RowIndex.ToString();
                                     string refCount = importSettings.ElementCountColumn.ToString() + row.RowIndex.ToString();
                                     string refDS = importSettings.ElementDatasheetColumn.ToString() + row.RowIndex.ToString();
-                                    string keyMnfc = importSettings.ElementManufacturingColumn.ToString() + row.RowIndex.ToString();
+                                  
 
 
                                     if (cell.CellReference.Value.ToString() == refName)
@@ -69,10 +69,6 @@ namespace Estimator.Helpers
                                     else if (cell.CellReference.Value.ToString() == refDS)
                                     {
                                         elementType.ElementDatasheet = getCellvalue(cell, sharedStringTable);
-                                    }
-                                    else if (cell.CellReference.Value.ToString() == keyMnfc)
-                                    {
-                                        elementType.ElementManufacturing = getCellvalue(cell, sharedStringTable);
                                     }
                                     else if (cell.CellReference.Value.ToString() == refCount)
                                     {
