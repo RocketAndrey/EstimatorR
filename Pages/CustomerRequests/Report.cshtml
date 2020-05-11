@@ -7,15 +7,15 @@
 
     <div>
         <h4>
-         
         </h4>
-        <table>
+        <table class="table ">
             <tr>
-                <td><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src= "~/Request.png" width="32" height="32" /></a></td>
                 <td> <h4>&nbsp;Расчёт стоимости испытаний:</h4></td>
+                <td align="right"><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/Request.png" width="32" height="32" /></a></td>
+
             </tr>
         </table>
-        <br />
+
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1">Структура цены</a>&nbsp;|&nbsp;
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2">По группам</a>&nbsp;|&nbsp;
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3">По типам</a>&nbsp;|&nbsp;
@@ -23,7 +23,7 @@
         <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="5">Стоимость по группам</a>
 
         <br />
-
+        <br />
         <dl class="row">
             <dt class="col-sm-2">
                 Заявка:

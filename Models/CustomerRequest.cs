@@ -44,8 +44,8 @@ namespace Estimator.Models
 
         public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
 
- 
-        private void  CalculateGroups()
+
+        private void CalculateGroups()
         {
 
             if (RequestElementTypes != null)
@@ -61,7 +61,7 @@ namespace Estimator.Models
                 foreach (var itemRET in RequestElementTypes)
                 {
 
-                    if (itemRET.RequestOperations != null & itemRET.ItemCount> 0 )
+                    if (itemRET.RequestOperations != null & itemRET.ItemCount > 0)
                     {
                         //перебираем операции для данного типа ЭРИ
                         foreach (var itemRO in itemRET.RequestOperations)
@@ -175,7 +175,7 @@ namespace Estimator.Models
             }
             else
             {
-                _operationSummary= new List<RequestOperationLaborSummary>();
+                _operationSummary = new List<RequestOperationLaborSummary>();
                 _operationGroups = new List<RequestOperationGroup>();
             }
 
@@ -308,16 +308,16 @@ namespace Estimator.Models
         {
             get
             {
-                return CompanyHistory.OverHead/100 * BasicSalary;
+                return CompanyHistory.OverHead / 100 * BasicSalary;
             }
         }
-      
+
         [NotMapped]
         public decimal PensionTax
         {
             get
             {
-                return CompanyHistory.PensionTax/100* TotalSalary;
+                return CompanyHistory.PensionTax / 100 * TotalSalary;
             }
         }
         /// <summary>
@@ -344,7 +344,7 @@ namespace Estimator.Models
         {
             get
             {
-                return InputCost * CompanyHistory.Margin/100;
+                return InputCost * CompanyHistory.Margin / 100;
             }
         }
         [NotMapped]
@@ -425,32 +425,45 @@ namespace Estimator.Models
         {
             get
             {
-                if (TotalBanchCount> 0)
-                        {
+                if (TotalBanchCount > 0)
+                {
                     return (TotalCost / TotalBanchCount);
                 }
                 else
                 {
                     return 0;
 
-                    }
+                }
             }
         }
         /// <summary>
         /// соотношение заработной платы к итоговой стоимости 
         /// </summary>
         [NotMapped]
-        public decimal TotalRatio 
+        public decimal TotalRatio
         {
             get
             {
-                return CompanyHistory.TotalRatio ;
+                return CompanyHistory.TotalRatio;
             }
         }
+        /// <summary>
+        /// Ссылка на родительскую заявку ( когда заявка создана из другой заявки)
+        /// </summary>
+        public int? ParentCustomerRequestID
+        {
+            get;
+            set;
+        }
+        public int? CreateUserID { get; set; }
+        public User CreateUser { get; set; }
+        public DateTime CreateDate { get; set; }
 
-        public IEnumerable<Element> Elements { get; set; }
 
+        public int? LastModificateUserID { get; set; }
 
+        public User LastModificateUser { get; set; }
+        public DateTime ModificateDate { get; set; }
 
     }
 }

@@ -24,5 +24,14 @@ namespace Estimator.Models
         /// Коллекция ключей
         /// </summary>
         public List<ElementKey> Keys { get; set; }
+        /// <summary>
+        /// ссылка на дочерний тип данных для создания цепочки программ
+        /// </summary>
+        public int? ChildElementTypeID { get; set; }
+        /// <summary>
+        /// Проверять испытывали ли элементы этого типа в АСУ. Микросхемы надо,  конденсаторы нет.
+        /// </summary>
+        public bool CheckInAsu { get; set; }
+    
     }
 }

@@ -7,23 +7,28 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Estimator.Pages.CustomerRequests
 {
     /// <summary>
     /// базовый класс для страницы модели страницы редактирования  заявки
     /// </summary>
-    public class CustomerRequestPageModel : PageModel
+    public class CustomerRequestPageModel : BaseEstimatorPage
 
     {
-        protected Estimator.Data.EstimatorContext _context;
-        protected IWebHostEnvironment _appEnvironment;
-        protected IConfiguration _configuration;
+        public CustomerRequestPageModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
+        {
+
+        }
 
         [BindProperty]
         public CustomerRequest CustomerRequest { get; set; }
 
         public CompanyHistory CompanyHistory { get; set; }
+
         public List<AssignedRequestElementType> AssignedElementsList;
         public List<RequestOperationGroupView> RequestOperationGroupViews;
         /// <summary>
@@ -66,14 +71,24 @@ namespace Estimator.Pages.CustomerRequests
 
 
         }
-
-        protected async void setCompanyHistory(int year)
+        /// <summary>
+        /// Получение свойств предприятия по году
+        /// </summary>
+        /// <param name="year"></param>
+        protected  void SetCompanyHistory(int year)
         {
-            CustomerRequest.CompanyHistory = await _context.CompanyHistories
-               .Include(c => c.Staff)
-                    .ThenInclude(e => e.Qualification)
-               .Include(c => c.CalcFactors)
-               .FirstOrDefaultAsync(m => m.YearOfNorms == year);
+            try
+            {
+                CustomerRequest.CompanyHistory =  _context.CompanyHistories
+                   .Include(c => c.Staff)
+                        .ThenInclude(e => e.Qualification)
+                   .Include(c => c.CalcFactors)
+                   .FirstOrDefault(m => m.YearOfNorms == year);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
         }
     }

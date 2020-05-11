@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+
+
+
+@if (User.Identity.IsAuthenticated)
+{
+
+    <form asp-area="Identity" method="post" id="logoutForm" class="navbar-right">
+
+        <a asp-area="Identity" asp-page="/Users/Edit" asp-route-name="@User.Identity.Name" title="Логин авторизованного пользователя">@User.Identity.Name</a> |
+        <a asp-area="Identity" asp-page="/Login" class=" btn btn-outline-primary" title="Выйти из учётной записи" asp-route-action="logout">Выйти</a>
+
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="Identity" class="btn btn-outline-danger" title="Войти в учетную запись" asp-page="/Login">Войти</a></li>
+    </ul>
+}

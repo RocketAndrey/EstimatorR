@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.Program
 {
+    [Authorize(Roles = "Administrator")]
     public class IndexModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
@@ -29,8 +31,9 @@ namespace Estimator.Pages.Program
             TestProgram = await _context.TestPrograms.ToListAsync();
 
             {
-                ProgramData = new ProgramIndexData();
-                ProgramData.Programs = await _context.TestPrograms
+                ProgramData = new ProgramIndexData
+                {
+                    Programs = await _context.TestPrograms
                     .Include(i => i.ElementntTypes)
                         .ThenInclude(i => i.ChainItems)
                             .ThenInclude(i => i.Operation)
@@ -39,7 +42,8 @@ namespace Estimator.Pages.Program
                             .ThenInclude(r => r.TestActions)
                     .AsNoTracking()
                     .OrderBy(i => i.Name)
-                    .ToListAsync();
+                    .ToListAsync()
+                };
 
                 if (id != null)
                 {

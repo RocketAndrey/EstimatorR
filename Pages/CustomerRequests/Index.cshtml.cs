@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -26,7 +27,7 @@ namespace Estimator.Pages.CustomerRequests
         public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
         {
             CurrentSort = sortOrder;
-
+            
             if (searchString != null)
             {
                 pageIndex = 1;

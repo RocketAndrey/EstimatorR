@@ -1,0 +1,52 @@
+﻿@page
+@model Estimator.Pages.Users.DeleteModel
+
+@{
+    ViewData["Title"] = "Удаление пользователя";
+}
+
+
+<h3>Вы уверены что хотите удалить этого пользователя?</h3>
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Password)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Family)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Family)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Role)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Role)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="User.Id" />
+        <a asp-page="./Index" class="btn btn-outline-primary ">К списку</a> |
+        <input type="submit" value="Удалить" class="btn btn-outline-danger " />
+
+    </form>
+</div>

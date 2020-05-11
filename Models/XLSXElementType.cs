@@ -37,6 +37,30 @@ namespace Estimator.Models
         }
         [NotMapped]
         public string ElementTypeName { get; set; }
+        /// <summary>
+        /// Код протокола из АСУ
+        /// </summary>
+
+        public string? AsuProtokolCode { get; set; }
+        /// <summary>
+        /// Найдена запись в АСУ о испытания такого типа
+        /// </summary>
+        public bool IsAsuProtokolExists 
+        { 
+            get
+            {
+                if (!String.IsNullOrEmpty(AsuProtokolCode))
+                {
+                    return AsuProtokolCode.Length > 0;
+                }
+                else
+                { 
+                    return false;
+                }
+                
+            }
+                
+        }
 
     }
 }

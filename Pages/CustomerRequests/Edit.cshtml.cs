@@ -5,24 +5,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Configuration;
+using System; 
 namespace Estimator.Pages.CustomerRequests
 {
     public class EditModel : CustomerRequestPageModel
     {
-
-        public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment)
+        public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
-            _context = context;
-            _appEnvironment = appEnvironment;
+            
         }
         public ElementImport ElementImport;
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public TestProgram ChildProgram;
+        public async Task<IActionResult> OnGetAsync(int? id,int? parentid)
         {
-            if (id == null)
+            if (id == null & parentid==null )
             {
                 return NotFound();
+            }
+            if ((parentid?? 0) > 0)
+            {
+                id = CreateRequestFromParent(parentid.Value);
             }
 
             CustomerRequest = await _context.CustomerRequests
@@ -81,6 +86,12 @@ namespace Estimator.Pages.CustomerRequests
                         .ThenInclude(c => c.TestChainItem)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
+            requestToUpdate.ModificateDate = System.DateTime.Now;
+
+            if (UserID > 0)
+            {
+                requestToUpdate.LastModificateUserID = UserID;
+            }
             if (requestToUpdate == null)
             {
                 // заявка не найдена
@@ -160,6 +171,102 @@ namespace Estimator.Pages.CustomerRequests
         private bool CustomerRequestExists(int id)
         {
             return _context.CustomerRequests.Any(e => e.CustomerRequestID == id);
+        }
+        public int ChildProgramID(int programID)
+        {
+            
+          
+                    
+                    ChildProgram= _context.TestPrograms.FirstOrDefault(m => m.ParentProgramID == programID);
+                    return ChildProgram?.TestProgramID?? 0;
+  
+        }
+        private int CreateRequestFromParent(int parentID)
+        {
+           
+            //Родительская заявка
+            CustomerRequest parentCR = _context.CustomerRequests
+                 .Include(c => c.Customer)
+                 .Include(c => c.Program)
+                 .Include(c => c.RequestElementTypes)
+                     .ThenInclude(c => c.ElementType)
+                 .FirstOrDefault(m => m.CustomerRequestID==  parentID);
+            //новая заявка 
+            CustomerRequest newCR = new CustomerRequest 
+            { 
+                Customer=parentCR.Customer ,
+            TestProgramID =ChildProgramID(parentCR.Program.TestProgramID ) , RequestDate= parentCR.RequestDate,
+            Description= parentCR.Description ,RequestNumber =parentCR.RequestNumber, ParentCustomerRequestID= parentCR.CustomerRequestID 
+            };
+
+            //сохранить
+            _context.CustomerRequests.Add(newCR);
+            int num = _context.SaveChanges();
+            int id = newCR.CustomerRequestID;
+
+            newCR  =  _context.CustomerRequests
+              .Include(c => c.Program)
+                    .ThenInclude(c => c.ElementntTypes)
+                        .ThenInclude(e => e.ChainItems)
+                            .ThenInclude(r => r.Operation)
+                .Include(c => c.RequestElementTypes)
+                .FirstOrDefault(m => m.CustomerRequestID == id);
+
+
+            if (!newCR.IsProceed)
+            {
+                List<RequestElementType> retList = new List<RequestElementType>();
+
+                foreach (ElementType e in newCR.Program.ElementntTypes)
+
+                {
+                    RequestElementType r = new RequestElementType { ElementType =e,Order = e.Order};
+
+                    r.BatchCount = 0;
+                    r.ItemCount = 0;
+                    r.KitCount = 0;
+                    //перебираем элементы родительской заявки
+
+                    foreach (var parentRET in parentCR.RequestElementTypes)
+                    {
+                        if (parentRET.ElementType.ChildElementTypeID ==e.ElementTypeID)
+                        {
+                            //копируем из родительского элемента
+                            r.KitCount += parentRET.KitCount;
+                            r.BatchCount += parentRET.BatchCount;
+                            r.ItemCount += parentRET.ItemCount;
+                        }
+                    }
+                    List<RequestOperation> roList = new List<RequestOperation>();
+
+                    foreach (TestChainItem tci in e.ChainItems)
+                    {
+                        RequestOperation rO = new RequestOperation
+                        {
+                            TestChainItem = tci,
+                            RequestElementType = r,
+                            IsExecute = tci.Operation.IsExecuteDefault,
+                            SampleCount = tci.Operation.SampleCount,
+                            ExecuteCount = 1
+                        };
+                        roList.Add(rO);
+
+                        r.RequestOperations = roList;
+
+                    }
+                    retList.Add(r);
+
+
+                }
+                newCR.RequestElementTypes = retList;
+
+
+                newCR.IsProceed = true;
+            }
+
+             num = _context.SaveChanges();
+
+            return newCR.CustomerRequestID  ;
         }
     }
 }

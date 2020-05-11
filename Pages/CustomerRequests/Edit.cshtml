@@ -7,10 +7,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<table>
+<table class="table">
     <tr>
-        <td><a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/contract2.png" width="32" height="32" /></a></td>
         <td> <h4>&nbsp;Редактирование заявки</h4></td>
+        <td align="right"><a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/contract2.png" width="32" height="32" /></a></td>
+
     </tr>
 </table>
 
@@ -73,26 +74,23 @@
 
             </td>
         </tr>
-        <tr>
-            <td colspan="3">
-                @if (Model.ElementImport != null)
-                {
-                    @if (Model.ElementImport.FileUploaded)
-                    {
-                        <a href="@Model.ElementImport.FileWWWPath  " + ".xlsx"><img src="~/xlsx.png" width="32" height="32" /></a>
-                    }
-                }
-            </td>
-            <td align="right"><a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID"
-   class="btn btn-primary">
-    Импортировать перечень 
-</a></td>
-        </tr>
+        @if ((Model.CustomerRequest.ParentCustomerRequestID??0) != 0)
+        {
+            <tr>
+                <td colspan="4">
+                    <b>
+                        <a asp-page="./edit" asp-route-parentid="@Model.CustomerRequest.ParentCustomerRequestID">
+                            Связанная заявка:
+                        </a>
+                    </b>
+                </td>
+            </tr>
+        }
 
     </table>
 
     <a href="#hiddenList" onclick="viewDIV('hiddenList'); return false">
-        <h4>Перечень ЭКБ:</h4>
+        <h4>Типы ЭКБ:</h4>
     </a>
 
     
@@ -101,6 +99,41 @@
 
 
         <table class="table">
+            <tr>
+                <td colspan="2">
+                    @if (Model.ElementImport != null)
+                    {
+                        @if (Model.ElementImport.FileUploaded)
+                        {
+                            <a href="@Model.ElementImport.FileWWWPath" + '.xlsx'><img src="~/xlsx.png" width="32" height="32" /></a>
+                        }
+                    }
+                </td>
+                <td align="right" colspan="2">
+                    @if (Model.ElementImport != null)
+                    {
+                        @if (Model.ElementImport.FileUploaded)
+                        {
+                            <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary ">
+                                Перечень
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
+                                Импортировать
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
+                    Импортировать
+                </a>
+                    }
+                </td>
+            </tr>
+
             <tr>
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
                 <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount), <b>N<sub>парт</sub> </b> </th>
@@ -191,17 +224,26 @@
 
         </div>
     }
+ 
+<div class="form-group">
 
+    <a asp-page="./Index"
+       class="btn btn-outline-primary ">
+        К списку
+    </a>|
+    <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
+    @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID) > 0)
+    {
+        
+         <a asp-page="./edit" asp-route-parentid="@Model.CustomerRequest.CustomerRequestID"  class="btn btn-outline-primary">
 
-    <div class="form-group">
+                | Создать @Model.ChildProgram.Name 
 
-        <a asp-page="./Index"
-           class="btn btn-primary">
-            Список
-        </a>
-        <input type="submit" value="Сохранить" class="btn btn-primary" />
+         </a>
+    
+    }
 
-    </div>
+</div>
 
 </form>
 

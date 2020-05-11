@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -14,27 +15,12 @@ namespace Estimator.Pages.CustomerRequests
     {
 
         public int Mode { get; set; }
-        public int YearOfNoms { get; set; }
 
-        public ReportModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment,IConfiguration configuration)
+        public ReportModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
-            _context = context;
-            _appEnvironment = appEnvironment;
-            _configuration = configuration;
-
-            //получаем год для которого применяем нормативы из конфигурации;
-            try
-            {
-                YearOfNoms = int.Parse(_configuration.GetSection("YearOfNorms")["value"]);
-            }
-            catch
-            {
-                YearOfNoms = 2019;
-            }
-
-            Mode = 1;
+            Mode = 1;            
         }
-     
+        
 
 
         public async Task<IActionResult> OnGetAsync(int? id, int? mode)
@@ -77,7 +63,7 @@ namespace Estimator.Pages.CustomerRequests
             CustomerRequest.RequestElementTypes = CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
 
             //получаем показатели рассчитываеомго года
-            setCompanyHistory(YearOfNoms);
+            SetCompanyHistory(YearOfNoms);
             //CustomerRequest.CompanyHistory=CompanyHistory;
 
             // foreach (var item in CustomerRequest.OperationGroups)

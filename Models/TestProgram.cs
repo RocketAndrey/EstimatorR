@@ -26,6 +26,10 @@ namespace Estimator.Models
         /// типы элементов программы испытний
         /// </summary>
         public ICollection<ElementType> ElementntTypes { get; set; }
+        /// <summary>
+        /// Ссылка на дочернюю программу для создания цепочки программ
+        /// </summary>
+        public int? ParentProgramID { get; set; }
 
 
     }

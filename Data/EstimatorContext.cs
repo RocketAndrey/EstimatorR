@@ -57,5 +57,6 @@ namespace Estimator.Data
             modelBuilder.Entity<XLSXElementType>().ToTable("XLSXElementType");
         }
         public DbSet<Estimator.Models.ElementImport> ElementImports { get; set; }
+        public DbSet<Estimator.Models.User> User { get; set; }
     }
 }

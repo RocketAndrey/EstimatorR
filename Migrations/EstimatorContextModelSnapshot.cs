@@ -118,6 +118,12 @@ namespace Estimator.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreateUserID")
+                        .HasColumnType("int");
+
                     b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
@@ -128,6 +134,15 @@ namespace Estimator.Migrations
 
                     b.Property<bool>("IsProceed")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("LastModificateUserID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ParentCustomerRequestID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
@@ -142,40 +157,15 @@ namespace Estimator.Migrations
 
                     b.HasKey("CustomerRequestID");
 
+                    b.HasIndex("CreateUserID");
+
                     b.HasIndex("CustomerID");
+
+                    b.HasIndex("LastModificateUserID");
 
                     b.HasIndex("TestProgramID");
 
                     b.ToTable("CustomerRequests");
-                });
-
-            modelBuilder.Entity("Estimator.Models.Element", b =>
-                {
-                    b.Property<int>("ElementID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CustomerRequestID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ElementText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ElementType")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ElementTypeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ElementID");
-
-                    b.HasIndex("CustomerRequestID");
-
-                    b.ToTable("Element");
                 });
 
             modelBuilder.Entity("Estimator.Models.ElementImport", b =>
@@ -239,6 +229,12 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CheckInAsu")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ChildElementTypeID")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClassECBID")
                         .HasColumnType("int");
@@ -514,9 +510,46 @@ namespace Estimator.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<int?>("ParentProgramID")
+                        .HasColumnType("int");
+
                     b.HasKey("TestProgramID");
 
                     b.ToTable("TestProgram");
+                });
+
+            modelBuilder.Entity("Estimator.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Family")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Estimator.Models.ViewModels.RequestOperationGroupView", b =>
@@ -551,6 +584,9 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AsuProtokolCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ElementCount")
                         .HasColumnType("int");
@@ -588,24 +624,23 @@ namespace Estimator.Migrations
 
             modelBuilder.Entity("Estimator.Models.CustomerRequest", b =>
                 {
+                    b.HasOne("Estimator.Models.User", "CreateUser")
+                        .WithMany()
+                        .HasForeignKey("CreateUserID");
+
                     b.HasOne("Estimator.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Estimator.Models.User", "LastModificateUser")
+                        .WithMany()
+                        .HasForeignKey("LastModificateUserID");
+
                     b.HasOne("Estimator.Models.TestProgram", "Program")
                         .WithMany()
                         .HasForeignKey("TestProgramID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Estimator.Models.Element", b =>
-                {
-                    b.HasOne("Estimator.Models.CustomerRequest", "CustomerRequest")
-                        .WithMany("Elements")
-                        .HasForeignKey("CustomerRequestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

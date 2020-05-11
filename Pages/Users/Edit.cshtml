@@ -1,0 +1,72 @@
+﻿@page
+@model Estimator.Pages.Users.EditModel;
+
+@{
+    ViewData["Title"] = "Редактирование пользователя";
+}
+
+
+<h4>Редактирование пользователя</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserView.Id" />
+            <div class="form-group">
+                <label asp-for="UserView.Email" class="control-label"></label>
+                <input asp-for="UserView.Email" class="form-control" />
+                <span asp-validation-for="UserView.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserView.Password" class="control-label"></label>
+                <input asp-for="UserView.Password" class="form-control" />
+                <span asp-validation-for="UserView.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserView.ConfirmPassword" class="control-label"></label>
+                <input asp-for="UserView.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="UserView.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserView.Name" class="control-label"></label>
+                <input asp-for="UserView.Name" class="form-control" placeholder="Введите имя" />
+                <span asp-UserView-for="UserView.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserView.Family" class="control-label"></label>
+                <input asp-for="UserView.Family" class="form-control" />
+                <span asp-validation-for="UserView.Family" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserView.Role" class="control-label"></label>
+                @if (Model.isAdministrator)
+                {
+                    <select asp-for="UserView.Role" asp-items="Html.GetEnumSelectList<Estimator.Models.Role>()" class="form-control">
+                    </select>
+                }
+                else
+                {
+                    <select asp-for="UserView.Role" asp-items="Html.GetEnumSelectList<Estimator.Models.Role>()" class="form-control"
+                            disabled="disabled">
+                    </select>
+                }
+
+                <span asp-validation-for="UserView.Role" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a asp-page="./Index" class="btn btn-outline-primary">К списку</a> |
+                <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

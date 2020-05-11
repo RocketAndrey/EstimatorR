@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.Program
 {
+    [Authorize(Roles = "Administrator")]
     public class DetailsModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;

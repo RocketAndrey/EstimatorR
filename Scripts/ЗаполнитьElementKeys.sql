@@ -1,5 +1,4 @@
 use Estimator
-select * from ElementType
 delete from ElementKey
 INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(1,N'Микросхема1')
 INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(2,N'Микросхема2')
@@ -21,8 +20,95 @@ INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(14,N'диод')
 INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(14,N'стабилитрон')
 INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(2,N'Микросхема')
 INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(96,N'Предохранитель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(108,N'электротехнические')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(109,N'комплектующие')
 
+--ДИ ЭКБ ИП
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(73,N'ИСЗУ')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(74,N'ПЛИС')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(87,N'соединитель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(87,N'Микроразветвитель')
+
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(73,N'Магниторезистивная память (MRAM)')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(100,N'Аналог1')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(76,N'Аналог2')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(76,N'Аналог')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(101,N'Аналог3')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(98,N'Цифра1')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(99,N'цифра3')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(75,N'цифра2')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(75,N'цифра')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(77,N'транзистор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(77,N'диод')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(77,N'оптопара')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(77,N'тиристор')
+
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(78,N'пьезо')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(79,N'реле')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(80,N'фильтр')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(81,N'предохранитель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(82,N'трансформатор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(83,N'катушка')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(84,N'феррит')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(85,N'Конденсатор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(86,N'резистор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(88,N'микропереключатель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(89,N'источник')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(90,N'кабель2')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(91,N'кабель1')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(92,N'кабель0')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(93,N'витаяпара')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(94,N'шлейф')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(95,N'жгут')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(97,N'электролит')
+--Дополнительные испытания ЭКБ ОП
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(35,N'микросхема2')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(35,N'микросхема')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(36,N'ИСбескорпусные')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(37,N'транзистор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(37,N'диод')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(37,N'тиристор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(37,N'оптопара')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(37,N'стабилитрон')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(38,N'ппбескорпусные')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(39,N'конденсаторзащ')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(40,N'конденсаторнезащ')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(41,N'конденсатороксид')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(42,N'конденсатороксидбезвывод')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(43,N'конденсатортантал')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(44,N'резистор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(45,N'наборрезистор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(46,N'терморезистор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(47,N'соединительнизкочастотный')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(47,N'вилка')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(47,N'розетка')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(47,N'соединитель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(48,N'соединительрадиочастотный')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(49,N'резонатор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(50,N'генератор')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(51,N'фильтр')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(52,N'реле')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(53,N'контакт')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(54,N'микропереключатель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(55,N'трансформатор импульсный')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(56,N'трансформатор питания')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(57,N'трансформатор согласующий')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(58,N'дроссель фильтров')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(59, N'дроссель высокочастотный')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(60,N'предохранитель')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(61,N'источник')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(62,N'феррит')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(63,N'резистор прецензионный')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(102,N'микросхема1')
+INSERT INTO [dbo].[ElementKey]([ElementTypeID],[Key]) VALUES(104,N'микросхема3')
 
 GO
 
-select * from ElementKey
+select e.ElementTypeID,e.Name, k.ElementKeyID ,k.ElementTypeID, k.[Key]  from  ElementType e
+LEFT JOIN ElementKey k on  k.ElementTypeID = e.ElementTypeID 
+
+Select [Key],ElementTypeID,COUNT(*) as coun
+from [ElementKey] 
+group by [key],ElementTypeID
+order by coun desc
+

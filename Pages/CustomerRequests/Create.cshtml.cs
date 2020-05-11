@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Estimator.CustomerRequests
 {
-    public class CreateModel : PageModel
+    public class CreateModel : Estimator.Pages.BaseEstimatorPage 
     {
-        private readonly Estimator.Data.EstimatorContext _context;
-        private ICollection<RequestElementType> _requestElementTypes;
-        public CreateModel(Estimator.Data.EstimatorContext context)
-        {
-            _context = context;
+       
+     
+        public CreateModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration):base( context,  appEnvironment, configuration)
+        { 
         }
-
         public IActionResult OnGet()
         {
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
@@ -36,14 +36,18 @@ namespace Estimator.CustomerRequests
             {
                 return Page();
             }
-
-
+           
+            CustomerRequest.CreateDate = System.DateTime.Now;
+            if (UserID > 0)
+            {
+                CustomerRequest.CreateUserID = UserID;
+            }
             _context.CustomerRequests.Add(CustomerRequest);
 
             // await _context.SaveChangesAsync();
             int num = _context.SaveChanges();
             int id = CustomerRequest.CustomerRequestID;
-
+           
             CustomerRequest = await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
@@ -62,22 +66,26 @@ namespace Estimator.CustomerRequests
                 foreach (ElementType e in CustomerRequest.Program.ElementntTypes)
 
                 {
-                    RequestElementType r = new RequestElementType();
-                    r.ElementType = e;
-                    r.BatchCount = 0;
-                    r.ItemCount = 0;
-                    r.Order = e.Order;
+                    RequestElementType r = new RequestElementType
+                    {
+                       ElementType = e,
+                    BatchCount = 0,
+                    ItemCount = 0,
+                   Order = e.Order};
 
                     List<RequestOperation> roList = new List<RequestOperation>();
 
                     foreach (TestChainItem tci in e.ChainItems)
                     {
-                        RequestOperation rO = new RequestOperation();
-                        rO.TestChainItem = tci;
-                        rO.RequestElementType = r;
-                        rO.IsExecute = tci.Operation.IsExecuteDefault;
-                        rO.SampleCount = tci.Operation.SampleCount;
-                        rO.ExecuteCount = 1;
+                        RequestOperation rO = new RequestOperation 
+                        {
+                        TestChainItem = tci,
+                        RequestElementType = r,
+                        IsExecute = tci.Operation.IsExecuteDefault,
+                        SampleCount = tci.Operation.SampleCount,
+                        ExecuteCount = 1
+                        };
+
                         roList.Add(rO);
 
                         r.RequestOperations = roList;

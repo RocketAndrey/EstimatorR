@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 namespace Estimator
 {
@@ -22,12 +24,29 @@ namespace Estimator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+           
+            services.AddRazorPages()
+               .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AuthorizeFolder("/Customer");
+                    options.Conventions.AuthorizeFolder("/CustomerRequests");
+                    options.Conventions.AuthorizeFolder("/Program");
+                 
 
+                });
+
+            // установка конфигурации подключения к базе данных калькулятора
             services.AddDbContext<EstimatorContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EstimatorContext")));
-           
          
+
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Login");
+                });
+
 
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +68,8 @@ namespace Estimator
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();     // авторизация
 
 
             app.UseEndpoints(endpoints =>
