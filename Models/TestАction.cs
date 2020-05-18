@@ -1,4 +1,5 @@
-﻿namespace Estimator.Models
+﻿using System.ComponentModel.DataAnnotations.Schema ;
+namespace Estimator.Models
 {
     /// <summary>
     /// Описывает 1 шаг технологической цепочки т.е. трудоемкость конкретной  квалификации работника
@@ -26,6 +27,7 @@
         /// <summary>
         /// трудоёмкость в минутах для одного изделия
         /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal ItemLabor { get; set; }
         /// <summary>
         /// Трудоемкость изготовления оснастки (для операций изготовления оснастки)

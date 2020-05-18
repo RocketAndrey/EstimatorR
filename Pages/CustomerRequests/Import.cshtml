@@ -9,14 +9,13 @@
 <table class="table">
     <tr>
 
-        <td> <h4>&nbsp;Импорт перечня из XLSX (эксель) файла:</h4></td>
+        <td> <h4>Заявка&nbsp;@Model.ElementImport.CustomerRequestID .&nbsp;Импорт перечня из XLSX (эксель) файла.</h4></td>
         <td align="right" ><a asp-page="./Edit" asp-route-id="@Model.ElementImport.CustomerRequestID" ><img src="~/Request.png" width="32" height="32" /></a></td>
     </tr>
 </table>
 <form method="post" enctype="multipart/form-data">
     <hr />
     <div>
-
         <dl class="row">
             <dt class="col-sm-2">
                 <input type="hidden" asp-for="ElementImport.CustomerRequestID" />
@@ -223,7 +222,8 @@
 
                     @if (Model.ElementImport.XLSXElementTypes.Count > 0)
                     {
-                        <input type="submit" value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
+                       
+                       <input type="submit" value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
                     }
                 </td>
             </tr>
@@ -235,40 +235,38 @@
             </tr>
         }
 
-        <tr>
-            <td></td>
-            <td>
+    <tr>
+        <td></td>
+        <td>
 
-                <b>@Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn) (@Model.ElementImport.ElementNameColumn)</b>
-            </td>
-            <td> <b>@Html.DisplayNameFor(model => model.ElementImport.ElementDatasheetColumn) (@Model.ElementImport.ElementDatasheetColumn )</b></td>
-            <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementTypeKeyColumn) (@Model.ElementImport.ElementTypeKeyColumn)</b></td>
-            <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementCountColumn) (@Model.ElementImport.ElementCountColumn)</b></td>
-            <td><b>Тип изделия</b></td>
-        </tr>
+            <b>@Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn) (@Model.ElementImport.ElementNameColumn)</b>
+        </td>
+        
+        <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementTypeKeyColumn) (@Model.ElementImport.ElementTypeKeyColumn)</b></td>
+        <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementCountColumn) (@Model.ElementImport.ElementCountColumn)</b></td>
+        <td><b>Тип изделия</b></td>
+        <td><b>АСУ</b></td>
+    </tr>
 
         @if (Model.ImportStep == 1)
         {
-            <tr>
-                <td></td>
-                <td><select asp-for="ElementImport.ElementNameColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
+    <tr>
+        <td></td>
+        <td><select asp-for="ElementImport.ElementNameColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
+        <td><select asp-for="ElementImport.ElementTypeKeyColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
 
-                <td><select asp-for="ElementImport.ElementDatasheetColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
-
-                <td><select asp-for="ElementImport.ElementTypeKeyColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
-
-                <td><select asp-for="ElementImport.ElementCountColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
-                <td></td>
-            </tr>
+        <td><select asp-for="ElementImport.ElementCountColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select></td>
+        <td></td>
+        <td></td>
+    </tr>
         }
         @if (Model.ElementImport.XLSXElementTypes != null)
         {
             @for (int i = 0; i < Model.ElementImport.XLSXElementTypes.Count; i++)
             {
-                string selectedRow = Model.ElementImport.XLSXElementTypes[i].Valid ? "" : "table-danger";
-
-                <tr class="@selectedRow" id="ElementImport.XLSXElementTypes[@i].ElementImportID">
-
+                string selectedRow = Model.ElementImport.XLSXElementTypes[i].Valid ? (Model.ElementImport.XLSXElementTypes[i].BeforeUploadedXLSXElementTypeID > 0 ? "table-warning" : "") : "table-danger";
+              
+                <tr class="@selectedRow">
                     <td>
                         <input asp-for="@Model.ElementImport.XLSXElementTypes[i].InList " class="form-check-inline" id="ElementImport.XLSXElementTypes[@i].InList" onclick="showSelected('ElementImport.XLSXElementTypes[@i].ElementImportID');" />
                         <input type="hidden" asp-for="@Model.ElementImport.XLSXElementTypes[i].ID" id="ElementImport.XLSXElementTypes[@i].ID" />
@@ -276,11 +274,10 @@
                     <td>
                         <input asp-for="@Model.ElementImport.XLSXElementTypes[i].ElementName" id="ElementImport.XLSXElementTypes[@i].ElementName" class="form-control" />
                         <span class="text-danger">@Model.ElementImport.XLSXElementTypes[i].ErrorMessage</span>
+                        
                     </td>
-                    <td>
-                        <input asp-for="@Model.ElementImport.XLSXElementTypes[i].ElementDatasheet" id="ElementImport.XLSXElementTypes[@i].ElementDatasheet" class="form-control" />
-                    </td>
-                    <td>
+                 
+                    <td >
                         <input asp-for="@Model.ElementImport.XLSXElementTypes[i].ElementTypeKey" id="ElementImport.XLSXElementTypes[@i].ElementTypeKey" class="form-control" />
                     </td>
 
@@ -291,6 +288,7 @@
                     <td>
                         @Model.ElementImport.XLSXElementTypes[i].ElementTypeName
                     </td>
+                    <td><span class="text-info">@Model.ElementImport.XLSXElementTypes[i].AsuProtokolCode</span></td>
                 </tr>
             }
         }

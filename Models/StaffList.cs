@@ -1,4 +1,6 @@
-﻿namespace Estimator.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Estimator.Models
 {
     public class StaffItem
     {
@@ -17,6 +19,7 @@
         /// <summary>
         /// Средняя зарплата специалиста за 1 час работы
         /// </summary>
+         [Column(TypeName = "decimal(18, 4)")]
         public decimal Salary { get; set; }
     }
 }

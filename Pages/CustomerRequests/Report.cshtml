@@ -10,7 +10,7 @@
         </h4>
         <table class="table ">
             <tr>
-                <td> <h4>&nbsp;Расчёт стоимости испытаний:</h4></td>
+                <td> <h4>Расчёт стоимости испытаний заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></td>
                 <td align="right"><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/Request.png" width="32" height="32" /></a></td>
 
             </tr>
@@ -449,7 +449,7 @@
     </table>
 
     <form method="post" enctype="multipart/form-data">
-        <a asp-page="./Index" class="btn btn-primary" >Список</a>|
-        <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-primary" >Редактировать</a> 
+        <a asp-page="./Index" class="btn btn-outline-primary " >Список</a>|
+        <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-outline-primary" >Редактировать</a> 
 
     </form>

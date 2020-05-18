@@ -4,6 +4,7 @@ namespace Estimator.Models.ViewModels
 {
     public class CustomerRequestView
     {
+        [Display(Name = "№ заявки")]
         public int CustomerRequestID { get; set; }
         [Display(Name = "№ исх.")]
         public string RequestNumber { get; set; }
@@ -13,7 +14,7 @@ namespace Estimator.Models.ViewModels
         public DateTime RequestDate { get; set; }
         [Display(Name = "Описание заявки")]
         public string Description { get; set; }
-        [Display(Name = "Программа испытаний")]
+        [Display(Name = "Программа")]
         public string ProgramName { get; set; }
         [Display(Name = "Заказчик")]
         public string CustomerName { get; set; }

@@ -16,8 +16,8 @@
             <td align="right">
                 Искать:
                 <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="Поиск" class="btn btn-outline-primary "/> |
-                <a asp-page="./Index" >Очистить поиск</a>
+                <input type="submit" value="Поиск" class="btn btn-outline-primary "/>|
+                <a asp-page="./Index" class="btn btn-outline-primary ">Очистить поиск</a>
             </td>
         </tr>
     </table>
@@ -25,6 +25,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID )</th> 
             <th>
                 Отчет
             </th>
@@ -61,32 +62,37 @@
     <tbody>
         @foreach (var item in Model.CustomerRequestList)
         {
-            <tr>
-                <td>
-                    <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20"  height="20"/></a>
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.RequestNumber)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProgramName)
-                </td>
-                <td>
-                    <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
-                    <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
-                </td>
-                <td>
+        <tr>
 
-                    <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>
+                
+            </td>
+            <td>
+                <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20" height="20" /></a>
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.RequestNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProgramName)
+            </td>
+            <td>
+                <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
+                <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
+            </td>
+            <td>
 
-                </td>
-            </tr>
+                <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
+
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -99,13 +105,13 @@
    asp-route-sortOrder="@Model.CurrentSort"
    asp-route-pageIndex="@(Model.CustomerRequestList.PageIndex - 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-primary @prevDisabled">
+   class="btn btn-outline-primary  @prevDisabled">
     Назад
 </a>
 <a asp-page="./Index"
    asp-route-sortOrder="@Model.CurrentSort"
    asp-route-pageIndex="@(Model.CustomerRequestList.PageIndex + 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-primary @nextDisabled">
+   class="btn btn-outline-primary @nextDisabled">
     Вперед
 </a>

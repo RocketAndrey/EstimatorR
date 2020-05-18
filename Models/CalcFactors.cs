@@ -1,4 +1,6 @@
-﻿namespace Estimator.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Estimator.Models
 {
     /// <summary>
     /// Поправочные коофициенты
@@ -9,6 +11,8 @@
         public int CompanyHistoryID { get; set; }
         public CompanyHistory CompanyHistory { get; set; }
         public string FactorName { get; set; }
+
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal FactorValue { get; set; }
 
     }

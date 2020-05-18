@@ -54,8 +54,7 @@ namespace Estimator.Helpers
                                     string refName = importSettings.ElementNameColumn.ToString() + row.RowIndex.ToString();
                                     string refKey = importSettings.ElementTypeKeyColumn.ToString() + row.RowIndex.ToString();
                                     string refCount = importSettings.ElementCountColumn.ToString() + row.RowIndex.ToString();
-                                    string refDS = importSettings.ElementDatasheetColumn.ToString() + row.RowIndex.ToString();
-                                  
+                                   
 
 
                                     if (cell.CellReference.Value.ToString() == refName)
@@ -66,10 +65,7 @@ namespace Estimator.Helpers
                                     {
                                         elementType.ElementTypeKey = getCellvalue(cell, sharedStringTable);
                                     }
-                                    else if (cell.CellReference.Value.ToString() == refDS)
-                                    {
-                                        elementType.ElementDatasheet = getCellvalue(cell, sharedStringTable);
-                                    }
+                                    
                                     else if (cell.CellReference.Value.ToString() == refCount)
                                     {
                                         int i;

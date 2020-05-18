@@ -14,6 +14,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Estimator.Models.AsuViews;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -200,6 +201,7 @@ namespace Estimator.Pages.CustomerRequests
                     //Пытаемся сохранить свойства импорта
 
                     ValidateXLSX(true);
+                    //запоминаем кто отредактировать заявку
                     ElementImport.CustomerRequest.ModificateDate = System.DateTime.Now;
 
                     if (UserID > 0)
@@ -254,7 +256,7 @@ namespace Estimator.Pages.CustomerRequests
         private bool ValidateXLSX(bool saveChanges)
         {
             //получаем коллекцию ключей
-            Dictionary<string, int> keys = new Dictionary<string, int>();
+            Dictionary<string, ElementType> keys = new Dictionary<string, ElementType>();
 
 
 
@@ -271,9 +273,10 @@ namespace Estimator.Pages.CustomerRequests
             {
                 foreach (var itemKey in itemET.Keys)
                 {
-                    keys.Add(itemKey.Key, itemKey.ElementTypeID);
+                    keys.Add(itemKey.Key, itemET );
                 }
             }
+
             //функция возвращает true  только когда все элементы валидны;
             bool returnValue = true;
             //перебираем все загрузки
@@ -306,27 +309,51 @@ namespace Estimator.Pages.CustomerRequests
                     returnValue = false;
                     continue;
                 }
-                foreach (var key in keys)
+                XLSXElementType beforeItem = new XLSXElementType();
+                beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ElementName , itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID );
+                //Если предыдущий типономина найден и ему присвоен тип
+                if (!((beforeItem!=null? beforeItem.ElementTypeID:0) > 0))
                 {
-                    if (PrepareStr(itemXLSX.ElementTypeKey) == PrepareStr(key.Key))
+                    // ищем в коллекции ключей
+                    foreach (var key in keys)
                     {
-
-                        itemXLSX.ElementTypeID = keys[key.Key];
-                        itemXLSX.ErrorMessage = "";
-                        itemXLSX.Valid = true;
-                        itemXLSX.ElementTypeName = ElementImport.CustomerRequest.Program.ElementntTypes.FirstOrDefault(m => m.ElementTypeID == itemXLSX.ElementTypeID).Name;
-                        //Ищем такой элемент в ASU
-                        if (UseAsu)
+                        if (PrepareStr(itemXLSX.ElementTypeKey) == PrepareStr(key.Key))
                         {
-                            string protokolName = LastAsuProtokolNumber(itemXLSX.ElementName);
-                            if(!String.IsNullOrWhiteSpace (protokolName))
-                            {
-                                itemXLSX.AsuProtokolCode = protokolName; 
-                            }
-                        }
-                        break;
-                    }
 
+                            itemXLSX.ElementTypeID = keys[key.Key].ElementTypeID;
+                            itemXLSX.ErrorMessage = "";
+                            itemXLSX.Valid = true;
+                            itemXLSX.ElementTypeName = keys[key.Key].Name;
+                            break;
+                        }
+
+                    }
+                }
+                else 
+                {
+                    // берем значения из ранее загруженного изделия
+                    itemXLSX.ElementTypeID = beforeItem.ElementTypeID ;
+                    itemXLSX.ElementTypeKey = beforeItem.ElementTypeKey;
+                    itemXLSX.ErrorMessage = "";
+                    itemXLSX.Valid = true;
+                    itemXLSX.BeforeUploadedXLSXElementTypeID = beforeItem.ID;
+
+                    itemXLSX.ElementTypeName = ElementImport.CustomerRequest.Program.ElementntTypes.FirstOrDefault(m => m.ElementTypeID == itemXLSX.ElementTypeID).Name??"";
+
+                }
+                if (itemXLSX.ElementTypeID > 0)
+                {
+                    //Ищем такой элемент в ASU, если надо
+                    bool checkElemenTypeInAsu = ElementImport.CustomerRequest.Program.ElementntTypes.FirstOrDefault(m => m.ElementTypeID == itemXLSX.ElementTypeID).CheckInAsu;
+                    
+                    if (UseAsu & itemXLSX.Valid & checkElemenTypeInAsu)
+                    {
+                        string protokolName = LastAsuProtokolNumber(itemXLSX.ElementName);
+                        if (!String.IsNullOrWhiteSpace(protokolName))
+                        {
+                            itemXLSX.AsuProtokolCode = protokolName;
+                        }
+                    }
                 }
                 if (!itemXLSX.Valid)
                 {
@@ -338,10 +365,9 @@ namespace Estimator.Pages.CustomerRequests
                     XLSXElementType item = _context.XLSXElementTypes.FirstOrDefault(m => m.ID == itemXLSX.ID);
                     item.ElementTypeKey = itemXLSX.ElementTypeKey ?? "";
                     item.ElementName = itemXLSX.ElementName ?? "";
-                    item.ElementDatasheet = itemXLSX.ElementDatasheet ?? "";
                     item.ElementCount = itemXLSX.ElementCount;
                     item.ElementTypeID = itemXLSX.ElementTypeID;
-
+                    item.BeforeUploadedXLSXElementTypeID  = itemXLSX.BeforeUploadedXLSXElementTypeID;
                     _context.Entry(item).State = EntityState.Modified;
                 }
             }
@@ -390,6 +416,10 @@ namespace Estimator.Pages.CustomerRequests
                         {
                             itemRet.BatchCount++;
                             itemRet.ItemCount += itemX.ElementCount;
+                            if (!itemX.IsAsuProtokolExists)
+                            {
+                                itemRet.KitCount ++;
+                            }
                         }
                     }
                 }
@@ -428,6 +458,23 @@ namespace Estimator.Pages.CustomerRequests
                 _asuContext = new AsuContext(options);
             
             }
+
+        }
+        /// <summary>
+        /// Проверяет загружали ли ли такой элемент ранее,  если да то ElementType  берется из ранее загруженного элемента
+        /// </summary>
+        /// <returns></returns>
+        private XLSXElementType BeforeUploadedXLSXElementType(string elementName, int id, int programid)
+        {
+            string selectStr= "SELECT [ID] ,[ElementImportID] ,[ElementName] ,[ElementTypeKey]"+
+            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[BeforeUploadedXLSXElementTypeID] " +
+            "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
+            " AND  e.ProgramID = {2}";
+            
+            List<XLSXElementType> list = _context.XLSXElementTypes.FromSqlRaw(selectStr, PrepareStr(elementName),id,programid).ToList();
+
+            return list.Count > 0 ? list[0] : null;
+        
 
         }
     }

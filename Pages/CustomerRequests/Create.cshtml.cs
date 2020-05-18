@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using System.Linq;
 
 namespace Estimator.CustomerRequests
 {
@@ -19,7 +20,7 @@ namespace Estimator.CustomerRequests
         }
         public IActionResult OnGet()
         {
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["CustomerID"] = new SelectList(_context.Customers.OrderBy(e => e.Name), "CustomerID", "Name");
             ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
             CustomerRequest = new CustomerRequest();
             return Page();

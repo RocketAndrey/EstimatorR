@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Estimator
 {
@@ -38,8 +39,8 @@ namespace Estimator
             // установка конфигурации подключения к базе данных калькулятора
             services.AddDbContext<EstimatorContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EstimatorContext")));
-         
-
+            // это чтобы ыорма импорта не отваливалать. Слишком много данных в форме.
+            services.Configure<FormOptions>(x => x.ValueCountLimit = int.MaxValue‬);
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions

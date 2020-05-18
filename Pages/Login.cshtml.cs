@@ -38,7 +38,7 @@ namespace Estimator
                     return await Logout();
                 }
             }
-
+            string path = Request.Path;
             Login  = new LoginView();
 
             return Page();

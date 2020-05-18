@@ -26,5 +26,24 @@ FROM  dbo.Wares INNER JOIN
 		 Manufactory mn  on mk.ManufactoryId= mn.ManufactoryId LEFT  JOIN
 		 Countries cr on cr.CountryId =mn.CountryId
 
-WHERE (dbo.Wares.ContractId = 295) AND (l.LotTypeId = 'Ï')
+WHERE (dbo.Wares.TypeNominal  in ('IRL5NJ7404SCS', 
+'VDNF64G08RS50MS8V25-III',
+'2N3019CSM',
+'2N5666U3',
+'1N6487US',
+'HFB35HB20C',
+'LFE100-461-50',
+'LFE100-461-80',
+'LDCD/ 100-5R-40/SP',
+'LDCD/100-7-14/SP',
+'LDCD/ 100-15-30/SP',
+'MS12TL-313S-02',
+'VJ2225Y185JLBAJ5G',
+'ÌÐ-080205-2',
+'DEMA9SNMBFR022',
+'DAMA15SNMBFR022',
+'62SMA-0-0-1/-111NE',
+'64SMA-0-0-1/-111NE',
+'R125252000',
+'R143608000') ) AND (l.LotTypeId = 'Ï')
 

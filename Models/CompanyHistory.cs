@@ -37,18 +37,22 @@ namespace Estimator.Models
         /// <summary>
         /// Накладные расходы (в % от основной заработной платы)
         /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal OverHead { get; set; }
         /// <summary>
         ///  Рентабельность (в %) от собственной себестоимости  
         /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal Margin { get; set; }
         /// <summary>
         ///Страховые взносы (в % от основной и дополнительной заработной платы) 
         /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal PensionTax { get; set; }
         /// <summary>
         /// Дополнительная заработная плата (в % от основной заработной платы)
         /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal AdditionalSalary { get; set;  }
         public List<StaffItem> Staff { get; set; }
         /// <summary>

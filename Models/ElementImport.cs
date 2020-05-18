@@ -10,14 +10,13 @@ namespace Estimator.Models
 {
     public enum ColumnNames
     {
-        A=1,B=2,C=3,D=4,E=5,F=6,G=7,H=8,I,J,K,M,N
+        A=1,B=2,C=3,D=4,E=5,F=6,G=7,H=8,I=9,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z
     }
     public class ElementImport
     {
         public ElementImport ()
         {
-            ElementNameColumn = ColumnNames.A;
-            ElementDatasheetColumn = ColumnNames.B;
+            ElementNameColumn = ColumnNames.B;
             ElementTypeKeyColumn = ColumnNames.C;
             ElementCountColumn = ColumnNames.D;
             FirstRowIsHeader = true;
@@ -30,10 +29,7 @@ namespace Estimator.Models
 
         [Display(Name = "Наименование")]
         public ColumnNames ElementNameColumn { get; set; }
-        [Display(Name = "ТУ (datasheet)")]
-        public ColumnNames ElementDatasheetColumn {get;set;}
       
-
         [Display(Name = "Ключ")]
         public ColumnNames ElementTypeKeyColumn { get; set; }
         [Display(Name = "Колличество")]

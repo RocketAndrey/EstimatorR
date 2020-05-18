@@ -8,7 +8,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using System; 
+using System;
+using DocumentFormat.OpenXml.Drawing;
+
 namespace Estimator.Pages.CustomerRequests
 {
     public class EditModel : CustomerRequestPageModel
@@ -19,7 +21,7 @@ namespace Estimator.Pages.CustomerRequests
         }
         public ElementImport ElementImport;
         public TestProgram ChildProgram;
-        public async Task<IActionResult> OnGetAsync(int? id,int? parentid)
+               public async Task<IActionResult> OnGetAsync(int? id,int? parentid)
         {
             if (id == null & parentid==null )
             {
@@ -52,8 +54,9 @@ namespace Estimator.Pages.CustomerRequests
             }
             // Добавляем типы элементов для новой заявки
 
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["CustomerID"] = new SelectList(_context.Customers.OrderBy (e=>e.Name), "CustomerID", "Name");
             ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
+
             return Page();
         }
 
@@ -172,14 +175,26 @@ namespace Estimator.Pages.CustomerRequests
         {
             return _context.CustomerRequests.Any(e => e.CustomerRequestID == id);
         }
+        public bool ChildCustomerRequestExists(int id)
+        {
+            return _context.CustomerRequests.Any(e => e.ParentCustomerRequestID  == id);
+        }
+
         public int ChildProgramID(int programID)
         {
-            
-          
-                    
-                    ChildProgram= _context.TestPrograms.FirstOrDefault(m => m.ParentProgramID == programID);
+           
+                    ChildProgram= _context.TestPrograms
+                        .FirstOrDefault(m => m.ParentProgramID == programID);
                     return ChildProgram?.TestProgramID?? 0;
   
+        }
+        public int ChildCustomerReguestID
+        {
+            get
+            {
+                return _context.CustomerRequests.FirstOrDefault(e => e.ParentCustomerRequestID == CustomerRequest.CustomerRequestID).CustomerRequestID;
+
+            }
         }
         private int CreateRequestFromParent(int parentID)
         {
@@ -196,7 +211,8 @@ namespace Estimator.Pages.CustomerRequests
             { 
                 Customer=parentCR.Customer ,
             TestProgramID =ChildProgramID(parentCR.Program.TestProgramID ) , RequestDate= parentCR.RequestDate,
-            Description= parentCR.Description ,RequestNumber =parentCR.RequestNumber, ParentCustomerRequestID= parentCR.CustomerRequestID 
+            Description= parentCR.Description + "Создана из заявки "+ parentID+".",
+            RequestNumber =parentCR.RequestNumber, ParentCustomerRequestID= parentCR.CustomerRequestID 
             };
 
             //сохранить

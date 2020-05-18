@@ -49,7 +49,7 @@ namespace Estimator.Pages.CustomerRequests
                     CustomerName = p.Customer.Name,
                     CustomerINN = p.Customer.INN,
                     ProgramName = p.Program.Name
-                }).ToListAsync();
+                }).AsNoTracking().ToListAsync();
 
 
             DateSort = String.IsNullOrEmpty(sortOrder) ? "Date_desc" : "";
@@ -62,33 +62,16 @@ namespace Estimator.Pages.CustomerRequests
                                        || s.CustomerName.Contains(searchString)).ToList();
             }
 
-            switch (sortOrder)
+            customerRequestViewsIQ = sortOrder switch
             {
-                case "Program":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.ProgramName).ToList();
-                    break;
-                case "Program_desc":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderByDescending(s => s.ProgramName).ToList();
-                    break;
-                case "Customer":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.CustomerName).ToList();
-                    break;
-                case "Customer_desc":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderByDescending(s => s.CustomerName).ToList();
-                    break;
-                case "Date":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList();
-                    break;
-                case "Date_desc":
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList();
-                    break;
-                default:
-                    customerRequestViewsIQ = customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList();
-                    break;
-            }
-
-
-
+                "Program" => customerRequestViewsIQ.OrderBy(s => s.ProgramName).ToList(),
+                "Program_desc" => customerRequestViewsIQ.OrderByDescending(s => s.ProgramName).ToList(),
+                "Customer" => customerRequestViewsIQ.OrderBy(s => s.CustomerName).ToList(),
+                "Customer_desc" => customerRequestViewsIQ.OrderByDescending(s => s.CustomerName).ToList(),
+                "Date" => customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList(),
+                "Date_desc" => customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList(),
+                _ => customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList(),
+            };
             int pageSize = 20;
             CustomerRequestList = await PaginatedList<CustomerRequestView>.CreateAsync(
                 customerRequestViewsIQ.ToList(), pageIndex ?? 1, pageSize);

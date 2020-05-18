@@ -16,7 +16,6 @@ namespace Estimator.Models
         public int ElementImportID { get; set; }
         public ElementImport ElementImport { get; set; }
         public string ElementName { get; set; }
-        public string ElementDatasheet { get; set; }
 
         public string ElementTypeKey { get; set; }
 
@@ -45,8 +44,8 @@ namespace Estimator.Models
         /// <summary>
         /// Найдена запись в АСУ о испытания такого типа
         /// </summary>
-        public bool IsAsuProtokolExists 
-        { 
+        public bool IsAsuProtokolExists
+        {
             get
             {
                 if (!String.IsNullOrEmpty(AsuProtokolCode))
@@ -54,13 +53,16 @@ namespace Estimator.Models
                     return AsuProtokolCode.Length > 0;
                 }
                 else
-                { 
+                {
                     return false;
                 }
-                
-            }
-                
-        }
 
+            }
+
+        }
+        /// <summary>
+        /// ID  элемента загруженного ранее, если он есть то тип элемента можно взять из него и не париться с ключом
+        /// </summary>
+        public int BeforeUploadedXLSXElementTypeID { get; set; }
     }
 }

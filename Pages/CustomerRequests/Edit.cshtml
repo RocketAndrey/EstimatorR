@@ -9,7 +9,7 @@
 
 <table class="table">
     <tr>
-        <td> <h4>&nbsp;Редактирование заявки</h4></td>
+        <td> <h4>Редактирование заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></td>
         <td align="right"><a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/contract2.png" width="32" height="32" /></a></td>
 
     </tr>
@@ -74,19 +74,30 @@
 
             </td>
         </tr>
-        @if ((Model.CustomerRequest.ParentCustomerRequestID??0) != 0)
+        @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
         {
             <tr>
                 <td colspan="4">
                     <b>
-                        <a asp-page="./edit" asp-route-parentid="@Model.CustomerRequest.ParentCustomerRequestID">
-                            Связанная заявка:
+                        <a asp-page="./edit" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
+                            <img src="~/connect.png" width="32" height="32" /> Родительская заявка: @Model.CustomerRequest.ParentCustomerRequestID
                         </a>
                     </b>
                 </td>
             </tr>
         }
-
+        @if (Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
+        {
+            <tr>
+                <td colspan="4">
+                    <b>
+                        <a asp-page="./edit" asp-route-id="@Model.ChildCustomerReguestID">
+                            <img src="~/connect.png" width="32" height="32" /> Дочерняя заявка: @Model.ChildCustomerReguestID
+                        </a>
+                    </b>
+                </td>
+            </tr>
+        }
     </table>
 
     <a href="#hiddenList" onclick="viewDIV('hiddenList'); return false">
@@ -231,14 +242,12 @@
        class="btn btn-outline-primary ">
         К списку
     </a>|
-    <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
-    @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID) > 0)
+    <input type="submit" value="Сохранить" class="btn btn-outline-primary" />|
+    @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID  ) > 0 & !Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
     {
         
          <a asp-page="./edit" asp-route-parentid="@Model.CustomerRequest.CustomerRequestID"  class="btn btn-outline-primary">
-
-                | Создать @Model.ChildProgram.Name 
-
+            Создать @Model.ChildProgram.Name 
          </a>
     
     }
