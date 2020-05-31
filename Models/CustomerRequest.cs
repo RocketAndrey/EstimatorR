@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +18,7 @@ namespace Estimator.Models
         {
             CompanyHistory = new CompanyHistory();
             RequestDate = DateTime.Now;
+            UseTemplate = false;
         }
 
         public int CustomerRequestID { get; set; }
@@ -68,6 +70,7 @@ namespace Estimator.Models
                         {
                             RequestOperationGroup itemROG;
                             RequestOperationLaborSummary itemROLS;
+                          
 
                             if (itemRO.TestChainItem.Operation != null)
                             {
@@ -131,8 +134,8 @@ namespace Estimator.Models
                                                 sampleCount = itemRO.RequestElementType.ItemCount;
                                                 break;
                                             default:
-                                                // берем объём выборки из заявки, если 0 то с выборкой ничего не делают()
-                                                sampleCount = itemRO.SampleCount;
+                                                // берем объём выборки из заявки умнож. на кол-во партий, если 0 то с выборкой ничего не делают()
+                                                sampleCount = itemRO.SampleCount* itemRO.RequestElementType.BatchCount;
                                                 break;
 
                                         }
@@ -149,11 +152,14 @@ namespace Estimator.Models
                                             groupOperationCount = 0;
                                         }
                                         ///какой - то кривой способ
+                                        
                                         // добавляем трудоемкость для данной специальности;
                                         labor = ((itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) +
                                            groupOperationCount * itemTA.ItemLabor +
                                             itemRO.RequestElementType.KitCount * itemTA.KitLabor) * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0)
                                              * CompanyHistory.TotalFactor; ;
+
+                                
 
                                     }
 
@@ -464,6 +470,13 @@ namespace Estimator.Models
 
         public User LastModificateUser { get; set; }
         public DateTime ModificateDate { get; set; }
+        /// <summary>
+        /// использоват ьшаблон при выборе операция программы
+        /// </summary>
+        [NotMapped]
+        public bool UseTemplate { get; set;}
+        [NotMapped]
+        public int TestProgramTemplateID { get; set; }
 
     }
 }

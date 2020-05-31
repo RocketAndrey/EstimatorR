@@ -76,27 +76,27 @@
         </tr>
         @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
         {
-            <tr>
-                <td colspan="4">
-                    <b>
-                        <a asp-page="./edit" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
-                            <img src="~/connect.png" width="32" height="32" /> Родительская заявка: @Model.CustomerRequest.ParentCustomerRequestID
-                        </a>
-                    </b>
-                </td>
-            </tr>
+        <tr>
+            <td colspan="4">
+                <b>
+                    <a asp-page="./edit" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
+                        <img src="~/connect.png" width="32" height="32" /> Родительская заявка: @Model.CustomerRequest.ParentCustomerRequestID
+                    </a>
+                </b>
+            </td>
+        </tr>
         }
         @if (Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
         {
-            <tr>
-                <td colspan="4">
-                    <b>
-                        <a asp-page="./edit" asp-route-id="@Model.ChildCustomerReguestID">
-                            <img src="~/connect.png" width="32" height="32" /> Дочерняя заявка: @Model.ChildCustomerReguestID
-                        </a>
-                    </b>
-                </td>
-            </tr>
+        <tr>
+            <td colspan="4">
+                <b>
+                    <a asp-page="./edit" asp-route-id="@Model.ChildCustomerReguestID">
+                        <img src="~/connect.png" width="32" height="32" /> Дочерняя заявка: @Model.ChildCustomerReguestID
+                    </a>
+                </b>
+            </td>
+        </tr>
         }
     </table>
 
@@ -104,7 +104,7 @@
         <h4>Типы ЭКБ:</h4>
     </a>
 
-    
+
 
     <div id="hiddenList" style="display:block;">
 
@@ -114,33 +114,33 @@
                 <td colspan="2">
                     @if (Model.ElementImport != null)
                     {
-                        @if (Model.ElementImport.FileUploaded)
+                    @if (Model.ElementImport.FileUploaded)
                         {
-                            <a href="@Model.ElementImport.FileWWWPath" + '.xlsx'><img src="~/xlsx.png" width="32" height="32" /></a>
+                    <a href="@Model.ElementImport.FileWWWPath" + '.xlsx'><img src="~/xlsx.png" width="32" height="32" /></a>
                         }
                     }
                 </td>
                 <td align="right" colspan="2">
                     @if (Model.ElementImport != null)
                     {
-                        @if (Model.ElementImport.FileUploaded)
+                    @if (Model.ElementImport.FileUploaded)
                         {
-                            <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary ">
-                                Перечень
-                            </a>
+                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary ">
+                        Перечень
+                    </a>
                         }
                         else
                         {
-                            <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
-                                Импортировать
-                            </a>
+                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
+                        Импортировать
+                    </a>
                         }
                     }
                     else
                     {
-                <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
-                    Импортировать
-                </a>
+                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
+                        Импортировать
+                    </a>
                     }
                 </td>
             </tr>
@@ -154,26 +154,26 @@
 
             @for (int i = 0; i < Model.AssignedElementsList.Count; i++)
             {
-                <tr>
-                    <td>
-                        <input type="hidden" name="elementTypes[@i].RequestElementTypeID" value="@Model.AssignedElementsList[i].RequestElementTypeID" />
-                        @Html.DisplayFor(model => model.AssignedElementsList[i].Name)
-                    </td>
-                    <td>
-                        <input asp-for="@Model.AssignedElementsList[i].BatchCount" class="form-control" name="elementTypes[@i].BatchCount" />
-                        <span asp-validation-for="AssignedElementsList[i].BatchCount" class="text-danger"></span>
-                    </td>
-                    <td>
-                        <input asp-for="@Model.AssignedElementsList[i].ItemCount" name="elementTypes[@i].ItemCount" class="form-control" />
-                        <span asp-validation-for="AssignedElementsList[i].ItemCount" class="text-danger"></span>
+            <tr>
+                <td>
+                    <input type="hidden" name="elementTypes[@i].RequestElementTypeID" value="@Model.AssignedElementsList[i].RequestElementTypeID" />
+                    @Html.DisplayFor(model => model.AssignedElementsList[i].Name)
+                </td>
+                <td>
+                    <input asp-for="@Model.AssignedElementsList[i].BatchCount" class="form-control" name="elementTypes[@i].BatchCount" />
+                    <span asp-validation-for="AssignedElementsList[i].BatchCount" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.AssignedElementsList[i].ItemCount" name="elementTypes[@i].ItemCount" class="form-control" />
+                    <span asp-validation-for="AssignedElementsList[i].ItemCount" class="text-danger"></span>
 
-                    </td>
-                    <td>
-                        <input asp-for="@Model.AssignedElementsList[i].MissingKitCount" name="elementTypes[@i].MissingKitCount" class="form-control" />
-                        <span asp-validation-for="AssignedElementsList[i].MissingKitCount" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.AssignedElementsList[i].MissingKitCount" name="elementTypes[@i].MissingKitCount" class="form-control" />
+                    <span asp-validation-for="AssignedElementsList[i].MissingKitCount" class="text-danger"></span>
 
-                    </td>
-                </tr>
+                </td>
+            </tr>
             }
         </table>
 
@@ -182,77 +182,94 @@
     @if (Model.CustomerRequest.Program.AllowEditChain)
     {
 
-        <a href="#hiddenOper" onclick="viewDIV('hiddenOper'); return false">
-            <h4>Операции:</h4>
-        </a>
-
-        <div id="hiddenOper" style="display:block;">
+    <a href="#hiddenOper" onclick="viewDIV('hiddenOper'); return false">
+        <h4>Операции:</h4>
+    </a>
 
 
-            <table class="table">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].OperationGroupCode)</th>
-                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].IsExecute)</th>
-                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].ExecuteCount), <b>K<sub>повтор</sub> </b> </th>
-                    <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].SampleCount), <b>n </b> </th>
+    @if (Model.CustomerRequest.Program.Templates.Count > 0)
+                {
+    <table class="table">
+        <tr>
+            <td>
+                <input asp-for="@Model.CustomerRequest.UseTemplate" class="form-check-inline" onclick="EnableDisableTextBox('CustomerRequest.TestProgramTemplateID',this);" />
+                Использовать шаблон
+            </td>
+            <td>
+                <select disabled="disabled" asp-for="CustomerRequest.TestProgramTemplateID" id="CustomerRequest.TestProgramTemplateID" class="form-control" asp-items="ViewBag.TestProgramTemplateID"></select>
+            </td>
+        </tr>
+    </table>
+            }
+    <div id="hiddenOper" style="display:block;">
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].OperationGroupCode)</th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].IsExecute)</th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].ExecuteCount), <b>K<sub>повтор</sub> </b> </th>
+                <th>@Html.DisplayNameFor(model => model.RequestOperationGroupViews[0].SampleCount), <b>n </b> </th>
 
 
-                </tr>
+            </tr>
 
-                @for (int i = 0; i < Model.RequestOperationGroupViews.Count; i++)
+
+
+
+            @for (int i = 0; i < Model.RequestOperationGroupViews.Count; i++)
                 {
 
                     string selectedRow = Model.RequestOperationGroupViews[i].IsExecute ? "table-success" : "";
 
-                    <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID" >
-                        <td>
-                            @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
-                        </td>
+            <tr class="@selectedRow" id="RequestOperationGroupViews[@i].OperationID">
+                <td>
+                    @Html.DisplayFor(model => model.RequestOperationGroupViews[i].OperationGroupCode)
+                </td>
 
-                        <td>
-                            <input type="hidden" name="requestOperationGroupViews[@i].OperationID" value="@Model.RequestOperationGroupViews[i].OperationID" />
-                            @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
-                        </td>
-                        <td>
-                            <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />
+                <td>
+                    <input type="hidden" name="requestOperationGroupViews[@i].OperationID" value="@Model.RequestOperationGroupViews[i].OperationID" />
+                    @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
+                </td>
+                <td>
+                    <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />
 
-                        </td>
-                        <td>
-                            <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="RequestOperationGroupViews[@i].ExecuteCount" class="form-control" />
-                            <span asp-validation-for="@Model.RequestOperationGroupViews[@i].ExecuteCount" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="RequestOperationGroupViews[@i].ExecuteCount" class="form-control" />
+                    <span asp-validation-for="@Model.RequestOperationGroupViews[@i].ExecuteCount" class="text-danger"></span>
 
-                        </td>
-                        <td>
-                            <input asp-for="@Model.RequestOperationGroupViews[i].SampleCount" name="RequestOperationGroupViews[@i].SampleCount" class="form-control" />
-                            <span asp-validation-for="@Model.RequestOperationGroupViews[i].SampleCount" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.RequestOperationGroupViews[i].SampleCount" name="RequestOperationGroupViews[@i].SampleCount" class="form-control" />
+                    <span asp-validation-for="@Model.RequestOperationGroupViews[i].SampleCount" class="text-danger"></span>
 
-                        </td>
+                </td>
 
-                    </tr>
+            </tr>
                 }
-            </table>
+        </table>
 
-        </div>
+    </div>
     }
- 
-<div class="form-group">
 
-    <a asp-page="./Index"
-       class="btn btn-outline-primary ">
-        К списку
-    </a>|
-    <input type="submit" value="Сохранить" class="btn btn-outline-primary" />|
-    @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID  ) > 0 & !Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
+    <div class="form-group">
+
+        <a asp-page="./Index"
+           class="btn btn-outline-primary ">
+            К списку
+        </a>|
+        <input type="submit" value="Сохранить" class="btn btn-outline-primary" />|
+
+        @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID  ) > 0 & !Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
     {
-        
-         <a asp-page="./edit" asp-route-parentid="@Model.CustomerRequest.CustomerRequestID"  class="btn btn-outline-primary">
-            Создать @Model.ChildProgram.Name 
-         </a>
-    
+
+        <a asp-page="./edit" asp-route-parentid="@Model.CustomerRequest.CustomerRequestID" class="btn btn-outline-primary">
+            Создать @Model.ChildProgram.Name
+        </a>
+
     }
 
-</div>
+    </div>
 
 </form>
 
@@ -274,6 +291,19 @@
         }
         else {
             item.classList.add('table-success');
+        }
+    }
+    function disableControl(n) {
+        element = document.getElementById(n);
+        
+        element.setAttribute('disabled', (element.disabled == 'disabled') ? '' : 'disabled');
+
+    }
+    function EnableDisableTextBox(control, chk) {
+        var txt = document.getElementById(control);
+        txt.disabled = chk.checked ? false : true;
+        if (!txt.disabled) {
+            txt.focus();
         }
     }
 </script>

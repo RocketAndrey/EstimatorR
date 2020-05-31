@@ -84,6 +84,26 @@ namespace Estimator.Pages
                 return (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator"); 
             }
         }
-
+        /// <summary>
+        /// функция удалает из строки все пробелы и переводит в нижний регистр 
+        /// </summary>
+        /// <param name="value">Исходная строка</param>
+        /// <returns></returns>
+        protected string PrepareStr(string value)
+        {
+            // новая строка для записи строки без пробелов
+            string newstr = "";
+            // цыкл
+            for (int i = 0; i < value.Length; i++)
+            {
+                // если елемент i-ый елемент не пробел - пишем его в новую строку "newstr"
+                if (value[i] != ' ')
+                {
+                    // - пишем его в новую строку "newstr"
+                    newstr += value[i];
+                }
+            }
+            return newstr.Trim().ToUpper();
+        }
     }
 }

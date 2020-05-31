@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System;
 using DocumentFormat.OpenXml.Drawing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.CustomerRequests
 {
+   
     public class EditModel : CustomerRequestPageModel
     {
         public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
@@ -30,6 +32,7 @@ namespace Estimator.Pages.CustomerRequests
             if ((parentid?? 0) > 0)
             {
                 id = CreateRequestFromParent(parentid.Value);
+                return RedirectToPage("./edit", new { id = id });
             }
 
             CustomerRequest = await _context.CustomerRequests
@@ -38,6 +41,8 @@ namespace Estimator.Pages.CustomerRequests
                     .ThenInclude(c => c.ElementntTypes)
                 .Include(c => c.RequestElementTypes)
                     .ThenInclude(c => c.ElementType)
+                .Include(c=>c.Program)
+                    .ThenInclude (c=>c.Templates)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
             ElementImport = _context.ElementImports
@@ -56,6 +61,7 @@ namespace Estimator.Pages.CustomerRequests
 
             ViewData["CustomerID"] = new SelectList(_context.Customers.OrderBy (e=>e.Name), "CustomerID", "Name");
             ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
+            ViewData["TestProgramTemplateID"] = new SelectList(CustomerRequest.Program.Templates, "TestProgramTemplateID", "TemplateName");
 
             return Page();
         }
@@ -76,12 +82,15 @@ namespace Estimator.Pages.CustomerRequests
             }
             //Элемент импорт тоже пригодиться
             ElementImport = _context.ElementImports
-               .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+                .AsNoTracking()
+                .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
             //получаем текущую заявку
             var requestToUpdate = await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
+                .Include(c=>c.Program)
+                    .ThenInclude (e=>e.Templates)
                 .Include(c => c.RequestElementTypes)
                     .ThenInclude(c => c.ElementType)
                   .Include(c => c.RequestElementTypes)
@@ -107,7 +116,7 @@ namespace Estimator.Pages.CustomerRequests
                 i => i.RequestNumber,
                 i => i.RequestDate,
                 i => i.CustomerID,
-                 i => i.Description)
+                 i => i.Description, i=>i.UseTemplate,i=>i.TestProgramTemplateID)
                 )
             {
                 UpdateAssignedElementTypes(elementTypes, requestToUpdate);
@@ -117,7 +126,8 @@ namespace Estimator.Pages.CustomerRequests
                     UpdateRequestOperations(requestOperationGroupViews, requestToUpdate);
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToPage("./report", new {id = id });
+
+                return RedirectToPage("./edit", new {id = id });
             }
             else
             {
@@ -151,18 +161,52 @@ namespace Estimator.Pages.CustomerRequests
         }
         public void UpdateRequestOperations(RequestOperationGroupView[] operationTypes, CustomerRequest customerRequestToUpdate)
         {
+            int templateID;
+            TestProgramTemplate template = null;
 
+            if (customerRequestToUpdate.UseTemplate)
+            {
+                templateID = customerRequestToUpdate.TestProgramTemplateID;
+                template = _context.TestProgramTemplates
+                    .Include(e => e.TemplateItems)
+                    .AsNoTracking()
+                    .FirstOrDefault(c => c.TestProgramTemplateID == customerRequestToUpdate.TestProgramTemplateID);
+            }
 
             foreach (var element in customerRequestToUpdate.RequestElementTypes)
             {
+                //получаем шаблон
+             
+
                 foreach (var operation in element.RequestOperations)
                 {
                     foreach (var updElement in operationTypes)
                     {
+                      
                         if (operation.TestChainItem.OperationID == updElement.OperationID)
                         {
-                            operation.IsExecute = updElement.IsExecute;
-                            operation.ExecuteCount = updElement.ExecuteCount;
+                            if (customerRequestToUpdate.UseTemplate  & template!=null)
+                            {
+
+                                TestProgramTemplateItem item = template?.TemplateItems?.FirstOrDefault(c => c.OperationID == updElement.OperationID);
+                                   
+                                if (item != null )
+                                {
+                                    operation.IsExecute = item.IsExecute;
+                                    operation.ExecuteCount = item.ExecuteCount;
+                                }
+                                else
+                                {
+                                    operation.IsExecute = updElement.IsExecute;
+                                    operation.ExecuteCount = updElement.ExecuteCount;
+                                }
+                            }
+                            else
+                            {
+                                operation.IsExecute = updElement.IsExecute;
+                                operation.ExecuteCount = updElement.ExecuteCount;
+                               
+                            }
                             operation.SampleCount = updElement.SampleCount;
                         }
                     }

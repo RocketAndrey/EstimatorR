@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.CustomerRequests
 {
+
     public class ReportModel : CustomerRequestPageModel
     {
 
@@ -52,7 +54,7 @@ namespace Estimator.Pages.CustomerRequests
                         .ThenInclude(e => e.TestChainItem)
                             .ThenInclude(e => e.Operation)
                                 .ThenInclude(e => e.OperationGroup)
-
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
             if (CustomerRequest == null)

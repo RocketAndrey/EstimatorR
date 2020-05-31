@@ -55,8 +55,14 @@ namespace Estimator.Data
             modelBuilder.Entity<CalcFactor>().ToTable("CalcFactor");
             modelBuilder.Entity<StaffItem>().ToTable("StaffItem");
             modelBuilder.Entity<XLSXElementType>().ToTable("XLSXElementType");
+            modelBuilder.Entity<TestProgramTemplateItem>().ToTable("TestProgramTemplateItem");
+            modelBuilder.Entity<TestProgramTemplate>().ToTable("TestProgramTemplate");
+
         }
         public DbSet<Estimator.Models.ElementImport> ElementImports { get; set; }
+     
+        public DbSet<Estimator.Models.TestProgramTemplate> TestProgramTemplates { get; set; }
         public DbSet<Estimator.Models.User> User { get; set; }
+        public DbSet<Estimator.Models.ElementKey> ElementKey { get; set; }
     }
 }

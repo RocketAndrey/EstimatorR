@@ -1,14 +1,17 @@
-﻿using Estimator.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using Estimator.Data;
+using Estimator.Models;
 using Microsoft.AspNetCore.Authorization;
 
-
-namespace Estimator.CustomerRequests
+namespace Estimator.Pages.ElementKey
 {
-   
+    [Authorize(Roles = "Administrator")]
     public class DeleteModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
@@ -19,7 +22,7 @@ namespace Estimator.CustomerRequests
         }
 
         [BindProperty]
-        public CustomerRequest CustomerRequest { get; set; }
+        public Estimator.Models.ElementKey ElementKey { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,11 +31,10 @@ namespace Estimator.CustomerRequests
                 return NotFound();
             }
 
-            CustomerRequest = await _context.CustomerRequests
-                .Include(c => c.Customer)
-                .Include(c => c.Program).FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+            ElementKey = await _context.ElementKey
+                .Include(e => e.ElementType).FirstOrDefaultAsync(m => m.ElementKeyID == id);
 
-            if (CustomerRequest == null)
+            if (ElementKey == null)
             {
                 return NotFound();
             }
@@ -46,15 +48,15 @@ namespace Estimator.CustomerRequests
                 return NotFound();
             }
 
-            CustomerRequest = await _context.CustomerRequests.FindAsync(id);
+            ElementKey = await _context.ElementKey.FindAsync(id);
 
-            if (CustomerRequest != null)
+            if (ElementKey != null)
             {
-                _context.CustomerRequests.Remove(CustomerRequest);
+                _context.ElementKey.Remove(ElementKey);
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { id=ElementKey.ElementTypeID });
         }
     }
 }

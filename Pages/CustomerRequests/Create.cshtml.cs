@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.CustomerRequests
 {
+   
     public class CreateModel : Estimator.Pages.BaseEstimatorPage 
     {
        

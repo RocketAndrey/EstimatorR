@@ -1,0 +1,37 @@
+﻿@page
+@model Estimator.Pages.ElementKey.IndexModel
+
+@{
+    ViewData["Title"] = "Ключи";
+}
+
+    <h4> @Html.DisplayFor(modelItem => Model.ElementType.Name)</h4>
+
+<p>
+    <a asp-page="Create" asp-route-typeID="@Model.ElementType.ElementTypeID" >Новый ключ</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.ElementType.Keys[0].Key)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ElementType.Keys) {
+        <tr>
+               
+            <td>
+                <a asp-page="./Create" asp-route-typeID="@Model.ElementType.ElementTypeID" asp-route-keyID="@item.ElementKeyID"> @Html.DisplayFor(modelItem => item.Key)</a>
+     
+            </td>
+            <td>
+                <a asp-page="./Delete" asp-route-id="@item.ElementKeyID"><img  height="32" width="32" src="~/delete.png"/></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

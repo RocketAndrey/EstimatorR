@@ -9,15 +9,20 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
+using System;
 namespace Estimator
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        IWebHostEnvironment _env;
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
-            
+            _env = env;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -32,20 +37,26 @@ namespace Estimator
                     options.Conventions.AuthorizeFolder("/Customer");
                     options.Conventions.AuthorizeFolder("/CustomerRequests");
                     options.Conventions.AuthorizeFolder("/Program");
-                 
+                    options.Conventions.AuthorizeFolder("/ElementKey");
 
                 });
+           
 
             // установка конфигурации подключения к базе данных калькулятора
             services.AddDbContext<EstimatorContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EstimatorContext")));
             // это чтобы ыорма импорта не отваливалать. Слишком много данных в форме.
             services.Configure<FormOptions>(x => x.ValueCountLimit = int.MaxValue‬);
+            services.AddDataProtection()
+                .SetApplicationName ("Estimator")
+                .PersistKeysToFileSystem(new DirectoryInfo(_env.WebRootPath + "/Files/")); ;
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Login");
+                    options.ExpireTimeSpan =System.TimeSpan.FromMinutes(1440);
+                
                 });
 
 

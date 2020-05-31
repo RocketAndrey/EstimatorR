@@ -89,8 +89,8 @@ namespace Estimator.Models
                                                 sampleCount = itemRO.RequestElementType.ItemCount;
                                                 break;
                                             default:
-                                                // берем объём выборки из заявки, если 0 то с выборкой ничего не делают()
-                                                sampleCount = itemRO.SampleCount;
+                                                // берем объём выборки из заявки  умнож на кол-во партий, если 0 то с выборкой ничего не делают()
+                                                sampleCount = itemRO.SampleCount* itemRO.RequestElementType.BatchCount ;
                                                 break;
 
                                         }

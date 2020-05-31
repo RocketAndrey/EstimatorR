@@ -14,6 +14,8 @@
     <Compile Remove="Migrations\20200219102759_CorrectRequestOperation.Designer.cs" />
     <Compile Remove="Migrations\20200401081918_test.cs" />
     <Compile Remove="Migrations\20200401081918_test.Designer.cs" />
+    <Compile Remove="Migrations\20200524094550_ProgramTemlate.cs" />
+    <Compile Remove="Migrations\20200524094550_ProgramTemlate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="NPOI" Version="2.4.1" />
   </ItemGroup>
 

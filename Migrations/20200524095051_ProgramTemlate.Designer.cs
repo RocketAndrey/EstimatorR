@@ -4,14 +4,16 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200524095051_ProgramTemlate")]
+    partial class ProgramTemlate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -548,7 +550,7 @@ namespace Estimator.Migrations
                     b.Property<bool>("IsExecute")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("OperationID")
+                    b.Property<int?>("TestChainItemID")
                         .HasColumnType("int");
 
                     b.Property<int>("TestProgramTemplateID")
@@ -556,7 +558,7 @@ namespace Estimator.Migrations
 
                     b.HasKey("TestProgramTemplateItemID");
 
-                    b.HasIndex("OperationID");
+                    b.HasIndex("TestChainItemID");
 
                     b.HasIndex("TestProgramTemplateID");
 
@@ -812,9 +814,9 @@ namespace Estimator.Migrations
 
             modelBuilder.Entity("Estimator.Models.TestProgramTemplateItem", b =>
                 {
-                    b.HasOne("Estimator.Models.Operation", "Operation")
+                    b.HasOne("Estimator.Models.TestChainItem", "TestChainItem")
                         .WithMany()
-                        .HasForeignKey("OperationID");
+                        .HasForeignKey("TestChainItemID");
 
                     b.HasOne("Estimator.Models.TestProgramTemplate", "ProgramTemplate")
                         .WithMany("TemplateItems")

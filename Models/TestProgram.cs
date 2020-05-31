@@ -30,6 +30,10 @@ namespace Estimator.Models
         /// Ссылка на дочернюю программу для создания цепочки программ
         /// </summary>
         public int? ParentProgramID { get; set; }
+        /// <summary>
+        /// Шаблоны программ
+        /// </summary>
+        public List<TestProgramTemplate> Templates { get; set; }
 
 
     }

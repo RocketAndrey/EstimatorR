@@ -47,6 +47,7 @@
         <tr>
             <th>Наименование типа</th>
             <th>Порядок</th>
+            <th>Ключи</th>>
         </tr>
 
         @foreach (var item in Model.ElementTypesSort)
@@ -56,16 +57,21 @@
             {
                 selectedRow = "table-success";
             }
-            <tr class="@selectedRow">
-                <td>
-                    <a asp-page="./Index" asp-route-elementTypeID="@item.ElementTypeID"> @item.Name</a>
-                </td>
-      
-                <td>
-                    @item.Order
-                </td>
+    <tr class="@selectedRow">
+        <td>
+            <a asp-page="./Index" asp-route-elementTypeID="@item.ElementTypeID"> @item.Name</a>
+        </td>
 
-            </tr>
+        <td>
+            @item.Order
+        </td>
+        
+        <td>
+
+            <a asp-page="../ElementKey/Index" asp-route-id="@item.ElementTypeID"><img  width="32" height="32" src="~/key.png"/></a>
+        </td>
+
+    </tr>
         }
 
     </table>

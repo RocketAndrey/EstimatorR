@@ -79,7 +79,11 @@ namespace Estimator
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id), new AuthenticationProperties
+            {
+                IsPersistent= true,
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(1440)
+            });
         }
 
         public async Task<IActionResult> Logout()

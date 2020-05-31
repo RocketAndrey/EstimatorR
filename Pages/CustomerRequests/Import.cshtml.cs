@@ -15,9 +15,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Estimator.Models.AsuViews;
 using DocumentFormat.OpenXml.Office.CustomUI;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.CustomerRequests
+
 {
+  
     public class ImportModel : Estimator.Pages.BaseEstimatorPage
     {
 
@@ -377,27 +380,7 @@ namespace Estimator.Pages.CustomerRequests
         {
             return _context.ElementImports.Any(e => e.ElementImportID == id);
         }
-        /// <summary>
-        /// функция удалает из строки все пробелы и переводит в нижний регистр 
-        /// </summary>
-        /// <param name="value">Исходная строка</param>
-        /// <returns></returns>
-        private string PrepareStr(string value)
-        {
-            // новая строка для записи строки без пробелов
-            string newstr = "";
-            // цыкл
-            for (int i = 0; i < value.Length; i++)
-            {
-                // если елемент i-ый елемент не пробел - пишем его в новую строку "newstr"
-                if (value[i] != ' ')
-                {
-                    // - пишем его в новую строку "newstr"
-                    newstr += value[i];
-                }
-            }
-            return newstr.Trim().ToUpper();
-        }
+     
 
         private void FillELementTypes()
         {
@@ -408,17 +391,21 @@ namespace Estimator.Pages.CustomerRequests
                 foreach (var itemRet in ElementImport.CustomerRequest.RequestElementTypes)
                 {
                     itemRet.ItemCount = 0;
-                    //   itemRet.KitCount = 0;
+                    itemRet.KitCount = 0;
                     itemRet.BatchCount = 0;
+
                     foreach (var itemX in ElementImport.XLSXElementTypes)
                     {
                         if (itemRet.ElementTypeID == itemX.ElementTypeID)
                         {
                             itemRet.BatchCount++;
                             itemRet.ItemCount += itemX.ElementCount;
-                            if (!itemX.IsAsuProtokolExists)
+                            itemRet.KitCount++;
+
+                            if (itemX.IsAsuProtokolExists)
                             {
-                                itemRet.KitCount ++;
+                                //такой тип найден- вычитаем оснастку
+                                itemRet.KitCount --;
                             }
                         }
                     }
@@ -427,20 +414,29 @@ namespace Estimator.Pages.CustomerRequests
         }
 
         private string LastAsuProtokolNumber (string elementName)
+            
         {
-            SetAsuContext();
-            string query = "select  l.LotID as TestedTypeID, w.TypeNominal," +
-                "l.PrefixNumber + '-' + CAST(l.Number AS VARCHAR(32)) + (CASE WHEN(l.SuffixNumber IS NULL) THEN('') ELSE l.SuffixNumber END) AS [ProtokolNumber] "+
-                 "from Wares w, Lot l where w.WareId = l.WareId and UPPER(LTRIM(RTRIM(w.TypeNominal))) = {0} "+
-                 "order by l.LotId Desc";
-            List<TestedType> list = _asuContext.TestedTypes.FromSqlRaw(query, PrepareStr(elementName)).ToList();
-         
-            if (list !=null)
+            try
             {
-                return  list.Count > 0? list[0].ProtokolNumber:""; 
+                SetAsuContext();
+                string query = "select  l.LotID as TestedTypeID, w.TypeNominal," +
+                    "l.PrefixNumber + '-' + CAST(l.Number AS VARCHAR(32)) + (CASE WHEN(l.SuffixNumber IS NULL) THEN('') ELSE l.SuffixNumber END) AS [ProtokolNumber] " +
+                     "from Wares w, Lot l where w.WareId = l.WareId and UPPER(LTRIM(RTRIM(w.TypeNominal))) = {0} " +
+                     "order by l.LotId Desc";
+                List<TestedType> list = _asuContext.TestedTypes.FromSqlRaw(query, PrepareStr(elementName)).ToList();
+
+                if (list != null)
+                {
+                    return list.Count > 0 ? list[0].ProtokolNumber : "";
+                }
+                else
+                { return ""; }
             }
-            else
-            { return ""; }
+            catch (Exception e)
+            {
+               
+                return e.Message;
+            }
         }
 
         /// <summary>
