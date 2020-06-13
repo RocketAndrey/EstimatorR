@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
 using Microsoft.AspNetCore.Hosting;
 using Estimator.Data;
 using Estimator.Models;
@@ -14,8 +13,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Estimator.Models.AsuViews;
-using DocumentFormat.OpenXml.Office.CustomUI;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace Estimator.Pages.CustomerRequests
 
@@ -238,14 +236,18 @@ namespace Estimator.Pages.CustomerRequests
 
                 if (ValidateXLSX(true))
                 {
+                    ImportStep = 3;
                     FillELementTypes();
                 }
+        
                 await _context.SaveChangesAsync();
-
-
+            }
+            if (ElementImport.XLSXElementTypes != null)
+            {
+                ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.Valid).ToList();
             }
 
-            return RedirectToPage("./import", new { id = ElementImport.CustomerRequestID, step = ImportStep });
+            return Page();
         }
 
         public string FilePath
@@ -282,6 +284,10 @@ namespace Estimator.Pages.CustomerRequests
 
             //функция возвращает true  только когда все элементы валидны;
             bool returnValue = true;
+            if (ElementImport.XLSXElementTypes == null)
+            {
+                return false; 
+            }
             //перебираем все загрузки
             foreach (var itemXLSX in ElementImport.XLSXElementTypes)
             {

@@ -16,7 +16,7 @@ namespace Estimator.Pages.CustomerRequests
     public class IndexModel : PageModel
     {
         private readonly Estimator.Data.EstimatorContext _context;
-        public PaginatedList<CustomerRequestView> CustomerRequestList { get; set; }
+        public PaginatedList <CustomerRequestView> CustomerRequestList { get; set; }
         // public PaginatedList<CustomerRequestView> CustomerRequestViews { get; set; }
         public string DateSort { get; set; }
         public string ProgramSort { get; set; }
@@ -77,8 +77,10 @@ namespace Estimator.Pages.CustomerRequests
                 _ => customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList(),
             };
             int pageSize = 20;
+           // CustomerRequestList = new X.PagedList.StaticPagedList<CustomerRequestView>(customerRequestViewsIQ, pageIndex ?? 1, pageSize, customerRequestViewsIQ.Count);
+           
             CustomerRequestList = await PaginatedList<CustomerRequestView>.CreateAsync(
-                customerRequestViewsIQ.ToList(), pageIndex ?? 1, pageSize);
+            customerRequestViewsIQ.ToList(), pageIndex ?? 1, pageSize);
 
         }
     }

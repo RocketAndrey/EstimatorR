@@ -255,7 +255,7 @@ namespace Estimator.Pages.CustomerRequests
             { 
                 Customer=parentCR.Customer ,
             TestProgramID =ChildProgramID(parentCR.Program.TestProgramID ) , RequestDate= parentCR.RequestDate,
-            Description= parentCR.Description + "Создана из заявки "+ parentID+".",
+            Description= parentCR.Description + ". Создана из заявки "+ parentID+".",
             RequestNumber =parentCR.RequestNumber, ParentCustomerRequestID= parentCR.CustomerRequestID 
             };
 

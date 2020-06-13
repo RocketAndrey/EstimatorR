@@ -54,6 +54,8 @@ namespace Estimator.Pages.CustomerRequests
                         .ThenInclude(e => e.TestChainItem)
                             .ThenInclude(e => e.Operation)
                                 .ThenInclude(e => e.OperationGroup)
+                    .Include(e => e.RequestElementTypes)
+                        .ThenInclude (e=>e.ElementType)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 

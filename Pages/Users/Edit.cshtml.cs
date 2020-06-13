@@ -8,15 +8,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Estimator.Data;
 using Estimator.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.Users
 {
+    [Authorize(Roles = "Administrator")]
     public class EditModel : Estimator.Pages.BaseEstimatorPage
     {
-        
-      
 
+
+        public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
+        {
+
+        }
         [BindProperty]
         public Estimator.Models.ViewModels.NewUserView  UserView { get; set; }
 
@@ -86,7 +92,7 @@ namespace Estimator.Pages.Users
                 }
             }
 
-            return RedirectToPage("../CustomerRequests/Index");
+            return RedirectToPage("./Index");
         }
 
         private bool UserExists(int id)

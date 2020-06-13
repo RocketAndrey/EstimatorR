@@ -137,7 +137,7 @@
                 </td>
 
                 <td colspan="2" align="right">
-                    <input type="submit" value="Загрузка" class="btn btn-outline-primary " asp-route-step="1" />|
+                    <a asp-page="import" class="btn btn-outline-primary" asp-route-id="@Model.ElementImport.CustomerRequestID" asp-route-step="-1"  >Загрузка</a>|
                     <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
                 </td>
                 `

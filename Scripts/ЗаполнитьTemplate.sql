@@ -31,3 +31,7 @@ update TestProgramTemplateItem set IsExecute =0
 where  OperationID in (19,20,28,36,37,38,39,40,42,43);
 
 select * from TestProgramTemplateItem
+
+SET IDENTITY_INSERT ElementKey  off;  
+
+SET IDENTITY_INSERT ElementType  off;  

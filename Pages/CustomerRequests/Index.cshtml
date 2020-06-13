@@ -1,13 +1,15 @@
 ﻿@page
 @model Estimator.Pages.CustomerRequests.IndexModel
 
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Заявки";
 }
+@addTagHelper *, Estimator
 
 <h1>Заявки:</h1>
 <form asp-page="./Index" method="get">
-    
+
     <table class="table">
         <tr>
             <td align="left">
@@ -16,7 +18,7 @@
             <td align="right">
                 Искать:
                 <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="Поиск" class="btn btn-outline-primary "/>|
+                <input type="submit" value="Поиск" class="btn btn-outline-primary " />|
                 <a asp-page="./Index" class="btn btn-outline-primary ">Очистить поиск</a>
             </td>
         </tr>
@@ -25,7 +27,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID )</th> 
+            <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID)</th>
             <th>
                 Отчет
             </th>
@@ -62,37 +64,37 @@
     <tbody>
         @foreach (var item in Model.CustomerRequestList)
         {
-        <tr>
+            <tr>
 
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>
-                
-            </td>
-            <td>
-                <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20" height="20" /></a>
-            </td>
-            <td>
-                 @Html.DisplayFor(modelItem => item.RequestNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequestDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProgramName)
-            </td>
-            <td>
-                <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
-                <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
-            </td>
-            <td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>
 
-                <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
+                </td>
+                <td>
+                    <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20" height="20" /></a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProgramName)
+                </td>
+                <td>
+                    <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
+                    <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
+                </td>
+                <td>
 
-            </td>
-        </tr>
+                    <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
+
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -101,7 +103,8 @@
     var nextDisabled = !Model.CustomerRequestList.HasNextPage ? "disabled" : "";
 }
 
-<a asp-page="./Index"
+
+@*<a asp-page="./Index"
    asp-route-sortOrder="@Model.CurrentSort"
    asp-route-pageIndex="@(Model.CustomerRequestList.PageIndex - 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
@@ -114,4 +117,8 @@
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-outline-primary @nextDisabled">
     Вперед
-</a>
+</a>*@
+<page-link page-model="Model.CustomerRequestList"
+           page-url-pageIndex="@(Model.CustomerRequestList.PageIndex - 1)"
+           page-url-currentFilter="@(Model.CurrentFilter)"
+           page-url-sortorder="@(Model.CurrentSort)"></page-link>

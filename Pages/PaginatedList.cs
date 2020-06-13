@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Estimator.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,6 +43,11 @@ namespace Estimator.Pages
                 (pageIndex - 1) * pageSize)
                 .Take(pageSize).ToList();
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+
+        public static implicit operator PaginatedList<T>(List<CustomerRequestView> v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
