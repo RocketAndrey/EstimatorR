@@ -45,5 +45,6 @@ namespace Estimator.Models
                 return "../files/" + CustomerRequestID.ToString() + ".xlsx";
             }
         }
+        public List<AsuViews.DefectedType> DefectedTypes { get; set; }
     }
 }

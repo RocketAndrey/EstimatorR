@@ -1,5 +1,6 @@
 ﻿using Estimator.Models;
 using Estimator.Models.ViewModels;
+using Estimator.Data; 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,6 +20,8 @@ namespace Estimator.Pages
         protected Estimator.Data.EstimatorContext _context;
         protected IWebHostEnvironment _appEnvironment;
         protected IConfiguration _configuration;
+        protected Estimator.Data.AsuContext _asuContext;
+
         public int YearOfNoms { get; set; }
         /// <summary>
         /// использовать базу данных Asu для проерки ЭКБ которые проходили испытания
@@ -104,6 +107,23 @@ namespace Estimator.Pages
                 }
             }
             return newstr.Trim().ToUpper();
+        }
+        /// <summary>
+        /// Подключение к базе данных ASU  для получения данных о ранее проведенных  испытаниях
+        /// </summary>
+        protected void SetAsuContext()
+        {
+            if (UseAsu)
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<AsuContext>();
+                var options = optionsBuilder
+                    .UseSqlServer(_configuration.GetConnectionString("AsuContext"))
+                    .Options;
+                // установка конфигурации подключения к базе данных калькулятора
+                _asuContext = new AsuContext(options);
+
+            }
+
         }
     }
 }

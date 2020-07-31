@@ -50,9 +50,10 @@ namespace Estimator.Models
         {
             get
             {
-                if (RequestOperations != null & ItemCount>0 )
+                ///if (RequestOperations != null & ItemCount>0 )
+                    if (RequestOperations != null)
 
-                {
+                    {
                     Dictionary<string, RequestQualLaborSummary> returnSummary = new Dictionary<string, RequestQualLaborSummary>();
 
                     //   перебираем все операции для данного типа ЭКБ в заявке      
@@ -75,6 +76,7 @@ namespace Estimator.Models
                                         itemRQLS = new RequestQualLaborSummary();
                                         itemRQLS.LaborSummary = 0;
                                         itemRQLS.Name = itemAc.Qualification.Name;
+                                        itemRQLS.QualificationID = itemAc.Qualification.QualificationID;
                                         itemRQLS.CustomerRequest = CustomerRequest;
                                         returnSummary.Add(itemAc.Qualification.Name, itemRQLS);
                                     }
@@ -143,6 +145,24 @@ namespace Estimator.Models
                 return result / 60;
             }
         }
+        [Display(Name = "Стоимость,руб")]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
+        public decimal CostSummary
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.CostSummary;
+                }
+                return result; 
+          
+            }
+        }
+
 
     }
 }

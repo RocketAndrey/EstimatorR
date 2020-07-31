@@ -23,7 +23,6 @@ namespace Estimator.Pages.CustomerRequests
     {
 
         public string ErrorMessage;
-        private AsuContext _asuContext;
         public ImportModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
             
@@ -425,7 +424,7 @@ namespace Estimator.Pages.CustomerRequests
             try
             {
                 SetAsuContext();
-                string query = "select  l.LotID as TestedTypeID, w.TypeNominal," +
+                string query = "select  l.LotID as ID, w.TypeNominal," +
                     "l.PrefixNumber + '-' + CAST(l.Number AS VARCHAR(32)) + (CASE WHEN(l.SuffixNumber IS NULL) THEN('') ELSE l.SuffixNumber END) AS [ProtokolNumber] " +
                      "from Wares w, Lot l where w.WareId = l.WareId and UPPER(LTRIM(RTRIM(w.TypeNominal))) = {0} " +
                      "order by l.LotId Desc";
@@ -445,23 +444,7 @@ namespace Estimator.Pages.CustomerRequests
             }
         }
 
-        /// <summary>
-        /// Подключение к базе данных ASU  для получения данных о ранее проведенных  испытаниях
-        /// </summary>
-        private void SetAsuContext()
-        {
-            if (UseAsu)
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<AsuContext>();
-                var options = optionsBuilder
-                    .UseSqlServer(_configuration.GetConnectionString("AsuContext"))
-                    .Options;
-                // установка конфигурации подключения к базе данных калькулятора
-                _asuContext = new AsuContext(options);
-            
-            }
-
-        }
+     
         /// <summary>
         /// Проверяет загружали ли ли такой элемент ранее,  если да то ElementType  берется из ранее загруженного элемента
         /// </summary>

@@ -286,7 +286,7 @@ namespace Estimator.Models
         {
             get
             {
-                return CompanyHistory.AdditionalSalary * BasicSalary;
+                return CompanyHistory.AdditionalSalary/100 * BasicSalary;
             }
         }
         /// <summary>
