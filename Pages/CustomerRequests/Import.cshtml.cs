@@ -13,7 +13,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Estimator.Models.AsuViews;
-
+using Estimator.Migrations;
 
 namespace Estimator.Pages.CustomerRequests
 
@@ -138,6 +138,7 @@ namespace Estimator.Pages.CustomerRequests
             //установка этапа
             ImportStep = step;
 
+
             if (ImportStep == 1)
             {
                 try
@@ -210,6 +211,7 @@ namespace Estimator.Pages.CustomerRequests
                     }
 
                     await _context.SaveChangesAsync();
+                    return Page();
 
                 }
                 catch (DbUpdateConcurrencyException)
@@ -233,20 +235,39 @@ namespace Estimator.Pages.CustomerRequests
             else if (ImportStep == 2)
             {
 
+               
+
                 if (ValidateXLSX(true))
                 {
+                    ElementImport.CustomerRequest.ModificateDate = System.DateTime.Now;
+
+                    if (UserID > 0)
+                    {
+                        ElementImport.CustomerRequest.LastModificateUserID = UserID;
+                    }
                     ImportStep = 3;
                     FillELementTypes();
+                    await _context.SaveChangesAsync();
+                    
                 }
-        
-                await _context.SaveChangesAsync();
-            }
-            if (ElementImport.XLSXElementTypes != null)
-            {
-                ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.Valid).ToList();
+                else 
+                {
+                    ElementImport.CustomerRequest.ModificateDate = System.DateTime.Now;
+
+                    if (UserID > 0)
+                    {
+                        ElementImport.CustomerRequest.LastModificateUserID = UserID;
+                    }
+                    await _context.SaveChangesAsync();
+                    return RedirectToPage("Import" ,new { id = ElementImport.CustomerRequestID, step = 2 });
+                }
+
+                
             }
 
             return Page();
+
+
         }
 
         public string FilePath

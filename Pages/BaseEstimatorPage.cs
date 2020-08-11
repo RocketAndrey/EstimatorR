@@ -121,6 +121,7 @@ namespace Estimator.Pages
                     .Options;
                 // установка конфигурации подключения к базе данных калькулятора
                 _asuContext = new AsuContext(options);
+               
 
             }
 

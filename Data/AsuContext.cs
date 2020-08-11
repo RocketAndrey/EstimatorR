@@ -1,5 +1,6 @@
 ﻿using Estimator.Models;
 using Estimator.Models.ViewModels;
+using Estimator.Models.AsuViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace Estimator.Data
@@ -14,9 +15,14 @@ namespace Estimator.Data
         public DbSet<Estimator.Models.AsuViews.DefectedType > DefectedTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Customer>().ToTable("Customer");
-           
-    }
+         //   modelBuilder
+         //.Entity<DefectedType>(eb =>
+         //{
+         //    eb.HasNoKey();
+          
+         //});
+
+        }
   
     }
 }

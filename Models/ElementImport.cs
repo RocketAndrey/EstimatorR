@@ -45,6 +45,54 @@ namespace Estimator.Models
                 return "../files/" + CustomerRequestID.ToString() + ".xlsx";
             }
         }
+        /// <summary>
+        /// Найденные в АСУ ИЦ браки
+        /// </summary>
         public List<AsuViews.DefectedType> DefectedTypes { get; set; }
+        /// <summary>
+        /// Cумма ранее забракованных по РФА партий
+        /// </summary>
+        public int DefectedRfaBanchCount
+        {
+            get
+            {
+                if (DefectedTypes == null)
+                { 
+                    return 0;
+                }
+                return DefectedTypes.Where(e => e.RFA).Count();
+              
+            }
+        }
+        /// <summary>
+        /// Cумма ранее забракованных по ТУ изделий
+        /// </summary>
+        public Int64 DefectedTYItemCount
+        {
+            get
+            {
+                if (DefectedTypes == null)
+                {
+                    return 0;
+                }
+                return DefectedTypes.Where(e => e.NormTY).Sum(n=>n.DefectCount);
+
+            }
+        }
+        /// <summary>
+        /// Cумма  нерекомендованных изделий из ранее проеведенных испытаний
+        /// </summary>
+        public Int64 DefectedUnrecommendCount
+        {
+            get
+            {
+                if (DefectedTypes == null)
+                {
+                    return 0;
+                }
+                return DefectedTypes.Where(e => e.Unrecommend).Sum(n => n.DefectCount);
+
+            }
+        }
     }
 }

@@ -276,3 +276,91 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20200522-200001] ON [dbo].[Wares]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 
 end 
+
+--браки
+
+CREATE TABLE [dbo].[Defect](
+	[DefectId] [bigint] IDENTITY(1,1) NOT NULL,
+	[DefectTypeId] [bigint] NULL,
+	[Description] [nvarchar](500) NULL,
+	[TU] [bit] NOT NULL,
+	[Unrecommend] [bit] NOT NULL,
+	[RFA] [bit] NOT NULL,
+	[RouteOperationId] [bigint] NULL,
+	[ProductNumbers] [nvarchar](1024) NULL,
+	[DefectCount] [bigint] NULL,
+ CONSTRAINT [PK_DEFECT] PRIMARY KEY CLUSTERED 
+(
+	[DefectId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+/****** Object:  Table [dbo].[RouteOperation]    Script Date: 09.08.2020 21:47:09 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RouteOperation](
+	[RouteOperationId] [bigint] IDENTITY(1,1) NOT NULL,
+	[LotId] [bigint] NOT NULL,
+	
+ CONSTRAINT [PK_ROUTEOPERATION] PRIMARY KEY CLUSTERED 
+(
+	[RouteOperationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+
+--Заполняем браки 
+
+
+INSERT INTO [dbo].[Defect]
+           ([DefectTypeId]
+           ,[Description]
+           ,[TU]
+           ,[Unrecommend]
+           ,[RFA]
+           ,[RouteOperationId]
+           ,[ProductNumbers]
+           ,[DefectCount])
+Select [DefectTypeId]
+           ,[Description]
+           ,[TU]
+           ,[Unrecommend]
+           ,[RFA]
+           ,[RouteOperationId]
+           ,[ProductNumbers]
+           ,[DefectCount]
+		   from Asulive.dbo.Defect
+
+
+go
+SET IDENTITY_INSERT dbo.[RouteOperation] on
+
+Insert into [RouteOperation]([RouteOperationId],[LotId])
+select distinct r.[RouteOperationId],[LotId] from Asulive.dbo.RouteOperation r, Asulive.dbo.Defect d
+where d.RouteOperationId= r.RouteOperationId 
+ 
+SET IDENTITY_INSERT dbo.[RouteOperation] Off
+go 
+
+ALTER TABLE [dbo].[RouteOperation]  WITH CHECK ADD  CONSTRAINT [FK_ROUTEOPE_ROUTE_ROU_LOT] FOREIGN KEY([LotId])
+REFERENCES [dbo].[Lot] ([LotId])
+ON DELETE CASCADE
+GO
+
+
+
+ALTER TABLE [dbo].[Defect]  WITH CHECK ADD  CONSTRAINT [FK_Defect_RouteOperation] FOREIGN KEY([RouteOperationId])
+REFERENCES [dbo].[RouteOperation] ([RouteOperationId])
+ON DELETE CASCADE
+GO
+
+
+ALTER TABLE [dbo].[Defect] CHECK CONSTRAINT [FK_Defect_RouteOperation]
+GO

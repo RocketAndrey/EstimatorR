@@ -125,7 +125,34 @@
                     <td>Средняя стоимость испытаний 1 партии, руб </td>
                     <td>@Model.CustomerRequest.AveragePartCost.ToString("N2") </td>
                 </tr>
+              
             </table>
+            @if (Model.ElementImport != null)
+            { 
+            <h4>Сведения о ранее забракованных изделиях:</h4>
+            <br />
+            <table class="table table-bordered">
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                 
+                    <td>Ранее забракованных изделий по ТУ, шт</td>
+                    <td>@Model.ElementImport.DefectedTYItemCount.ToString("N0") </td>
+                </tr>
+                <tr>
+                    
+                    <td>Ранее забракованных партий по РФА, партий</td>
+                    <td>@Model.ElementImport.DefectedRfaBanchCount.ToString("N0") </td>
+                </tr>
+                <tr>
+                  
+                    <td>Ренее нерекомендованных изделий, шт</td>
+                    <td>@Model.ElementImport.DefectedUnrecommendCount.ToString("N0") </td>
+                </tr>
+            </table>
+            }
         }
 
 
@@ -400,152 +427,136 @@
             </table>
         }
 
-            @if (Model.Mode == 6)
-            {
-                <h4>Забраованные изделия при предыдущих  испытаниях :</h4>
-                <br />
-                <table class="table table-bordered">
-
-                    @*<tr>
-                        <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
-                        @if (Model.CustomerRequest.OperationGroups.Count > 0)
-                        {
-                            @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
-                            {
-                                <th>
-                                    @itemOG.Name
-                                </th>
-                            }
-
-                            <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].CostSummary)</th>
-                        }
-                    </tr>*@
-                    <tr>
-                        <th></th>
-                    </tr>
-                    @if (Model.ElementImport != null)
-                    {
-
-                    @foreach (var item in Model.ElementImport.DefectedTypes)
-                    {
-
-                            <tr>
-                                <td>
-                                    @item.ProtokolNumber
-                                </td>
-                              
-                            </tr>
-
-
-                    }
-
-                    }
-
-                    @*<tfoot>
-                        <tr class="thead-dark">
-                            <td><b>Итого стоимость,  руб:</b></td>
-                            @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
-                            {
-                                <td>
-                                    <b>
-                                        @itemOG.CostSummary.ToString("N2")
-                                    </b>
-                                </td>
-                            }
-                            <td>
-                                <b>
-                                    @Model.CustomerRequest.TotalCost.ToString("N2")
-                                </b>
-                            </td>
-                        </tr>
-                    </tfoot>*@
-                </table>
-            }
-
-
-            <h4>Сведения о перечне ЭКБ:</h4>
+        @if (Model.Mode == 6)
+        {
+            <h4>Изделия забракованные при предыдущих испытаниях:</h4>
             <br />
             <table class="table table-bordered">
 
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].LaborSummary)</th>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].CostSummary)</th>
-
+                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].ProtokolNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].TypeNominal)</th>
+                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].DefectCount)</th>
+                    <th>Тип несоответствия</th>
                 </tr>
-                <tbody>
-                    @foreach (var item in Model.CustomerRequest.RequestElementTypes)
+                @if (Model.ElementImport != null)
+                {
+
+                    @foreach (var item in Model.ElementImport.DefectedTypes)
                     {
-                        @if (item.BatchCount > 0)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ElementType.Name
-                                </td>
-                                <td>
-                                    @item.BatchCount
-                                </td>
-                                <td>
-                                    @item.ItemCount
-                                </td>
-                                <td>
-                                    @item.KitCount
-                                </td>
-                                <td>
-                                    @item.LaborSummary.ToString("N2")
+                        string selectedRow = item.RFA ? "table-danger" : item.NormTY ? "table-warning" : "table-success";
 
-                                </td>
-                                <td>
-                                    @item.CostSummary.ToString("N2")
+                        string rowText = item.RFA ? "РФА" : item.NormTY ? "ТУ" : "НР";
+                        <tr class=@selectedRow>
+                            <td>
+                                @item.ProtokolNumber
+                            </td>
+                            <td>
+                                @item.TypeNominal
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+                            <td>
+                                @item.DefectCount
+                            </td>
+                            <td>
+                                @rowText
+                            </td>
+                        </tr>
 
-                                </td>
-
-
-                            </tr>
-                        }
 
                     }
-                </tbody>
-                <tfoot>
 
-                    <tr>
-                        <td><b>Итого:</b></td>
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalBanchCount
-                            </b>
-                        </td>
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalItemCount
-                            </b>
-                        </td>
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalKitCount
-                            </b>
-
-                        </td>
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalLabor.ToString("N2")
-                            </b>
-
-                        </td>
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalCost.ToString("N2")
-                            </b>
-
-                        </td>
-                    </tr>
-                </tfoot>
+                }
             </table>
+        }
 
-            <a asp-page="./Index" class="btn btn-outline-primary ">Список</a>|
-    <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-outline-primary">Редактировать</a>
+
+        <h4>Сведения о перечне ЭКБ:</h4>
+        <br />
+        <table class="table table-bordered">
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].LaborSummary)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].CostSummary)</th>
+
+            </tr>
+            <tbody>
+                @foreach (var item in Model.CustomerRequest.RequestElementTypes)
+                {
+                    @if (item.BatchCount > 0)
+                    {
+                        <tr>
+                            <td>
+                                @item.ElementType.Name
+                            </td>
+                            <td>
+                                @item.BatchCount
+                            </td>
+                            <td>
+                                @item.ItemCount
+                            </td>
+                            <td>
+                                @item.KitCount
+                            </td>
+                            <td>
+                                @item.LaborSummary.ToString("N2")
+
+                            </td>
+                            <td>
+                                @item.CostSummary.ToString("N2")
+
+                            </td>
+
+
+                        </tr>
+                    }
+
+                }
+            </tbody>
+            <tfoot>
+
+                <tr>
+                    <td><b>Итого:</b></td>
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalBanchCount
+                        </b>
+                    </td>
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalItemCount
+                        </b>
+                    </td>
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalKitCount
+                        </b>
+
+                    </td>
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalLabor.ToString("N2")
+                        </b>
+
+                    </td>
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalCost.ToString("N2")
+                        </b>
+
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <a asp-page="./Index" class="btn btn-outline-primary ">Список</a>|
+        <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-outline-primary">Редактировать</a>
 
     </form>

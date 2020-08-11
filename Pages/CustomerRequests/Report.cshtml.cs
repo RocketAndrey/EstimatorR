@@ -12,6 +12,8 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Estimator.Models.AsuViews;
+using System.Collections.Generic;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -68,7 +70,7 @@ namespace Estimator.Pages.CustomerRequests
                 return NotFound();
             }
             //заполняем аблицу браков
-            if (Mode == 6)
+            if (Mode == 6 | Mode == 1)
             {
                 FillDefectedTypes();
             }
@@ -108,6 +110,9 @@ namespace Estimator.Pages.CustomerRequests
                       .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == CustomerRequest.CustomerRequestID);
             //если нет импорта то и нет элементов
             if (ElementImport == null) return;
+
+            Dictionary <Int64,DefectedType> returnTypes = new Dictionary<Int64, DefectedType > ();
+
             ElementImport.CustomerRequest = CustomerRequest;
 
             SetAsuContext();
@@ -118,21 +123,32 @@ namespace Estimator.Pages.CustomerRequests
 
             foreach (XLSXElementType type in ElementImport.XLSXElementTypes)
             {
-                string selectStr = "select l.LotID as ID, l.PrefixNumber + '-' + CAST(l.Number AS VARCHAR(32)) + (CASE WHEN(l.SuffixNumber IS NULL) THEN('') ELSE l.SuffixNumber END) AS[ProtokolNumber]," +
-                "w.TypeNominal , w.TU1 + ' ' + w.TU2 AS[TY], l.ManufacturingDate,d.[Description], d.TU as NormTY,d.Unrecommend ,d.RFA " +
-                "from Defect d, [DefectTypes] dt,[dbo].[RouteOperation] r, lot l, Wares w " +
-                "where dt.DefectTypeId = d.DefectTypeId and r.RouteOperationId = d.RouteOperationId and l.LotId = r.LotId and w.WareId = l.WareId " +
-                 "and w.TypeNominal like '%{0}%'";
+                string selectStr = "select d.DefectId as ID, l.PrefixNumber + '-' + CAST(l.Number AS VARCHAR(32)) + (CASE WHEN(l.SuffixNumber IS NULL) " +
+                "THEN('') ELSE l.SuffixNumber END) AS[ProtokolNumber], w.TypeNominal , w.TU1 + ' ' + w.TU2 AS[TY], d.[Description], "+
+                "d.TU as NormTY, d.Unrecommend , d.RFA, d.DefectCount as DefectCount " +
+                "from Defect d,[dbo].[RouteOperation] r, lot l, Wares w "+
+                "where r.RouteOperationId = d.RouteOperationId and l.LotId = r.LotId and w.WareId = l.WareId "+
+                "and w.TypeNominal like N'{0}'" ;
                
                 string elementName = type.ElementName.Trim().Substring(0, type.ElementName.Trim ().Length > 15?15:type.ElementName.Trim().Length );
                 selectStr = String.Format(selectStr, elementName);
 
 
                 System.Collections.Generic.List <DefectedType> defTypes = _asuContext.DefectedTypes.FromSqlRaw(selectStr).ToList();
+
+                foreach (DefectedType item in defTypes)
+                {
+                    if(!returnTypes.ContainsKey(item.ID))
+                    {
+                        returnTypes.Add(item.ID, item);
+
+                    }
+                }
+
                 ElementImport.DefectedTypes.AddRange(defTypes);
 
             }
-            int i = ElementImport.DefectedTypes.Count;
+            ElementImport.DefectedTypes = returnTypes.Values.ToList();
 
 
         }
