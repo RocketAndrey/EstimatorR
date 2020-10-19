@@ -15,7 +15,7 @@ where e.ElementTypeID =t.ElementTypeID
 and e.ProgramID = @ProgramID 
 
 update TestProgramTemplateItem set IsExecute =1 
-where OperationID in (11,12,13,14,15,21);
+where OperationID in (11,12,13,14,15,21,498,500);
 
 --154ÒÂÂÔ001
 insert into TestProgramTemplate(TemplateName,TestProgramID) values (N'154.ÒÂÂÔ001', @ProgramID)
