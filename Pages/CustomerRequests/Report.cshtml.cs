@@ -23,14 +23,13 @@ namespace Estimator.Pages.CustomerRequests
 
         public int Mode { get; set; }
         public ElementImport ElementImport;
+        public int  childCustomer;
 
         public ReportModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
             Mode = 1;            
         }
         
-
-
         public async Task<IActionResult> OnGetAsync(int? id, int? mode, int? year)
         {
             if (id == null)
@@ -45,7 +44,7 @@ namespace Estimator.Pages.CustomerRequests
             {
                 Mode = mode.Value;
             }
-            
+            //получаем заявку
             CustomerRequest = await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
@@ -69,16 +68,6 @@ namespace Estimator.Pages.CustomerRequests
             {
                 return NotFound();
             }
-            //заполняем аблицу браков
-            if (Mode == 6 | Mode == 1)
-            {
-                FillDefectedTypes();
-            }
-            //сортируем
-            CustomerRequest.RequestElementTypes = CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
-
-            ViewData["YearOfNorms"] = new SelectList(_context.CompanyHistories , "YearOfNorms", "YearOfNorms");
-
             //получаем показатели рассчитываеомго года
             if (year != null)
             {
@@ -88,7 +77,68 @@ namespace Estimator.Pages.CustomerRequests
             SelectedYear = YearOfNoms;
 
             SetCompanyHistory(YearOfNoms);
+            //сортируем
+            CustomerRequest.RequestElementTypes = CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
+
+            ViewData["YearOfNorms"] = new SelectList(_context.CompanyHistories, "YearOfNorms", "YearOfNorms");
+
+            // Родительская заявка
+            if ((CustomerRequest.ParentCustomerRequestID?? 0)!=0)
+            {
+                CustomerRequest.ParentCustomerRequest= await _context.CustomerRequests
+                .Include(c => c.Customer)
+                .Include(c => c.Program)
+                    .ThenInclude(c => c.ElementntTypes)
+                .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.TestActions)
+                               .ThenInclude(i => i.Qualification)
+                   .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.Operation)
+                                .ThenInclude(e => e.OperationGroup)
+                    .Include(e => e.RequestElementTypes)
+                        .ThenInclude(e => e.ElementType)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.CustomerRequestID == CustomerRequest.ParentCustomerRequestID);
+
+                CustomerRequest.ParentCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
+            }
+            //Дочерняя заявка
+            if (ChildCustomerRequestExists (CustomerRequest.CustomerRequestID ))
+            {
+                CustomerRequest.ChildCustomerRequestID = ChildCustomerReguestID;
+                CustomerRequest.ChildCustomerRequest  = await _context.CustomerRequests
+               .Include(c => c.Customer)
+               .Include(c => c.Program)
+                   .ThenInclude(c => c.ElementntTypes)
+               .Include(e => e.RequestElementTypes)
+                   .ThenInclude(e => e.RequestOperations)
+                       .ThenInclude(e => e.TestChainItem)
+                           .ThenInclude(e => e.TestActions)
+                              .ThenInclude(i => i.Qualification)
+                  .Include(e => e.RequestElementTypes)
+                   .ThenInclude(e => e.RequestOperations)
+                       .ThenInclude(e => e.TestChainItem)
+                           .ThenInclude(e => e.Operation)
+                               .ThenInclude(e => e.OperationGroup)
+                   .Include(e => e.RequestElementTypes)
+                       .ThenInclude(e => e.ElementType)
+               .AsNoTracking()
+               .FirstOrDefaultAsync(m => m.CustomerRequestID == CustomerRequest.ChildCustomerRequestID);
+
+                CustomerRequest.ChildCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
+            }
+            //заполняем аблицу браков
+            if (Mode == 6 | Mode == 1)
+            {
+                FillDefectedTypes();
+            }
   
+
+           
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(int? id, int? mode)
@@ -152,5 +202,18 @@ namespace Estimator.Pages.CustomerRequests
 
 
         }
+        /// <summary>
+        /// полная стоимость дополнительные и сертификационные испытания
+        /// </summary>
+        public decimal FullTotalCost
+        {
+            get
+            {
+                decimal cost = CustomerRequest.TotalCost + (CustomerRequest.ParentCustomerRequest?.TotalCost?? 0) + (CustomerRequest.ChildCustomerRequest?.TotalCost ??0);
+                return cost;
+
+            }
+        
+        }
     }
-}
+} 

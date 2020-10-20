@@ -461,6 +461,14 @@ namespace Estimator.Models
             get;
             set;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public CustomerRequest? ParentCustomerRequest
+        {
+            get;
+            set;
+        }
         public int? CreateUserID { get; set; }
         public User CreateUser { get; set; }
         public DateTime CreateDate { get; set; }
@@ -471,12 +479,23 @@ namespace Estimator.Models
         public User LastModificateUser { get; set; }
         public DateTime ModificateDate { get; set; }
         /// <summary>
-        /// использоват ьшаблон при выборе операция программы
+        /// использоват шаблон при выборе операция программы
         /// </summary>
         [NotMapped]
         public bool UseTemplate { get; set;}
         [NotMapped]
         public int TestProgramTemplateID { get; set; }
+        [NotMapped]
+        public int? ChildCustomerRequestID
+        {
+            get;
+            set;
+        }
+        public CustomerRequest ChildCustomerRequest
+        {
+            get;
+            set;
+        }
 
     }
 }

@@ -219,11 +219,7 @@ namespace Estimator.Pages.CustomerRequests
         {
             return _context.CustomerRequests.Any(e => e.CustomerRequestID == id);
         }
-        public bool ChildCustomerRequestExists(int id)
-        {
-            return _context.CustomerRequests.Any(e => e.ParentCustomerRequestID  == id);
-        }
-
+      
         public int ChildProgramID(int programID)
         {
            
@@ -232,14 +228,7 @@ namespace Estimator.Pages.CustomerRequests
                     return ChildProgram?.TestProgramID?? 0;
   
         }
-        public int ChildCustomerReguestID
-        {
-            get
-            {
-                return _context.CustomerRequests.FirstOrDefault(e => e.ParentCustomerRequestID == CustomerRequest.CustomerRequestID).CustomerRequestID;
-
-            }
-        }
+       
         private int CreateRequestFromParent(int parentID)
         {
            

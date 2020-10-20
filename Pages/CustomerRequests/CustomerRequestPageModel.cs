@@ -91,5 +91,19 @@ namespace Estimator.Pages.CustomerRequests
             }
 
         }
+
+        public int ChildCustomerReguestID
+        {
+            get
+            {
+                return _context.CustomerRequests.FirstOrDefault(e => e.ParentCustomerRequestID == CustomerRequest.CustomerRequestID).CustomerRequestID;
+
+            }
+        }
+        public bool ChildCustomerRequestExists(int id)
+        {
+            return _context.CustomerRequests.Any(e => e.ParentCustomerRequestID == id);
+        }
+
     }
 }

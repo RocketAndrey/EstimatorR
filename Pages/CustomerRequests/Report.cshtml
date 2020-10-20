@@ -69,63 +69,220 @@
                 <tr>
                     <th>№ п/п </th>
                     <th>Наименование статей калькуляции </th>
-                    <th>Плановые затраты </th>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <th>
+                            <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
+                                Плановые затраты,<br /> @Model.CustomerRequest.ParentCustomerRequest.Program.Name
+                            </a>
+                        </th>
+                    }
+                    <th>
+                        Плановые затраты,<br /> @Model.CustomerRequest.Program.Name
+                    </th>
+
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID  ?? 0) != 0)
+                    {
+                        <th>
+                            <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ChildCustomerRequestID  ">
+                                Плановые затраты,<br /> @Model.CustomerRequest.ChildCustomerRequest.Program.Name
+                            </a>
+                        </th>
+                    }
+
+
                 </tr>
+
+
+
+
+
                 <tr>
                     <td>2</td>
                     <td>Затраты на оплату труда основных производственных рабочих (непосредственных исполнителей) - всего:, руб</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>
+                            @Model.CustomerRequest.ParentCustomerRequest.TotalSalary.ToString("N2")
+                        </td>
+                    }
                     <td>@Model.CustomerRequest.TotalSalary.ToString("N2") </td>
-                </tr>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.TotalSalary.ToString("N2")
+                </td>
+                    }
+                    </tr>
                 <tr>
                     <td>2.1</td>
                     <td>-основная заработная плата, руб </td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.BasicSalary.ToString("N2")</td>
+                    }
                     <td>@Model.CustomerRequest.BasicSalary.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.BasicSalary.ToString("N2")
+                </td>
+                    }
                 </tr>
                 <tr>
                     <td>2.2</td>
                     <td>-дополнительная заработная плата, руб (@Model.CustomerRequest.CompanyHistory.AdditionalSalary.ToString("N2")%)</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>
+                            @Model.CustomerRequest.ParentCustomerRequest.AdditionalSalary.ToString("N2")
+                        </td>
+                    }
                     <td>@Model.CustomerRequest.AdditionalSalary.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.AdditionalSalary.ToString("N2")
+                </td>
+                    }
                 </tr>
                 <tr>
                     <td>6</td>
                     <td>Страховые взносы на обязательное социальное страхование, руб (@Model.CustomerRequest.CompanyHistory.PensionTax.ToString("N2")%) </td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.PensionTax.ToString("N2") </td>
+                    }
                     <td>@Model.CustomerRequest.PensionTax.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td> @Model.CustomerRequest.ChildCustomerRequest.PensionTax.ToString("N2")  </td>
+                    }
                 </tr>
                 <tr>
                     <td>10</td>
                     <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.OverHead.ToString("N2")%)</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.OverHead.ToString("N2") </td>
+                    }
                     <td>@Model.CustomerRequest.OverHead.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.OverHead.ToString("N2")
+                </td>
+                    }
                 </tr>
                 <tr>
                     <td>12</td>
                     <td>Производственная себестоимость, руб</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.InputCost.ToString("N2") </td>
+                    }
                     <td>@Model.CustomerRequest.InputCost.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.InputCost.ToString("N2")
+                </td>
+                    }
                 </tr>
                 <tr>
                     <td>16</td>
                     <td>Прибыль, руб (@Model.CustomerRequest.CompanyHistory.Margin.ToString("N2")%)</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.Margin.ToString("N2")  </td>
+                    }
                     <td>@Model.CustomerRequest.Margin.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.Margin.ToString("N2")
+                </td>
+                    }
                 </tr>
                 <tr>
                     <td><b>17</b></td>
                     <td><b>Цена(без НДС), руб</b></td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>
+                            <b>@Model.CustomerRequest.ParentCustomerRequest.TotalCost.ToString("N2") </b>
+                        </td>
+                    }
                     <td><b>@Model.CustomerRequest.TotalCost.ToString("N2") </b></td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>
+                            <b>@Model.CustomerRequest.ChildCustomerRequest.TotalCost.ToString("N2") </b>
+                        </td>
+                    }
                 </tr>
+
+                <tr class=" table-warning">
+                    @if (((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0) || ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0))
+                    {
+                        <td></td>
+                        <td><b>ИТОГО без НДС, руб</b></td>
+                        <td> </td>
+                        <td>
+                            <b>                  
+                                @Model.FullTotalCost.ToString("N2")
+                            </b>
+                        </td>
+                  
+                   
+                    }
+                </tr>
+
                 <tr>
                     <td>18</td>
                     <td>Трудоемкость, чел/час</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.TotalLabor.ToString("N2")</td>
+                    }
                     <td>@Model.CustomerRequest.TotalLabor.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.TotalLabor.ToString("N2")
+                </td>
+                    }
                 <tr>
                     <td>19</td>
                     <td>Средняя заработная плата(мес), руб</td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.AverageSalary.ToString("N2") </td>
+                    }
                     <td>@Model.CustomerRequest.AverageSalary.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.AverageSalary.ToString("N2")
+                </td>
+                    }
                 </tr>
                 <tr>
                     <td>20</td>
                     <td>Средняя стоимость испытаний 1 партии, руб </td>
+                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                    {
+                        <td>@Model.CustomerRequest.ParentCustomerRequest.AveragePartCost.ToString("N2") </td>
+                    }
                     <td>@Model.CustomerRequest.AveragePartCost.ToString("N2") </td>
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                    {
+                <td>
+                    @Model.CustomerRequest.ChildCustomerRequest.AveragePartCost.ToString("N2")
+                </td>
+                    }
                 </tr>
-              
+
             </table>
             @if (Model.ElementImport != null)
             { 
