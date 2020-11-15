@@ -43,13 +43,29 @@ labor.TestChainItemID = eet.[TestChainItemID]
  where 
 -- isnull(eeo.E_OperationID,0)=0 and 
  isnull(ro.Disabled,0) = 0 
-   and ro.EndTime > '2020-09-01'
-   and  ro.EndTime < '2020-10-01'
+   and ro.EndTime > '2020-10-01'
+   and  ro.EndTime < '2020-11-01'
   and isnull (ro.EndTime,0)> 0
   and IsNull(labor.banchLabor ,-1)=-1
-  And bo.BaseOperationId not in (164,151)
+--And bo.BaseOperationId not in (164,165,151,10423)
  order By cl.ClassId, [¹ ÌÊ], [Äàòà]
+
+  Use Estimator
+ select etc.TestChainItemID,  etc.ElementTypeID, e.Name  ,etc.OperationID ,o.Name 
+from 
+Estimator.dbo.TestChainItem etc, ElementType e, Operation o
+where   e.ElementTypeID = etc.ElementTypeID and o.OperationID=etc.OperationID 
+and e.ElementTypeID  in
+(105
+
+
+)
+order by etc.[Order]
+
+--select * from ElementType order by ProgramID                  
+
  */
+
 
 -- select etc.TestChainItemID,  etc.ElementTypeID, e.Name  ,etc.OperationID ,o.Name 
 --from 
@@ -59,8 +75,10 @@ labor.TestChainItemID = eet.[TestChainItemID]
 --order by etc.[Order]
 
 
+
+
  declare @Month int,@Year int
- select @Month = 9, @Year = 2020
+ select @Month = 10, @Year = 2020
  select 
 cl.Name as ClassType,
 w.TypeNominal as [Òèï ÝÐÈ],
@@ -195,4 +213,3 @@ labor.TestChainItemID = eet.[TestChainItemID]
    and MONTH (ro.EndTime) =@Month
    and  YEAR (ro.EndTime) = @year
   and isnull (ro.EndTime,0)> 0
-  

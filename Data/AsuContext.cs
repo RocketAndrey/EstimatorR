@@ -15,13 +15,7 @@ namespace Estimator.Data
         public DbSet<Estimator.Models.AsuViews.DefectedType > DefectedTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-         //   modelBuilder
-         //.Entity<DefectedType>(eb =>
-         //{
-         //    eb.HasNoKey();
-          
-         //});
-
+ 
         }
   
     }

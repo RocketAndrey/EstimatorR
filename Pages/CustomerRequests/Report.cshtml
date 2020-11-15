@@ -12,19 +12,10 @@
                 <tr>
                     <td> <h4>Расчёт стоимости испытаний заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></td>
                     <td align="right"><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/Request.png" width="32" height="32" /></a></td>
-
                 </tr>
             </table>
 
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1" value="Структура цены" />|
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2" value="По группам" />|
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3" value="По типам" />|
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="4" value="По испытаниям" />|
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="5" value="Стоимость по группам" />|
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="6" value="Сводка браков" />
 
-            <br />
-            <br />
             <dl class="row">
                 <dt class="col-sm-2">
                     Заявка:
@@ -58,13 +49,31 @@
                 </dd>
 
             </dl>
+            <h5>
+                Стоимость:
+            </h5>
 
+            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1" value="Структура цены" />|
+
+            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="5" value="Стоимость по группам" />|
+            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="6" value="Сводка браков" />
+            <br />
+            <br />
+            <h5>
+                Трудоёмкость:
+            </h5>
+
+                    <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2" value="По группам" />|
+                    <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3" value="По типам" />|
+                    <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="4" value="По испытаниям" />
+               
+        
         </div>
-
+        <br />
         @if (Model.Mode == 1)
         {
             <h4>Структура цены:</h4>
-            <br />
+
             <table class=" table table-bordered">
                 <tr>
                     <th>№ п/п </th>
@@ -81,7 +90,7 @@
                         Плановые затраты,<br /> @Model.CustomerRequest.Program.Name
                     </th>
 
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID  ?? 0) != 0)
+                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
                         <th>
                             <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ChildCustomerRequestID  ">
@@ -109,11 +118,11 @@
                     <td>@Model.CustomerRequest.TotalSalary.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.TotalSalary.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.TotalSalary.ToString("N2")
+                        </td>
                     }
-                    </tr>
+                </tr>
                 <tr>
                     <td>2.1</td>
                     <td>-основная заработная плата, руб </td>
@@ -124,9 +133,9 @@
                     <td>@Model.CustomerRequest.BasicSalary.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.BasicSalary.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.BasicSalary.ToString("N2")
+                        </td>
                     }
                 </tr>
                 <tr>
@@ -141,9 +150,9 @@
                     <td>@Model.CustomerRequest.AdditionalSalary.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.AdditionalSalary.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.AdditionalSalary.ToString("N2")
+                        </td>
                     }
                 </tr>
                 <tr>
@@ -156,7 +165,7 @@
                     <td>@Model.CustomerRequest.PensionTax.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td> @Model.CustomerRequest.ChildCustomerRequest.PensionTax.ToString("N2")  </td>
+                        <td> @Model.CustomerRequest.ChildCustomerRequest.PensionTax.ToString("N2")  </td>
                     }
                 </tr>
                 <tr>
@@ -169,9 +178,9 @@
                     <td>@Model.CustomerRequest.OverHead.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.OverHead.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.OverHead.ToString("N2")
+                        </td>
                     }
                 </tr>
                 <tr>
@@ -184,9 +193,9 @@
                     <td>@Model.CustomerRequest.InputCost.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.InputCost.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.InputCost.ToString("N2")
+                        </td>
                     }
                 </tr>
                 <tr>
@@ -199,9 +208,9 @@
                     <td>@Model.CustomerRequest.Margin.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.Margin.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.Margin.ToString("N2")
+                        </td>
                     }
                 </tr>
                 <tr>
@@ -229,12 +238,12 @@
                         <td><b>ИТОГО без НДС, руб</b></td>
                         <td> </td>
                         <td>
-                            <b>                  
+                            <b>
                                 @Model.FullTotalCost.ToString("N2")
                             </b>
                         </td>
-                  
-                   
+
+
                     }
                 </tr>
 
@@ -248,9 +257,9 @@
                     <td>@Model.CustomerRequest.TotalLabor.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.TotalLabor.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.TotalLabor.ToString("N2")
+                        </td>
                     }
                 <tr>
                     <td>19</td>
@@ -262,9 +271,9 @@
                     <td>@Model.CustomerRequest.AverageSalary.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.AverageSalary.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.AverageSalary.ToString("N2")
+                        </td>
                     }
                 </tr>
                 <tr>
@@ -277,38 +286,38 @@
                     <td>@Model.CustomerRequest.AveragePartCost.ToString("N2") </td>
                     @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                     {
-                <td>
-                    @Model.CustomerRequest.ChildCustomerRequest.AveragePartCost.ToString("N2")
-                </td>
+                        <td>
+                            @Model.CustomerRequest.ChildCustomerRequest.AveragePartCost.ToString("N2")
+                        </td>
                     }
                 </tr>
 
             </table>
             @if (Model.ElementImport != null)
-            { 
-            <h4>Сведения о ранее забракованных изделиях:</h4>
-            <br />
-            <table class="table table-bordered">
-                <tr>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                 
-                    <td>Ранее забракованных изделий по ТУ, шт</td>
-                    <td>@Model.ElementImport.DefectedTYItemCount.ToString("N0") </td>
-                </tr>
-                <tr>
-                    
-                    <td>Ранее забракованных партий по РФА, партий</td>
-                    <td>@Model.ElementImport.DefectedRfaBanchCount.ToString("N0") </td>
-                </tr>
-                <tr>
-                  
-                    <td>Ренее нерекомендованных изделий, шт</td>
-                    <td>@Model.ElementImport.DefectedUnrecommendCount.ToString("N0") </td>
-                </tr>
-            </table>
+            {
+                <h4>Сведения о ранее забракованных изделиях:</h4>
+                <br />
+                <table class="table table-bordered">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+
+                        <td>Ранее забракованных изделий по ТУ, шт</td>
+                        <td>@Model.ElementImport.DefectedTYItemCount.ToString("N0") </td>
+                    </tr>
+                    <tr>
+
+                        <td>Ранее забракованных партий по РФА, партий</td>
+                        <td>@Model.ElementImport.DefectedRfaBanchCount.ToString("N0") </td>
+                    </tr>
+                    <tr>
+
+                        <td>Ренее нерекомендованных изделий, шт</td>
+                        <td>@Model.ElementImport.DefectedUnrecommendCount.ToString("N0") </td>
+                    </tr>
+                </table>
             }
         }
 
