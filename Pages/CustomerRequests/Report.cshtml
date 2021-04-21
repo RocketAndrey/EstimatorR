@@ -4,725 +4,763 @@
 @{
     ViewData["Title"] = "Расчёт стоимости по заявке";
 }
-    <form method="post">
-        <div>
-            <h4>
-            </h4>
-            <table class="table ">
-                <tr>
-                    <td> <h4>Расчёт стоимости испытаний заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></td>
-                    <td align="right"><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/Request.png" width="32" height="32" /></a></td>
-                </tr>
-            </table>
+<form method="post">
+    <div>
+        <h4>
+        </h4>
+        <table class="table ">
+            <tr>
+                <td> <h4>Расчёт стоимости испытаний заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></td>
+                <td align="right"><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/Request.png" width="32" height="32" /></a></td>
+            </tr>
+        </table>
 
 
-            <dl class="row">
-                <dt class="col-sm-2">
-                    Заявка:
-                </dt>
-                <dd class="col-sm-10">
-                    @String.Concat(Model.CustomerRequest.RequestNumber, " от ", @Model.CustomerRequest.RequestDate.ToShortDateString())
-                </dd>
-                <dt class="col-sm-2">
-                    Заказчик:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CustomerRequest.Customer.Name)
-                </dd>
-                <dt class="col-sm-2">
-                    Программа испытаний:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CustomerRequest.Program.Name)
-                </dd>
-                <dt class="col-sm-2">
-                    Описание:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CustomerRequest.Description)
-                </dd>
-                <dt class="col-sm-2">
-                    Экономические показатели:
-                </dt>
-                <dd class="col-sm-10">
-                    <select asp-for="SelectedYear" class="form-control" asp-items="ViewBag.YearOfNorms"></select>
-                </dd>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Заявка:
+            </dt>
+            <dd class="col-sm-10">
+                @String.Concat(Model.CustomerRequest.RequestNumber, " от ", @Model.CustomerRequest.RequestDate.ToShortDateString())
+            </dd>
+            <dt class="col-sm-2">
+                Заказчик:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CustomerRequest.Customer.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Программа испытаний:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CustomerRequest.Program.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Описание:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CustomerRequest.Description)
+            </dd>
+            <dt class="col-sm-2">
+                Экономические показатели:
+            </dt>
+            <dd class="col-sm-10">
+                <select asp-for="SelectedYear" class="form-control" asp-items="ViewBag.YearOfNorms"></select>
+            </dd>
 
-            </dl>
-            <h5>
-                Стоимость:
-            </h5>
+        </dl>
+        <h5>
+            Стоимость:
+        </h5>
 
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1" value="Структура цены" />|
-
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="5" value="Стоимость по группам" />|
-            <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="6" value="Сводка браков" />
-            <br />
-            <br />
-            <h5>
-                Трудоёмкость:
-            </h5>
-
-                    <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2" value="По группам" />|
-                    <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3" value="По типам" />|
-                    <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="4" value="По испытаниям" />
-               
-        
-        </div>
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="1" value="Структура цены" />|
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="7" value="Стоимость по типам" />|
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="5" value="Стоимость по группам" />|
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="6" value="Сводка браков" />
         <br />
-        @if (Model.Mode == 1)
-        {
-            <h4>Структура цены:</h4>
+        <br />
+        <h5>
+            Трудоёмкость:
+        </h5>
 
-            <table class=" table table-bordered">
-                <tr>
-                    <th>№ п/п </th>
-                    <th>Наименование статей калькуляции </th>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <th>
-                            <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
-                                Плановые затраты,<br /> @Model.CustomerRequest.ParentCustomerRequest.Program.Name
-                            </a>
-                        </th>
-                    }
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="2" value="По группам" />|
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="3" value="По типам" />|
+        <input class="btn btn-outline-primary " type="submit" asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-mode="4" value="По испытаниям" />
+
+
+    </div>
+    <br />
+    @if (Model.Mode == 1)
+    {
+        <h4>Структура цены:</h4>
+
+        <table class=" table table-bordered">
+            <tr>
+                <th>№ п/п </th>
+                <th>Наименование статей калькуляции </th>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
                     <th>
-                        Плановые затраты,<br /> @Model.CustomerRequest.Program.Name
+                        <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
+                            Плановые затраты,<br /> @Model.CustomerRequest.ParentCustomerRequest.Program.Name
+                        </a>
                     </th>
-
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <th>
-                            <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ChildCustomerRequestID  ">
-                                Плановые затраты,<br /> @Model.CustomerRequest.ChildCustomerRequest.Program.Name
-                            </a>
-                        </th>
-                    }
-
-
-                </tr>
-
-
-
-
-
-                <tr>
-                    <td>2</td>
-                    <td>Затраты на оплату труда основных производственных рабочих (непосредственных исполнителей) - всего:, руб</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ParentCustomerRequest.TotalSalary.ToString("N2")
-                        </td>
-                    }
-                    <td>@Model.CustomerRequest.TotalSalary.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.TotalSalary.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>2.1</td>
-                    <td>-основная заработная плата, руб </td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.BasicSalary.ToString("N2")</td>
-                    }
-                    <td>@Model.CustomerRequest.BasicSalary.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.BasicSalary.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>2.2</td>
-                    <td>-дополнительная заработная плата, руб (@Model.CustomerRequest.CompanyHistory.AdditionalSalary.ToString("N2")%)</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ParentCustomerRequest.AdditionalSalary.ToString("N2")
-                        </td>
-                    }
-                    <td>@Model.CustomerRequest.AdditionalSalary.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.AdditionalSalary.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>Страховые взносы на обязательное социальное страхование, руб (@Model.CustomerRequest.CompanyHistory.PensionTax.ToString("N2")%) </td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.PensionTax.ToString("N2") </td>
-                    }
-                    <td>@Model.CustomerRequest.PensionTax.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td> @Model.CustomerRequest.ChildCustomerRequest.PensionTax.ToString("N2")  </td>
-                    }
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.OverHead.ToString("N2")%)</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.OverHead.ToString("N2") </td>
-                    }
-                    <td>@Model.CustomerRequest.OverHead.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.OverHead.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>Производственная себестоимость, руб</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.InputCost.ToString("N2") </td>
-                    }
-                    <td>@Model.CustomerRequest.InputCost.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.InputCost.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>16</td>
-                    <td>Прибыль, руб (@Model.CustomerRequest.CompanyHistory.Margin.ToString("N2")%)</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.Margin.ToString("N2")  </td>
-                    }
-                    <td>@Model.CustomerRequest.Margin.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.Margin.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td><b>17</b></td>
-                    <td><b>Цена(без НДС), руб</b></td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            <b>@Model.CustomerRequest.ParentCustomerRequest.TotalCost.ToString("N2") </b>
-                        </td>
-                    }
-                    <td><b>@Model.CustomerRequest.TotalCost.ToString("N2") </b></td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            <b>@Model.CustomerRequest.ChildCustomerRequest.TotalCost.ToString("N2") </b>
-                        </td>
-                    }
-                </tr>
-
-                <tr class=" table-warning">
-                    @if (((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0) || ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0))
-                    {
-                        <td></td>
-                        <td><b>ИТОГО без НДС, руб</b></td>
-                        <td> </td>
-                        <td>
-                            <b>
-                                @Model.FullTotalCost.ToString("N2")
-                            </b>
-                        </td>
-
-
-                    }
-                </tr>
-
-                <tr>
-                    <td>18</td>
-                    <td>Трудоемкость, чел/час</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.TotalLabor.ToString("N2")</td>
-                    }
-                    <td>@Model.CustomerRequest.TotalLabor.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.TotalLabor.ToString("N2")
-                        </td>
-                    }
-                <tr>
-                    <td>19</td>
-                    <td>Средняя заработная плата(мес), руб</td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.AverageSalary.ToString("N2") </td>
-                    }
-                    <td>@Model.CustomerRequest.AverageSalary.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.AverageSalary.ToString("N2")
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Средняя стоимость испытаний 1 партии, руб </td>
-                    @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>@Model.CustomerRequest.ParentCustomerRequest.AveragePartCost.ToString("N2") </td>
-                    }
-                    <td>@Model.CustomerRequest.AveragePartCost.ToString("N2") </td>
-                    @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
-                    {
-                        <td>
-                            @Model.CustomerRequest.ChildCustomerRequest.AveragePartCost.ToString("N2")
-                        </td>
-                    }
-                </tr>
-
-            </table>
-            @if (Model.ElementImport != null)
-            {
-                <h4>Сведения о ранее забракованных изделиях:</h4>
-                <br />
-                <table class="table table-bordered">
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr>
-
-                        <td>Ранее забракованных изделий по ТУ, шт</td>
-                        <td>@Model.ElementImport.DefectedTYItemCount.ToString("N0") </td>
-                    </tr>
-                    <tr>
-
-                        <td>Ранее забракованных партий по РФА, партий</td>
-                        <td>@Model.ElementImport.DefectedRfaBanchCount.ToString("N0") </td>
-                    </tr>
-                    <tr>
-
-                        <td>Ренее нерекомендованных изделий, шт</td>
-                        <td>@Model.ElementImport.DefectedUnrecommendCount.ToString("N0") </td>
-                    </tr>
-                </table>
-            }
-        }
-
-
-
-        @if (Model.Mode == 3)
-        {
-            <h4>Трудоёмкость по типам ЭКБ:</h4>
-            <br />
-            <table class="table table-bordered">
-
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
-
-                    @foreach (var itemOG in Model.CustomerRequest.RequestElementTypes.ToList()[0].QualificationLaborSummary)
-                    {
-                        <th>
-                            @itemOG.Key.ToString()
-                        </th>
-                    }
-
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].LaborSummary)</th>
-
-                </tr>
-
-                @foreach (var item in Model.CustomerRequest.RequestElementTypes)
-                {
-                    if (item.BatchCount > 0)
-                    {
-                        <tr>
-                            <td>
-                                @item.ElementType.Name
-                            </td>
-                            @foreach (var itemQ in item.QualificationLaborSummary)
-                            {
-                                <td>
-                                    @String.Format("{0:0.00}", itemQ.Value.LaborSummary / 60)
-
-                                </td>
-                            }
-                            <td>
-                                @String.Format("{0:0.00}", item.LaborSummary)
-
-                            </td>
-
-                        </tr>
-                    }
-
                 }
-                <tfoot>
-                    <tr class="thead-dark">
-                        <td><b>Итого трудоёмкость,  час:</b></td>
-                        @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
-                        {
-                            <td>
-                                <b>
-                                    @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
-                                </b>
-                            </td>
-                        }
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalLabor.ToString("N2")
-                            </b>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        }
+                <th>
+                    Плановые затраты,<br /> @Model.CustomerRequest.Program.Name
+                </th>
 
-
-        @if (Model.Mode == 2)
-        {
-            <h4>Трудоёмкость по группам испытаний:</h4>
-            <br />
-            <table class="table table-bordered">
-
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
-                    @if (Model.CustomerRequest.OperationGroups.Count > 0)
-                    {
-                        @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
-                        {
-                            <th>
-                                @itemOG.Name
-                            </th>
-                        }
-
-                        <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].LaborSummary)</th>
-                    }
-                </tr>
-
-                @foreach (var item in Model.CustomerRequest.OperationGroups)
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                 {
-                    if (item.LaborSummary > 0)
-                    {
-                        <tr>
-                            <td>
-                                @item.Name
-                            </td>
-                            @foreach (var itemOG in item.QualificationLaborSummary)
-                            {
-                                <td>
-                                    @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
-                                </td>
-                            }
-                            <td>
-                                @String.Format("{0:0.00}", item.LaborSummary / 60)
-                            </td>
-                        </tr>
-                    }
-
+                    <th>
+                        <a asp-page="./report" asp-route-id="@Model.CustomerRequest.ChildCustomerRequestID  ">
+                            Плановые затраты,<br /> @Model.CustomerRequest.ChildCustomerRequest.Program.Name
+                        </a>
+                    </th>
                 }
 
 
+            </tr>
 
-                <tfoot>
-                    <tr class="thead-dark">
-                        <td><b>Итого трудоёмкость,  час:</b></td>
-                        @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
-                        {
-                            <td>
-                                <b>
-                                    @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
-                                </b>
-                            </td>
-                        }
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalLabor.ToString("N2")
-                            </b>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        }
-
-
-        @if (Model.Mode == 4)
-        {
-            <h4>Трудоёмкость по операциям:</h4>
-            <br />
-            <table class="table table-bordered">
-
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].OperationCode)</th>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].OperationName)</th>
-                    @if (Model.CustomerRequest.OperationGroups.Count > 0)
-                    {
-                        @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
-                        {
-                            <th>
-                                @itemOG.Name
-                            </th>
-                        }
-
-                        <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].LaborSummary)</th>
-                    }
-                </tr>
-
-                @foreach (var item in Model.CustomerRequest.OperationSummary)
+            <tr>
+                <td>2</td>
+                <td>Затраты на оплату труда основных производственных рабочих (непосредственных исполнителей) - всего:, руб</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                 {
-                    if (item.LaborSummary > 0)
-                    {
-                        <tr>
-                            <td>
-                                @item.OperationCode
-                            </td>
-                            <td>
-                                @item.OperationName
-                            </td>
-                            @foreach (var itemOG in item.QualificationLaborSummary)
-                            {
-                                <td>
-                                    @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
-                                </td>
-                            }
-                            <td>
-                                @String.Format("{0:0.00}", item.LaborSummary / 60)
-                            </td>
-                        </tr>
-                    }
+                    <td>
+                        @Model.CustomerRequest.ParentCustomerRequest.TotalSalary.ToString("N2")
+                    </td>
+                }
+                <td>@Model.CustomerRequest.TotalSalary.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.TotalSalary.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>2.1</td>
+                <td>-основная заработная плата, руб </td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.BasicSalary.ToString("N2")</td>
+                }
+                <td>@Model.CustomerRequest.BasicSalary.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.BasicSalary.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>2.2</td>
+                <td>-дополнительная заработная плата, руб (@Model.CustomerRequest.CompanyHistory.AdditionalSalary.ToString("N2")%)</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ParentCustomerRequest.AdditionalSalary.ToString("N2")
+                    </td>
+                }
+                <td>@Model.CustomerRequest.AdditionalSalary.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.AdditionalSalary.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Страховые взносы на обязательное социальное страхование, руб (@Model.CustomerRequest.CompanyHistory.PensionTax.ToString("N2")%) </td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.PensionTax.ToString("N2") </td>
+                }
+                <td>@Model.CustomerRequest.PensionTax.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td> @Model.CustomerRequest.ChildCustomerRequest.PensionTax.ToString("N2")  </td>
+                }
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.OverHead.ToString("N2")%)</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.OverHead.ToString("N2") </td>
+                }
+                <td>@Model.CustomerRequest.OverHead.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.OverHead.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Производственная себестоимость, руб</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.InputCost.ToString("N2") </td>
+                }
+                <td>@Model.CustomerRequest.InputCost.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.InputCost.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>Прибыль, руб (@Model.CustomerRequest.CompanyHistory.Margin.ToString("N2")%)</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.Margin.ToString("N2")  </td>
+                }
+                <td>@Model.CustomerRequest.Margin.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.Margin.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td><b>Цена(без НДС), руб</b></td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        <b>@Model.CustomerRequest.ParentCustomerRequest.TotalCost.ToString("N2") </b>
+                    </td>
+                }
+                <td><b>@Model.CustomerRequest.TotalCost.ToString("N2") </b></td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        <b>@Model.CustomerRequest.ChildCustomerRequest.TotalCost.ToString("N2") </b>
+                    </td>
+                }
+            </tr>
+
+            <tr class=" table-warning">
+                @if (((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0) || ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0))
+                {
+                    <td></td>
+                    <td><b>ИТОГО без НДС, руб</b></td>
+                    <td> </td>
+                    <td>
+                        <b>
+                            @Model.FullTotalCost.ToString("N2")
+                        </b>
+                    </td>
+
 
                 }
-                <tfoot>
-                    <tr class="thead-dark">
-                        <td></td>
-                        <td><b>Итого трудоёмкость,  час:</b></td>
-                        @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
-                        {
-                            <td>
-                                <b>
-                                    @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
-                                </b>
-                            </td>
-                        }
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalLabor.ToString("N2")
-                            </b>
-                        </td>
-                    </tr>
-                </tfoot>
+            </tr>
 
-            </table>
-        }
+            <tr>
+                <td>18</td>
+                <td>Трудоемкость, чел/час</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.TotalLabor.ToString("N2")</td>
+                }
+                <td>@Model.CustomerRequest.TotalLabor.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.TotalLabor.ToString("N2")
+                    </td>
+                }
+            <tr>
+                <td>19</td>
+                <td>Средняя заработная плата(мес), руб</td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.AverageSalary.ToString("N2") </td>
+                }
+                <td>@Model.CustomerRequest.AverageSalary.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.AverageSalary.ToString("N2")
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>Средняя стоимость испытаний 1 партии, руб </td>
+                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                {
+                    <td>@Model.CustomerRequest.ParentCustomerRequest.AveragePartCost.ToString("N2") </td>
+                }
+                <td>@Model.CustomerRequest.AveragePartCost.ToString("N2") </td>
+                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                {
+                    <td>
+                        @Model.CustomerRequest.ChildCustomerRequest.AveragePartCost.ToString("N2")
+                    </td>
+                }
+            </tr>
 
-        @if (Model.Mode == 5)
+        </table>
+        @if (Model.ElementImport != null)
         {
-            <h4>Стоимость по группам испытаний:</h4>
+            <h4>Сведения о ранее забракованных изделиях:</h4>
             <br />
             <table class="table table-bordered">
-
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
-                    @if (Model.CustomerRequest.OperationGroups.Count > 0)
-                    {
-                        @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
-                        {
-                            <th>
-                                @itemOG.Name
-                            </th>
-                        }
-
-                        <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].CostSummary)</th>
-                    }
+                    <th></th>
+                    <th></th>
                 </tr>
+                <tr>
 
-                @foreach (var item in Model.CustomerRequest.OperationGroups)
-                {
-                    if (item.LaborSummary > 0)
-                    {
-                        <tr>
-                            <td>
-                                @item.Name
-                            </td>
-                            @foreach (var itemOG in item.QualificationLaborSummary)
-                            {
-                                <td>
-                                    @String.Format("{0:0.00}", itemOG.CostSummary)
-                                </td>
-                            }
-                            <td>
-                                <b>
-                                    @String.Format("{0:0.00}", item.CostSummary)
-                                </b>
-                            </td>
-                        </tr>
-                    }
+                    <td>Ранее забракованных изделий по ТУ, шт</td>
+                    <td>@Model.ElementImport.DefectedTYItemCount.ToString("N0") </td>
+                </tr>
+                <tr>
 
-                }
+                    <td>Ранее забракованных партий по РФА, партий</td>
+                    <td>@Model.ElementImport.DefectedRfaBanchCount.ToString("N0") </td>
+                </tr>
+                <tr>
 
-
-
-                <tfoot>
-                    <tr class="thead-dark">
-                        <td><b>Итого стоимость,  руб:</b></td>
-                        @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
-                        {
-                            <td>
-                                <b>
-                                    @itemOG.CostSummary.ToString("N2")
-                                </b>
-                            </td>
-                        }
-                        <td>
-                            <b>
-                                @Model.CustomerRequest.TotalCost.ToString("N2")
-                            </b>
-                        </td>
-                    </tr>
-                </tfoot>
+                    <td>Ренее нерекомендованных изделий, шт</td>
+                    <td>@Model.ElementImport.DefectedUnrecommendCount.ToString("N0") </td>
+                </tr>
             </table>
         }
-
-        @if (Model.Mode == 6)
-        {
-            <h4>Изделия забракованные при предыдущих испытаниях:</h4>
-            <br />
-            <table class="table table-bordered">
-
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].ProtokolNumber)</th>
-                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].TypeNominal)</th>
-                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].Description)</th>
-                    <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].DefectCount)</th>
-                    <th>Тип несоответствия</th>
-                </tr>
-                @if (Model.ElementImport != null)
-                {
-
-                    @foreach (var item in Model.ElementImport.DefectedTypes)
-                    {
-                        string selectedRow = item.RFA ? "table-danger" : item.NormTY ? "table-warning" : "table-success";
-
-                        string rowText = item.RFA ? "РФА" : item.NormTY ? "ТУ" : "НР";
-                        <tr class=@selectedRow>
-                            <td>
-                                @item.ProtokolNumber
-                            </td>
-                            <td>
-                                @item.TypeNominal
-                            </td>
-                            <td>
-                                @item.Description
-                            </td>
-                            <td>
-                                @item.DefectCount
-                            </td>
-                            <td>
-                                @rowText
-                            </td>
-                        </tr>
+    }
 
 
-                    }
 
-                }
-            </table>
-        }
-
-
-        <h4>Сведения о перечне ЭКБ:</h4>
+    @if (Model.Mode == 3)
+    {
+        <h4>Трудоёмкость по типам ЭКБ:</h4>
         <br />
         <table class="table table-bordered">
 
             <tr>
                 <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
-                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
-                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
-                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
+
+                @foreach (var itemOG in Model.CustomerRequest.RequestElementTypes.ToList()[0].QualificationLaborSummary)
+                {
+                    <th>
+                        @itemOG.Key.ToString()
+                    </th>
+                }
+
                 <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].LaborSummary)</th>
-                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].CostSummary)</th>
 
             </tr>
-            <tbody>
-                @foreach (var item in Model.CustomerRequest.RequestElementTypes)
+
+            @foreach (var item in Model.CustomerRequest.RequestElementTypes)
+            {
+                if (item.BatchCount > 0)
                 {
-                    @if (item.BatchCount > 0)
-                    {
-                        <tr>
+                    <tr>
+                        <td>
+                            @item.ElementType.Name
+                        </td>
+                        @foreach (var itemQ in item.QualificationLaborSummary)
+                        {
                             <td>
-                                @item.ElementType.Name
-                            </td>
-                            <td>
-                                @item.BatchCount
-                            </td>
-                            <td>
-                                @item.ItemCount
-                            </td>
-                            <td>
-                                @item.KitCount
-                            </td>
-                            <td>
-                                @item.LaborSummary.ToString("N2")
+                                @String.Format("{0:0.00}", itemQ.Value.LaborSummary / 60)
 
                             </td>
-                            <td>
-                                @item.CostSummary.ToString("N2")
+                        }
+                        <td>
+                            @String.Format("{0:0.00}", item.LaborSummary)
 
-                            </td>
+                        </td>
 
-
-                        </tr>
-                    }
-
+                    </tr>
                 }
-            </tbody>
+
+            }
             <tfoot>
-
-                <tr>
-                    <td><b>Итого:</b></td>
-                    <td>
-                        <b>
-                            @Model.CustomerRequest.TotalBanchCount
-                        </b>
-                    </td>
-                    <td>
-                        <b>
-                            @Model.CustomerRequest.TotalItemCount
-                        </b>
-                    </td>
-                    <td>
-                        <b>
-                            @Model.CustomerRequest.TotalKitCount
-                        </b>
-
-                    </td>
+                <tr class="thead-dark">
+                    <td><b>Итого трудоёмкость,  час:</b></td>
+                    @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
+                    {
+                        <td>
+                            <b>
+                                @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
+                            </b>
+                        </td>
+                    }
                     <td>
                         <b>
                             @Model.CustomerRequest.TotalLabor.ToString("N2")
                         </b>
-
-                    </td>
-                    <td>
-                        <b>
-                            @Model.CustomerRequest.TotalCost.ToString("N2")
-                        </b>
-
                     </td>
                 </tr>
             </tfoot>
         </table>
+    }
 
-        <a asp-page="./Index" class="btn btn-outline-primary ">Список</a>|
-        <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-outline-primary">Редактировать</a>
 
-    </form>
+    @if (Model.Mode == 2)
+    {
+        <h4>Трудоёмкость по группам испытаний:</h4>
+        <br />
+        <table class="table table-bordered">
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
+                @if (Model.CustomerRequest.OperationGroups.Count > 0)
+                {
+                    @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
+                    {
+                        <th>
+                            @itemOG.Name
+                        </th>
+                    }
+
+                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].LaborSummary)</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.CustomerRequest.OperationGroups)
+            {
+                if (item.LaborSummary > 0)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        @foreach (var itemOG in item.QualificationLaborSummary)
+                        {
+                            <td>
+                                @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
+                            </td>
+                        }
+                        <td>
+                            @String.Format("{0:0.00}", item.LaborSummary / 60)
+                        </td>
+                    </tr>
+                }
+
+            }
+
+
+
+            <tfoot>
+                <tr class="thead-dark">
+                    <td><b>Итого трудоёмкость,  час:</b></td>
+                    @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
+                    {
+                        <td>
+                            <b>
+                                @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
+                            </b>
+                        </td>
+                    }
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalLabor.ToString("N2")
+                        </b>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+
+
+    @if (Model.Mode == 4)
+    {
+        <h4>Трудоёмкость по операциям:</h4>
+        <br />
+        <table class="table table-bordered">
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].OperationCode)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].OperationName)</th>
+                @if (Model.CustomerRequest.OperationGroups.Count > 0)
+                {
+                    @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
+                    {
+                        <th>
+                            @itemOG.Name
+                        </th>
+                    }
+
+                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationSummary[0].LaborSummary)</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.CustomerRequest.OperationSummary)
+            {
+                if (item.LaborSummary > 0)
+                {
+                    <tr>
+                        <td>
+                            @item.OperationCode
+                        </td>
+                        <td>
+                            @item.OperationName
+                        </td>
+                        @foreach (var itemOG in item.QualificationLaborSummary)
+                        {
+                            <td>
+                                @String.Format("{0:0.00}", itemOG.LaborSummary / 60)
+                            </td>
+                        }
+                        <td>
+                            @String.Format("{0:0.00}", item.LaborSummary / 60)
+                        </td>
+                    </tr>
+                }
+
+            }
+            <tfoot>
+                <tr class="thead-dark">
+                    <td></td>
+                    <td><b>Итого трудоёмкость,  час:</b></td>
+                    @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
+                    {
+                        <td>
+                            <b>
+                                @String.Format("{0:0.00}", (itemOG.LaborSummary / 60))
+                            </b>
+                        </td>
+                    }
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalLabor.ToString("N2")
+                        </b>
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+    }
+
+    @if (Model.Mode == 5)
+    {
+        <h4>Стоимость по группам испытаний:</h4>
+        <br />
+        <table class="table table-bordered">
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].Name)</th>
+                @if (Model.CustomerRequest.OperationGroups.Count > 0)
+                {
+                    @foreach (var itemOG in Model.CustomerRequest.OperationGroups[0].QualificationLaborSummary)
+                    {
+                        <th>
+                            @itemOG.Name
+                        </th>
+                    }
+
+                    <th>@Html.DisplayNameFor(model => model.CustomerRequest.OperationGroups[0].CostSummary)</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.CustomerRequest.OperationGroups)
+            {
+                if (item.LaborSummary > 0)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        @foreach (var itemOG in item.QualificationLaborSummary)
+                        {
+                            <td>
+                                @String.Format("{0:0.00}", itemOG.CostSummary)
+                            </td>
+                        }
+                        <td>
+                            <b>
+                                @String.Format("{0:0.00}", item.CostSummary)
+                            </b>
+                        </td>
+                    </tr>
+                }
+
+            }
+
+
+
+            <tfoot>
+                <tr class="thead-dark">
+                    <td><b>Итого стоимость,  руб:</b></td>
+                    @foreach (var itemOG in Model.CustomerRequest.QualificationSummary)
+                    {
+                        <td>
+                            <b>
+                                @itemOG.CostSummary.ToString("N2")
+                            </b>
+                        </td>
+                    }
+                    <td>
+                        <b>
+                            @Model.CustomerRequest.TotalCost.ToString("N2")
+                        </b>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+
+    @if (Model.Mode == 6)
+    {
+        <h4>Изделия забракованные при предыдущих испытаниях:</h4>
+        <br />
+        <table class="table table-bordered">
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].ProtokolNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].TypeNominal)</th>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].Description)</th>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].DefectCount)</th>
+                <th>Тип несоответствия</th>
+            </tr>
+            @if (Model.ElementImport != null)
+            {
+
+                @foreach (var item in Model.ElementImport.DefectedTypes)
+                {
+                    string selectedRow = item.RFA ? "table-danger" : item.NormTY ? "table-warning" : "table-success";
+
+                    string rowText = item.RFA ? "РФА" : item.NormTY ? "ТУ" : "НР";
+                    <tr class=@selectedRow>
+                        <td>
+                            @item.ProtokolNumber
+                        </td>
+                        <td>
+                            @item.TypeNominal
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.DefectCount
+                        </td>
+                        <td>
+                            @rowText
+                        </td>
+                    </tr>
+
+
+                }
+
+            }
+        </table>
+    }
+
+    @if (Model.Mode == 7)
+    {
+        <h4>Стоимость по изделиям:</h4>
+        <br />
+        <table class="table table-bordered">
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementName)</th>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementTypeName)</th>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementCount)</th>
+                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].Cost)</th>
+              
+            </tr>
+            @if (Model.ElementImport != null)
+            {
+
+                @foreach (var item in Model.ElementImport.XLSXElementTypes)
+                {
+                   
+                   
+                    <tr>
+                        <td>
+                            @item.ElementName
+                        </td>
+                        <td>
+                            @item.ElementTypeName
+                        </td>
+                        <td>
+                            @item.ElementCount
+                        </td>
+                        <td>
+                         
+                            @String.Format("{0:0.00}", item.Cost)
+                        </td>
+                     
+                    </tr>
+
+
+                }
+
+            }
+        </table>
+    }
+    <h4>Сведения о перечне ЭКБ:</h4>
+    <br />
+    <table class="table table-bordered">
+
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ElementType.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].LaborSummary)</th>
+            <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].CostSummary)</th>
+
+        </tr>
+        <tbody>
+            @foreach (var item in Model.CustomerRequest.RequestElementTypes)
+            {
+                @if (item.BatchCount > 0)
+                {
+                    <tr>
+                        <td>
+                            @item.ElementType.Name
+                        </td>
+                        <td>
+                            @item.BatchCount
+                        </td>
+                        <td>
+                            @item.ItemCount
+                        </td>
+                        <td>
+                            @item.KitCount
+                        </td>
+                        <td>
+                            @item.LaborSummary.ToString("N2")
+
+                        </td>
+                        <td>
+                            @item.CostSummary.ToString("N2")
+
+                        </td>
+
+
+                    </tr>
+                }
+
+            }
+        </tbody>
+        <tfoot>
+
+            <tr>
+                <td><b>Итого:</b></td>
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalBanchCount
+                    </b>
+                </td>
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalItemCount
+                    </b>
+                </td>
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalKitCount
+                    </b>
+
+                </td>
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalLabor.ToString("N2")
+                    </b>
+
+                </td>
+                <td>
+                    <b>
+                        @Model.CustomerRequest.TotalCost.ToString("N2")
+                    </b>
+
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <a asp-page="./Index" class="btn btn-outline-primary ">Список</a>|
+    <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID" class="btn btn-outline-primary">Редактировать</a>
+
+</form>

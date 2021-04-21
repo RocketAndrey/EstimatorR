@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Estimator.Models
 {
     /// <summary>
-    /// Описфвает колличество партий и штук ЭКБ по типам в заявке 
+    /// Описывает колличество партий и штук ЭКБ по типам в заявке 
     /// </summary>
     public class RequestElementType
     {

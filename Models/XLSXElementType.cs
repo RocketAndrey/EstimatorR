@@ -15,10 +15,11 @@ namespace Estimator.Models
         public int ID { get; set; }
         public int ElementImportID { get; set; }
         public ElementImport ElementImport { get; set; }
+        [Display(Name = "Типономинал")]
         public string ElementName { get; set; }
 
         public string ElementTypeKey { get; set; }
-
+        [Display(Name = "Кол-во,шт")]
         public int ElementCount { get; set; }
 
         [NotMapped]
@@ -35,6 +36,7 @@ namespace Estimator.Models
             set;
         }
         [NotMapped]
+        [Display(Name = "Тип")]
         public string ElementTypeName { get; set; }
         /// <summary>
         /// Код протокола из АСУ
@@ -64,5 +66,11 @@ namespace Estimator.Models
         /// ID  элемента загруженного ранее, если он есть то тип элемента можно взять из него и не париться с ключом
         /// </summary>
         public int BeforeUploadedXLSXElementTypeID { get; set; }
+        /// <summary>
+        /// стоимость испытаний партии 
+        /// </summary>
+        [NotMapped]
+        [Display(Name = "Стоимость, руб.")]
+        public decimal  Cost { get; set; }
     }
 }

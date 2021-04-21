@@ -1,6 +1,6 @@
 use Asulive
 ---Операции для которых  не установлена связь АСУ-калькулятор 
-/*
+
 select
 '--'+bo.Name + char(10)+char(13)+
 'insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])
@@ -43,14 +43,15 @@ labor.TestChainItemID = eet.[TestChainItemID]
  where 
 -- isnull(eeo.E_OperationID,0)=0 and 
  isnull(ro.Disabled,0) = 0 
-   and ro.EndTime > '2020-10-01'
-   and  ro.EndTime < '2020-11-01'
-  and isnull (ro.EndTime,0)> 0
-  and IsNull(labor.banchLabor ,-1)=-1
---And bo.BaseOperationId not in (164,165,151,10423)
+and ro.EndTime > '2020-11-01'
+and  ro.EndTime < '2021-04-12'
+and isnull (ro.EndTime,0)> 0
+and IsNull(labor.banchLabor ,-1)=-1
+and cl.ClassId = 1287
  order By cl.ClassId, [№ МК], [Дата]
-
+ /*
   Use Estimator
+  Select
  select etc.TestChainItemID,  etc.ElementTypeID, e.Name  ,etc.OperationID ,o.Name 
 from 
 Estimator.dbo.TestChainItem etc, ElementType e, Operation o
@@ -64,8 +65,7 @@ order by etc.[Order]
 
 --select * from ElementType order by ProgramID                  
 
- */
-
+ 
 
 -- select etc.TestChainItemID,  etc.ElementTypeID, e.Name  ,etc.OperationID ,o.Name 
 --from 
@@ -78,7 +78,7 @@ order by etc.[Order]
 
 
  declare @Month int,@Year int
- select @Month = 10, @Year = 2020
+ select @Month = 11, @Year = 2020
  select 
 cl.Name as ClassType,
 w.TypeNominal as [Тип ЭРИ],
@@ -213,3 +213,4 @@ labor.TestChainItemID = eet.[TestChainItemID]
    and MONTH (ro.EndTime) =@Month
    and  YEAR (ro.EndTime) = @year
   and isnull (ro.EndTime,0)> 0
+  */

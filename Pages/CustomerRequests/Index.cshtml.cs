@@ -73,12 +73,12 @@ namespace Estimator.Pages.CustomerRequests
                 "Customer" => customerRequestViewsIQ.OrderBy(s => s.CustomerName).ToList(),
                 "Customer_desc" => customerRequestViewsIQ.OrderByDescending(s => s.CustomerName).ToList(),
                 "Date" => customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList(),
-                "Date_desc" => customerRequestViewsIQ.OrderBy(s => s.RequestDate).ToList(),
+                "Date_desc" => customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList(),
                 _ => customerRequestViewsIQ.OrderByDescending(s => s.RequestDate).ToList(),
             };
+
             int pageSize = 20;
-           // CustomerRequestList = new X.PagedList.StaticPagedList<CustomerRequestView>(customerRequestViewsIQ, pageIndex ?? 1, pageSize, customerRequestViewsIQ.Count);
-           
+  
             CustomerRequestList = await PaginatedList<CustomerRequestView>.CreateAsync(
             customerRequestViewsIQ.ToList(), pageIndex ?? 1, pageSize);
 

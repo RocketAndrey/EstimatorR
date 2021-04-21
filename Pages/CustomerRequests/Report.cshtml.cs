@@ -132,7 +132,7 @@ namespace Estimator.Pages.CustomerRequests
                 CustomerRequest.ChildCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
             }
             //заполняем аблицу браков
-            if (Mode == 6 | Mode == 1)
+            if (Mode > 5 | Mode == 1)
             {
                 FillDefectedTypes();
             }
@@ -161,10 +161,24 @@ namespace Estimator.Pages.CustomerRequests
             //если нет импорта то и нет элементов
             if (ElementImport == null) return;
 
-            Dictionary <Int64,DefectedType> returnTypes = new Dictionary<Int64, DefectedType > ();
+            ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(s=>s.ElementImportID).ToList();
 
             ElementImport.CustomerRequest = CustomerRequest;
 
+            // вычисляем стоимость испытаний 1 шт
+            foreach(XLSXElementType type in ElementImport.XLSXElementTypes)
+            {
+                foreach (RequestElementType requestType in CustomerRequest.RequestElementTypes)
+                {
+                    if (requestType.ElementTypeID==type.ElementTypeID)
+                    {
+                        type.ElementTypeName = requestType.ElementType.Name;
+                        type.Cost = (requestType.CostSummary / requestType.ItemCount)*type.ElementCount ;
+                    }
+                }
+            }
+
+            Dictionary<Int64, DefectedType> returnTypes = new Dictionary<Int64, DefectedType>();
             SetAsuContext();
             
 
@@ -200,6 +214,11 @@ namespace Estimator.Pages.CustomerRequests
             }
             ElementImport.DefectedTypes = returnTypes.Values.ToList();
 
+
+        }
+
+        private void FillElementsCost()
+        {
 
         }
         /// <summary>
