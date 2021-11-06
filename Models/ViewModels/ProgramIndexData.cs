@@ -3,7 +3,7 @@
 namespace Estimator.Models.ViewModels
 {
     /// <summary>
-    /// класс для редактирования прграммы испытаний (
+    /// класс для редактирования программы испытаний (
     /// </summary>
     public class ProgramIndexData
     {

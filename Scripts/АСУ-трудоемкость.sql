@@ -43,24 +43,21 @@ labor.TestChainItemID = eet.[TestChainItemID]
  where 
 -- isnull(eeo.E_OperationID,0)=0 and 
  isnull(ro.Disabled,0) = 0 
-and ro.EndTime > '2020-11-01'
-and  ro.EndTime < '2021-04-12'
-and isnull (ro.EndTime,0)> 0
-and IsNull(labor.banchLabor ,-1)=-1
-and cl.ClassId = 1287
+and ro.EndTime > '2021-06-01'
+and  ro.EndTime < '2021-11-30'
+and isnull (ro.EndTime,0)<> 0
+and IsNull(labor.banchLabor,-1)=-1
+and cl.ClassId = 1337
  order By cl.ClassId, [№ МК], [Дата]
  /*
   Use Estimator
-  Select
+
  select etc.TestChainItemID,  etc.ElementTypeID, e.Name  ,etc.OperationID ,o.Name 
 from 
 Estimator.dbo.TestChainItem etc, ElementType e, Operation o
 where   e.ElementTypeID = etc.ElementTypeID and o.OperationID=etc.OperationID 
 and e.ElementTypeID  in
-(105
-
-
-)
+(105)
 order by etc.[Order]
 
 --select * from ElementType order by ProgramID                  

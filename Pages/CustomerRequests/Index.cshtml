@@ -13,91 +13,109 @@
     <table class="table">
         <tr>
             <td align="left">
-                <a asp-page="Create" class="btn btn-outline-primary ">Создать заявку</a>
+                <a asp-page="Create" class="btn btn-outline-primary btn-sm">Создать заявку</a>
             </td>
-            <td align="right">
-                Искать:
-                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="Поиск" class="btn btn-outline-primary " />|
-                <a asp-page="./Index" class="btn btn-outline-primary ">Очистить поиск</a>
-            </td>
-        </tr>
     </table>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID)</th>
-            <th>
-                Отчет
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestNumber)
-            </th>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
-                   asp-route-currentFilter="@Model.CurrentFilter">
 
-                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestDate)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerRequestList[0].Description)
-            </th>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.ProgramSort"
-                   asp-route-currentFilter="@Model.CurrentFilter">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="table-secondary table-sm">
+                <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID)</th>
+                <th>
+                    Отчет
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestNumber)
+                </th>
+                <th>
+                    <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
+                       asp-route-currentFilter="@Model.CurrentFilter">
 
-                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].ProgramName)
-                </a>
-            </th>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.CustomerSort"
-                   asp-route-currentFilter="@Model.CurrentFilter">
+                        @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestDate)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].Description)
+                </th>
+                <th>
+                    <a asp-page="./Index" asp-route-sortOrder="@Model.ProgramSort"
+                       asp-route-currentFilter="@Model.CurrentFilter">
 
-                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerName)
-                </a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.CustomerRequestList)
-        {
-            <tr>
+                        @Html.DisplayNameFor(model => model.CustomerRequestList[0].ProgramName)
+                    </a>
+                </th>
+                <th>
+                    <a asp-page="./Index" asp-route-sortOrder="@Model.CustomerSort"
+                       asp-route-currentFilter="@Model.CurrentFilter">
 
+                        @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerName)
+                    </a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-secondary table-sm">
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>
+                    <input type="text" name="customerRequestID" value="@Model.filter.CustomerRequestID" />
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                </td>
+                <td>
+                    <select asp-for="@Model.filter.ProgramID"  name= "programID" class="form-control" asp-items="ViewBag.TestProgramID"></select>
+                </td>
+                <td>
+                    <select asp-for="@Model.filter.CustomerID" name="customerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
 
                 </td>
                 <td>
-                    <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20" height="20" /></a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProgramName)
-                </td>
-                <td>
-                    <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
-                    <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
-                </td>
-                <td>
-
-                    <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
-
+                    <input type="submit" value="Поиск" class="btn btn-outline-primary btn-sm " />
                 </td>
             </tr>
-        }
-    </tbody>
-</table>
+            @foreach (var item in Model.CustomerRequestList)
+            {
+                <tr>
+
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>
+
+                    </td>
+                    <td>
+                        <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20" height="20" /></a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProgramName)
+                    </td>
+                    <td>
+                        <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
+                        <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
+                    </td>
+                    <td>
+
+                        <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID"><img src="~/delete.png" /></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
 @{
     var prevDisabled = !Model.CustomerRequestList.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.CustomerRequestList.HasNextPage ? "disabled" : "";

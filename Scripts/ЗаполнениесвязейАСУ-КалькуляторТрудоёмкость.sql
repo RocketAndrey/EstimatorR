@@ -68,6 +68,54 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (167 , 244,684    )
 --Испытание на сдвиг кристалла 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (167 , 245, 685   )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (167 , 279,  57  )
+END
+--Микросхемы ИП
+Begin
+--Идентификация ЭКБ ИП  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 344,  58  )
+--Сериализация изделий (присвоение индивидуального номера)  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 1,   61 )
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 246, 57   )
+--Проверка габаритных, установочных и присоединительных размеров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 4, 59   )
+--Анализ сопроводительной документации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 260,   55 )
+--Контроль электрических параметров, функциональный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 32,62    )
+--Испытание на воздействие повышенной температуры среды при эксплуатации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 272,  75  )
+--Испытание на воздействие пониженной температуры среды при эксплуатации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 273,  77  )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 98,79    )
+--Проверка внешнего вида  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 2, 57   )
+--Отбор на термомеханику
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 164, 2574   )
+--Испытание на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 268,70    )
+--Испытание на виброустойчивость 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 269, 70   )
+--Испытание на  воздействие одиночных ударов  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 130, 74   )
+--Испытание на воздействие атмосферного пониженного  давления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 133, 85 )
+--Электротермотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 84, 665   )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 81,  667  )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 100,  668  )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 259,2592    )
+--Испытания на безотказность
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 104, 1768   )
+--Нанесение отличительной маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1286 , 20,2619    )
+
 END
 --ОПТОРЕЛЕ(ПП)
 BEGIN
@@ -143,7 +191,60 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 107, 389   )
 --Испытания на безотказность  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 104,1775    )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 10408,356    )
+--Анализ технических спецификаций, выбор критериев параметров - годности  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 10407,  355  )
+--Контроль внешнего вида и сопроводительной документации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 351,363    )
+--Упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 261,2447    )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 279,  365  )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 275,  386  )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 274, 384   )
+--Испытания на виброустойчивость  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (426 , 168, 378   )
+
+
 END
+--КОНТРОЛЬНЫЕ ТОЧКИ
+BEGIN
+--Идентификация ЭКБ ИП 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 344, 366   )
+--Сериализация изделий (присвоение индивидуального номера)  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 1, 369   )
+--Проверка внешнего вида и контроль качества маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 154,   365 )
+--Проверка габаритных, установочных и присоединительных размеров
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 4,  367  )
+--Контроль электрических параметров, функциональный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 32, 370   )
+--Отбор на термомеханику  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 164,2581    )
+
+--Испытание на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 268, 378   )
+--Испытания на виброустойчивость
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 168,  378  )
+--Испытание на  воздействие одиночных ударов 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 130,382    )
+--Испытание на воздействие повышенной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 272,  383  )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 274,  384  )
+--Испытание на воздействие пониженной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 273,  385  )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 275,  386  )
+--Анализ технических спецификаций, выбор критериев параметров - годности  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 10407,  355  )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (982 , 10408, 356   )
+END
+
 --КОНДЕНСАТОРЫ
 BEGIN
 --Контроль электрических параметров, функциональный контроль 
@@ -156,6 +257,8 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 154,    233)
 --Проверка габаритных, установочных и присоединительных размеров  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 4,  235  )
+--Проверка габаритных, установочных и присоединительных размеров, проверка массы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 10435, 235   )
 --Анализ сопроводительной документации  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 260, 231   )
 --Контроль по ужесточенным нормам  
@@ -196,7 +299,36 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 10408, 224   )
 --Испытание на вибропрочность  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 268, 246   )
-
+--Испытание на воздействие синусоидальной вибрации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 357,246    )
+--Испытание на ударную прочность при воздействии механических ударов одиночного действия  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 10393,250    )
+--Испытание на  ударную прочность при воздействии механических ударов многократного действия 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 122,  248  )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 274, 252   )
+--Испытание на воздействие повышенной влажности воздуха 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 107,257    )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 275, 254   )
+--Испытание на воздействие атмосферного пониженного  давления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 133,261    )
+--Испытание на воздействие повышенного давления  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 131, 262   )
+--Испытание на способность к пайке 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 138,   1924 )--как у микросхем
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 279, 233   )
+--Нанесение отличительной маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 20, 2629   )
+--Термоциклы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 349,  775  )
+--Испытания на виброустойчивость
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 168,  246  )
+--Оценка показателей безотказности (пусть будут ужесточенные нормы)
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 10426,930    )
+--Восстановление диэлектрика  (пусть будет повышенная температура)
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (611 , 10432, 253   )
 END
 --КРЕПЕЖИ
 begin
@@ -210,6 +342,7 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (731 , 98,387)
 --Испытание на  воздействие одиночных ударов  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (731 , 130,382)
+
 END
 --ДАТЧИКИ ТОКА
 BEGIN
@@ -268,6 +401,10 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 
 --Нанесение отличительной маркировки  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1232 , 20, 803   )
+--Отбор на термомеханику 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1232 , 164,   2581 )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1232 , 279, 365   )
 
 END
 --ИС высокой степени интеграции
@@ -356,6 +493,38 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 292,  15  )
 --Испытание на воздействие изменения температуры среды 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 98,  35  )
+--Испытания на воздействие широкополосной случайной вибрации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 10387,  27  )
+--Испытание на воздействие синусоидальной вибрации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 357, 26   )
+--Испытание на ударную прочность при воздействии механических ударов одиночного действия 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 10393,30    )
+--Испытание на  ударную прочность при воздействии механических ударов многократного действия
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 122, 28   )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 274, 32   )
+--Испытание на воздействие атмосферного пониженного  давления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 133, 41   )
+--Отбор на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 165,  2573  )
+--Испытание на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 268, 26   )
+--Рентгено-телевизионный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 51,870    )
+--Контроль электрических параметров и функциональный контроль при повышенной  температуре  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 57,  19  )
+--Контроль электрических параметров и функциональный контроль при пониженной  температуре  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 58,   20 )
+--Испытание на воздействие повышенной влажности воздуха 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 107,  37  )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 275,34    )
+--Испытание на воздействие повышенного давления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 131, 42   )
+--Испытание на пожарную безопасность
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 132, 42   )
+--Испытания на безотказность
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1287 , 104,  1767  )
 
 end
 --ИС средней степени интеграции
@@ -422,6 +591,10 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 104,  1768  )
 --Отбор на термомеханику  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 164,2574)
+--Отбор на безотказность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 165,  2574  )
+--Отбор для испытаний на специальные факторы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 331, 2574   )
 --Разработка проектов печатных плат оснастки  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 10410, 50   )
 --Сборочно-монтажные работы  
@@ -438,6 +611,85 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 10382, 59   )
 --Нанесение отличительной маркировки  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 20,2620 )
+--Упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 261,  2440  )
+--Испытание на ударную прочность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 270, 72   )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 274,76    )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 275,78    )
+--Испытание на воздействие повышенной влажности воздуха  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 107,  82  )
+--Подготовка для испытаний на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 10423, 49   )
+--Проверка внешнего вида, разборчивости и содержания маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 263,  57  )
+--Испытания на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 106, 70   )
+--Контроль электрических параметров после воздействия повышенной влажности 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 35,  67  )
+--Испытание на воздействие атмосферного пониженного давления при эксплуатации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 376, 85   )
+--Испытание на воздействие атмосферного пониженного давления при хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 377,  85  )
+--Испытание на воздействие повышенного давления
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 131, 86   )
+--Испытания на сохраняемость 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 105, 1781   )
+--Отбор на РФА  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1288 , 151,  2574  )
+END
+--ИС корпусные высокой степени интеграции
+BEGIN
+--Анализ технических спецификаций, выбор критериев параметров - годности 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10407,  2130  )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10408,  2131  )
+--Разработка принципиальных электрических схем оснастки и выбор комплектующих 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10409,2132    )
+--Разработка проектов печатных плат оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10410,2133    )
+--Сборочно-монтажные работы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10411, 2134   )
+--Разработка конструкторской документации для технологической оснастки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10412,  2135  )
+
+--Калибровка (аттестация) оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10422,  2136  )
+--Разработка специального программного обеспечения для тестирования ЭКБ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 10414,  2137  )
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 246, 2114   )
+--Сериализация изделий (присвоение индивидуального номера) 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 1,2092    )
+--Проверка наличия посторонних частиц в подкорпусном пространстве
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 146,  2093  )
+--Контроль электрических параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 22,   2095 )
+--Контроль по ужесточенным нормам  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 81,2097    )
+--Отбор на РФА 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 151,  2573  )
+--Контроль качества маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 145,   2119 )
+
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 279, 2089   )
+--Электротермотренировка   
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 84, 2096   )
+--Контроль дрейфа параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 100,2098    )
+--Испытание на герметичность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 67,  2113  )
+--Приемка партии по результатам ДПО 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 259,2115    )
+--Проверка внешнего вида
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 2, 2114   )
+--Испытание на способность к пайке 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 138, 2117   )
+--Проверка прочности выводов  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1327 , 136, 2118   )
 END
 --ИС малой степени интеграции
 begin
@@ -493,10 +745,18 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 107,477    )
 --Ускоренные испытания на безотказность  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10421,1777)
+--Испытания на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 104, 1777   )
 --Отбор на термомеханику 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 164,2583)
 --Отбор на безотказность 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 165,2583)
+--Отбор на РФА 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 151, 2583   )
+--Отбор для испытаний на надёжность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 340, 2583   )
+--Отбор для испытаний на специальные факторы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 331, 2583   )
 --Испытание на герметичность  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 67, 1917   )
 --Проверка наличия посторонних частиц в подкорпусном пространстве  
@@ -525,6 +785,51 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10414,450 )
 --Проверка массы, габаритных, установочных и присоединительных размеров  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10382, 455   )
+--Определение массы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 292,  455  )
+--Испытания по определению резонансных частот конструкции  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 152,  464  )
+--Испытание на воздействие синусоидальной вибрации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 357, 466   )
+--Испытание на ударную прочность при воздействии механических ударов одиночного действия 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10393,470    )
+--Испытание на  ударную прочность при воздействии механических ударов многократного действия  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 122, 468   )
+--Испытание на способность к пайке
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 138,  1924  )
+--Термотренировка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 88, 1913   )
+--Контроль содержания паров воды внутри корпуса* 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 142,  1927  )
+--Контроль качества маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 145, 1926   )
+--Визуальный внутренний контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 143,  1928  )
+--контроль качества кристалла и металлизации на РЭМ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 243,1929    )
+--Анализ технологии изготовления (делаем как РЭМ)
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10429,  1929  )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 279, 2481   )
+--Контроль прочности внутренних соединений 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 244,   1930 )
+--Испытание на сдвиг кристалла  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 245, 1931  )
+
+--Подготовка для испытаний на безотказность
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10423, 445   )
+--Испытания на виброустойчивость
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 168, 466   )
+
+--Проверка маркировки на прочность
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10431,1926    )
+--Контроль электрических параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 22, 458   )
+--Упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 261, 2449   )
+
+--Оценка показателей безотказности  (ужесточ нормы)
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1289 , 10426, 2047   )
 
 end
 --ИС корпусные средней степени интеграции
@@ -555,7 +860,46 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 10422,1509    )
 --Разработка специального программного обеспечения для тестирования ЭКБ 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 10414, 1538   )
-
+--Проверка наличия посторонних частиц в подкорпусном пространстве 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 146,  839  )
+--Контроль электрических параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 22,841    )
+--Контроль по ужесточенным нормам
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 81,843    )
+--Отбор на РФА  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 151,  2574  )
+--Электротермотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 84,   842 )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 100, 844   )
+--Испытание на герметичность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 67,  859  )
+--Приемка партии по результатам ДПО 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 259,   861 )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 2, 860   )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 279,  860  )
+--Нанесение отличительной маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 20, 862   )
+--Упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 261, 875   )
+--Контроль качества маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 145, 867   )
+--Контроль содержания паров воды внутри корпуса*  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 142, 868   )
+--Испытание на способность к пайке 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 138, 865   )
+--Проверка прочности выводов 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 136, 866   )
+--Визуальный внутренний контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 143,  869  )
+--контроль качества кристалла и металлизации на РЭМ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 243,   870 )
+--Контроль прочности внутренних соединений
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 244, 871   )
+--Испытание на сдвиг кристалла 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1329 , 245,  872  )
 END
 --ИС корпусные низкой степени интеграции
 BEGIN
@@ -583,6 +927,10 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 2, 2064   )
 --Проверка внешнего вида и маркировки  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 246, 2069   )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 279,  2069  )
+--Анализ сопроводительной документации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 260, 2069   )
 --Сериализация изделий (присвоение индивидуального номера) 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 1, 2042   )
 --Проверка наличия посторонних частиц в подкорпусном пространстве 
@@ -613,6 +961,20 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 261,  2077  )
 --Нанесение отличительной маркировки 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 20,2066    )
+--Контроль электрических параметров, функциональный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 32, 2045   )
+--Термотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 88,  2046  )
+--Испытание на воздействие изменения температуры среды
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 98, 1912   )
+--Контроль электрических параметров, функциональный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 32, 2045   )
+--Контроль содержания паров воды внутри корпуса*  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 142,  2070  )
+--Контроль прочности внутренних соединений 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 244, 2073)
+--Испытание на сдвиг кристалла 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1282 , 245, 2074)
 END
 --Аналоговые ИС высокой степени интеграции
 BEGIN
@@ -667,7 +1029,69 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1335 , 4,  15  )
 --Определение массы  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1335 , 292, 15   )
-
+--Термоциклы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1335 , 349, 2144   )
+--Контроль электрических параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1335 , 22,2141    )
+--Упаковка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1335 , 261,2480    )
+END
+---Аналоговые ИС средней степени интеграции
+Begin
+--Сериализация изделий (присвоение индивидуального номера) 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 1,660    )
+--Проверка массы, габаритных, установочных и присоединительных размеров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10382, 659   )
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 246,  659  )
+--Идентификация ЭКБ ИП 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 344, 2414   )
+--Анализ сопроводительной документации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 260, 659   )
+--Контроль электрических параметров, функциональный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 32,  661  )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 98, 664   )
+--Электротермотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 84, 665   )
+--Определение массы  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 292, 659   )
+--Проверка габаритных, установочных и присоединительных размеров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 4,659    )
+--Контроль по ужесточенным нормам  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 81,  667  )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 100, 668   )
+--Испытание на герметичность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 67, 669   )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 259, 2592   )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 2,  675  )
+--Нанесение отличительной маркировки
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 20, 2620   )
+--Анализ технических спецификаций, выбор критериев параметров - годности  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10407, 1570   )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10408,  1594  )
+--Разработка принципиальных электрических схем оснастки и выбор комплектующих 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10409, 1618   )
+--Разработка проектов печатных плат оснастки
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10410,1642    )
+--Сборочно-монтажные работы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10411, 1666   )
+--Разработка конструкторской документации для технологической оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10412, 1690   )
+--Калибровка (аттестация) оснастки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10422, 1714   )
+--Разработка специального программного обеспечения для тестирования ЭКБ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 10414,1738    )
+--Проверка наличия посторонних частиц в подкорпусном пространстве
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 146, 670   )
+--Контроль электрических параметров
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 22,  671  )
+--Термоциклы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1336 , 349,664    )
 END
 --Аналоговые ИС низкой степени интеграции
 BEGIN
@@ -725,6 +1149,8 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1337 , 98,  475  )
 --Контроль дрейфа параметров 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1337 , 100,  1916  )
+--Проверка наличия посторонних частиц в подкорпусном пространстве 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1337 , 146, 1918   )
 END
 --Аналого-цифровые преобразователи(средняя степень)
 Begin
@@ -822,6 +1248,12 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1293 , 10414, 494   )
 --Нанесение отличительной маркировки  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1293 , 20,  2621  )
+--Отбор на безотказность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1293 , 165,   2584 )
+--Ускоренные испытания на безотказность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1293 , 10421, 1778   )
+--Испытания на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1293 , 104, 1778   )
 END
 --ПП корпусные
 BEGIN
@@ -853,6 +1285,8 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1326 , 10422, 1511   )
 --Разработка специального программного обеспечения для тестирования ЭКБ 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1326 , 10414, 1540   )
+
+
 END
 --Полупроводниковые и оптоэлектронные приборы
 BEGIN
@@ -939,7 +1373,42 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 10414, 1739   )
 --Отбор на РФА 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 151,  2584  )
+--Проверка прочности выводов 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 136, 705   )
+--Контроль прочности внутренних соединений 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 244, 709   )
+--Испытание на сдвиг кристалла 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 245,  710  )
+--Идентификация ЭКБ ИП  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 344, 498   )
+--Проверка габаритных, установочных и присоединительных размеров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 4,  499  )
+--контроль качества кристалла и металлизации на РЭМ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 243, 708   )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 279, 497   )
+
+--Контроль качества кристалла и металлизации на РЭМ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 139, 708   )
+--Проверка внешнего вида и контроль качества маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 154,  701  )
+--Анализ технологии изготовления
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (357 , 10429,  708  )
+
 END 
+--Транзисторные сборки
+BEGIN
+--Испытание на способность к пайке
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (354 , 138, 704   )
+--Контроль качества маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (354 , 145,706    )
+--Визуальный внутренний контроль 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (354 , 143,  707  )
+--Контроль прочности внутренних соединений 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (354 , 244,  709  )
+--Испытание на сдвиг кристалла 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (354 , 245,  710  )
+END
 --Диоды
  BEGIN
  --Контроль электрических параметров, функциональный контроль 
@@ -958,8 +1427,91 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10408,  1595  )
 --Разработка принципиальных электрических схем оснастки и выбор комплектующих  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10409,  1619  )
-END
+--Отбор на термомеханику 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 164, 2584   )
+--Испытание на вибропрочность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 268,510    )
+--Испытание на  воздействие одиночных ударов  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 130, 514   )
+--Испытание на воздействие повышенной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 272, 515   )
+--Испытание на воздействие пониженной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 273,  517  )
+--Идентификация ЭКБ ИП 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 344, 498   )
+--Проверка габаритных, установочных и присоединительных размеров
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 4,  499  )
+--Отбор для испытаний на надёжность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 340, 2584   )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 2,   497 )
+--Определение массы  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 292, 499   )
+--Испытание на воздействие синусоидальной вибрации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 357, 510   )
 
+--Испытание на ударную прочность при воздействии механических ударов одиночного действия  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10393, 514   )
+--Испытание на  ударную прочность при воздействии механических ударов многократного действия
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 122, 513   )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 98,  519  )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 274,516    )
+--Испытание на воздействие повышенной влажности воздуха  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 107, 521   )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 275, 518   )
+--Испытание на воздействие атмосферного пониженного  давления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 133,   525 )
+--Испытание на воздействие повышенного давления
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 131,  526  )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 279,497   )
+--Электротермотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 84, 692   )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 100,  695  )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 259, 2593   )
+--Испытание на способность к пайке 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 138,   704 )
+
+
+--Разработка проектов печатных плат оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10410,  1619  )
+--Сборочно-монтажные работы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10411, 1667   )
+--Разработка конструкторской документации для технологической оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10412,1691    )
+--Калибровка (аттестация) оснастки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10422,  1715  )
+--Разработка специального программного обеспечения для тестирования ЭКБ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10414, 1739   )
+
+--Отбор на РФА  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 151, 2584   )
+--Контроль качества маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 145, 899   )
+--Проверка прочности выводов  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 136, 898   )
+
+--Проверка внешнего вида и контроль качества маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 154, 686   )
+--Анализ технологии изготовления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 10429, 708   )
+--Испытания на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 104,  1778  )
+END
+--диоды оп
+BEGIN
+--Контроль "m" - характеристик 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 76,  889  )
+--Контроль ВАХ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 64,  889  )
+--Визуальный внутренний контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (337 , 143,  900  )
+end
 --МОДУЛИ IGBT
 BEGIN
 --Контроль электрических параметров, функциональный контроль 
@@ -970,6 +1522,10 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1018 , 130,338    )
 --Испытание на воздействие повышенной температуры среды при эксплуатации  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1018 , 272,  339  )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1018 , 2,  321  )
+--Испытание на воздействие соляного (морского) тумана
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1018 , 159,347    )
 END
 --Цифровые датчики температуры (проводим как транзисторы)
 BEGIN
@@ -1026,7 +1582,11 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 --Испытания на безотказность 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1301 , 104, 1775   )
 END
-
+--ВИЛКИ
+BEGIN
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (411 , 246,  1068  )
+END
 --Конденсаторы и конденсаторные сборки
 BEGIN
 --Испытание на воздействие изменения температуры среды
@@ -1054,6 +1614,28 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 --Испытание на воздействие пониженной температуры среды при эксплуатации  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 273, 253   )
 
+--Контроль внешнего вида и сопроводительной документации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 351,773    )
+--Идентификация ЭКБ ИП 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 344, 773   )
+--Сериализация изделий (присвоение индивидуального номера) 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 1,237    )
+--Проверка внешнего вида и маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 246, 773   )
+--Проверка габаритных, установочных и присоединительных размеров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 4, 235   )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 100, 778   )
+--Отбор на термомеханику  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 164,  2578  )
+--Нанесение отличительной маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 20,  2629  )
+--Анализ технических спецификаций, выбор критериев параметров - годности 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 10407, 1579 )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 10408,1603)
+--Упаковка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1305 , 261,  2444  )
 END
 --Конденсаторы оксидно-полупроводниковые с выводами, конденсаторные сборки
 begin
@@ -1107,6 +1689,14 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1319 , 10412,  1484  )
 --Калибровка (аттестация) оснастки
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1319 , 10422,1513    )
+
+--Контроль по ужесточенным нормам  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1319 , 81, 927   )
+--Приемка партии по результатам ДПО 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1319 , 259,  933 )
+--Термотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1319 , 88, 929   )
+
 end
 --Конденсаторы объёмно-пористые танталовые, оксидно-электролитичекие алюминиевые
 begin
@@ -1158,6 +1748,27 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 --Упаковка  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1321 , 261,953)
 end
+--Конденсаторы оксидно-полупроводниковые безвыводные
+begin
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 246, 981   )
+--Контроль электрических параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 22, 974   )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 81, 979   )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 98, 975   )
+--Приемка партии по результатам ДПО 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 259,982    )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 2, 981   )
+--Упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 261,  984  )
+--Анализ технических спецификаций, выбор критериев параметров - годности  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 10407, 1342   )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1322 , 10408,1371    )
+END
 --РЕЗИСТОРЫ
 BEGIN
 --Идентификация ЭКБ ИП  
@@ -1170,8 +1781,11 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 246,189    )
 --Проверка габаритных, установочных и присоединительных размеров  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 4,191)
+--Проверка габаритных, установочных и присоединительных размеров, проверка массы  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 10435, 191   )
 --Анализ сопроводительной документации  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 260,  790  )
+
 --Контроль электрических параметров, функциональный контроль  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 32,   794 )
 --Контроль по ужесточенным нормам  
@@ -1198,6 +1812,20 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 10407,  179  )
 --Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 10408,180    )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 279,  188  )
+--Проверка внешнего вида  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 2,189    )
+--Испытание на воздействие соляного (морского) тумана  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 159, 215   )
+
+--Испытания на виброустойчивость 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 168,  202  )
+
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 274, 208  )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (373 , 275,  210  )
 END
 --Резисторы постоянные и переменные
 BEGIN
@@ -1284,6 +1912,8 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 100,  794  )
 --Испытания на безотказность  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 104, 1773   )
+--Оценка показателей безотказности 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 10426,  1773  )
 --Отбор на термомеханику 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 164,  2579  )
 --Отбор на безотказность  
@@ -1300,7 +1930,24 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 2,  277  )
 --Приемка партии по результатам ДПО 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 259,  2599  )
-
+--Термоциклы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 349,  761  )
+--Отбор для испытаний на специальные факторы  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 331,  2579  )
+--Нанесение отличительной маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 20,  2627  )
+--Упаковка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 261,2445    )
+--Контроль электрических параметров
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 22,   282 )
+--Анализ технических спецификаций, выбор критериев параметров - годности 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 10407,   267 )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 10408,  268  )
+--Анализ упаковки, проверка сопроводительной документации, проверка внешнего вида и маркировки, упаковка
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 279, 277   )
+--Испытания на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (378 , 104,  1773  )
 END
 --Моточные изделия
 begin
@@ -1327,7 +1974,52 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 4,2539    )
 --Анализ сопроводительной документации  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 260,2535    )
+--Испытание на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 268,  2550  )
+--Испытание на виброустойчивость 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 269,  2550  )
+--Испытание на  воздействие одиночных ударов  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 130, 2554   )
+--Отбор на термомеханику 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 164,  2588  )
+--Отбор на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 165,  2588  )
+--Контроль электрических параметров, функциональный контроль  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 32, 2542   )
+--Испытание на воздействие повышенной температуры среды при эксплуатации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 272,2555    )
+--Испытание на воздействие пониженной температуры среды при эксплуатации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 273, 2557   )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 98,2559    )
+--Термотренировка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 88, 769   )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 81, 1915   )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 100, 1916   )
+--Испытание на герметичность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 67,  1917  )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 259,  2616  )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 2,  1923  )
+--Нанесение отличительной маркировки
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 20,2644    )
+--Испытания на безотказность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (398 , 104,398    )
+END
 
+---Кварцевые генераторы ОП
+BEGIN
+--Анализ технических спецификаций, выбор критериев параметров - годности
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (394 , 10407,  1350  )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (394 , 10408, 1379   )
+--Проверка внешнего вида и контроль качества маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (394 , 154, 409   )
+--Анализ технологии изготовления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (394 , 10429,  870  )
 END
 ---ПРЕДОХРАНИТЕЛИ 
 BEGIN
@@ -1391,6 +2083,36 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 10407,  1350  )
 --Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 10408,  1379  )
+
+--Контроль электрических параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 22, 1109   )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 81,  1111  )
+--Испытание на воздействие изменения температуры среды
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 98, 1110   )
+--Термотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 88,  1113  )
+--Контроль дрейфа параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 100,  1115  )
+--Приемка партии по результатам ДПО 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 259, 1118   )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 2,1117    )
+--Нанесение отличительной маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 20,  1119  )
+--Упаковка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1081 , 261,  1120  )
+END
+--ФЕРРИТОВЫЕ ПРИБОРЫ ОП
+BEGIN
+--Анализ технических спецификаций, выбор критериев параметров - годности 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (385 , 10407, 1362   )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (385 , 10408, 1391   )
+--Проверка внешнего вида, разборчивости и содержания маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (385 , 263, 1794   )
+--Сериализация изделий (присвоение индивидуального номера) 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (385 , 1,  413  )
 END
 --Ферритовые приборы
 BEGIN
@@ -1436,6 +2158,9 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1315 , 259,2600   )
 --Проверка внешнего вида  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1315 , 2, 772   )
+--Контроль электрических параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (385 , 22,  414  )
+
 END
 --Комплектующие изделия (КИ)
 BEGIN
@@ -1467,6 +2192,24 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1342 , 287, 2233   )
 --Испытание на  воздействие одиночных ударов 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1342 , 130,  2234  )
+END
+--Дроссели
+
+BEGIN
+--Идентификация ЭКБ ИП 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (377 , 344,  146  )
+--Сериализация изделий (присвоение индивидуального номера) 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (377 , 1,   149 )
+--Проверка внешнего вида и маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (377 , 246, 145   )
+--Проверка габаритных, установочных и присоединительных размеров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (377 , 4, 147   )
+END
+
+--Блоки трансформаторов
+BEGIN
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (376 , 246,  1228  )
 END
 --Дроссели высокочастотные
 Begin
@@ -1506,6 +2249,18 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 10407, 1351   )
 --Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 10408, 1380   )
+--Термотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 88, 713   )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 100,716    )
+--Приемка партии по результатам ДПО 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 259, 2594   )
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 2,711    )
+--Упаковка
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 261, 2459   )
+--Нанесение отличительной маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1354 , 20,2622    )
 END
 --фильтры
 begin
@@ -1561,6 +2316,26 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 98, 299   )
 --Термоциклы 
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 349, 737   )
+--Испытание на воздействие синусоидальной вибрации  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 357,  290  )
+--Испытание на ударную прочность при воздействии механических ударов одиночного действия  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 10393,  294  )
+--Испытание на  ударную прочность при воздействии механических ударов многократного действия
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 122, 292   )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 274,296    )
+--Испытание на воздействие повышенной влажности воздуха  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 107, 301   )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 275,298    )
+--Испытание на воздействие атмосферного пониженного  давления 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 133, 305   )
+--Испытание на воздействие повышенного давления  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 131,306    )
+--Испытание на способность к пайке 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 138, 704   )
+--Испытания на безотказность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (402 , 104, 1773   )
 end
 --Соединители низкочастотные прямоугольные и цилиндрические
 begin
@@ -1577,6 +2352,11 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 --Нанесение отличительной маркировки  
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1351 , 20,  1071  )
 end
+--РОЗЕТКИ
+begin
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (421 , 246,   1068 )
+END
 --Соединители радиочастотные
 begin
 --Проверка внешнего вида и маркировки  
@@ -1602,11 +2382,207 @@ insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[
 
 --Контроль качества маркировки
 insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 145,734    )
+--Проверка внешнего вида и маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 246,   101 )
+--Проверка габаритных, установочных и присоединительных размеров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 4,  103  )
+--Контроль электрических параметров, функциональный контроль 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 32, 106   )
+--Испытание на воздействие повышенной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 272, 119   )
+--Испытание на воздействие пониженной температуры среды при эксплуатации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 273, 121   )
+--Испытание на воздействие изменения температуры среды  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 98,  123  )
+--Отбор на термомеханику  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 164,2575    )
+--Отбор на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 165, 2575   )
+--Отбор для испытаний на специальные факторы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 331,2575    )
+--Анализ технических спецификаций, выбор критериев параметров - годности  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10407, 91   )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10408, 93   )
 
+
+--Идентификация ЭКБ ИП  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 344,   102 )
+--Термотренировка
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 88,1150    )
+--Сериализация изделий (присвоение индивидуального номера)
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 1,   105 )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 81, 1154   )
+--Контроль дрейфа параметров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 100, 1154   )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 259,  1164  )
+--Нанесение отличительной маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 20,  1165  )
+
+--Испытание на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 268,   114 )
+--Испытание на  воздействие одиночных ударов 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 130,  118  )
 end
+
+--РЕЛЕ ОП
+Begin
+--Разработка проектов печатных плат оснастки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10410,  1439  )
+--Разработка принципиальных электрических схем оснастки и выбор комплектующих 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10409,   1410 )
+--Сборочно-монтажные работы 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10411, 1468   )
+--Разработка специального программного обеспечения для тестирования ЭКБ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10414, 1555   )
+--Калибровка (аттестация) оснастки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10422,  1555  )
+--Разработка конструкторской документации для технологической оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 10412,  1497  )
+--Контроль электрических параметров
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 22, 1149   )
+--Отбор на РФА
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 151, 2575   )
+--Приработка переключателей 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 134,  1153  )
+--Испытание на воздействие пониженной температуры  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (420 , 73, 1151  )
+end
+--Вентили
+begin
+--Проверка внешнего вида 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 2,  409  )
+--Сериализация изделий (присвоение индивидуального номера)  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 1, 413   )
+--Контроль электрических параметров, функциональный контроль 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 32,  414  )
+--Ускоренные испытания на безотказность
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 10421, 1776   )
+--Идентификация ЭКБ ИП 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 344,  410  )
+--Проверка внешнего вида и маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 246, 409   )
+--Проверка габаритных, установочных и присоединительных размеров  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 4, 411   )
+--Испытание на воздействие повышенной температуры среды при эксплуатации
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 272,427    )
+--Испытание на воздействие пониженной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 273,  429  )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 98,431    )
+--Анализ технических спецификаций, выбор критериев параметров - годности  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 10407,399    )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 10408, 400   )
+
+--Испытание на вибропрочность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 268,  422  )
+
+--Отбор на термомеханику 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 164, 2582   )
+--Отбор на безотказность  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 165,  2582  )
+--Отбор для испытаний на специальные факторы  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 331,  2582  )
+--Термотренировка 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 88, 1797   )
+--Контроль по ужесточенным нормам  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 81, 1804   )
+--Контроль дрейфа параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 100, 1804   )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 259,  1804  )
+--Нанесение отличительной маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (333 , 20, 1805   )
+end
+--Модули питания
+begin
+--Анализ технических спецификаций, выбор критериев параметров - годности
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 10407,1361    )
+--Разработка методик параметрического и функционального контроля ЭКБ в период проведения ВК и СИ
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 10408,1390    )
+--Проверка внешнего вида, разборчивости и содержания маркировки
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 263,   1298 )
+--Сериализация изделий (присвоение индивидуального номера)  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 1,   1288 )
+--Контроль электрических параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 22,  1291  )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 81, 1290   )
+--Испытание на воздействие изменения температуры среды  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 98, 1292   )
+--Термотренировка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 88, 1293   )
+--Контроль дрейфа параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 100,1295    )
+--Приемка партии по результатам ДПО  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 259, 1299   )
+--Проверка внешнего вида
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 2,  1298  )
+--Нанесение отличительной маркировки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 20,1300    )
+--Упаковка  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 261, 1302   )
+--Испытание на герметичность 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 67,  1296  )
+--Разработка принципиальных электрических схем оснастки и выбор комплектующих 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 10409,   1419 )
+--Сборочно-монтажные работы
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 10411,  1477  )
+--Калибровка (аттестация) оснастки 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (871 , 10422, 1535   )
+end
+--Опытные образцы
+BEGIN
+
+
+--Испытание на воздействие повышенной влажности воздуха 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 107,345    )
+--Испытание на воздействие пониженной температуры среды при транспортировании и хранении  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 275, 342   )
+--Испытание на воздействие синусоидальной вибрации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 357,  334  )
+--Испытание на воздействие повышенной температуры среды при транспортировании и хранении 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 274, 340   )
+--Испытание на  воздействие одиночных ударов  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 130, 338   )
+--Испытание на  ударную прочность при воздействии механических ударов многократного действия 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 122,  336  )
+--Испытание на воздействие изменения температуры среды  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 98,343    )
+--Проверка внешнего вида  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 2, 321   )
+--Испытание на воздействие соляного (морского) тумана  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 159,347    )
+--Контроль функционирования 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 55, 326   )
+--Испытание на воздействие пониженной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 273,  339  )
+--Испытание на воздействие повышенной температуры среды при эксплуатации 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 272, 341   )
+--Испытание на прочность при транспортировании  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (1372 , 303, 336   )
+
+END
+
+--Сердечники
+BEGIN
+--Сериализация изделий (присвоение индивидуального номера) 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (386 , 1,   1805 )
+--Проверка внешнего вида, разборчивости и содержания маркировки  
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (386 , 263,1794    )
+--Контроль электрических параметров 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (386 , 22,  1795  )
+--Контроль по ужесточенным нормам 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (386 , 81, 1796   )
+--Испытание на воздействие изменения температуры среды 
+insert into [dbo].[Estimator_TestChainItem] ([AsuClassID],[AsuBaseOperationID],[TestChainItemID])  VALUES (386 , 98, 431   )
 END
 
 
+END
 --select c.TestChainItemID ,tc.AsuClassID,e.[Name], tc.AsuBaseOperationID, o.Name   from Estimator_TestChainItem tc,Estimator.dbo.TestChainItem c, Estimator.dbo.Operation o, Estimator.dbo.ElementType e
 --where e.ElementTypeID= c.ElementTypeID and o.OperationID = c.OperationID 
 --and tc.TestChainItemID= c.TestChainItemID 

@@ -1,0 +1,844 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/22/2021 3:38:36 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BOSS"
+  DTS:CreatorName="BOSS\asker"
+  DTS:Description="Описание пакета служб SSIS"
+  DTS:DTSID="{AFCC0433-9BA1-48DA-9E86-45814E37B783}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.168"
+  DTS:LocaleID="1049"
+  DTS:MaxErrorCount="0"
+  DTS:ObjectName="ВыгрузкатрудоемкостиИзкалькулятора"
+  DTS:ProtectionLevel="0"
+  DTS:VersionGUID="{5F48FB86-1860-4279-9244-EE2AF925504D}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{B344B9A1-A981-4184-9314-04A9E2D934B3}"
+      DTS:ObjectName="DestinationConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=ASU;User ID=reports;Initial Catalog=Estimator;Provider=SQLNCLI11;Auto Translate=false;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"></DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{9E8E3339-BFA1-45E7-A86A-F498FE38924A}"
+      DTS:ObjectName="SourceConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=BOSS\SQLEXPRESS;Initial Catalog=u1000209_ESTIMATOR;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=false;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Задача потока данных 1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DTSID="{A9373AAE-58CA-45DD-86CD-946D6DCE256B}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Задача потока данных 1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          defaultBufferSize="3145728"
+          version="1">
+          <components>
+            <component
+              refId="Package\Задача потока данных 1\Источник - TestAction"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="Источник &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;7"
+              description="Источник &quot;OLE DB&quot;"
+              name="Источник - TestAction"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[dbo].[TestAction]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="Переменная, содержащая команду SQL для выполнения."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Сопоставления между параметрами в команде SQL и переменными."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных 1\Источник - TestAction.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;]"
+                  name="Выход источника &quot;OLE DB&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[QualificationID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[QualificationID]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[QualificationID]"
+                      name="QualificationID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[BatchLabor]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[BatchLabor]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[BatchLabor]"
+                      name="BatchLabor"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[ItemLabor]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[ItemLabor]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[ItemLabor]"
+                      name="ItemLabor"
+                      precision="18"
+                      scale="4"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TestChainItemID]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      name="TestChainItemID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestActionID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TestActionID]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestActionID]"
+                      name="TestActionID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[KitLabor]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[KitLabor]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[KitLabor]"
+                      name="KitLabor"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[QualificationID]"
+                      dataType="i4"
+                      name="QualificationID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[BatchLabor]"
+                      dataType="i4"
+                      name="BatchLabor" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[ItemLabor]"
+                      dataType="numeric"
+                      name="ItemLabor"
+                      precision="18"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TestChainItemID]"
+                      dataType="i4"
+                      name="TestChainItemID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TestActionID]"
+                      dataType="i4"
+                      name="TestActionID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[KitLabor]"
+                      dataType="i4"
+                      name="KitLabor" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;]"
+                  isErrorOut="true"
+                  name="Вывод ошибок источника &quot;OLE DB&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[QualificationID]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[QualificationID]"
+                      name="QualificationID" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[BatchLabor]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[BatchLabor]"
+                      name="BatchLabor" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ItemLabor]"
+                      dataType="numeric"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ItemLabor]"
+                      name="ItemLabor"
+                      precision="18"
+                      scale="4" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      name="TestChainItemID" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TestActionID]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TestActionID]"
+                      name="TestActionID" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[KitLabor]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[KitLabor]"
+                      name="KitLabor" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных 1\Источник 1 - TestChainItem"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="Источник &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;7"
+              description="Источник &quot;OLE DB&quot;"
+              name="Источник 1 - TestChainItem"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[dbo].[TestChainItem]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="Переменная, содержащая команду SQL для выполнения."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Сопоставления между параметрами в команде SQL и переменными."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;]"
+                  name="Выход источника &quot;OLE DB&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[ElementTypeID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[ElementTypeID]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[ElementTypeID]"
+                      name="ElementTypeID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[OperationID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[OperationID]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[OperationID]"
+                      name="OperationID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Order]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Order]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Order]"
+                      name="Order"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TestChainItemID]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      name="TestChainItemID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Description]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Description]"
+                      length="1000"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Description]"
+                      name="Description"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[GroupOperation]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[GroupOperation]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[GroupOperation]"
+                      name="GroupOperation"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[OldTesChainItemId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[OldTesChainItemId]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[OldTesChainItemId]"
+                      name="OldTesChainItemId"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[ElementTypeID]"
+                      dataType="i4"
+                      name="ElementTypeID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[OperationID]"
+                      dataType="i4"
+                      name="OperationID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Order]"
+                      dataType="i4"
+                      name="Order" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TestChainItemID]"
+                      dataType="i4"
+                      name="TestChainItemID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="1000"
+                      name="Description" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[GroupOperation]"
+                      dataType="i4"
+                      name="GroupOperation" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[OldTesChainItemId]"
+                      dataType="i4"
+                      name="OldTesChainItemId" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;]"
+                  isErrorOut="true"
+                  name="Вывод ошибок источника &quot;OLE DB&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ElementTypeID]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ElementTypeID]"
+                      name="ElementTypeID" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[OperationID]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[OperationID]"
+                      name="OperationID" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Order]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Order]"
+                      name="Order" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TestChainItemID]"
+                      name="TestChainItemID" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Description]"
+                      dataType="wstr"
+                      length="1000"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Description]"
+                      name="Description" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[GroupOperation]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[GroupOperation]"
+                      name="GroupOperation" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[OldTesChainItemId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[OldTesChainItemId]"
+                      name="OldTesChainItemId" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных 1\Назначение - TestAction"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Назначение &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;4"
+              description="Назначение &quot;OLE DB&quot;"
+              name="Назначение - TestAction"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[dbo].[TestAction]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, должны ли значения в столбцах идентификаторов копироваться в назначение. Если свойство имеет значение false, значения в столбцах идентификаторов будут созданы автоматически в месте назначения. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, будут ли в назначение вставляться значения NULL для столбцов, содержащих их. Значение false показывает, что если столбец имеет значение NULL, то в назначение будет вставлено его значение по умолчанию. Применяется только в случае, если включена быстрая загрузка."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Задает параметры быстрой загрузки. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Задает, когда выдаются сообщения о фиксации транзакции в ходе вставки данных. Значение 0 задает, что по окончании вставки данных будет выдано одно сообщение о фиксации транзакции. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных 1\Назначение - TestAction.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input]"
+                  errorOrTruncationOperation="Вставить"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].Columns[QualificationID]"
+                      cachedDataType="i4"
+                      cachedName="QualificationID"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[QualificationID]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[QualificationID]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].Columns[BatchLabor]"
+                      cachedDataType="i4"
+                      cachedName="BatchLabor"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[BatchLabor]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[BatchLabor]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].Columns[ItemLabor]"
+                      cachedDataType="numeric"
+                      cachedName="ItemLabor"
+                      cachedPrecision="18"
+                      cachedScale="4"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[ItemLabor]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[ItemLabor]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].Columns[TestChainItemID]"
+                      cachedDataType="i4"
+                      cachedName="TestChainItemID"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[TestChainItemID]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestChainItemID]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].Columns[TestActionID]"
+                      cachedDataType="i4"
+                      cachedName="TestActionID"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[TestActionID]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestActionID]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].Columns[KitLabor]"
+                      cachedDataType="i4"
+                      cachedName="KitLabor"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[KitLabor]"
+                      lineageId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;].Columns[KitLabor]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[QualificationID]"
+                      dataType="i4"
+                      name="QualificationID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[BatchLabor]"
+                      dataType="i4"
+                      name="BatchLabor" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[ItemLabor]"
+                      dataType="numeric"
+                      name="ItemLabor"
+                      precision="18"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[TestChainItemID]"
+                      dataType="i4"
+                      name="TestChainItemID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[TestActionID]"
+                      dataType="i4"
+                      name="TestActionID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input].ExternalColumns[KitLabor]"
+                      dataType="i4"
+                      name="KitLabor" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных 1\Назначение - TestAction.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок назначения &quot;OLE DB&quot;"
+                  synchronousInputId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Назначение - TestAction.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Назначение - TestAction.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Назначение - TestAction.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Назначение &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;4"
+              description="Назначение &quot;OLE DB&quot;"
+              name="Назначение 1 - TestChainItem"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[dbo].[TestChainItem]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, должны ли значения в столбцах идентификаторов копироваться в назначение. Если свойство имеет значение false, значения в столбцах идентификаторов будут созданы автоматически в месте назначения. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, будут ли в назначение вставляться значения NULL для столбцов, содержащих их. Значение false показывает, что если столбец имеет значение NULL, то в назначение будет вставлено его значение по умолчанию. Применяется только в случае, если включена быстрая загрузка."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Задает параметры быстрой загрузки. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Задает, когда выдаются сообщения о фиксации транзакции в ходе вставки данных. Значение 0 задает, что по окончании вставки данных будет выдано одно сообщение о фиксации транзакции. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input]"
+                  errorOrTruncationOperation="Вставить"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[ElementTypeID]"
+                      cachedDataType="i4"
+                      cachedName="ElementTypeID"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[ElementTypeID]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[ElementTypeID]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[OperationID]"
+                      cachedDataType="i4"
+                      cachedName="OperationID"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[OperationID]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[OperationID]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[Order]"
+                      cachedDataType="i4"
+                      cachedName="Order"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[Order]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Order]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[TestChainItemID]"
+                      cachedDataType="i4"
+                      cachedName="TestChainItemID"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[TestChainItemID]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TestChainItemID]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="1000"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[Description]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Description]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[GroupOperation]"
+                      cachedDataType="i4"
+                      cachedName="GroupOperation"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[GroupOperation]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[GroupOperation]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].Columns[OldTesChainItemId]"
+                      cachedDataType="i4"
+                      cachedName="OldTesChainItemId"
+                      externalMetadataColumnId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[OldTesChainItemId]"
+                      lineageId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;].Columns[OldTesChainItemId]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[ElementTypeID]"
+                      dataType="i4"
+                      name="ElementTypeID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[OperationID]"
+                      dataType="i4"
+                      name="OperationID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[Order]"
+                      dataType="i4"
+                      name="Order" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[TestChainItemID]"
+                      dataType="i4"
+                      name="TestChainItemID" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="1000"
+                      name="Description" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[GroupOperation]"
+                      dataType="i4"
+                      name="GroupOperation" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input].ExternalColumns[OldTesChainItemId]"
+                      dataType="i4"
+                      name="OldTesChainItemId" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок назначения &quot;OLE DB&quot;"
+                  synchronousInputId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Задача потока данных 1.Paths[Выход источника &quot;OLE DB&quot;]"
+              endId="Package\Задача потока данных 1\Назначение - TestAction.Inputs[Destination Input]"
+              name="Выход источника &quot;OLE DB&quot;"
+              startId="Package\Задача потока данных 1\Источник - TestAction.Outputs[Выход источника &quot;OLE DB&quot;]" />
+            <path
+              refId="Package\Задача потока данных 1.Paths[Выход источника &quot;OLE DB&quot;1]"
+              endId="Package\Задача потока данных 1\Назначение 1 - TestChainItem.Inputs[Destination Input]"
+              name="Выход источника &quot;OLE DB&quot;"
+              startId="Package\Задача потока данных 1\Источник 1 - TestChainItem.Outputs[Выход источника &quot;OLE DB&quot;]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

@@ -20,5 +20,10 @@ namespace Estimator.Models.ViewModels
         public string CustomerName { get; set; }
         [Display(Name = "ИНН")]
         public string CustomerINN { get; set; }
+
+        public Int64 CustomerID{ get; set; }
+
+        public Int64 ProgramID { get; set; }
+
     }
 }

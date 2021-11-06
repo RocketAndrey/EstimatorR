@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
@@ -17,19 +18,37 @@ namespace Estimator.Pages.CustomerRequests
     {
         private readonly Estimator.Data.EstimatorContext _context;
         public PaginatedList <CustomerRequestView> CustomerRequestList { get; set; }
-        // public PaginatedList<CustomerRequestView> CustomerRequestViews { get; set; }
+       
         public string DateSort { get; set; }
         public string ProgramSort { get; set; }
         public string CustomerSort { get; set; }
         public string CurrentSort { get; set; }
         public string CurrentFilter { get; set; }
+
+        public CustomerRequestFilter filter; 
+
         public IndexModel(Estimator.Data.EstimatorContext context)
         {
             _context = context;
+            filter = new CustomerRequestFilter(); 
+
         }
 
-        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
+        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex, int? customerID,int? programID, int? customerRequestID)
         {
+            //фильтр по заказчику
+            if (customerID == null) { customerID = 0; }
+            List<Models.Customer> customers = _context.Customers.ToList();
+            customers.Add(new Models.Customer { CustomerID = 0, Name = "Все" });
+            ViewData["CustomerID"] = new SelectList(customers.OrderBy (e=>e.Name ), "CustomerID", "Name");
+            //фильтр по программе
+            if (programID == null) { programID = 0; }
+            List<Models.TestProgram> programs = _context.TestPrograms.ToList();
+            programs.Add(new Models.TestProgram  { TestProgramID  = 0,Name  = "Все" });
+            ViewData["TestProgramID"] = new SelectList(programs, "TestProgramID", "Name");
+            //фильтр по номеру заявки 
+            if (customerRequestID == null) customerRequestID = 0;
+
             CurrentSort = sortOrder;
             
             if (searchString != null)
@@ -40,6 +59,7 @@ namespace Estimator.Pages.CustomerRequests
             {
                 searchString = currentFilter;
             }
+
 
             CurrentFilter = searchString;
 
@@ -52,7 +72,9 @@ namespace Estimator.Pages.CustomerRequests
                     Description = p.Description,
                     CustomerName = p.Customer.Name,
                     CustomerINN = p.Customer.INN,
-                    ProgramName = p.Program.Name
+                    ProgramName = p.Program.Name,
+                    CustomerID =p.CustomerID ,
+                    ProgramID = p.Program.TestProgramID
                 }).AsNoTracking().ToListAsync();
 
 
@@ -65,6 +87,26 @@ namespace Estimator.Pages.CustomerRequests
                 customerRequestViewsIQ = customerRequestViewsIQ.Where(s => s.Description.Contains(searchString)
                                        || s.CustomerName.Contains(searchString)).ToList();
             }
+           
+            if (customerID != 0)
+            {             
+                    customerRequestViewsIQ = customerRequestViewsIQ.Where(s => s.CustomerID == customerID).ToList();  
+            }
+            filter.CustomerID = (int)customerID;
+
+            if (programID  != 0)
+            {
+                    customerRequestViewsIQ = customerRequestViewsIQ.Where(s => s.ProgramID  == programID).ToList();
+                
+            }
+            filter.ProgramID = (int)programID;
+
+            if (customerRequestID  != 0)
+            {
+                customerRequestViewsIQ = customerRequestViewsIQ.Where(s => s.CustomerRequestID == customerRequestID).ToList();
+
+            }
+            filter.CustomerRequestID = (int)customerRequestID;
 
             customerRequestViewsIQ = sortOrder switch
             {
