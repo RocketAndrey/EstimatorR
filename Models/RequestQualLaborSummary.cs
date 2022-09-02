@@ -10,12 +10,30 @@ namespace Estimator.Models
     {
         public CustomerRequest CustomerRequest { get; set; }
         [Display(Name = "Итого, час")]
-        public decimal LaborSummary { get; set; }
+        public decimal LaborSummary 
+        {
+            get
+            {
+                return KitLaborSummary + BanchLaborSummary + ItemLaborSummary;
+            }
+        }
 
+        /// <summary>
+        /// трудоёмкость на создание оснастки для  данной специальности
+        /// </summary>
+        public decimal KitLaborSummary { get; set; }
+        /// <summary>
+        /// трудоёмкость по партиям для данной специальности
+        /// </summary>
+        public decimal BanchLaborSummary { get; set; }
+        /// <summary>
+        /// трудоемкость по позициям для данной специальности
+        /// </summary>
+        public decimal ItemLaborSummary { get; set; }
         /// <summary>
         /// Зарплата данной специальности 
         /// </summary>
-        public decimal RequestQualSalarySummary
+        public decimal SalarySummary
         {
             get
             {
@@ -23,16 +41,46 @@ namespace Estimator.Models
             }
         }
         /// <summary>
-        /// Итоговая суммарна я стоимость работ в разрезе данной специальности
+        /// Итоговая суммарная стоимость работ в разрезе данной специальности
         /// </summary>
-
         public decimal CostSummary 
         { 
             get
             {
-                return RequestQualSalarySummary * CustomerRequest.TotalRatio;
+                return SalarySummary * CustomerRequest.TotalRatio;
             }
         }
+        /// <summary>
+        /// стоимость создания оснастки в разрезе данной специальности 
+        /// </summary>
+        public decimal KitCostSummary 
+        {
+            get
+            {
+                return (KitLaborSummary / 60) * CustomerRequest.CompanyHistory.GetSalary(QualificationID) * CustomerRequest.TotalRatio; ;
+            }
+        }
+        /// <summary>
+        /// стоимость на партии разрезе данной специальности 
+        /// </summary>
+        public decimal BanchCostSummary
+        {
+            get
+            {
+                return (BanchLaborSummary / 60) * CustomerRequest.CompanyHistory.GetSalary(QualificationID) * CustomerRequest.TotalRatio; ;
+            }
+        }
+        /// <summary>
+        /// стоимость для элементов в разрезе данной специальности 
+        /// </summary>
+        public decimal ItemCostSummary
+        {
+            get
+            {
+                return (ItemLaborSummary / 60) * CustomerRequest.CompanyHistory.GetSalary(QualificationID) * CustomerRequest.TotalRatio; ;
+            }
+        }
+
 
     }
 }

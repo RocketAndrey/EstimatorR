@@ -131,14 +131,9 @@ namespace Estimator.Pages.CustomerRequests
 
                 CustomerRequest.ChildCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
             }
-            //заполняем аблицу браков
-            if (Mode > 5 | Mode == 1)
-            {
-                FillDefectedTypes();
-            }
-  
 
-           
+            FillDefectedTypes();
+
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(int? id, int? mode)
@@ -161,7 +156,7 @@ namespace Estimator.Pages.CustomerRequests
             //если нет импорта то и нет элементов
             if (ElementImport == null) return;
 
-            ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(s=>s.ElementImportID).ToList();
+            ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(s=>s.RowNum).ToList();
 
             ElementImport.CustomerRequest = CustomerRequest;
 
@@ -173,7 +168,11 @@ namespace Estimator.Pages.CustomerRequests
                     if (requestType.ElementTypeID==type.ElementTypeID)
                     {
                         type.ElementTypeName = requestType.ElementType.Name;
-                        type.Cost = (requestType.CostSummary / requestType.ItemCount)*type.ElementCount ;
+
+                   //стоимость испытаний данной партии
+                        type.Cost = (requestType.CostItems / requestType.ItemCount) * type.ElementCount
+                            + (requestType.CostBanchs / requestType.BatchCount)
+                            + (!type.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0) ;
                     }
                 }
             }
@@ -217,10 +216,6 @@ namespace Estimator.Pages.CustomerRequests
 
         }
 
-        private void FillElementsCost()
-        {
-
-        }
         /// <summary>
         /// полная стоимость дополнительные и сертификационные испытания
         /// </summary>

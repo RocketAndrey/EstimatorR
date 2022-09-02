@@ -4,6 +4,7 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20220826150529_XLSXRowNumber")]
+    partial class XLSXRowNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,9 +241,6 @@ namespace Estimator.Migrations
                     b.Property<int>("ElementNameColumn")
                         .HasColumnType("int");
 
-                    b.Property<int>("ElementPriceColumn")
-                        .HasColumnType("int");
-
                     b.Property<int>("ElementTypeKeyColumn")
                         .HasColumnType("int");
 
@@ -249,24 +248,6 @@ namespace Estimator.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("FirstRowIsHeader")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("FirstRowNumber")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("ImportElementPrice")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LastRowNumber")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("UseFirstRowNumber")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("UseLastCalculation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("UseLastRowNumber")
                         .HasColumnType("bit");
 
                     b.HasKey("ElementImportID");
@@ -736,9 +717,6 @@ namespace Estimator.Migrations
 
                     b.Property<string>("ElementName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ElementPrice")
-                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int?>("ElementTypeID")
                         .HasColumnType("int");

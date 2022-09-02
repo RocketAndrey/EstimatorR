@@ -10,22 +10,17 @@ namespace Estimator.Models
     public class RequestElementType
     {
         public int RequestElementTypeID { get; set; }
-
         public int? ElementTypeID { get; set; }
         public ElementType ElementType { get; set; }
-
         public int CustomerRequestID { get; set; }
         public CustomerRequest CustomerRequest { get; set; }
-
-        /// Колличество партиий        
-
         /// <summary>
-
+        /// Колличество партиий        
         /// </summary>
         [Display(Name = "Партий")]
         public int BatchCount { get; set; }
         /// <summary>
-        /// Коилличестово изделий
+        /// Колличестово изделий
         /// </summary>
         [Display(Name = "Штук")]
         public int ItemCount { get; set; }
@@ -34,17 +29,14 @@ namespace Estimator.Models
         /// </summary>
         [Display(Name = "Нет остнастки, типов")]
         public int KitCount { get; set; }
-
         /// <summary>
         /// 
         /// </summary>
         public int Order { get; set; }
-
         public IEnumerable<RequestOperation> RequestOperations { get; set; }
         /// <summary>
-        /// Возвращает коллескцию специальностей с трудоемкостями дл я данного типа
+        /// Возвращает коллекцию специальностей с трудоемкостями для данного типа
         /// </summary>
-
         [NotMapped]
         public Dictionary<string, RequestQualLaborSummary> QualificationLaborSummary
         {
@@ -74,7 +66,7 @@ namespace Estimator.Models
                                     {
                                         //если нет то добавляем таковую 
                                         itemRQLS = new RequestQualLaborSummary();
-                                        itemRQLS.LaborSummary = 0;
+                                        //itemRQLS.LaborSummary = 0;
                                         itemRQLS.Name = itemAc.Qualification.Name;
                                         itemRQLS.QualificationID = itemAc.Qualification.QualificationID;
                                         itemRQLS.CustomerRequest = CustomerRequest;
@@ -98,6 +90,8 @@ namespace Estimator.Models
                                         }
                                         int groupOperationCount = 0;
                                         int result = 0;
+                                        //DivRem(int a, int b, out int result): возвращает результат от деления a/b,
+                                        //а остаток помещается в параметр result
                                         groupOperationCount = Math.DivRem(sampleCount, itemRO.TestChainItem.GroupOperation, out result);
 
                                         if (result != 0)
@@ -108,11 +102,18 @@ namespace Estimator.Models
                                         {
                                             groupOperationCount = 0;
                                         }
+                                        //трудоемкость создания оснастки для данного типа
+                                        returnSummary[itemAc.Qualification.Name].KitLaborSummary += (itemRO.RequestElementType.KitCount * itemAc.KitLabor) * (itemRO.IsExecute ? 1 : 0) * CustomerRequest.CompanyHistory.TotalFactor;
+                                        //трудоемкость для элементов
+                                        returnSummary[itemAc.Qualification.Name].ItemLaborSummary += (groupOperationCount * itemAc.ItemLabor) * (itemRO.IsExecute ? 1 : 0) * CustomerRequest.CompanyHistory.TotalFactor * itemRO.ExecuteCount;
+                                        //трудоемкость для партий
+                                        returnSummary[itemAc.Qualification.Name].BanchLaborSummary+= (itemRO.RequestElementType.BatchCount * itemAc.BatchLabor) * (itemRO.IsExecute ? 1 : 0) * CustomerRequest.CompanyHistory.TotalFactor * itemRO.ExecuteCount;
                                         // добавляем трудоемкость для данной специальности;
-                                        returnSummary[itemAc.Qualification.Name].LaborSummary +=( (itemRO.RequestElementType.BatchCount * itemAc.BatchLabor +
-                                           groupOperationCount * itemAc.ItemLabor +
-                                            itemRO.RequestElementType.KitCount * itemAc.KitLabor) * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0))
-                                            * CustomerRequest.CompanyHistory.TotalFactor;
+                                        //returnSummary[itemAc.Qualification.Name].LaborSummary +=
+                                        //( (itemRO.RequestElementType.BatchCount * itemAc.BatchLabor +
+                                        //   groupOperationCount * itemAc.ItemLabor +
+                                        //    itemRO.RequestElementType.KitCount * itemAc.KitLabor) * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0))
+                                        //    * CustomerRequest.CompanyHistory.TotalFactor;
 
                                     }
 
@@ -141,6 +142,7 @@ namespace Estimator.Models
                 foreach (var itemRQLS in QualificationLaborSummary)
                 {
                     result += itemRQLS.Value.LaborSummary;
+                   
                 }
                 return result / 60;
             }
@@ -162,7 +164,50 @@ namespace Estimator.Models
           
             }
         }
+        public decimal CostItems
+        {
+            get
+            {
+                decimal result;
+                result = 0;
 
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.ItemCostSummary;
+                }
+                return result;
 
+            }
+        }
+        public decimal CostKits 
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.KitCostSummary;
+                }
+                return result;
+
+            }
+        }
+        public decimal CostBanchs 
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.BanchCostSummary;
+                }
+                return result;
+
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20220901172809_FirstRowNumber")]
+    partial class FirstRowNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,9 +263,6 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("UseFirstRowNumber")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("UseLastCalculation")
                         .HasColumnType("bit");
 
                     b.Property<bool>("UseLastRowNumber")
@@ -736,9 +735,6 @@ namespace Estimator.Migrations
 
                     b.Property<string>("ElementName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ElementPrice")
-                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int?>("ElementTypeID")
                         .HasColumnType("int");

@@ -70,7 +70,14 @@ namespace Estimator.Models
         /// стоимость испытаний партии 
         /// </summary>
         [NotMapped]
-        [Display(Name = "Стоимость, руб.")]
+        [Display(Name = "Стоимость испытаний, руб.")]
         public decimal  Cost { get; set; }
+        public int? RowNum { get; set; }
+        /// <summary>
+        /// Цена закупки,1 шт без НДС
+        /// </summary>
+        [Display(Name = "Цена, руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal ElementPrice { get; set; }
     }
 }

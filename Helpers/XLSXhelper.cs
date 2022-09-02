@@ -42,41 +42,49 @@ namespace Estimator.Helpers
 
                         foreach (Row row in sheetData.Elements<Row>())
                         {
-                            //  if (importSettings.FirstRowIsHeader)
+                         
                             if (row.RowIndex > 1 | !importSettings.FirstRowIsHeader)
                             {
-                                elementType = new XLSXElementType();
-
-                                foreach (Cell cell in row.Elements<Cell>())
-                                {
-                                    string cellValue = string.Empty;
-
-                                    string refName = importSettings.ElementNameColumn.ToString() + row.RowIndex.ToString();
-                                    string refKey = importSettings.ElementTypeKeyColumn.ToString() + row.RowIndex.ToString();
-                                    string refCount = importSettings.ElementCountColumn.ToString() + row.RowIndex.ToString();
-                                   
-
-
-                                    if (cell.CellReference.Value.ToString() == refName)
+                                    if(!importSettings.UseLastRowNumber | importSettings.UseLastRowNumber & row.RowIndex>importSettings.LastRowNumber)
                                     {
-                                        elementType.ElementName = getCellvalue(cell, sharedStringTable);
-                                    }
-                                    else if (cell.CellReference.Value.ToString() == refKey)
+
+                               
+                                        elementType = new XLSXElementType();
+
+                                    foreach (Cell cell in row.Elements<Cell>())
                                     {
-                                        elementType.ElementTypeKey = getCellvalue(cell, sharedStringTable);
-                                    }
+                                        string cellValue = string.Empty;
+
+                                        string refName = importSettings.ElementNameColumn.ToString() + row.RowIndex.ToString();
+                                        string refKey = importSettings.ElementTypeKeyColumn.ToString() + row.RowIndex.ToString();
+                                        string refCount = importSettings.ElementCountColumn.ToString() + row.RowIndex.ToString();
+                                        // запоминаем номер строки
+                                        elementType.RowNum = (int)row.RowIndex.Value;
+
+
+                                        if (cell.CellReference.Value.ToString() == refName)
+                                        {
+                                            elementType.ElementName = getCellvalue(cell, sharedStringTable);
+                                        }
+                                        else if (cell.CellReference.Value.ToString() == refKey)
+                                        {
+                                            elementType.ElementTypeKey = getCellvalue(cell, sharedStringTable);
+                                        }
                                     
-                                    else if (cell.CellReference.Value.ToString() == refCount)
-                                    {
-                                        int i;
-                                        int.TryParse(getCellvalue(cell, sharedStringTable), out i);
-                                        elementType.ElementCount = i;
+                                        else if (cell.CellReference.Value.ToString() == refCount)
+                                        {
+                                            int i;
+                                            int.TryParse(getCellvalue(cell, sharedStringTable), out i);
+                                            elementType.ElementCount = i;
+                                        }
+                                        
                                     }
-                                }
-                                // если колличествов данной строке = 0 то нефиг его и импортировать
-                                if (elementType.ElementCount > 0)
-                                {
-                                    returnValue.Add(elementType);
+                                    // если колличествов данной строке = 0 то нефиг его и импортировать
+                                    if (elementType.ElementCount > 0)
+                                    {
+                                        returnValue.Add(elementType);
+                                    }
+
                                 }
                             }
                         }

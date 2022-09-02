@@ -120,8 +120,9 @@ namespace Estimator.Models
                                         returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Add(itemRQLS);
 
                                     }
-                                    //вычисление труlоёмкости;
-                                    labor = 0;
+                                   
+                                    //вычисление группировки
+                                    int groupOperationCount = 0;
                                     //Cкладываем трудоёмкости по специальностям
                                     if (itemRO.IsExecute)
                                     {
@@ -139,10 +140,11 @@ namespace Estimator.Models
                                                 break;
 
                                         }
-                                        //вычисление группировкиж
-                                        int groupOperationCount = 0;
+                                        
+                                       
                                         int result = 0;
                                         groupOperationCount = Math.DivRem(sampleCount, itemRO.TestChainItem.GroupOperation, out result);
+                                        
                                         if (result != 0)
                                         {
                                             groupOperationCount += 1;
@@ -162,10 +164,14 @@ namespace Estimator.Models
                                 
 
                                     }
+                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).KitLaborSummary+= (itemRO.RequestElementType.KitCount * itemTA.KitLabor) *CompanyHistory.TotalFactor;
+                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).BanchLaborSummary += (itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0);
+                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).ItemLaborSummary += (groupOperationCount * itemTA.ItemLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0); 
 
+                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).KitLaborSummary= (itemRO.RequestElementType.KitCount * itemTA.KitLabor) * CompanyHistory.TotalFactor;
+                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).BanchLaborSummary= (itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0);
+                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).ItemLaborSummary= (groupOperationCount * itemTA.ItemLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0); 
 
-                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).LaborSummary += labor;
-                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).LaborSummary += labor;
                                 }
 
 
@@ -202,14 +208,18 @@ namespace Estimator.Models
                             if (!returnGroup.ContainsKey(itemQ.QualificationID.ToString()))
                             {
                                 RequestQualLaborSummary item = new RequestQualLaborSummary();
-                                item.LaborSummary = 0;
+                              
                                 item.Name = itemQ.Name;
                                 item.QualificationID = itemQ.QualificationID;
                                 item.CustomerRequest = this;
 
                                 returnGroup.Add(itemQ.QualificationID.ToString(), item);
                             }
-                            returnGroup[itemQ.QualificationID.ToString()].LaborSummary += itemQ.LaborSummary;
+                            returnGroup[itemQ.QualificationID.ToString()].KitLaborSummary += itemQ.KitLaborSummary;
+                            returnGroup[itemQ.QualificationID.ToString()].BanchLaborSummary += itemQ.BanchLaborSummary;
+                            returnGroup[itemQ.QualificationID.ToString()].ItemLaborSummary += itemQ.ItemLaborSummary;
+
+                            
                         }
                     }
                     return returnGroup.Values.ToList();

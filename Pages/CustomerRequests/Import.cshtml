@@ -125,10 +125,14 @@
         </table>
     </details>
     <br />
+
+ 
+
     <table class="table table-bordered">
         @if (Model.ImportStep > 1)
         {
             <tr>
+
                 <td colspan="4">
                     @if (Model.ElementImport.FileUploaded)
                     {
@@ -137,14 +141,18 @@
                 </td>
 
                 <td colspan="2" align="right">
-                    <a asp-page="import" class="btn btn-outline-primary" asp-route-id="@Model.ElementImport.CustomerRequestID" asp-route-step="-1"  >Загрузка</a>|
-                    <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a asp-page="import" class="btn btn-outline-primary" asp-route-id="@Model.ElementImport.CustomerRequestID" asp-route-step="-1"  >Загрузка</a>
+                            <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
+                        </div>
+                
                 </td>
-                `
+
             </tr>
+            
         }
     </table>
-
+   
     @if (Model.ImportStep == 3)
     {
         <h4>Результат анализа:</h4>
@@ -213,24 +221,51 @@
         {
             <tr>
                 <td colspan="4">
-                    <input type="file" name="uploadedFile" accept="*.xslx" />
-
-
+                    @*<input type="file" name="uploadedFile" accept="*.xslx" />*@
                 </td>
                 <td colspan=" 2" align="right">
-                    <input type="submit" value="Загрузить" class="btn btn-outline-primary " asp-route-step="1" />|
 
-                    @if (Model.ElementImport.XLSXElementTypes.Count > 0)
+                    @*<input type="submit" value="Загрузить" class="btn btn-outline-primary " asp-route-step="1" />*@
+
+                    @if (Model?.ElementImport?.XLSXElementTypes?.Count > 0)
                     {
                        
-                       <input type="submit" value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
+                       <input type="submit"  value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
                     }
+                </td>
+            </tr>
+            <tr >
+                <td colspan="6">
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" accept="*.xslx" name="uploadedFile" class="custom-file-input" id="uploadedFile" aria-describedby="inputGroupFileAddon04">
+                        <label class="custom-file-label" for="inputGroupFile04">Выберите xlsx файл</label>
+                      </div>
+                      <div class="input-group-append">
+                        @*<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>*@
+                        <input type="submit" value="Загрузить" class="btn btn-outline-secondary " asp-route-step="1" />
+                    </div>
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td colspan="6">
                     <input asp-for="@Model.ElementImport.FirstRowIsHeader" class="form-check-inline" />
                     Первая строка таблицы является заголовком
+                </td>
+            </tr>
+              <tr>
+                <td colspan="6">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Конечная строка</span>
+                        <div class="input-group-text">
+                                   <input asp-for="@Model.ElementImport.UseLastRowNumber" class="form-check-inline" />
+                        </div>
+                      </div>
+                       <input asp-for="@Model.ElementImport.LastRowNumber" class="form-check-inline" />
+                      
+                    </div>
                 </td>
             </tr>
         }

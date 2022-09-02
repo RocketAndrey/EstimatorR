@@ -14,18 +14,59 @@ namespace Estimator.Models
     }
     public class ElementImport
     {
-        public ElementImport ()
+        public ElementImport()
         {
             ElementNameColumn = ColumnNames.B;
             ElementTypeKeyColumn = ColumnNames.C;
             ElementCountColumn = ColumnNames.D;
-            FirstRowIsHeader = true;
+            ElementPriceColumn = ColumnNames.E;
 
+            FirstRowIsHeader = true;
+            ImportElementPrice = false;
+            UseFirstRowNumber = true;
+            FirstRowNumber = 2;
+            UseLastRowNumber = false;
+            LastRowNumber = 3;
         }
         public int ElementImportID { get; set; }
         public int CustomerRequestID { get; set; }
         public CustomerRequest CustomerRequest { get; set; }
+
+        [Display(Name = "Импортировать цену элементов")]
+        public bool ImportElementPrice { get; set; }
+
         public bool FirstRowIsHeader { get; set; }
+        /// <summary>
+        /// Ипортировать с конкретной строки или с первой
+        /// </summary>
+
+        [Display(Name = "Импортировать с строки")]
+        public bool UseFirstRowNumber { get; set; }
+
+        /// <summary>
+        /// Номер первой строки Эксель при импортировании
+        /// </summary>
+        [Display(Name = "Номер первой строки")]
+        public int FirstRowNumber{get;set;}
+    
+        /// <summary>
+        /// Импортировать до конкретной строки или до последней
+        /// </summary>
+  
+        [Display(Name = "Импортировать до строки")]
+        public bool UseLastRowNumber { get; set; } = false;
+        /// <summary>
+       
+        /// Номер последней строки Эксель при импортировании
+        /// </summary>
+        [Display(Name = "Номер последней строки")]
+        public int LastRowNumber { get; set; }
+        /// <summary>
+        /// использовать предыдущие расчёты для определения типа элемента
+        /// </summary>
+
+        [Display(Name = "Использовать предыдущие расчёты")]
+        public bool UseLastCalculation { get; set; }
 
         [Display(Name = "Наименование")]
         public ColumnNames ElementNameColumn { get; set; }
@@ -34,8 +75,12 @@ namespace Estimator.Models
         public ColumnNames ElementTypeKeyColumn { get; set; }
         [Display(Name = "Колличество")]
         public ColumnNames ElementCountColumn { get; set; }
+        [Display(Name = "Цена")]
+        public ColumnNames ElementPriceColumn { get; set; }
         public List<XLSXElementType> XLSXElementTypes { get; set; }
-
+        /// <summary>
+        /// файл загружен?
+        /// </summary>
         public bool FileUploaded { get; set; }
 
         public string FileWWWPath
@@ -80,7 +125,7 @@ namespace Estimator.Models
             }
         }
         /// <summary>
-        /// Cумма  нерекомендованных изделий из ранее проеведенных испытаний
+        /// Cумма  нерекомендованных изделий из ранее проведенных испытаний
         /// </summary>
         public Int64 DefectedUnrecommendCount
         {
