@@ -168,11 +168,14 @@ namespace Estimator.Pages.CustomerRequests
                     if (requestType.ElementTypeID==type.ElementTypeID)
                     {
                         type.ElementTypeName = requestType.ElementType.Name;
-
-                   //стоимость испытаний данной партии
-                        type.Cost = (requestType.CostItems / requestType.ItemCount) * type.ElementCount
-                            + (requestType.CostBanchs / requestType.BatchCount)
-                            + (!type.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0) ;
+                        if (requestType.ItemCount > 0 & requestType.BatchCount > 0)
+                        {
+                            decimal costKit = requestType.KitCount == 0 ? 0 : (!type.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
+                            //стоимость испытаний данной партии
+                            type.Cost = (requestType.CostItems / requestType.ItemCount) * type.ElementCount
+                                + (requestType.CostBanchs / requestType.BatchCount)
+                                + costKit;
+                        }
                     }
                 }
             }

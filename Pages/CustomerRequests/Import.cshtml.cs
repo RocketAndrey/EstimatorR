@@ -364,7 +364,7 @@ namespace Estimator.Pages.CustomerRequests
                     // берем значения из ранее загруженного изделия
                     itemXLSX.ElementTypeID = beforeItem.ElementTypeID ;
                     itemXLSX.ElementTypeKey = beforeItem.ElementTypeKey;
-                    itemXLSX.RowNum = beforeItem.RowNum ;    
+                //    itemXLSX.RowNum = beforeItem.RowNum ;    
                     itemXLSX.ErrorMessage = "";
                     itemXLSX.Valid = true;
                     itemXLSX.BeforeUploadedXLSXElementTypeID = beforeItem.ID;
@@ -406,7 +406,10 @@ namespace Estimator.Pages.CustomerRequests
                     item.ElementName = itemXLSX.ElementName ?? "";
                     item.ElementCount = itemXLSX.ElementCount;
                     item.ElementTypeID = itemXLSX.ElementTypeID;
-                    item.RowNum = itemXLSX.RowNum;
+                    if (item.RowNum == null)
+                    {
+                        item.RowNum = itemXLSX.RowNum;
+                    }
                     item.BeforeUploadedXLSXElementTypeID  = itemXLSX.BeforeUploadedXLSXElementTypeID;
                     _context.Entry(item).State = EntityState.Modified;
                 }
@@ -484,7 +487,7 @@ namespace Estimator.Pages.CustomerRequests
         private XLSXElementType BeforeUploadedXLSXElementType(string elementName, int id, int programid)
         {
             string selectStr= "SELECT [ID] ,[RowNum],[ElementImportID] ,[ElementName] ,[ElementTypeKey]" +
-            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[BeforeUploadedXLSXElementTypeID] " +
+            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[ElementPrice],[BeforeUploadedXLSXElementTypeID] " +
             "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
             " AND  e.ProgramID = {2}";
             
