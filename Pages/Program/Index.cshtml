@@ -5,9 +5,27 @@
     ViewData["Title"] = "Программы испытаний";
 }
 
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="./Index">Программы испытаний</a></li>
+        @{
+            if (Model.SelectedProgram!=null)
+            {
+                <li class="breadcrumb-item"><a asp-page="./Index" asp-route-id="@Model.TestProgramID">@Model.SelectedProgram.Name</a></li>
+            }
+            if (Model.SelectedElementType!=null)
+            {
+                <li class="breadcrumb-item">
+                <a asp-page="./Index" asp-route-elementTypeID="@Model.SelectedElementType.ElementTypeID"> @Model.SelectedElementType.Name</a>
+                </li>
+            }
+        }
+        
+       
+    </ol>
+</nav>
 <h1>Программы испытаний</h1>
-
-
 <table class="table">
     <thead>
         <tr>
@@ -47,7 +65,7 @@
         <tr>
             <th>Наименование типа</th>
             <th>Порядок</th>
-            <th>Ключи</th>>
+            <th>Ключи</th>
         </tr>
 
         @foreach (var item in Model.ElementTypesSort)
@@ -72,7 +90,7 @@
         </td>
 
     </tr>
-        }
+    }
 
     </table>
 

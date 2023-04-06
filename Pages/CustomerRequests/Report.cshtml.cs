@@ -14,6 +14,8 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Estimator.Models.AsuViews;
 using System.Collections.Generic;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.InkML;
+using System.ComponentModel.DataAnnotations;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -27,7 +29,8 @@ namespace Estimator.Pages.CustomerRequests
 
         public ReportModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
-            Mode = 1;            
+            Mode = 1;
+            SelectedTab = 1; 
         }
         
         public async Task<IActionResult> OnGetAsync(int? id, int? mode, int? year)
@@ -44,6 +47,20 @@ namespace Estimator.Pages.CustomerRequests
             {
                 Mode = mode.Value;
             }
+           // HttpContext.Request.BodyReader.
+            // выбрання вкладка
+            if (HttpContext.Request.Cookies.ContainsKey("SelectedTab"))
+            {
+
+                int i =1 ;
+        
+
+                if (Int32.TryParse(HttpContext.Request.Cookies["SelectedTab"], out i ))
+                {
+                    SelectedTab = i; 
+                }
+            }
+            
             //получаем заявку
             CustomerRequest = await _context.CustomerRequests
                 .Include(c => c.Customer)
@@ -74,6 +91,8 @@ namespace Estimator.Pages.CustomerRequests
                 YearOfNoms = (int)year;
 
             }
+            //получаем кооф.сложности
+            RequestRate = CustomerRequest.StringRate; 
             SelectedYear = YearOfNoms;
 
             SetCompanyHistory(YearOfNoms);
@@ -138,7 +157,21 @@ namespace Estimator.Pages.CustomerRequests
         }
         public async Task<IActionResult> OnPostAsync(int? id, int? mode)
 
+
         {
+            HttpContext.Response.Cookies.Append("SelectedTab",SelectedTab.ToString());
+            //получаем заявку
+            if (id > 0)
+            {
+                CustomerRequest = await _context.CustomerRequests
+               .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+                if (CustomerRequest !=null)
+                {
+                    // Обновляет извлеченную сущность CustomerRequest, используя значения из связывателя модели. TryUpdateModel позволяет предотвратить чрезмерную передачу данных.
+                    CustomerRequest.StringRate = RequestRate;
+                    _context.SaveChanges(); 
+                }
+            }
 
             return RedirectToPage("Report", new { id , mode, year = SelectedYear  });
 
@@ -146,39 +179,28 @@ namespace Estimator.Pages.CustomerRequests
 
         [BindProperty]
         public int SelectedYear { get; set; }
-
+        [BindProperty]
+        public int SelectedTab { get; set; }
+       
+        [BindProperty]
+        [Display(Name = "Коэффициент сложности")]
+        [Required(ErrorMessage = "Введитe число с плавающей точкой")]
+        [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$",ErrorMessage ="Введите число в формате числа с плавающей запятой")]
+        [DisplayFormat(DataFormatString = "{0:F4}")]
+        public string RequestRate { get; set; }
         private void FillDefectedTypes()
         {
             //получаем список элементов 
              ElementImport = _context.ElementImports
                        .Include(e => e.XLSXElementTypes)
                       .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == CustomerRequest.CustomerRequestID);
+            
+            ElementImport.CustomerRequest = CustomerRequest;
             //если нет импорта то и нет элементов
             if (ElementImport == null) return;
 
-            ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(s=>s.RowNum).ToList();
-
-            ElementImport.CustomerRequest = CustomerRequest;
-
-            // вычисляем стоимость испытаний 1 шт
-            foreach(XLSXElementType type in ElementImport.XLSXElementTypes)
-            {
-                foreach (RequestElementType requestType in CustomerRequest.RequestElementTypes)
-                {
-                    if (requestType.ElementTypeID==type.ElementTypeID)
-                    {
-                        type.ElementTypeName = requestType.ElementType.Name;
-                        if (requestType.ItemCount > 0 & requestType.BatchCount > 0)
-                        {
-                            decimal costKit = requestType.KitCount == 0 ? 0 : (!type.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
-                            //стоимость испытаний данной партии
-                            type.Cost = (requestType.CostItems / requestType.ItemCount) * type.ElementCount
-                                + (requestType.CostBanchs / requestType.BatchCount)
-                                + costKit;
-                        }
-                    }
-                }
-            }
+            //считаем стоимости
+            ElementImport.CalculateXLSXCosts();
 
             Dictionary<Int64, DefectedType> returnTypes = new Dictionary<Int64, DefectedType>();
             SetAsuContext();

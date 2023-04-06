@@ -7,6 +7,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Text;
 using System.IO;
 using Estimator.Models;
+using Estimator.Migrations;
 
 namespace Estimator.Helpers
 {
@@ -45,10 +46,9 @@ namespace Estimator.Helpers
                          
                             if (row.RowIndex > 1 | !importSettings.FirstRowIsHeader)
                             {
-                                    if(!importSettings.UseLastRowNumber | importSettings.UseLastRowNumber & row.RowIndex>importSettings.LastRowNumber)
+                                    if(!importSettings.UseLastRowNumber |  row.RowIndex <= importSettings.LastRowNumber)
                                     {
 
-                               
                                         elementType = new XLSXElementType();
 
                                     foreach (Cell cell in row.Elements<Cell>())
@@ -58,6 +58,10 @@ namespace Estimator.Helpers
                                         string refName = importSettings.ElementNameColumn.ToString() + row.RowIndex.ToString();
                                         string refKey = importSettings.ElementTypeKeyColumn.ToString() + row.RowIndex.ToString();
                                         string refCount = importSettings.ElementCountColumn.ToString() + row.RowIndex.ToString();
+                                        string refPrice = importSettings.ElementPriceColumn.ToString() + row.RowIndex.ToString();
+                                        string refKitPrice = importSettings.ElementKitPriceColumn.ToString() + row.RowIndex.ToString();
+                                        string refContractorPrice = importSettings.ElementContractorPriceColumn.ToString() + row.RowIndex.ToString();
+
                                         // запоминаем номер строки
                                         elementType.RowNum = (int)row.RowIndex.Value;
 
@@ -70,7 +74,33 @@ namespace Estimator.Helpers
                                         {
                                             elementType.ElementTypeKey = getCellvalue(cell, sharedStringTable);
                                         }
-                                    
+                                        else if(cell.CellReference.Value.ToString() ==refPrice)
+                                        {
+                                            decimal d= 0 ;
+                                            if (importSettings.ImportElementPrice)
+                                            {
+                                                decimal.TryParse ( getCellvalue(cell, sharedStringTable),out d);
+                                            }
+                                            elementType.ElementPrice = 0;
+                                        }
+                                        else if (cell.CellReference.Value.ToString() == refKitPrice)
+                                        {
+                                            decimal d = 0;
+                                            if (importSettings.ImportElementКitPrice)
+                                            {
+                                                decimal.TryParse(getCellvalue(cell, sharedStringTable), out d);
+                                            }
+                                            elementType.ElementKitPrice  = 0;
+                                        }
+                                        else if (cell.CellReference.Value.ToString() == refContractorPrice)
+                                        {
+                                            decimal d = 0;
+                                            if (importSettings.ImportElementContractorPrice)
+                                            {
+                                                decimal.TryParse(getCellvalue(cell, sharedStringTable),out d);
+                                            }
+                                            elementType.ElementContractorPrice = 0;
+                                        }
                                         else if (cell.CellReference.Value.ToString() == refCount)
                                         {
                                             int i;

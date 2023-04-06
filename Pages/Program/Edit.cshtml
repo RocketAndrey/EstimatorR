@@ -2,24 +2,73 @@
 @model Estimator.Pages.Program.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование трудоёмкости операции";
 }
+<div class="container">
+    <div class="form-row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="./Index">Программы испытаний</a></li>
+                    @{
+                        if (Model?.TestChainItem?.ElementType?.Program != null)
+                        {
+                            <li class="breadcrumb-item"><a asp-page="./Index" asp-route-id="@Model.TestChainItem.ElementType.ProgramID">@Model.TestChainItem.ElementType.Program.Name</a></li>
+                        }
+                        if (Model?.TestChainItem?.ElementType != null)
+                        {
+                            <li class="breadcrumb-item">
+                                <a asp-page="./Index" asp-route-id="@Model.TestChainItem.ElementType.ProgramID" asp-route-elementTypeID="@Model.TestChainItem.ElementTypeID">@Model.TestChainItem.ElementType.Name</a>
+                            </li>
+                        }
+                    }
+                    <li class="breadcrumb-item active">@Model.HeaderText</li>
 
-<h4>@Model.TestChainItem.ElementType.Name </h4>
-<hr />
 
-<h4>@Model.HeaderText</h4>
-<hr />
+                </ol>
+            </nav>
+        </div>
+    </div>
 
-<div class="row">
-    @foreach (var chainitem in Model.TestChainItem.ElementType.ChainItems)
-    {
-        <a asp-page="./Edit"
-           asp-route-testChainItemID="@chainitem.TestChainItemID" title="@chainitem.Operation.Name">
-            @chainitem.Operation.Code |
-        </a>
-    }
+  @*  <div class="form-row">
+        <div class="col">
+            <h4>@Model.TestChainItem.ElementType.Name </h4>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            <h4>@Model.HeaderText</h4>
+        </div>
+    </div>
+*@
+    <div class="form-row">
+        <div class="col">
+        @foreach (var chainitem in Model.TestChainItem.ElementType.ChainItems)
+            {   
+                  @if (Model.TestChainItem.TestChainItemID == chainitem.TestChainItemID)
+                {
+                    <b>
+                        <a asp-page="./Edit"
+                   asp-route-testChainItemID="@chainitem.TestChainItemID" title="@chainitem.Operation.Name">
+                            @chainitem.Operation.Code |
+                        </a>
+                        </b>
+                }
+                else
+                {
+                <a asp-page="./Edit"
+                   asp-route-testChainItemID="@chainitem.TestChainItemID" title="@chainitem.Operation.Name">
+                    @chainitem.Operation.Code |
+                </a>
+                }
+            }
+            </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+
     <form method="post">
+
         <table class="table">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.TestActionViewList[0].QualificationName)</th>
@@ -68,16 +117,18 @@
             </tr>
         </table>
 
+        <div class="btn-group" role="group" aria-label="Basic example">
 
         <a asp-page="./Index"
            asp-route-id="@Model.TestChainItem.ElementType.ProgramID" asp-route-elementTypeID="@Model.TestChainItem.ElementTypeID"
-           class="btn btn-primary">
+               class="btn btn-outline-primary">
             к списку
         </a>
-        <input type="submit" value="Сохранить" class="btn btn-primary" />
-        
+        <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
+        </div>
     </form>
-
+        </div>
+    </div>
 </div>
 
 @section Scripts {

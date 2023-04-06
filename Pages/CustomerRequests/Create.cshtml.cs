@@ -33,7 +33,7 @@ namespace Estimator.CustomerRequests
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string mode)
         {
             if (!ModelState.IsValid)
             {
@@ -106,7 +106,17 @@ namespace Estimator.CustomerRequests
 
             num = _context.SaveChanges();
 
-            return RedirectToPage("./Edit", new { id = id });
+       
+
+            if ((mode ?? "") == "import")
+            {
+                return RedirectToPage("./import", new { id = id });
+            }
+            else
+            {
+                return RedirectToPage("./Edit", new { id = id });
+
+            }
 
 
         }

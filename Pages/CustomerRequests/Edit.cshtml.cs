@@ -14,22 +14,23 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.CustomerRequests
 {
-   
+
     public class EditModel : CustomerRequestPageModel
     {
         public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
-            
+
         }
         public ElementImport ElementImport;
         public TestProgram ChildProgram;
-               public async Task<IActionResult> OnGetAsync(int? id,int? parentid)
+        public string strRate; 
+        public async Task<IActionResult> OnGetAsync(int? id, int? parentid)
         {
-            if (id == null & parentid==null )
+            if (id == null & parentid == null)
             {
                 return NotFound();
             }
-            if ((parentid?? 0) > 0)
+            if ((parentid ?? 0) > 0)
             {
                 id = CreateRequestFromParent(parentid.Value);
                 return RedirectToPage("./edit", new { id = id });
@@ -41,12 +42,15 @@ namespace Estimator.Pages.CustomerRequests
                     .ThenInclude(c => c.ElementntTypes)
                 .Include(c => c.RequestElementTypes)
                     .ThenInclude(c => c.ElementType)
-                .Include(c=>c.Program)
-                    .ThenInclude (c=>c.Templates)
+                .Include(c => c.Program)
+                    .ThenInclude(c => c.Templates)
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
             ElementImport = _context.ElementImports
+                   .Include(c=>c.XLSXElementTypes)     
                    .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+            
+            strRate = CustomerRequest.Rate.ToString(); 
 
             // запролняем типы элементов
             PopulateAssignedElementTypes(CustomerRequest);
@@ -59,7 +63,7 @@ namespace Estimator.Pages.CustomerRequests
             }
             // Добавляем типы элементов для новой заявки
 
-            ViewData["CustomerID"] = new SelectList(_context.Customers.OrderBy (e=>e.Name), "CustomerID", "Name");
+            ViewData["CustomerID"] = new SelectList(_context.Customers.OrderBy(e => e.Name), "CustomerID", "Name");
             ViewData["TestProgramID"] = new SelectList(_context.TestPrograms, "TestProgramID", "Name");
             ViewData["TestProgramTemplateID"] = new SelectList(CustomerRequest.Program.Templates, "TestProgramTemplateID", "TemplateName");
 
@@ -89,8 +93,8 @@ namespace Estimator.Pages.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
-                .Include(c=>c.Program)
-                    .ThenInclude (e=>e.Templates)
+                .Include(c => c.Program)
+                    .ThenInclude(e => e.Templates)
                 .Include(c => c.RequestElementTypes)
                     .ThenInclude(c => c.ElementType)
                   .Include(c => c.RequestElementTypes)
@@ -116,18 +120,20 @@ namespace Estimator.Pages.CustomerRequests
                 i => i.RequestNumber,
                 i => i.RequestDate,
                 i => i.CustomerID,
-                 i => i.Description, i=>i.UseTemplate,i=>i.TestProgramTemplateID)
+                 i => i.Description, i => i.UseTemplate, i => i.TestProgramTemplateID, i => i.StringRate)
                 )
             {
-                UpdateAssignedElementTypes(elementTypes, requestToUpdate);
-
+                if (!CustomerRequest.UseImport)
+                {
+                    UpdateAssignedElementTypes(elementTypes, requestToUpdate);
+                }
                 if (requestToUpdate.Program.AllowEditChain)
                 {
                     UpdateRequestOperations(requestOperationGroupViews, requestToUpdate);
                 }
                 await _context.SaveChangesAsync();
 
-                return RedirectToPage("./edit", new {id = id });
+                return RedirectToPage("./edit", new { id = id });
             }
             else
             {
@@ -140,7 +146,21 @@ namespace Estimator.Pages.CustomerRequests
 
         }
 
-
+        public bool  useImport
+        {
+            get 
+            {
+                // вот это все надо чтобы корректно отображались старые заявки
+                if (!CustomerRequest.UseImport)
+                {
+                    if (ElementImport?.XLSXElementTypes?.Count >0)
+                    {
+                        return true;
+                    }    
+                }
+                return CustomerRequest.UseImport; 
+            }
+        }
 
         public void UpdateAssignedElementTypes(AssignedRequestElementType[] elementTypes, CustomerRequest customerRequestToUpdate)
         {

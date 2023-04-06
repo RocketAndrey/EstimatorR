@@ -4,13 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
+
 namespace Estimator.Models
 {
     public class XLSXElementType
     {
+        private decimal _price;
+        private decimal _kitPrice;
+        private decimal _contractorPrice; 
         public XLSXElementType()
         {
             InList = true;
+            ElementKitPrice  =0;
+            ElementPrice   = 0;
+            ElementContractorPrice  = 0;
         }
         public int ID { get; set; }
         public int ElementImportID { get; set; }
@@ -72,12 +80,32 @@ namespace Estimator.Models
         [NotMapped]
         [Display(Name = "Стоимость испытаний, руб.")]
         public decimal  Cost { get; set; }
+
+        [Display(Name = "Строка")]
         public int? RowNum { get; set; }
         /// <summary>
         /// Цена закупки,1 шт без НДС
         /// </summary>
-        [Display(Name = "Цена, руб.")]
+        [Display(Name = "Цена закупки, шт/руб.")]
         [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
         public decimal ElementPrice { get; set; }
+        /// <summary>
+        /// Цена оснастки,1 шт без НДС
+        /// </summary>
+        [Display(Name = "Цена оснастки, партия/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ElementKitPrice 
+        {
+            get;set;
+        }
+        /// <summary>
+        /// Цена оснастки,1 шт без НДС
+        /// </summary>
+        [Display(Name = "Цена сторонних работ, партия/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ElementContractorPrice { get; set; }
     }
 }

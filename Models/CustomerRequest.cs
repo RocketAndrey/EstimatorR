@@ -1,4 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using Microsoft.AspNetCore.Identity;
+using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +14,7 @@ namespace Estimator.Models
     public class CustomerRequest
 
     {
+        private decimal rate;
         private List<RequestOperationLaborSummary> _operationSummary;
         private List<RequestOperationGroup> _operationGroups;
         public CustomerRequest()
@@ -19,10 +22,12 @@ namespace Estimator.Models
             CompanyHistory = new CompanyHistory();
             RequestDate = DateTime.Now;
             UseTemplate = false;
+            rate = 1;
+            UseImport = true; 
         }
 
         public int CustomerRequestID { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Введите номер заявки!")]
         [StringLength(50)]
         [Display(Name = "№ исх.")]
         public string RequestNumber { get; set; }
@@ -38,12 +43,64 @@ namespace Estimator.Models
         /// Используется при обработке новой заявки
         /// </summary>
         public bool IsProceed { get; set; }
+        [Display(Name = "Программа испытаний")]
         public int TestProgramID { get; set; }
         public TestProgram Program { get; set; }
-
+        [Display(Name = "Заказчик")]
         public int CustomerID { get; set; }
         public Customer Customer { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
+        //[Range(typeof(decimal), "0,0", "100,0", ErrorMessage = "Наименьшее значение- 0, наибольшее 100, в качестве разделителя дробной и целой части используется запятая")]
+        public decimal Rate
+        {
+            get
+            {
+                return rate == 0 ? 1 : rate;
+            }
+            set
+            {
+                rate = value == 0 ? 1 : value;
+                if (rate<0)  rate = 0;
+                if (rate>100) rate = 100;
 
+            }
+        }
+        /// <summary>
+        /// строковое значение к-та сложности для правильного отображения в форме
+        /// </summary>
+        [NotMapped]
+        [Display(Name = "Коэффициент сложности")]
+        [Required(ErrorMessage = "Введитe число с плавающей точкой")]
+        [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$", ErrorMessage = "Введите число в формате числа с плавающей запятой")]
+        [DisplayFormat(DataFormatString = "{0:F4}")]
+    
+        public string StringRate 
+        {
+            get
+            {
+                return string.Format("{0:f4}", Rate);
+               
+            }
+             set
+            {
+                decimal outputValue; 
+               if ( decimal.TryParse (value,out outputValue))
+                {
+                    Rate = outputValue;
+                }
+                
+            }
+
+        }
+
+        [Display(Name = "Поэлементный расчёт")]
+        public bool  UseImport
+        {
+            get;set;
+        }
         public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
 
 

@@ -2,36 +2,75 @@
 @model Estimator.Pages.ElementKey.IndexModel
 
 @{
-    ViewData["Title"] = "Ключи";
+    ViewData["Title"] = "Ключи для " + Html.DisplayFor(modelItem => Model.ElementType.Name);
 }
 
-    <h4> @Html.DisplayFor(modelItem => Model.ElementType.Name)</h4>
+   
+<div class="container">
+    <div class="form-row">
+        <div class="col">
 
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../Program/Index">Программы испытаний</a></li>
+                    @{
+                        if (Model?.ElementType?.Program != null)
+                        {
+                            <li class="breadcrumb-item"><a asp-page="../Program/Index" asp-route-id="@Model.ElementType.ProgramID">@Model.ElementType.Program.Name</a></li>
+                        }
+                        if (Model?.ElementType != null)
+                        {
+                            <li class="breadcrumb-item">
+                                <a asp-page="../Program/Index" asp-route-id="@Model.ElementType.ProgramID" asp-route-elementTypeID="@Model.ElementType.ElementTypeID">@Model.ElementType.Name</a>
+                            </li>
+                        }
+                    }
+                    <li class="breadcrumb-item active" >ключи</li>
+          
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="form-row"> 
+        <div class = "col">  <h4> @Html.DisplayFor(modelItem => Model.ElementType.Name)</h4></div>
+    </div>
+     <div class="form-row"> 
+        <div class="col">
+            <a asp-page="Create" class="btn btn-outline-primary" asp-route-typeID="@Model.ElementType.ElementTypeID">Создать ключ</a>
+            
+        </div>
+    </div>
+     <div class="form-row"> 
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementType.Keys[0].Key)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ElementType.Keys)
+                    {
+                        <tr>
+
+                            <td>
+                                <a asp-page="./Create" asp-route-typeID="@Model.ElementType.ElementTypeID" asp-route-keyID="@item.ElementKeyID"> @Html.DisplayFor(modelItem => item.Key)</a>
+
+                            </td>
+                            <td>
+                                <a asp-page="./Delete" asp-route-id="@item.ElementKeyID"><img height="32" width="32" src="~/delete.png" /></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    </div>
+
+</div>
 <p>
-    <a asp-page="Create" asp-route-typeID="@Model.ElementType.ElementTypeID" >Новый ключ</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
 
-            <th>
-                @Html.DisplayNameFor(model => model.ElementType.Keys[0].Key)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.ElementType.Keys) {
-        <tr>
-               
-            <td>
-                <a asp-page="./Create" asp-route-typeID="@Model.ElementType.ElementTypeID" asp-route-keyID="@item.ElementKeyID"> @Html.DisplayFor(modelItem => item.Key)</a>
-     
-            </td>
-            <td>
-                <a asp-page="./Delete" asp-route-id="@item.ElementKeyID"><img  height="32" width="32" src="~/delete.png"/></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

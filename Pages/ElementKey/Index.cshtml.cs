@@ -32,6 +32,7 @@ namespace Estimator.Pages.ElementKey
 
             ElementType = await _context.ElementTypes
                 .Include(e => e.Keys)
+                .Include(e=>e.Program)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e=>e.ElementTypeID==id);
             if(ElementType==null)

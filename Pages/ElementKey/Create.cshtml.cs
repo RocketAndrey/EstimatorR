@@ -37,14 +37,17 @@ namespace Estimator.Pages.ElementKey
                 {
                     ElementTypeID = typeID ?? 0,
                     ElementType = _context.ElementTypes
+                    .Include(e=>e.Program)
                     .FirstOrDefault(e => e.ElementTypeID == typeID)
                 };
+                
             }
             else
             {
 
                 ElementKey =  _context.ElementKey
                     .Include(e => e.ElementType)
+                        .ThenInclude(e=>e.Program)
                     .FirstOrDefault(m => m.ElementKeyID == keyID);
             }
             if (ElementKey.ElementType==null)

@@ -4,180 +4,197 @@
 @model Estimator.Pages.CustomerRequests.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование заявки";
 }
 
-<table class="table">
-    <tr>
-        <td> <h4>Редактирование заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></td>
-        <td align="right"><a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/contract2.png" width="32" height="32" /></a></td>
 
-    </tr>
-</table>
 
-<hr />
 <form method="post">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="CustomerRequest.CustomerRequestID" />
-    <table class="table">
-        <tr>
-            <td>
 
-                <label asp-for="CustomerRequest.RequestNumber" class="control-label"></label>
+    <div class="container">
 
-            </td>
-            <td>
+        <div class="form-group row">
+            <div class="col-11">   <h4>Редактирование заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4> </div>
+            <div class="col align-items-end">
+                <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID" data-toggle="tooltip" data-placement="top" title="Калькуляция стоимости"><img src="~/contract2.png" width="32" height="32" /></a>
 
-                <input asp-for="CustomerRequest.RequestNumber" class="form-control" />
-                <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
-
-            </td>
-            <td>
-
-                <label asp-for="CustomerRequest.RequestDate" class="control-label"></label>
-
-
-            </td>
-            <td>
-
-                <input asp-for="CustomerRequest.RequestDate" class="form-control" />
-                <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label asp-for="CustomerRequest.Program.Name" class="control-label"></label>
-            </td>
-            <td>
-                <select asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID" disabled="disabled"></select>
-                <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
-            </td>
-            <td><label asp-for="CustomerRequest.Customer.Name" class="control-label"></label></td>
-            <td>
-                <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
-                <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-
-                <label asp-for="CustomerRequest.Description" class="control-label"></label>
-
-
-            </td>
-            <td colspan="3">
-
-                <textarea asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3"></textarea>
-                <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
-
-            </td>
-        </tr>
+             </div>
+        </div>
         @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
         {
-        <tr>
-            <td colspan="4">
-                <b>
-                    <a asp-page="./edit" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
-                        <img src="~/connect.png" width="32" height="32" /> Родительская заявка: @Model.CustomerRequest.ParentCustomerRequestID
-                    </a>
-                </b>
-            </td>
-        </tr>
+            <div class="form-group row">
+                <div class="col">
+                    <b>
+                        <a asp-page="./edit" asp-route-id="@Model.CustomerRequest.ParentCustomerRequestID">
+                            <img src="~/connect.png" width="20" height="20" /> Родительская заявка: @Model.CustomerRequest.ParentCustomerRequestID
+                        </a>
+                    </b>
+                </div>
+            </div>
         }
         @if (Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
         {
-        <tr>
-            <td colspan="4">
-                <b>
-                    <a asp-page="./edit" asp-route-id="@Model.ChildCustomerReguestID">
-                        <img src="~/connect.png" width="32" height="32" /> Дочерняя заявка: @Model.ChildCustomerReguestID
-                    </a>
-                </b>
-            </td>
-        </tr>
+            <div class="form-group row">
+                <div class="col">
+                    <b>
+                        <a asp-page="./edit" asp-route-id="@Model.ChildCustomerReguestID">
+                            <img src="~/connect.png" width="20" height="20" /> Дочерняя заявка: @Model.ChildCustomerReguestID
+                        </a>
+                    </b>
+                </div>
+            </div>
         }
-    </table>
-
-    <a href="#hiddenList" onclick="viewDIV('hiddenList'); return false">
-        <h4>Типы ЭКБ:</h4>
-    </a>
+        <div class="form-group row">
 
 
+             <div class="col">
+                @*<label for="inputRequestName">@Html.DisplayNameFor(m=>m.CustomerRequest.RequestNumber) </label>*@
+                <input id="inputRequestName" asp-for="CustomerRequest.RequestNumber" class="form-control" placeholder=@Html.DisplayNameFor(model => model.CustomerRequest.RequestNumber) />
+                <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
+             
+            </div>     
+      
+            <div class="col">
+                @*<label for="inputRequestdate">@Html.DisplayNameFor(m=>m.CustomerRequest.RequestDate) </label>*@
+                <input id="inputRequestdate" asp-for="CustomerRequest.RequestDate" class="form-control" placeholder=@Html.DisplayNameFor(model => model.CustomerRequest.RequestDate) />
+                <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div id="hiddenList" style="display:block;">
+        <div class="form-group row">
+
+ 
+             <div class="col">
+                @*<label for="inputProgram">@Html.DisplayNameFor(m=>m.CustomerRequest.TestProgramID) </label>*@
+
+                <select id="inputProgram" asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID" disabled="disabled"></select>
+                <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
+             </div>     
+      
+            <div class="col">
+                @*<label for="inputCustomer">@Html.DisplayNameFor(m=>m.CustomerRequest.CustomerID) </label>*@
+                <select id="inputCustomer" asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+                <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
 
 
-        <table class="table">
-            <tr>
-                <td colspan="2">
+            <div class="col">
+                @*<label for="inputDescription">@Html.DisplayNameFor(m=>m.CustomerRequest.CustomerID) </label>*@
+                <textarea id="inputDescription" asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3" placeholder=@Html.DisplayNameFor(model => model.CustomerRequest.Description)></textarea>
+                <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
+            </div>
+
+          
+        </div>
+        <div class="form-group row">
+
+            <div class="col">
+                <label for="inputrate">@Html.DisplayNameFor(m=>m.CustomerRequest.StringRate ) </label>
+
+                <input id="inputrate" asp-for="CustomerRequest.StringRate" class="form-control" placeholder=@Html.DisplayNameFor(m=>m.CustomerRequest.StringRate) />
+                <span asp-validation-for="CustomerRequest.StringRate" class="text-danger"></span>
+                <small id="inputrateHelpBlock" class="form-text text-muted">
+                    Диапазон значений от 0,00 до 100,00,  разделитель разрядов - запятая.
+                </small>
+            </div>
+
+
+        </div>
+      <div class="form-group row" >
+            <div class ="col-9">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" asp-for="@Model.useImport" class="custom-control-input" id="customSwitchUseImport" onclick="ShowImport()">
+                    <label class="custom-control-label" for="customSwitchUseImport">@Html.DisplayNameFor(mosel=>Model.CustomerRequest.UseImport) </label>
+                </div>
+            </div>
+                <div class="col col-auto">
+                <div id="divImportIcon" style="display:none">
                     @if (Model.ElementImport != null)
+                    {
+                        @if (Model.ElementImport.FileUploaded)
+                        {
+                            <a href="@Model.ElementImport.FileWWWPath"><img src="~/xlsx.png" width="32" height="32" /></a>
+                        }
+                    }
+                </div>
+                </div>
+                <div class="col col-auto">
+                    <div id="divImportbutton" style="display:block">
+                @{
+                    string btnText = "Импортировать";
+                    string dis = Model.useImport ? "" : "disabled";
+                
+                     @if (Model.ElementImport != null)
                     {
                     @if (Model.ElementImport.FileUploaded)
                         {
-                    <a href="@Model.ElementImport.FileWWWPath" + '.xlsx'><img src="~/xlsx.png" width="32" height="32" /></a>
+                            btnText = "Перечень";
+
                         }
+  
                     }
-                </td>
-                <td align="right" colspan="2">
-                    @if (Model.ElementImport != null)
-                    {
-                    @if (Model.ElementImport.FileUploaded)
+                  } 
+                <a  id="importButton" asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
+                   @btnText
+                </a>
+                </div>
+                </div>
+           
+      </div>
+      
+        <div class="form-group row">
+            <div class="col">
+             
+                <div id="hiddenList">
+                    <a href="#hiddenOper" onclick="viewDIV('hiddenList'); return false">
+                        <h4>Типы ЭКБ:</h4>
+                    </a>
+                    <table class="table">
+
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount), <b>N<sub>парт</sub> </b> </th>
+                            <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].ItemCount), <b>N<sub>штук</sub> </b> </th>
+                            <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].MissingKitCount), <b>N<sub>осн</sub> </b> </th>
+                        </tr>
+
+                        @for (int i = 0; i < Model.AssignedElementsList.Count; i++)
                         {
-                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary ">
-                        Перечень
-                    </a>
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="elementTypes[@i].RequestElementTypeID" value="@Model.AssignedElementsList[i].RequestElementTypeID" />
+                                    @Html.DisplayFor(model => model.AssignedElementsList[i].Name)
+                                </td>
+                                <td>
+                                    <input asp-for="@Model.AssignedElementsList[i].BatchCount" class="form-control" name="elementTypes[@i].BatchCount" />
+                                    <span asp-validation-for="AssignedElementsList[i].BatchCount" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="@Model.AssignedElementsList[i].ItemCount" name="elementTypes[@i].ItemCount" class="form-control" />
+                                    <span asp-validation-for="AssignedElementsList[i].ItemCount" class="text-danger"></span>
+
+                                </td>
+                                <td>
+                                    <input asp-for="@Model.AssignedElementsList[i].MissingKitCount" name="elementTypes[@i].MissingKitCount" class="form-control" />
+                                    <span asp-validation-for="AssignedElementsList[i].MissingKitCount" class="text-danger"></span>
+
+                                </td>
+                            </tr>
                         }
-                        else
-                        {
-                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
-                        Импортировать
-                    </a>
-                        }
-                    }
-                    else
-                    {
-                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
-                        Импортировать
-                    </a>
-                    }
-                </td>
-            </tr>
+                    </table>
 
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].Name)</th>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].BatchCount), <b>N<sub>парт</sub> </b> </th>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].ItemCount), <b>N<sub>штук</sub> </b> </th>
-                <th>@Html.DisplayNameFor(model => model.AssignedElementsList[0].MissingKitCount), <b>N<sub>осн</sub> </b> </th>
-            </tr>
-
-            @for (int i = 0; i < Model.AssignedElementsList.Count; i++)
-            {
-            <tr>
-                <td>
-                    <input type="hidden" name="elementTypes[@i].RequestElementTypeID" value="@Model.AssignedElementsList[i].RequestElementTypeID" />
-                    @Html.DisplayFor(model => model.AssignedElementsList[i].Name)
-                </td>
-                <td>
-                    <input asp-for="@Model.AssignedElementsList[i].BatchCount" class="form-control" name="elementTypes[@i].BatchCount" />
-                    <span asp-validation-for="AssignedElementsList[i].BatchCount" class="text-danger"></span>
-                </td>
-                <td>
-                    <input asp-for="@Model.AssignedElementsList[i].ItemCount" name="elementTypes[@i].ItemCount" class="form-control" />
-                    <span asp-validation-for="AssignedElementsList[i].ItemCount" class="text-danger"></span>
-
-                </td>
-                <td>
-                    <input asp-for="@Model.AssignedElementsList[i].MissingKitCount" name="elementTypes[@i].MissingKitCount" class="form-control" />
-                    <span asp-validation-for="AssignedElementsList[i].MissingKitCount" class="text-danger"></span>
-
-                </td>
-            </tr>
-            }
-        </table>
-
+                </div>
+            </div>
+        </div>
+      
     </div>
+
 
     @if (Model.CustomerRequest.Program.AllowEditChain)
     {
@@ -192,11 +209,15 @@
     <table class="table">
         <tr>
             <td>
-                <input asp-for="@Model.CustomerRequest.UseTemplate" class="form-check-inline" onclick="EnableDisableTextBox('CustomerRequest.TestProgramTemplateID',this);" />
-                Использовать шаблон
+                @*<input asp-for="@Model.CustomerRequest.UseTemplate" class="form-check-inline" onclick="EnableDisableTextBox('CustomerRequest.TestProgramTemplateID',this);" />*@
+                
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" asp-for="@Model.CustomerRequest.UseTemplate" class="custom-control-input" id="customSwitchUseTemplate" onclick="EnableDisableTextBox('selectTestProgramTemplateID',this);">
+                            <label class="custom-control-label" for="customSwitchUseTemplate">Использовать шаблон </label>
+                        </div>
             </td>
             <td>
-                <select disabled="disabled" asp-for="CustomerRequest.TestProgramTemplateID" id="CustomerRequest.TestProgramTemplateID" class="form-control" asp-items="ViewBag.TestProgramTemplateID"></select>
+                <select disabled="disabled" asp-for="CustomerRequest.TestProgramTemplateID" id="selectTestProgramTemplateID" class="form-control" asp-items="ViewBag.TestProgramTemplateID"></select>
             </td>
         </tr>
     </table>
@@ -231,13 +252,19 @@
                     @Html.DisplayFor(model => model.RequestOperationGroupViews[i].Name)
                 </td>
                 <td>
-                    <input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />
+                            @*<input asp-for="@Model.RequestOperationGroupViews[i].IsExecute" class="form-check-inline" name="requestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');" />*@
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" asp-for="@Model.RequestOperationGroupViews[i].IsExecute" name="RequestOperationGroupViews[@i].IsExecute" class="custom-control-input" id="RequestOperationGroupViews[@i].IsExecute" onclick="showSelected('RequestOperationGroupViews[@i].OperationID');">
+                                <label class="custom-control-label" for="RequestOperationGroupViews[@i].IsExecute"> </label>
+            </div>
 
-                </td>
+                
+                        </td>
                 <td>
                     <input asp-for="@Model.RequestOperationGroupViews[i].ExecuteCount" name="RequestOperationGroupViews[@i].ExecuteCount" class="form-control" />
                     <span asp-validation-for="@Model.RequestOperationGroupViews[@i].ExecuteCount" class="text-danger"></span>
 
+                            
                 </td>
                 <td>
                     <input asp-for="@Model.RequestOperationGroupViews[i].SampleCount" name="RequestOperationGroupViews[@i].SampleCount" class="form-control" />
@@ -252,13 +279,13 @@
     </div>
     }
 
-    <div class="form-group">
+    <div class="btn-group" role="group" aria-label="request">
 
         <a asp-page="./Index"
            class="btn btn-outline-primary ">
             К списку
-        </a>|
-        <input type="submit" value="Сохранить" class="btn btn-outline-primary" />|
+        </a>
+        <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
 
         @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID  ) > 0 & !Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))
     {
@@ -270,7 +297,12 @@
     }
 
     </div>
-
+    <script>
+        window.onload = function () {
+            ShowImport();
+        };
+      
+        </script>
 </form>
 
 
@@ -306,4 +338,15 @@
             txt.focus();
         }
     }
+    function ShowImport()
+    {
+        var chk = document.getElementById('customSwitchUseImport').checked;
+        
+        document.getElementById('divImportbutton').style.display = (chk) ? 'block' : 'none';
+        document.getElementById('divImportIcon').style.display = (chk) ? 'block' : 'none';
+        document.getElementById('hiddenList').style.display = (chk) ? 'none' : 'block';
+        //alert(chk);
+        
+    }
+   
 </script>

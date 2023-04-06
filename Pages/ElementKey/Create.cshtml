@@ -2,36 +2,63 @@
 @model Estimator.Pages.ElementKey.CreateModel
 
 @{
-    ViewData["Title"] = "Ключ для элемента";
+    ViewData["Title"] = "Создание ключа для элемента";
 }
 
+<div class="container">
+    <div class="form-row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="./Index">Программы испытаний</a></li>
+                    @{
+                        if (Model?.ElementKey?.ElementType?.Program != null)
+                        {
+                            <li class="breadcrumb-item"><a asp-page="./Index" asp-route-id="@Model.ElementKey.ElementType.ProgramID">@Model.ElementKey.ElementType.Program.Name</a></li>
+                        }
+                        if (Model?.ElementKey?.ElementType != null)
+                        {
+                            <li class="breadcrumb-item">
+                                <a asp-page="./Index" asp-route-id="@Model.ElementKey.ElementType.ProgramID" asp-route-elementTypeID="@Model.ElementKey.ElementTypeID">@Model.ElementKey.ElementType.Name</a>
+                            </li>
+                        }
+                        <li class="breadcrumb-item active">
+                            Ключ
+                        </li>
+                    }
 
-<img height="32" width="32" src="~/key.png" />
-<br />
-<h4>Ключ для:&ensp;@Html.DisplayFor(modelItem => Model.ElementKey.ElementType.Name)</h4>
-<hr />
+
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col"><img height="32" width="32" src="~/key.png" /></div>
+        @*<div class="col-10"><h4>Ключ для:&ensp;@Html.DisplayFor(modelItem => Model.ElementKey.ElementType.Name)</h4></div>*@
+    </div>
+
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+        
                 <input type="hidden" asp-for="ElementKey.ElementKeyID" />
-                <input type="hidden" asp-for="ElementKey.ElementTypeID" />
-            </div>
+                
             <div class="form-group">
                 <label asp-for="ElementKey.Key" class="control-label"></label>
                 <input asp-for="ElementKey.Key" class="form-control" />
                 <span asp-validation-for="ElementKey.Key" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                 <a asp-page="Index" class="btn btn-outline-primary" asp-route-id="@Model.ElementKey.ElementTypeID">К списку</a>!
+
+            <div class="btn-group">
+                 <a asp-page="Index" class="btn btn-outline-primary" asp-route-id="@Model.ElementKey.ElementTypeID">Список</a>
                 <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
             </div>
         </form>
     </div>
 </div>
 
-
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

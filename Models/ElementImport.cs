@@ -10,6 +10,7 @@ namespace Estimator.Models
 {
     public enum ColumnNames
     {
+        
         A=1,B=2,C=3,D=4,E=5,F=6,G=7,H=8,I=9,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z
     }
     public class ElementImport
@@ -20,43 +21,40 @@ namespace Estimator.Models
             ElementTypeKeyColumn = ColumnNames.C;
             ElementCountColumn = ColumnNames.D;
             ElementPriceColumn = ColumnNames.E;
-
+            ElementKitPriceColumn = ColumnNames.F;
+            ElementContractorPriceColumn = ColumnNames.G;
+        
             FirstRowIsHeader = true;
-            ImportElementPrice = false;
-            UseFirstRowNumber = true;
+            ImportElementPrice = true;
+
             FirstRowNumber = 2;
             UseLastRowNumber = false;
             LastRowNumber = 3;
         }
+      
         public int ElementImportID { get; set; }
         public int CustomerRequestID { get; set; }
         public CustomerRequest CustomerRequest { get; set; }
 
-        [Display(Name = "Импортировать цену элементов")]
-        public bool ImportElementPrice { get; set; }
+
 
         public bool FirstRowIsHeader { get; set; }
-        /// <summary>
-        /// Ипортировать с конкретной строки или с первой
-        /// </summary>
 
-        [Display(Name = "Импортировать с строки")]
-        public bool UseFirstRowNumber { get; set; }
 
         /// <summary>
         /// Номер первой строки Эксель при импортировании
         /// </summary>
         [Display(Name = "Номер первой строки")]
-        public int FirstRowNumber{get;set;}
-    
+        public int FirstRowNumber { get; set; }
+
         /// <summary>
         /// Импортировать до конкретной строки или до последней
         /// </summary>
-  
+
         [Display(Name = "Импортировать до строки")]
         public bool UseLastRowNumber { get; set; } = false;
         /// <summary>
-       
+
         /// Номер последней строки Эксель при импортировании
         /// </summary>
         [Display(Name = "Номер последней строки")]
@@ -70,13 +68,29 @@ namespace Estimator.Models
 
         [Display(Name = "Наименование")]
         public ColumnNames ElementNameColumn { get; set; }
-      
+
         [Display(Name = "Ключ")]
         public ColumnNames ElementTypeKeyColumn { get; set; }
         [Display(Name = "Колличество")]
+
         public ColumnNames ElementCountColumn { get; set; }
-        [Display(Name = "Цена")]
+
+        [Display(Name = "Импортировать цену элементов")]
+        public bool ImportElementPrice { get; set; }
+        [Display(Name = "Цена закупки")]
         public ColumnNames ElementPriceColumn { get; set; }
+
+        [Display(Name = "Импортировать цену оснастки")]
+        public bool ImportElementКitPrice { get; set; }
+        [Display(Name = "Цена оснастки")]
+        public ColumnNames ElementKitPriceColumn { get; set; }
+
+
+        [Display(Name = "Импортировать цену оснастки")]
+        public bool ImportElementContractorPrice { get; set; }
+        [Display(Name = "Цена соисполнитель")]
+        public ColumnNames ElementContractorPriceColumn { get; set; }
+
         public List<XLSXElementType> XLSXElementTypes { get; set; }
         /// <summary>
         /// файл загружен?
@@ -102,11 +116,11 @@ namespace Estimator.Models
             get
             {
                 if (DefectedTypes == null)
-                { 
+                {
                     return 0;
                 }
                 return DefectedTypes.Where(e => e.RFA).Count();
-              
+
             }
         }
         /// <summary>
@@ -120,7 +134,7 @@ namespace Estimator.Models
                 {
                     return 0;
                 }
-                return DefectedTypes.Where(e => e.NormTY).Sum(n=>n.DefectCount);
+                return DefectedTypes.Where(e => e.NormTY).Sum(n => n.DefectCount);
 
             }
         }
@@ -139,5 +153,36 @@ namespace Estimator.Models
 
             }
         }
+
+        /// <summary>
+        /// расчет стоимости поэлементно
+        /// </summary>
+        public void CalculateXLSXCosts()
+        {
+
+            this.XLSXElementTypes = this.XLSXElementTypes.OrderBy(s => s.RowNum).ToList();
+            // вычисляем стоимость испытаний 1 шт
+            foreach (XLSXElementType type in this.XLSXElementTypes)
+            {
+                foreach (RequestElementType requestType in CustomerRequest.RequestElementTypes)
+                {
+                    if (requestType.ElementTypeID == type.ElementTypeID)
+                    {
+                        type.ElementTypeName = requestType.ElementType.Name;
+                        if (requestType.ItemCount > 0 & requestType.BatchCount > 0)
+                        {
+                            decimal costKit = requestType.KitCount == 0 ? 0 : (!type.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
+                            //стоимость испытаний данной партии
+                            type.Cost = ((requestType.CostItems / requestType.ItemCount) * type.ElementCount
+                                + (requestType.CostBanchs / requestType.BatchCount)
+                                + costKit) * this.CustomerRequest.Rate;
+
+                        }
+                    }
+                }
+            }
+
+        }
+    
     }
 }

@@ -2,78 +2,61 @@
 @model Estimator.CustomerRequests.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать заявку";
 }
 
 <h4> Создание заявки</h4>
-<hr />
-<div class="row">
-   
+<br />
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-          
-            <table class="table">
-                <tr>
-                    <td>
+        
+            <div class="form-row">
+                <div class="form-group col-md-6">
+               
+                <label asp-for="CustomerRequest.RequestNumber" class="control-label" for="inputRequestNumber"></label>
 
-                        <label asp-for="CustomerRequest.RequestNumber" class="control-label"></label>
+                <input asp-for="CustomerRequest.RequestNumber" class="form-control" placeholder="№ исходящего" id="inputRequestNumber" />
+                <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                     <label asp-for="CustomerRequest.RequestDate" class="control-label"></label>
 
-                    </td>
-                    <td>
-
-                        <input asp-for="CustomerRequest.RequestNumber" class="form-control"  placeholder="№ исходящего"/>
-                        <span asp-validation-for="CustomerRequest.RequestNumber" class="text-danger"></span>
-
-                    </td>
-                    <td>
-
-                        <label asp-for="CustomerRequest.RequestDate" class="control-label"></label>
-
-                    </td>
-                    <td>
-
-                        <input asp-for="CustomerRequest.RequestDate" class="form-control" />
-                        <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label asp-for="CustomerRequest.Program.Name" class="control-label"></label>
-                    </td>
-                    <td>
-                        <select asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID" ></select>
-                        <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
-                    </td>
-                    <td><label asp-for="CustomerRequest.Customer.Name" class="control-label"></label></td>
-                    <td>
-                        <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
-                        <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-
-                        <label asp-for="CustomerRequest.Description" class="control-label"></label>
-
-
-                    </td>
-                    <td colspan="3">
-
-                        <textarea asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3" placeholder="Краткое описание заявки"></textarea>
-                        <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
-
-                    </td>
-                </tr>
-
-            </table>
-            <div class="form-group">
-                <a asp-page="Index" class="btn btn-outline-primary">К списку</a>
-                <input type="submit" value="Создать" class="btn btn-outline-primary" />
+                    <input asp-for="CustomerRequest.RequestDate" class="form-control" />
+                    <span asp-validation-for="CustomerRequest.RequestDate" class="text-danger"></span>
+                </div>
             </div>
-        </form>
-    </div>
 
+          
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                     <label asp-for="CustomerRequest.Program.Name" class="control-label"></label>
+            <select asp-for="CustomerRequest.TestProgramID" class="form-control" asp-items="ViewBag.TestProgramID"></select>
+            <span asp-validation-for="CustomerRequest.TestProgramID" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                <label asp-for="CustomerRequest.Customer.Name" class="control-label"></label>
+                 <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+                <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
+                </div>
+                
+            </div>
+
+            <div class="form-group">
+               
+            <label asp-for="CustomerRequest.Description" class="control-label"></label>
+             <textarea asp-for="CustomerRequest.Description" class="form-control" cols="50" rows="3" placeholder="Краткое описание заявки"></textarea>
+            <span asp-validation-for="CustomerRequest.Description" class="text-danger"></span>
+               
+            </div>
+          
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a asp-page="Index" class="btn btn-outline-primary">К списку</a>
+        <input type="submit" value="Создать" class="btn btn-outline-primary" />
+        <input type="submit" value="Создать и импортировать" class="btn btn-outline-success" asp-route-mode="import"/>
+        </div> 
+    
+        </form>
+  
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -338,9 +338,13 @@ namespace Estimator.Pages.CustomerRequests
                     continue;
                 }
 
-                XLSXElementType beforeItem = new XLSXElementType();
-                beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ElementName , itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID );
-                //Если предыдущий типономина найден и ему не присвоен тип
+                XLSXElementType beforeItem = null;
+                //если используем  данные предыдущих  импортов
+                if (this.ElementImport.UseLastCalculation)
+                {
+                    beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ElementName, itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID);
+                }
+               //Если предыдущий типономина найден и ему присвоен тип
                 if (!((beforeItem!=null? beforeItem.ElementTypeID:0) > 0))
                 {
                     // ищем в коллекции ключей
@@ -358,13 +362,12 @@ namespace Estimator.Pages.CustomerRequests
 
                     }
                 }
-                // тип присвоен
-                else 
+                // берем значения из ранее загруженного изделия
+                else
                 {
-                    // берем значения из ранее загруженного изделия
+                    
                     itemXLSX.ElementTypeID = beforeItem.ElementTypeID ;
-                    itemXLSX.ElementTypeKey = beforeItem.ElementTypeKey;
-                //    itemXLSX.RowNum = beforeItem.RowNum ;    
+                    itemXLSX.ElementTypeKey = beforeItem.ElementTypeKey;  
                     itemXLSX.ErrorMessage = "";
                     itemXLSX.Valid = true;
                     itemXLSX.BeforeUploadedXLSXElementTypeID = beforeItem.ID;

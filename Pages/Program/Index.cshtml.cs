@@ -23,7 +23,11 @@ namespace Estimator.Pages.Program
         public IList<ElementType> ElementTypesSort { get; set; }
         public ProgramIndexData ProgramData { get; set; }
         public int TestProgramID { get; set; }
+
+        public TestProgram SelectedProgram; 
         public int ElementTypeID { get; set; }
+
+        public ElementType SelectedElementType;
         public int ChainItemID { get; set; }
 
         public async Task OnGetAsync(int? id, int? elementTypeID)
@@ -49,20 +53,21 @@ namespace Estimator.Pages.Program
                 {
                     TestProgramID = id.Value;
                     // Instructor instructor = InstructorData.Instructors
-                    TestProgram program = ProgramData.Programs
+                    SelectedProgram = ProgramData.Programs
                         .Where(i => i.TestProgramID == id.Value).Single();
-                    ProgramData.Elements = program.ElementntTypes;
-                    ElementTypesSort = program.ElementntTypes.OrderBy(e => e.Order).ToList();
+                    ProgramData.Elements = SelectedProgram.ElementntTypes;
+                    ElementTypesSort = SelectedProgram.ElementntTypes.OrderBy(e => e.Order).ToList();
 
 
                 }
                 if (elementTypeID != null)
                 {
                     ElementTypeID = elementTypeID.Value;
-                    var selectedElenentType = ProgramData.Elements
+
+                     SelectedElementType = ProgramData.Elements
                         .Where(x => x.ElementTypeID == elementTypeID)
                         .Single();
-                    ProgramData.ChainItems = selectedElenentType.ChainItems.OrderBy(e => e.Order);
+                    ProgramData.ChainItems = SelectedElementType.ChainItems.OrderBy(e => e.Order);
                 }
 
             }
