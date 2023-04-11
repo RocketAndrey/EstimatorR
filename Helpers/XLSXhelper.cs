@@ -65,24 +65,28 @@ namespace Estimator.Helpers
                                         // запоминаем номер строки
                                         elementType.RowNum = (int)row.RowIndex.Value;
 
-
+                                        //Наименование элемента
                                         if (cell.CellReference.Value.ToString() == refName)
                                         {
                                             elementType.ElementName = getCellvalue(cell, sharedStringTable);
                                         }
+                                        //ключ элемента
                                         else if (cell.CellReference.Value.ToString() == refKey)
                                         {
                                             elementType.ElementTypeKey = getCellvalue(cell, sharedStringTable);
                                         }
+                                        //цена 1 элемента
                                         else if(cell.CellReference.Value.ToString() ==refPrice)
                                         {
                                             decimal d= 0 ;
                                             if (importSettings.ImportElementPrice)
                                             {
+                                                // если не парсится то 0.00
                                                 decimal.TryParse ( getCellvalue(cell, sharedStringTable),out d);
                                             }
                                             elementType.ElementPrice = 0;
                                         }
+                                        //стоимость остнастки
                                         else if (cell.CellReference.Value.ToString() == refKitPrice)
                                         {
                                             decimal d = 0;
@@ -92,6 +96,7 @@ namespace Estimator.Helpers
                                             }
                                             elementType.ElementKitPrice  = 0;
                                         }
+                                        //стоимость сторонних 
                                         else if (cell.CellReference.Value.ToString() == refContractorPrice)
                                         {
                                             decimal d = 0;
@@ -101,6 +106,7 @@ namespace Estimator.Helpers
                                             }
                                             elementType.ElementContractorPrice = 0;
                                         }
+                                        //колличество
                                         else if (cell.CellReference.Value.ToString() == refCount)
                                         {
                                             int i;
@@ -110,7 +116,7 @@ namespace Estimator.Helpers
                                         
                                     }
                                     // если колличествов данной строке = 0 то нефиг его и импортировать
-                                    if (elementType.ElementCount > 0)
+                                    if (elementType.ElementCount > 0 && String.IsNullOrEmpty(elementType.ElementName) )
                                     {
                                         returnValue.Add(elementType);
                                     }

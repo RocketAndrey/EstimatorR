@@ -7,6 +7,34 @@
 <form method="post">
     <input type="hidden" asp-for="SelectedTab" />
     <div class="container">
+      <div class="form-row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="./Index">Заявки</a></li>
+                        <li class="breadcrumb-item "><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID">@Model.CustomerRequest.CustomerRequestID</a></li>
+                        @{
+                            if (Model.CustomerRequest.UseImport)
+                            {
+                                <li class="breadcrumb-item">
+                                    <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
+                                        Импорт перечня
+                                    </a>
+                                </li>
+
+                            }
+                        }
+                        <li class="breadcrumb-item active">
+                            <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
+                                Калькуляция
+                            </a>
+                        </li>
+
+
+                    </ol>
+                </nav>
+            </div>
+        </div>
         <div class="row">
             <div class="col-11"><h4>Расчёт стоимости испытаний заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></div>
             <div class="col text-right">
@@ -129,9 +157,76 @@
 
 
                             </tr>
-
                             <tr>
-                                <td>2</td>
+                                <td>0100</td>
+                                <td>@Html.DisplayNameFor(model=>model.CustomerRequest.MaterialCost)</td>
+                                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ParentCustomerRequest.MaterialCost.ToString("N2")
+                                    </td>
+                                }
+                                <td>@Model.CustomerRequest.MaterialCost.ToString("N2") </td>
+                                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ChildCustomerRequest.MaterialCost.ToString("N2")
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>0101</td>
+                                <td>@Html.DisplayNameFor(model=>model.CustomerRequest.AccessoriesCost)</td>
+                                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ParentCustomerRequest.AccessoriesCost.ToString("N2")
+                                    </td>
+                                }
+                                <td>@Model.CustomerRequest.AccessoriesCost.ToString("N2") </td>
+                                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ChildCustomerRequest.AccessoriesCost.ToString("N2")
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>0104</td>
+                                <td>@Html.DisplayNameFor(model=>model.CustomerRequest.PartsCost)</td>
+                                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ParentCustomerRequest.PartsCost.ToString("N2")
+                                    </td>
+                                }
+                                <td>@Model.CustomerRequest.PartsCost.ToString("N2") </td>
+                                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ChildCustomerRequest.PartsCost.ToString("N2")
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>0105</td>
+                                <td>@Html.DisplayNameFor(model=>model.CustomerRequest.ServicesCost)</td>
+                                @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ParentCustomerRequest.ServicesCost.ToString("N2")
+                                    </td>
+                                }
+                                <td>@Model.CustomerRequest.ServicesCost.ToString("N2") </td>
+                                @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                                {
+                                    <td>
+                                        @Model.CustomerRequest.ChildCustomerRequest.ServicesCost.ToString("N2")
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>0200</td>
                                 <td>Затраты на оплату труда основных производственных рабочих (непосредственных исполнителей) - всего:, руб</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -148,7 +243,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td>2.1</td>
+                                <td>0201</td>
                                 <td>-основная заработная плата, руб </td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -163,7 +258,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td>2.2</td>
+                                <td>0202</td>
                                 <td>-дополнительная заработная плата, руб (@Model.CustomerRequest.CompanyHistory.AdditionalSalary.ToString("N2")%)</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -180,7 +275,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td>6</td>
+                                <td>0300</td>
                                 <td>Страховые взносы на обязательное социальное страхование, руб (@Model.CustomerRequest.CompanyHistory.PensionTax.ToString("N2")%) </td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -193,7 +288,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td>10</td>
+                                <td>0900</td>
                                 <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.OverHead.ToString("N2")%)</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -208,7 +303,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td>12</td>
+                                <td>1300</td>
                                 <td>Производственная себестоимость, руб</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -223,7 +318,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td>16</td>
+                                <td>1800</td>
                                 <td>Прибыль, руб (@Model.CustomerRequest.CompanyHistory.Margin.ToString("N2")%)</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -238,7 +333,7 @@
                                 }
                             </tr>
                             <tr>
-                                <td><b>17</b></td>
+                                <td><b>1900</b></td>
                                 <td><b>Цена(без НДС), руб</b></td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -272,7 +367,7 @@
                             </tr>
 
                             <tr>
-                                <td>18</td>
+                                <td>0000</td>
                                 <td>Трудоемкость, чел/час</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
@@ -286,7 +381,7 @@
                                     </td>
                                 }
                             <tr>
-                                <td>19</td>
+                                <td>0000</td>
                                 <td>Средняя заработная плата(мес), руб</td>
                                     @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                     {
@@ -301,7 +396,7 @@
                                     }
                             </tr>
                             <tr>
-                                <td>20</td>
+                                <td>0000</td>
                                 <td>Средняя стоимость испытаний 1 партии, руб </td>
                                     @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                     {

@@ -1,11 +1,15 @@
 ﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+
 namespace Estimator.Models
 {
     /// <summary>
@@ -17,13 +21,14 @@ namespace Estimator.Models
         private decimal rate;
         private List<RequestOperationLaborSummary> _operationSummary;
         private List<RequestOperationGroup> _operationGroups;
+        private bool useimport;
         public CustomerRequest()
         {
             CompanyHistory = new CompanyHistory();
             RequestDate = DateTime.Now;
             UseTemplate = false;
             rate = 1;
-            UseImport = true; 
+            useimport = true; 
         }
 
         public int CustomerRequestID { get; set; }
@@ -31,7 +36,7 @@ namespace Estimator.Models
         [StringLength(50)]
         [Display(Name = "№ исх.")]
         public string RequestNumber { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Дата исх.")]
         public DateTime RequestDate { get; set; }
@@ -50,10 +55,9 @@ namespace Estimator.Models
         public int CustomerID { get; set; }
         public Customer Customer { get; set; }
         /// <summary>
-        ///
+        ///Коофициент сложности
         /// </summary>
         [Column(TypeName = "decimal(18, 4)")]
-        //[Range(typeof(decimal), "0,0", "100,0", ErrorMessage = "Наименьшее значение- 0, наибольшее 100, в качестве разделителя дробной и целой части используется запятая")]
         public decimal Rate
         {
             get
@@ -76,7 +80,6 @@ namespace Estimator.Models
         [Required(ErrorMessage = "Введитe число с плавающей точкой")]
         [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$", ErrorMessage = "Введите число в формате числа с плавающей запятой")]
         [DisplayFormat(DataFormatString = "{0:F4}")]
-    
         public string StringRate 
         {
             get
@@ -96,13 +99,35 @@ namespace Estimator.Models
 
         }
 
+        /// <summary>
+        /// Если = 1 то использзуется расчет на основе списка элементов
+        /// </summary>
         [Display(Name = "Поэлементный расчёт")]
         public bool  UseImport
         {
-            get;set;
+            get
+            {
+           
+                    // вот это все надо чтобы корректно отображались старые заявки
+                    if (!useimport)
+                    {
+                        if (this.ElementImport?.XLSXElementTypes?.Count > 0)
+                        {
+                            return true;
+                        }
+                    }
+                    return useimport;
+                
+            }
+            set
+            { 
+                useimport = value;  
+            }
+            
         }
+        [NotMapped]
+        public ElementImport ElementImport { get; set; }    
         public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
-
 
         private void CalculateGroups()
         {
@@ -312,11 +337,96 @@ namespace Estimator.Models
                 return _operationGroups;
             }
         }
+
+        /// <summary>
+        /// Материальные затраты
+        /// </summary>
+        [NotMapped]
+        [Display(Description = "0100", Name = "Материальные затраты")]
+        public decimal MaterialCost 
+        {
+        get
+            {
+                return ServicesCost + PartsCost + AccessoriesCost;
+            }
+        }
+        /// <summary>
+        /// Услуги сторонних организаций
+        /// </summary>
+        [NotMapped]
+        [Display(Description = "0105" ,Name= "-оплата работ и услуг сторонних организаций производственного характера")]
+        public decimal ServicesCost
+        {
+            get
+            {
+               decimal result = 0;
+                if (this?.ElementImport?.XLSXElementTypes!=null)
+                {
+                    foreach(XLSXElementType type in  this?.ElementImport?.XLSXElementTypes)
+                    {
+                        result += type.ElementContractorPrice;
+                    }
+                }
+
+                return Math.Round(result, 0);
+
+            }
+        }
+        /// <summary>
+        /// ПКИ и Комплектующие 
+        /// </summary>
+        [NotMapped]
+        [Display(Description = "0104", Name = "-приобретение комплектующих изделий")]
+        public decimal PartsCost
+        {
+            get
+            {
+
+                decimal result = 0;
+                if (this?.ElementImport?.XLSXElementTypes != null)
+                {
+                    foreach (XLSXElementType type in this?.ElementImport?.XLSXElementTypes)
+                    {
+                        result += type.ElementPrice;
+                    }
+                }
+
+                return Math.Round(result, 0);
+            }
+
+
+        }
+        //
+        /// <summary>
+        ///Приобретение сырья, материалов и вспомогательных материалов
+        /// </summary>
+        [NotMapped]
+        [Display(Description = "0101", Name = "-приобретение сырья, материалов и вспомогательных материалов")]
+        public decimal AccessoriesCost
+        {
+            get 
+            {
+                decimal result = 0;
+                if (this?.ElementImport?.XLSXElementTypes != null)
+                {
+                    foreach (XLSXElementType type in this?.ElementImport?.XLSXElementTypes)
+                    {
+                        result += type.ElementKitPrice;
+                    }
+                }
+
+                return Math.Round(result, 0);
+            }
+
+
+        }
+
         /// <summary>
         /// Основная заработная плата
         /// </summary>
         [NotMapped]
-        public decimal BasicSalary
+        [Display(Description = "0201", Name = " основная заработная плата")]
+       public decimal BasicSalary
         {
             get
             {
@@ -331,7 +441,7 @@ namespace Estimator.Models
                     }
 
                 }
-                return result;
+                return Math.Round (result,0);
             }
         }
         /// <summary>
@@ -353,7 +463,7 @@ namespace Estimator.Models
         {
             get
             {
-                return CompanyHistory.AdditionalSalary/100 * BasicSalary;
+                return Math.Round(CompanyHistory.AdditionalSalary/100 * BasicSalary,0);
             }
         }
         /// <summary>
@@ -372,39 +482,58 @@ namespace Estimator.Models
                 { return 0; }
             }
         }
-
         /// <summary>
-        /// накладные расходы
+        /// накладные расходы (Общехозяйственные затраты )
         /// </summary>
         [NotMapped]
+        [Display(Description = "0900", Name = "Общехозяйственные затраты ")]
         public decimal OverHead
         {
             get
             {
-                return CompanyHistory.OverHead / 100 * BasicSalary;
+                return Math.Round(CompanyHistory.OverHead / 100 * BasicSalary,0);
             }
         }
-
+        /// <summary>
+        /// Страховые взносы на обязательное социальное страхование
+        /// </summary>
         [NotMapped]
+        [Display(Description = "0300", Name = "Страховые взносы на обязательное социальное страхование")]
         public decimal PensionTax
         {
             get
             {
-                return CompanyHistory.PensionTax / 100 * TotalSalary;
+                return Math.Round (CompanyHistory.PensionTax / 100 * TotalSalary,0);
             }
         }
+
+        /// <summary>
+        /// собственные затраты
+        /// </summary>
+        ///    [NotMapped]
+        [Display(Description = "0000", Name = "Собственная себестоимость")]
+        public decimal OwnCost
+        {
+            get
+            {
+                return   TotalSalary + PensionTax + OverHead;
+            }
+        }
+      
         /// <summary>
         /// производственная себестоимость 
         /// </summary>
         [NotMapped]
+        [Display(Description = "1300", Name = "Произвдственная себестоимость")]
         public decimal InputCost
         {
             get
             {
-                return TotalSalary + PensionTax + OverHead;
+                return MaterialCost+TotalSalary + PensionTax + OverHead;
             }
         }
         [NotMapped]
+        [Display(Description = "1900", Name = "Цена продукции (без НДС)")]
         public decimal TotalCost
         {
             get
@@ -413,11 +542,12 @@ namespace Estimator.Models
             }
         }
         [NotMapped]
+        [Display(Description = "1800", Name = "Прибыль")]
         public decimal Margin
         {
             get
             {
-                return InputCost * CompanyHistory.Margin / 100;
+                return Math.Round(OwnCost * CompanyHistory.Margin / 100,0);
             }
         }
         [NotMapped]

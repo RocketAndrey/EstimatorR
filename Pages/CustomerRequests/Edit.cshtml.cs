@@ -50,7 +50,9 @@ namespace Estimator.Pages.CustomerRequests
                    .Include(c=>c.XLSXElementTypes)     
                    .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
             
-            strRate = CustomerRequest.Rate.ToString(); 
+            strRate = CustomerRequest.Rate.ToString();
+
+            CustomerRequest.ElementImport = ElementImport; 
 
             // запролняем типы элементов
             PopulateAssignedElementTypes(CustomerRequest);
@@ -103,6 +105,7 @@ namespace Estimator.Pages.CustomerRequests
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
             requestToUpdate.ModificateDate = System.DateTime.Now;
+            requestToUpdate.ElementImport = ElementImport; 
 
             if (UserID > 0)
             {
@@ -123,7 +126,7 @@ namespace Estimator.Pages.CustomerRequests
                  i => i.Description, i => i.UseTemplate, i => i.TestProgramTemplateID, i => i.StringRate)
                 )
             {
-                if (!CustomerRequest.UseImport)
+                if (!requestToUpdate.UseImport)
                 {
                     UpdateAssignedElementTypes(elementTypes, requestToUpdate);
                 }
@@ -146,21 +149,6 @@ namespace Estimator.Pages.CustomerRequests
 
         }
 
-        public bool  useImport
-        {
-            get 
-            {
-                // вот это все надо чтобы корректно отображались старые заявки
-                if (!CustomerRequest.UseImport)
-                {
-                    if (ElementImport?.XLSXElementTypes?.Count >0)
-                    {
-                        return true;
-                    }    
-                }
-                return CustomerRequest.UseImport; 
-            }
-        }
 
         public void UpdateAssignedElementTypes(AssignedRequestElementType[] elementTypes, CustomerRequest customerRequestToUpdate)
         {

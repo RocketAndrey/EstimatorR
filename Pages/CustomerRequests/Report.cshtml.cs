@@ -195,10 +195,10 @@ namespace Estimator.Pages.CustomerRequests
                        .Include(e => e.XLSXElementTypes)
                       .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == CustomerRequest.CustomerRequestID);
             
-            ElementImport.CustomerRequest = CustomerRequest;
             //если нет импорта то и нет элементов
             if (ElementImport == null) return;
 
+            ElementImport.CustomerRequest = CustomerRequest;
             //считаем стоимости
             ElementImport.CalculateXLSXCosts();
 

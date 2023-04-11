@@ -174,6 +174,7 @@ namespace Estimator.Pages.CustomerRequests
                             }
                             //загружаем файлы их экселя
                             ElementImport.XLSXElementTypes = xhelper.Convert(uploadedFile.OpenReadStream(), ElementImport);
+                            
                             ImportStep += 1;
 
                             await _context.SaveChangesAsync();
@@ -205,6 +206,8 @@ namespace Estimator.Pages.CustomerRequests
                     ValidateXLSX(true);
                     //запоминаем кто отредактировать заявку
                     ElementImport.CustomerRequest.ModificateDate = System.DateTime.Now;
+                    ElementImport.CustomerRequest.UseImport = true;
+
 
                     if (UserID > 0)
                     {
