@@ -134,7 +134,7 @@
 
         </div>
       <div class="form-group row" >
-            <div class ="col-9">
+            <div class ="col">
                 <div class="custom-control custom-switch">
                     <input type="checkbox" asp-for="@Model.CustomerRequest.UseImport" class="custom-control-input" id="customSwitchUseImport" onclick="ShowImport()">
                     <label class="custom-control-label" for="customSwitchUseImport">@Html.DisplayNameFor(mosel=>Model.CustomerRequest.UseImport) </label>
@@ -167,7 +167,7 @@
   
                     }
                   } 
-                <a  id="importButton" asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-step="1" class="btn btn-outline-primary">
+                <a  id="importButton" asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" >
                    @btnText
                 </a>
                 </div>
@@ -308,10 +308,6 @@
 
     <div class="btn-group" role="group" aria-label="request">
 
-        <a asp-page="./Index"
-           class="btn btn-outline-primary ">
-            К списку
-        </a>
         <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
 
         @if (Model.ChildProgramID(Model.CustomerRequest.TestProgramID  ) > 0 & !Model.ChildCustomerRequestExists(Model.CustomerRequest.CustomerRequestID))

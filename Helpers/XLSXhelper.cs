@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using Estimator.Models;
 using Estimator.Migrations;
+using Microsoft.Extensions.Logging;
 
 namespace Estimator.Helpers
 {
@@ -22,19 +23,39 @@ namespace Estimator.Helpers
         {
             return SpreadsheetProcess(memStream);
         }
-        public List<Estimator.Models.XLSXElementType> Convert(Stream memStream, Estimator.Models.ElementImport importSettings)
+        public List<Estimator.Models.XLSXElementType> Convert(Stream memStream, Estimator.Models.ElementImport importSettings, out bool result,out string errorMessage )
         {
-            List<Models.XLSXElementType> returnValue = new List<XLSXElementType>();
+            List<Models.XLSXElementType> returnValue = new();
+            result = true;
+            errorMessage = "";
+            //переменные для расчета пустых сторjr
+            int emptyNames = 0;
+            int emptyCounts = 0;
+
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false))
             {
-        
-                XLSXElementType elementType;
+               
 
+                XLSXElementType elementType;
+                if (doc.WorkbookPart.WorksheetParts.Count() > 1)
+                {
+                    result = false;
+                    errorMessage = "В импортируемой книге Эксель должен быть только 1 лист!";
+                    return returnValue;
+                }
+
+                if (doc.WorkbookPart.WorksheetParts.Count() ==0)
+                {
+                    result = false;
+                    errorMessage = "В импортируемая книга Эксель не содержит ни одного листа!";
+                    return returnValue;
+                }
                 memStream.Position = 0;
                 ///shared ячейки (в которых хранятся повторяемые значения). Так вот, из объекта класса SpreadsheetDocument их можно получить так:
                 SharedStringTable sharedStringTable = doc.WorkbookPart.SharedStringTablePart.SharedStringTable;
                 //используем только первый лист!
                 WorksheetPart worksheetPart = doc.WorkbookPart.WorksheetParts.First();
+               
                 //перебираем все строки
                 foreach (SheetData sheetData in worksheetPart.Worksheet.Elements<SheetData>())
                 {
@@ -44,7 +65,7 @@ namespace Estimator.Helpers
                         foreach (Row row in sheetData.Elements<Row>())
                         {
                          
-                            if (row.RowIndex > 1 | !importSettings.FirstRowIsHeader)
+                            if (row.RowIndex >= importSettings.FirstRowNumber | !importSettings.FirstRowIsHeader)
                             {
                                     if(!importSettings.UseLastRowNumber |  row.RowIndex <= importSettings.LastRowNumber)
                                     {
@@ -84,7 +105,7 @@ namespace Estimator.Helpers
                                                 // если не парсится то 0.00
                                                 decimal.TryParse ( getCellvalue(cell, sharedStringTable),out d);
                                             }
-                                            elementType.ElementPrice = 0;
+                                            elementType.ElementPrice = d;
                                         }
                                         //стоимость остнастки
                                         else if (cell.CellReference.Value.ToString() == refKitPrice)
@@ -94,7 +115,7 @@ namespace Estimator.Helpers
                                             {
                                                 decimal.TryParse(getCellvalue(cell, sharedStringTable), out d);
                                             }
-                                            elementType.ElementKitPrice  = 0;
+                                            elementType.ElementKitPrice  = d;
                                         }
                                         //стоимость сторонних 
                                         else if (cell.CellReference.Value.ToString() == refContractorPrice)
@@ -104,7 +125,7 @@ namespace Estimator.Helpers
                                             {
                                                 decimal.TryParse(getCellvalue(cell, sharedStringTable),out d);
                                             }
-                                            elementType.ElementContractorPrice = 0;
+                                            elementType.ElementContractorPrice = d;
                                         }
                                         //колличество
                                         else if (cell.CellReference.Value.ToString() == refCount)
@@ -115,20 +136,41 @@ namespace Estimator.Helpers
                                         }
                                         
                                     }
+                                    if (elementType.ElementCount==0) { emptyCounts++; }
+                                  
+                                    if (String.IsNullOrEmpty(elementType.ElementName) ) {emptyNames++; }
+
                                     // если колличествов данной строке = 0 то нефиг его и импортировать
-                                    if (elementType.ElementCount > 0 && String.IsNullOrEmpty(elementType.ElementName) )
+                                    if (elementType.ElementCount > 0 && !String.IsNullOrEmpty(elementType.ElementName))
                                     {
                                         returnValue.Add(elementType);
                                     }
-
+    
+                                    
                                 }
                             }
                         }
                     }
                 }
-                
+
+                if (emptyCounts > 0 || emptyNames > 0)
+                {
+                    if (returnValue.Count == 0)
+                    {
+                        ///ничего не импортнулось 
+                        result = false;
+                        errorMessage = string.Format("Не найдено ни одной строки для импорта. Строк с пустым имненем {0}. Строк с нулевым количеством {1}.", emptyNames, emptyCounts);
+                    }
+                    else 
+                    {
+                        errorMessage = string.Format("Строк с пустым именем {0}. Строк с нулевым количеством {1}.", emptyNames, emptyCounts);
+                    }
+                }
+           
+                return returnValue;
             }
-            return returnValue;
+
+       
         }
  
 

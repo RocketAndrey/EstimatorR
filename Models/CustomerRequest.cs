@@ -387,7 +387,7 @@ namespace Estimator.Models
                 {
                     foreach (XLSXElementType type in this?.ElementImport?.XLSXElementTypes)
                     {
-                        result += type.ElementPrice;
+                        result += type.TotalPrice;
                     }
                 }
 
@@ -538,12 +538,12 @@ namespace Estimator.Models
         {
             get
             {
-                return InputCost + Margin;
+                return InputCost + Profit;
             }
         }
         [NotMapped]
         [Display(Description = "1800", Name = "Прибыль")]
-        public decimal Margin
+        public decimal Profit
         {
             get
             {
@@ -661,7 +661,7 @@ namespace Estimator.Models
         /// <summary>
         /// 
         /// </summary>
-        public CustomerRequest? ParentCustomerRequest
+        public CustomerRequest ParentCustomerRequest
         {
             get;
             set;

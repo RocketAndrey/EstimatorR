@@ -123,6 +123,7 @@ namespace Estimator.Pages.CustomerRequests
                 i => i.RequestNumber,
                 i => i.RequestDate,
                 i => i.CustomerID,
+                i=>i.UseImport, 
                  i => i.Description, i => i.UseTemplate, i => i.TestProgramTemplateID, i => i.StringRate)
                 )
             {

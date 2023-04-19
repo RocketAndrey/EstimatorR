@@ -10,7 +10,7 @@
 
 <form asp-page="./Index" method="get">
 
-    <table class="table table-bordered">
+    <table class="table table-borderless">
         <tr>
             <td>
                 <h3>Заявки:</h3>
@@ -24,9 +24,7 @@
         <thead>
             <tr class="table-secondary table-sm">
                 <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID)</th>
-                <th>
-                    Отчет
-                </th>
+               
                 <th>
                     @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestNumber)
                 </th>
@@ -59,11 +57,10 @@
         </thead>
         <tbody>
             <tr class="table-secondary table-sm">
-                <td width="16">
+                <td width="100">
                     <input class="form-control form-control-sm" type="text" name="customerRequestID" value="@Model.filter.CustomerRequestID" />
                 </td>
-                <td>
-                </td>
+               
                 <td>
                 </td>
                 <td>
@@ -87,11 +84,17 @@
                 <tr>
 
                     <td>
-                        <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>
+                        <div class="form-row">
+                            <a asp-page="./Edit" asp-route-id="@item.CustomerRequestID"> @Html.DisplayFor(modelItem => item.CustomerRequestID)</a>&nbsp;
 
-                    </td>
-                    <td>
+                   
                         <a asp-page="./Report" asp-route-id="@item.CustomerRequestID"><img src="~/contract2.png" width="20" height="20" /></a>
+                        @if (item.UseImport)
+                        {
+                            <a asp-page="./Import" asp-route-id="@item.CustomerRequestID"><img src="~/xlsx.png" width="20" height="20" /></a>
+                        }
+
+                        </div>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.RequestNumber)

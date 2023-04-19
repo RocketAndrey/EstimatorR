@@ -74,7 +74,9 @@ namespace Estimator.Pages.CustomerRequests
                     CustomerINN = p.Customer.INN,
                     ProgramName = p.Program.Name,
                     CustomerID =p.CustomerID ,
-                    ProgramID = p.Program.TestProgramID
+                    ProgramID = p.Program.TestProgramID,
+                    UseImport = p.UseImport
+
                 }).AsNoTracking().ToListAsync();
 
 

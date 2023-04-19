@@ -93,7 +93,16 @@
                 }
             </div>
         </div>
-        <div class="row">
+        <div class="form-row">
+             <div class="col-4"></div>
+            <div class="col-8">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" asp-for="@Model.ElementImport.UseLastCalculation" class="custom-control-input" id="customSwitch1">
+                    <label class="custom-control-label" for="customSwitch1">Использовать ключи из предыдущих расчётов</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
             <div class="col">
                 <a  data-toggle="collapse" href="#collapseKeys" role="button" aria-expanded="false" aria-controls="collapseKeys">
                     Ключи
@@ -132,31 +141,265 @@
         <div class="row">
             <hr />
         </div>
-         @if (Model.ImportStep > 1)
-        {
-            <div class="row">
+
+       
+            <div class="form-row">
                 <div class="col">
                     @if (Model.ElementImport.FileUploaded)
                     {
                         <a href="@Model.ElementImport.FileWWWPath"><img src="~/xlsx.png" width="32" height="32" /></a>
                     }
 
-                    </div>
+                </div>
            
             
                     <div class="col-md-auto">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <a asp-page="import" class="btn btn-outline-primary" asp-route-id="@Model.ElementImport.CustomerRequestID" asp-route-step="-1">Загрузка</a>
-                            <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
+                            @if(Model.ImportStep != 1)
+                        {
+                        <a asp-page="import" class="btn btn-outline-primary" asp-route-id="@Model.ElementImport.CustomerRequestID" asp-route-step="1">Загрузить</a>
+                    }
+                    else
+                    {
+                        <input type="submit" value="Загрузить" class="btn btn-outline-primary " asp-route-step="1" />
+
+                    }
+                    <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
+     
                         </div>
                     </div>
+            
+                </div>
+
+        <div class="form-row" id="collapseUpload">
+            
+            @if (Model.ImportStep == 1)
+            {
+                <div class="col">
+
+                    <table class="table table-borderless">
+
+                        <tr>
+                            <td colspan="7">
+                                <input type="file" name="uploadedFile" accept="*.xslx" class="form-control" />
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td colspan="7">
+                                
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4" class="align-content-center">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Начальная строка</span>
+
+                                    </div>
+                                    <input asp-for="@Model.ElementImport.FirstRowNumber" class="form-control" />
+
+                                </div>
+                            </td>
+                            <td colspan="3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Конечная строка</span>
+                                        <div class="input-group-text">
+                                            <input asp-for="@Model.ElementImport.UseLastRowNumber" onclick="EnableDisableTextBox('lastRowNumberSelector',this);" />
+                                        </div>
+                                    </div>
+                                    @{
+                                        //string lastDisable = "";
+
+                                        if (Model.ElementImport.UseLastRowNumber)
+                                        {
+                                            <input id="lastRowNumberSelector" asp-for="@Model.ElementImport.LastRowNumber" class="form-control" />
+
+                                        }
+                                        else
+                                        {
+                                            <input id="lastRowNumberSelector" asp-for="@Model.ElementImport.LastRowNumber" class="form-control" disabled= />
+
+                                        }
+                                    }
+
+
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            @Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn)
+                                        </div>
+                                    </div>
+                                    <select asp-for="ElementImport.ElementNameColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            @Html.DisplayNameFor(model => model.ElementImport.ElementTypeKeyColumn)
+                                        </div>
+                                    </div>
+                                    <select asp-for="ElementImport.ElementTypeKeyColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+
+                                        <div class="input-group-text">
+                                            @Html.DisplayNameFor(model => model.ElementImport.ElementCountColumn)
+                                        </div>
+                                    </div>
+                                    <select asp-for="ElementImport.ElementCountColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+
+                                            <input type="checkbox" asp-for="@Model.ElementImport.ImportElementPrice" onclick="EnableDisableTextBox('ElementPriceColumnSelector',this);" />
+
+                                        </div>
+
+                                        <span class="input-group-text">
+                                            @Html.DisplayNameFor(model => model.ElementImport.ElementPriceColumn)
+                                        </span>
+
+
+                                    </div>
+                                    @{
+                                        
+                                        if (Model.ElementImport.ImportElementPrice)
+                                        {
+                                            <select asp-for="ElementImport.ElementPriceColumn" id="ElementPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select disabled asp-for="ElementImport.ElementPriceColumn" id="ElementPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                            </select>
+                                        }
+                                    }
+
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+
+                                            <input type="checkbox" asp-for="@Model.ElementImport.ImportElementКitPrice" onclick="EnableDisableTextBox('ElementKitPriceColumnSelector',this);" />
+
+                                        </div>
+
+                                        <span class="input-group-text">
+                                            @Html.DisplayNameFor(model => model.ElementImport.ElementKitPriceColumn)
+                                        </span>
+
+                                    </div>
+
+                                    @{
+
+                                        if (Model.ElementImport.ImportElementКitPrice)
+                                        {
+                                            <select asp-for="ElementImport.ElementKitPriceColumn" id="ElementKitPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select disabled asp-for="ElementImport.ElementKitPriceColumn" id="ElementKitPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                            </select>
+                                        }
+                                    }
+
+
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+
+                                            <input type="checkbox" asp-for="@Model.ElementImport.ImportElementContractorPrice" onclick="EnableDisableTextBox('ElementContractorPriceColumnSelector',this);" onload="EnableDisableTextBox('ElementContractorPriceColumnSelector',this);" />
+
+                                        </div>
+
+                                        <span class="input-group-text">
+                                            @Html.DisplayNameFor(model => model.ElementImport.ElementContractorPriceColumn)
+                                        </span>
+
+                                    </div>
+                                    @{
+                                       
+
+                                        if (Model.ElementImport.ImportElementContractorPrice)
+                                        {
+                                            <select asp-for="ElementImport.ElementContractorPriceColumn" id="ElementContractorPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select disabled asp-for="ElementImport.ElementContractorPriceColumn" id="ElementContractorPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                            </select>
+                                        }
+                                    }
+
+
+
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7" align="right">
+
+           
+                                @if (Model?.ElementImport?.XLSXElementTypes?.Count > 0)
+                                {
+
+                                    <input type="submit" value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
+                                }
+                            </td>
+                        </tr>
+
+                    </table>
+                
             </div>
+            }
+            
+        </div>
         
-        }
-    </div>
+    
      <div div class="form-row">
          <div class="col">
-            @if (Model.ImportStep == 3)
+            @if (Model.ElementImport.Valid)
             {
                 <h4>Результат анализа:</h4>
                 <br />
@@ -170,7 +413,9 @@
                         <th><b>@Html.DisplayNameFor(model => model.ElementImport.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</b></th>
                     </tr>
                     <tbody>
-                        @foreach (var item in Model.ElementImport.CustomerRequest.RequestElementTypes)
+                            @if (Model?.ElementImport?.CustomerRequest?.RequestElementTypes!=null )
+                            {
+                        @foreach (var item in Model?.ElementImport?.CustomerRequest?.RequestElementTypes)
                         {
                             @if (item.BatchCount > 0)
                             {
@@ -190,6 +435,7 @@
                                 </tr>
                             }
 
+                        }
                         }
                     </tbody>
                     <tfoot>
@@ -219,214 +465,10 @@
          </div>
      </div>
 
-          <div div class="form-row">
-         <div class="col">
-            @if (Model.ImportStep == 1)
-            {
-                <table class="table table-borderless">
-
-                    <tr>
-                        <td colspan="7">
-                            <input type="file" name="uploadedFile" accept="*.xslx" class="form-control" />
-                        </td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td colspan="7">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" asp-for="@Model.ElementImport.UseLastCalculation" class="custom-control-input" id="customSwitch1">
-                                <label class="custom-control-label" for="customSwitch1">Использовать ключи из предыдущих расчётов</label>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="4" class="align-content-center">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Начальная строка</span>
-
-                                </div>
-                                <input asp-for="@Model.ElementImport.FirstRowNumber" class="form-control" />
-
-                            </div>
-                        </td>
-                        <td colspan="3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Конечная строка</span>
-                                    <div class="input-group-text">
-                                        <input asp-for="@Model.ElementImport.UseLastRowNumber" onclick="EnableDisableTextBox('lastRowNumberSelector',this);" />
-                                    </div>
-                                </div>
-                                @{
-                                    string lastDisable = "";
-
-                                    if (!Model.ElementImport.UseLastRowNumber)
-                                    {
-                                        lastDisable = "disabled";
-                                    }
-                                }
-
-                                <input @lastDisable id="lastRowNumberSelector" asp-for="@Model.ElementImport.LastRowNumber" class="form-control" />
-
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        @Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn)
-                                    </div>
-                                </div>
-                                <select asp-for="ElementImport.ElementNameColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        @Html.DisplayNameFor(model => model.ElementImport.ElementTypeKeyColumn)
-                                    </div>
-                                </div>
-                                <select asp-for="ElementImport.ElementTypeKeyColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-
-                                    <div class="input-group-text">
-                                        @Html.DisplayNameFor(model => model.ElementImport.ElementCountColumn)
-                                    </div>
-                                </div>
-                                <select asp-for="ElementImport.ElementCountColumn" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control"></select>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-
-                                        <input type="checkbox" asp-for="@Model.ElementImport.ImportElementPrice" onclick="EnableDisableTextBox('ElementPriceColumnSelector',this);" />
-
-                                    </div>
-
-                                    <span class="input-group-text">
-                                        @Html.DisplayNameFor(model => model.ElementImport.ElementPriceColumn)
-                                    </span>
-
-
-                                </div>
-                                @{
-                                    string priceDisable = "";
-
-                                    if (!Model.ElementImport.ImportElementPrice)
-                                    {
-                                        priceDisable = "disabled";
-                                    }
-                                }
-                                <select @priceDisable asp-for="ElementImport.ElementPriceColumn" id="ElementPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
-                                </select>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-
-                                        <input type="checkbox" asp-for="@Model.ElementImport.ImportElementКitPrice" onclick="EnableDisableTextBox('ElementKitPriceColumnSelector',this);" />
-
-                                    </div>
-
-                                    <span class="input-group-text">
-                                        @Html.DisplayNameFor(model => model.ElementImport.ElementKitPriceColumn)
-                                    </span>
-
-                                </div>
-
-                                @{
-                                    string kitdisable = "";
-                                    if (!Model.ElementImport.ImportElementКitPrice)
-                                    {
-                                        kitdisable = "disabled";
-                                    }
-                                }
-
-                                <select @kitdisable asp-for="ElementImport.ElementKitPriceColumn" id="ElementKitPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
-                                </select>
-                            </div>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="7">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-
-                                        <input type="checkbox" asp-for="@Model.ElementImport.ImportElementContractorPrice" onclick="EnableDisableTextBox('ElementContractorPriceColumnSelector',this);" onload="EnableDisableTextBox('ElementContractorPriceColumnSelector',this);" />
-
-                                    </div>
-
-                                    <span class="input-group-text">
-                                        @Html.DisplayNameFor(model => model.ElementImport.ElementContractorPriceColumn)
-                                    </span>
-
-                                </div>
-                                @{
-                                    string contractorDisable = "";
-
-                                    if (!Model.ElementImport.ImportElementContractorPrice)
-                                    {
-                                        contractorDisable = "disabled";
-                                    }
-                                }
-                                <select @contractorDisable asp-for="ElementImport.ElementContractorPriceColumn" id="ElementContractorPriceColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
-                                </select>
-
-
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7" align="right">
-
-                            <input type="submit" value="Загрузить" class="btn btn-outline-primary " asp-route-step="1" />
-
-                            @if (Model?.ElementImport?.XLSXElementTypes?.Count > 0)
-                            {
-
-                                <input type="submit" value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
-                            }
-                        </td>
-                    </tr>
-
-                </table>
-            }
-         </div>
-     </div>
+         
     <div div class="form-row">
         <div class="col">
-            @if (Model.ImportStep != 1)
+            @if (Model?.ElementImport?.XLSXElementTypes?.Count >0 )
             {
                 <br />
                 <h4>Загруженный перечень:</h4>
@@ -434,7 +476,7 @@
                 <table class="table table-bordered">
                     <tr>
 
-                        <td></td>
+                        <td><b>№</b></td>
                         <td>
 
                             <b>@Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn) (@Model.ElementImport.ElementNameColumn)</b>
@@ -455,11 +497,16 @@
 
                             <tr class="@selectedRow">
                                 <td>
-                                    <input asp-for="@Model.ElementImport.XLSXElementTypes[i].InList " class="form-check-inline" id="ElementImport.XLSXElementTypes[@i].InList" onclick="showSelected('ElementImport.XLSXElementTypes[@i].ElementImportID');" />
+                                        <div class="form-group form-check">
+
+                                     <input type ="checkbox" asp-for="@Model.ElementImport.XLSXElementTypes[i].InList" class="form-check-input" id="ElementImport.XLSXElementTypes[@i].InList" onclick="showSelected('ElementImport.XLSXElementTypes[@i].ElementImportID');" />
+                                        <label class="form-check-label" for="ElementImport.XLSXElementTypes[@i].InList"> @Model.ElementImport.XLSXElementTypes[i].RowNum </label>
+                                     </div> 
                                     <input type="hidden" asp-for="@Model.ElementImport.XLSXElementTypes[i].ID" id="ElementImport.XLSXElementTypes[@i].ID" />
                                 </td>
                                 <td>
                                     <input asp-for="@Model.ElementImport.XLSXElementTypes[i].ElementName" id="ElementImport.XLSXElementTypes[@i].ElementName" class="form-control" />
+                                    <span class="text-info">@Model.ElementImport.XLSXElementTypes[i].AsuProtokolCode</span>
                                     <span class="text-danger">@Model.ElementImport.XLSXElementTypes[i].ErrorMessage</span>
 
                                 </td>
@@ -473,9 +520,11 @@
 
                                 </td>
                                 <td>
-                                    @Model.ElementImport.XLSXElementTypes[i].ElementTypeName
+                                    @Model.ElementImport.XLSXElementTypes[i].ElementPrice.ToString("N2")
+                                
                                 </td>
-                                <td><span class="text-info">@Model.ElementImport.XLSXElementTypes[i].AsuProtokolCode</span></td>
+                                <td> @Model.ElementImport.XLSXElementTypes[i].ElementKitPrice.ToString("N2")</td>
+                                <td>@Model.ElementImport.XLSXElementTypes[i].ElementContractorPrice.ToString("N2")</td>
                             </tr>
                         }
 

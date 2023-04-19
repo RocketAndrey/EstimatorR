@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Estimator.Models.ViewModels;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace Estimator.Models
 {
@@ -173,7 +174,7 @@ namespace Estimator.Models
                         {
                             decimal costKit = requestType.KitCount == 0 ? 0 : (!type.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
                             //стоимость испытаний данной партии
-                            type.Cost = ((requestType.CostItems / requestType.ItemCount) * type.ElementCount
+                            type.OwnCost = ((requestType.CostItems / requestType.ItemCount) * type.ElementCount
                                 + (requestType.CostBanchs / requestType.BatchCount)
                                 + costKit) * this.CustomerRequest.Rate;
 
@@ -183,6 +184,140 @@ namespace Estimator.Models
             }
 
         }
-    
+        /// <summary>
+        /// Равно true все элементы распознаны.
+        /// </summary>
+        public bool Valid
+        {
+            get
+            {
+                bool returnValue = false;
+                if (XLSXElementTypes != null)
+                {
+                    returnValue = true;
+                    foreach (XLSXElementType type in this.XLSXElementTypes)
+                    {
+                        if (!type.Valid)
+                        {
+                            returnValue = false;
+                            break;
+                        }
+                    }
+                }
+                return returnValue;
+            }
+        }
+        /// <summary>
+        /// Цена закупки,итого шт без НДС
+        /// </summary>
+        [Display(Name = "Цена закупки, итого/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ElementPriceTotal
+        {
+            get
+            { 
+                decimal returnValue = 0;
+                if (XLSXElementTypes != null)
+                {
+        
+                    foreach (XLSXElementType type in this.XLSXElementTypes)
+                    {
+                        returnValue += type.TotalPrice;
+                    }
+                }
+                return returnValue;
+            }
+        }
+        /// <summary>
+        /// Цена оснастки,итого шт без НДС
+        /// </summary>
+        [Display(Name = "Цена оснастки, итого/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ElementKitPriceTotal
+        {
+            get
+            {
+                decimal returnValue = 0;
+                if (XLSXElementTypes != null)
+                {
+
+                    foreach (XLSXElementType type in this.XLSXElementTypes)
+                    {
+                        returnValue += type.ElementKitPrice;
+                    }
+                }
+                return returnValue;
+            }
+        }
+        /// <summary>
+        /// Цена сторонних работ, итого НДС
+        /// </summary>
+        [Display(Name = "Цена сторонних работ, итого/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ElementContractorPriceTotal
+        {
+            get
+            {
+                decimal returnValue = 0;
+                if (XLSXElementTypes != null)
+                {
+
+                    foreach (XLSXElementType type in this.XLSXElementTypes)
+                    {
+                        returnValue += type.ElementContractorPrice;
+                    }
+                }
+                return returnValue;
+            }
+        }
+
+        /// <summary>
+        /// Стоимость испытаний, итого/руб
+        /// </summary>
+        [Display(Name = "Стоимость испытаний, итого/руб.")]
+            [Column(TypeName = "decimal(18, 4)")]
+            [DefaultValue(0)]
+            public decimal CostTotal
+            {
+                get
+                {
+                    decimal returnValue = 0;
+                    if (XLSXElementTypes != null)
+                    {
+
+                        foreach (XLSXElementType type in this.XLSXElementTypes)
+                        {
+                            returnValue += type.OwnCost;
+                        }
+                    }
+                    return returnValue;
+                }
+        }  
+        /// <summary>
+           /// Цена полная,весь перечень без НДС
+           /// </summary>
+        [Display(Name = "Цена полная,/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal FullCost
+        {
+            get
+            {
+                decimal returnValue = 0;
+                if (XLSXElementTypes != null)
+                {
+
+                    foreach (XLSXElementType type in this.XLSXElementTypes)
+                    {
+                        returnValue += type.FullCost;
+                    }
+                }
+                return returnValue;
+            }
+        }
+
     }
 }

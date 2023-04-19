@@ -81,6 +81,10 @@ namespace Estimator.Pages.CustomerRequests
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
 
+            CustomerRequest.ElementImport = _context.ElementImports
+               .Include(e => e.XLSXElementTypes)
+
+                  .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
             if (CustomerRequest == null)
             {
                 return NotFound();

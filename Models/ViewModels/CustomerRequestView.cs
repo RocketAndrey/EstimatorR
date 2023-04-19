@@ -24,6 +24,7 @@ namespace Estimator.Models.ViewModels
         public Int64 CustomerID{ get; set; }
 
         public Int64 ProgramID { get; set; }
+        public bool UseImport { get; set; }
 
     }
 }

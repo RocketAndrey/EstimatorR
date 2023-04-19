@@ -79,7 +79,7 @@ namespace Estimator.Models
         /// </summary>
         [NotMapped]
         [Display(Name = "Стоимость испытаний, руб.")]
-        public decimal  Cost { get; set; }
+        public decimal  OwnCost { get; set; }
 
         [Display(Name = "Строка")]
         public int? RowNum { get; set; }
@@ -90,6 +90,21 @@ namespace Estimator.Models
         [Column(TypeName = "decimal(18, 4)")]
         [DefaultValue(0)]
         public decimal ElementPrice { get; set; }
+
+        [Display(Name = "Цена закупки партии,руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal TotalPrice 
+        {
+            get
+            {
+                return ElementPrice * ElementCount; 
+                
+            }
+                
+         }
+
+
         /// <summary>
         /// Цена оснастки,1 шт без НДС
         /// </summary>
@@ -107,5 +122,37 @@ namespace Estimator.Models
         [Column(TypeName = "decimal(18, 4)")]
         [DefaultValue(0)]
         public decimal ElementContractorPrice { get; set; }
+        /// <summary>
+        /// Цена полная,партия без НДС
+        /// </summary>
+        [Display(Name = "Сумма полная, руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal FullCost 
+        { 
+            get
+            {
+                return ElementFullCost*ElementCount;
+            }
+        }
+        /// <summary>
+        /// Цена полная,1 шт без НДС
+        /// </summary>
+        [Display(Name = "Цена полная, шт/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ElementFullCost
+        {
+            get
+            {
+               
+                if (ElementCount != 0)
+                {
+                    return decimal.Round( (ElementPrice * ElementCount + ElementKitPrice + ElementContractorPrice + OwnCost) / ElementCount,0);
+                }
+                else
+                { return 0; }
+            }
+        }
     }
 }
