@@ -89,7 +89,7 @@ namespace Estimator.Models
             }
              set
             {
-                decimal outputValue; 
+               decimal outputValue; 
                if ( decimal.TryParse (value,out outputValue))
                 {
                     Rate = outputValue;
@@ -129,7 +129,7 @@ namespace Estimator.Models
         public ElementImport ElementImport { get; set; }    
         public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
 
-        private void CalculateGroups()
+        public void CalculateGroups()
         {
 
             if (RequestElementTypes != null)

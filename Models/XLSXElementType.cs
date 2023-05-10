@@ -103,8 +103,6 @@ namespace Estimator.Models
             }
                 
          }
-
-
         /// <summary>
         /// Цена оснастки,1 шт без НДС
         /// </summary>

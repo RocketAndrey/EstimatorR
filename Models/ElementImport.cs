@@ -102,7 +102,7 @@ namespace Estimator.Models
         {
             get
             {
-                return "../files/" + CustomerRequestID.ToString() + ".xlsx";
+                return "files/" + CustomerRequestID.ToString() + ".xlsx";
             }
         }
         /// <summary>
@@ -177,6 +177,7 @@ namespace Estimator.Models
                             type.OwnCost = ((requestType.CostItems / requestType.ItemCount) * type.ElementCount
                                 + (requestType.CostBanchs / requestType.BatchCount)
                                 + costKit) * this.CustomerRequest.Rate;
+                            type.OwnCost = decimal.Round(type.OwnCost, 0);
 
                         }
                     }

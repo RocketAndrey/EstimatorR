@@ -9,6 +9,7 @@ using System.IO;
 using Estimator.Models;
 using Estimator.Migrations;
 using Microsoft.Extensions.Logging;
+using NPOI.XSSF.Model;
 
 namespace Estimator.Helpers
 {
@@ -102,9 +103,11 @@ namespace Estimator.Helpers
                                             decimal d= 0 ;
                                             if (importSettings.ImportElementPrice)
                                             {
+
                                                 // если не парсится то 0.00
-                                                decimal.TryParse ( getCellvalue(cell, sharedStringTable),out d);
+                                                d=ParceDecimal(cell, sharedStringTable);
                                             }
+
                                             elementType.ElementPrice = d;
                                         }
                                         //стоимость остнастки
@@ -113,7 +116,7 @@ namespace Estimator.Helpers
                                             decimal d = 0;
                                             if (importSettings.ImportElementКitPrice)
                                             {
-                                                decimal.TryParse(getCellvalue(cell, sharedStringTable), out d);
+                                                d = ParceDecimal(cell, sharedStringTable);
                                             }
                                             elementType.ElementKitPrice  = d;
                                         }
@@ -123,7 +126,7 @@ namespace Estimator.Helpers
                                             decimal d = 0;
                                             if (importSettings.ImportElementContractorPrice)
                                             {
-                                                decimal.TryParse(getCellvalue(cell, sharedStringTable),out d);
+                                                d = ParceDecimal(cell, sharedStringTable);
                                             }
                                             elementType.ElementContractorPrice = d;
                                         }
@@ -173,8 +176,13 @@ namespace Estimator.Helpers
        
         }
  
-
-
+        private decimal ParceDecimal(Cell cell,SharedStringTable table)
+        {
+            decimal d;
+            string svalue = getCellvalue(cell, table).Trim().Replace(".", ",");
+            decimal.TryParse(svalue, out d);
+            return d;
+        }
         private string getCellvalue(Cell cell, SharedStringTable sharedStringTable)
         {
             string cellValue = string.Empty;

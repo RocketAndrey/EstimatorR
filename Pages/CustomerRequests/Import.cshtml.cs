@@ -207,7 +207,15 @@ namespace Estimator.Pages.CustomerRequests
 
                     //Пытаемся сохранить свойства импорта
 
-                    ValidateXLSX(true);
+
+                    if (ValidateXLSX(true))
+                    {
+                        ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.RowNum).ToList();
+                    }
+                    else
+                    {
+                        ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.Valid).ToList();
+                    }
                     //запоминаем кто отредактировать заявку
                     ElementImport.CustomerRequest.ModificateDate = System.DateTime.Now;
                     ElementImport.CustomerRequest.UseImport = true;
@@ -219,6 +227,15 @@ namespace Estimator.Pages.CustomerRequests
                     }
 
                     await _context.SaveChangesAsync();
+                      
+                if (ValidateXLSX(false))
+                {
+                    ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.RowNum ).ToList();
+                }
+                else
+                {
+                    ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.Valid).ToList();
+                }
                     return Page();
 
                 }

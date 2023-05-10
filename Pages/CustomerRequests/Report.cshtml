@@ -499,6 +499,9 @@
                     </div>
                     @*перечень*@
                     <div class="@tabs[5]" id="nav-item5" role="tabpanel" aria-labelledby="nav-item5-tab">
+                        <a target="_blank" asp-page="./Download" asp-route-reportType="elements" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-year="@Model.YearOfNoms">
+                            скачать эксель
+                       </a>
                         <table class="table table-bordered">
 
                             <tr>
@@ -543,33 +546,33 @@
                                         </td>
                                          <td>
 
-                                            @item.ElementPrice.ToString("N2")
+                                            @item.ElementPrice.ToString("F2")
                                         </td>
                                         <td>
 
-                                            @item.TotalPrice.ToString("N2")
+                                            @item.TotalPrice.ToString("F2")
                                         </td>
                                          <td>
 
-                                            @item.ElementKitPrice.ToString("N2")
+                                            @item.ElementKitPrice.ToString("F2")
                                         </td>
                                                 
                                         <td>
 
-                                            @item.ElementContractorPrice.ToString("N2")
+                                            @item.ElementContractorPrice.ToString("F2")
                                         </td>
                                         <td>
 
-                                            @item.OwnCost.ToString("N2")
+                                            @item.OwnCost.ToString("F2")
                                         </td>
 
                                         <td>
 
-                                            @item.ElementFullCost.ToString("N2")
+                                            @item.ElementFullCost.ToString("F2")
                                         </td>
                                         <td>
 
-                                            @item.FullCost.ToString("N2")
+                                            @item.FullCost.ToString("F2")
                                         </td>
                                     </tr>
 

@@ -155,16 +155,18 @@
             
                     <div class="col-md-auto">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            @if(Model.ImportStep != 1)
+                    @if(Model.ImportStep != 1)
                         {
                         <a asp-page="import" class="btn btn-outline-primary" asp-route-id="@Model.ElementImport.CustomerRequestID" asp-route-step="1">Загрузить</a>
+                        <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
                     }
                     else
                     {
                         <input type="submit" value="Загрузить" class="btn btn-outline-primary " asp-route-step="1" />
 
                     }
-                    <input type="submit" value="Анализ " class="btn btn-outline-primary " asp-route-step="2" />
+                    
+                    
      
                         </div>
                     </div>
