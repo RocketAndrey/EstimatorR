@@ -503,17 +503,26 @@
                             скачать эксель
                        </a>
                         <table class="table table-bordered">
-
-                            <tr>
+                            
+                           
+                                <tr>
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].RowNum)</th>
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementName)</th>
-                                @*<th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementTypeName)</th>*@
+                                
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementCount)</th>
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementPrice)</th>
+                                  @if (Model.ElementImport.ImportElementPrice)
+                            {
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].TotalPrice)</th>
+                            }
+                              @if (Model.ElementImport.ImportElementКitPrice)
+                            {
                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementKitPrice)</th>
+                            }
+                                @if (Model.ElementImport.ImportElementContractorPrice)
+                            {
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementContractorPrice)</th>
-
+                            }
                                 @{
                                     string colName = Model.CustomerRequest.Program.Name + " " + Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].OwnCost).ToString();
                                 }
@@ -527,6 +536,7 @@
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementFullCost)</th>
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].FullCost)</th>
                             </tr>
+                        
 
                             @if (Model.ElementImport != null)
                             
@@ -548,19 +558,28 @@
 
                                             @item.ElementPrice.ToString("F2")
                                         </td>
-                                        <td>
+                                        @if (Model.ElementImport.ImportElementPrice)
+                                        {
+                                            <td>
 
-                                            @item.TotalPrice.ToString("F2")
-                                        </td>
+                                                @item.TotalPrice.ToString("F2")
+                                            </td>
+                                        }
+                                        @if (Model.ElementImport.ImportElementКitPrice)
+                            {
                                          <td>
 
                                             @item.ElementKitPrice.ToString("F2")
                                         </td>
-                                                
-                                        <td>
+                            }
 
-                                            @item.ElementContractorPrice.ToString("F2")
-                                        </td>
+                                        @if (Model.ElementImport.ImportElementContractorPrice)
+                                        {
+                                            <td>
+
+                                                @item.ElementContractorPrice.ToString("F2")
+                                            </td>
+                                        }
                                         <td>
 
                                             @item.OwnCost.ToString("F2")
@@ -585,7 +604,8 @@
 
                                 <tr>
                                     <td colspan="4"></td>
-
+                                     @if (Model.ElementImport.ImportElementPrice)
+                                        {
                                     <td>
 
                                         <b>
@@ -593,6 +613,9 @@
                                         </b>
 
                                     </td>
+                                        }
+                                                     @if (Model.ElementImport.ImportElementКitPrice)
+                            {
                                     <td>
 
                                         <b>
@@ -600,12 +623,16 @@
                                         </b>
 
                                     </td>
+                            }
+                              @if (Model.ElementImport.ImportElementContractorPrice)
+                                        {
                                     <td>
                                         <b>
                                             @Model.ElementImport.ElementContractorPriceTotal.ToString("N2")
                                         </b>
 
                                     </td>
+                                        }
                                     <td></td>
                                   <td>
                                         <b>

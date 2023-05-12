@@ -379,18 +379,6 @@
                             </td>
                         </tr>
 
-                        <tr>
-                            <td colspan="7" align="right">
-
-           
-                                @if (Model?.ElementImport?.XLSXElementTypes?.Count > 0)
-                                {
-
-                                    <input type="submit" value="Анализ" class="btn btn-outline-primary " asp-route-step="2" />
-                                }
-                            </td>
-                        </tr>
-
                     </table>
                 
             </div>
@@ -479,17 +467,22 @@
                     <tr>
 
                         <td><b>№</b></td>
-                        <td>
-
-                            <b>@Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn) (@Model.ElementImport.ElementNameColumn)</b>
-                        </td>
-
+                        <td> <b>@Html.DisplayNameFor(model => model.ElementImport.ElementNameColumn) (@Model.ElementImport.ElementNameColumn)</b> </td>
                         <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementTypeKeyColumn) (@Model.ElementImport.ElementTypeKeyColumn)</b></td>
                         <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementCountColumn) (@Model.ElementImport.ElementCountColumn)</b></td>
-                        <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementPriceColumn) (@Model.ElementImport.ElementPriceColumn)</b></td>
-                        <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementKitPriceColumn) (@Model.ElementImport.ElementKitPriceColumn)</b></td>
-                        <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementContractorPriceColumn) (@Model.ElementImport.ElementContractorPriceColumn)</b></td>
-                    </tr>
+                            @if (Model.ElementImport.ImportElementPrice)
+                            {
+                                <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementPriceColumn) (@Model.ElementImport.ElementPriceColumn)</b></td>
+                            }
+                            @if (Model.ElementImport.ImportElementКitPrice)
+                            {
+                                <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementKitPriceColumn) (@Model.ElementImport.ElementKitPriceColumn)</b></td>
+                            }
+                               @if (Model.ElementImport.ImportElementContractorPrice)
+                            {
+                                <td><b>@Html.DisplayNameFor(model => model.ElementImport.ElementContractorPriceColumn) (@Model.ElementImport.ElementContractorPriceColumn)</b></td>
+                            }
+                        </tr>
 
                     @if (Model.ElementImport.XLSXElementTypes != null)
                     {
@@ -521,12 +514,21 @@
                                     <input asp-for="@Model.ElementImport.XLSXElementTypes[i].ElementCount" id="ElementImport.XLSXElementTypes[@i].ElementCount" class="form-control" />
 
                                 </td>
-                                <td>
+                                    @if (Model.ElementImport.ImportElementPrice)
+                                    {
+                                    <td>
                                     @Model.ElementImport.XLSXElementTypes[i].ElementPrice.ToString("N2")
                                 
-                                </td>
-                                <td> @Model.ElementImport.XLSXElementTypes[i].ElementKitPrice.ToString("N2")</td>
+                                     </td>
+                                    }
+                                    @if (Model.ElementImport.ImportElementКitPrice)
+                                    {
+                                      <td> @Model.ElementImport.XLSXElementTypes[i].ElementKitPrice.ToString("N2")</td>
+                                    }
+                                    @if (Model.ElementImport.ImportElementContractorPrice)
+                                    {
                                 <td>@Model.ElementImport.XLSXElementTypes[i].ElementContractorPrice.ToString("N2")</td>
+                                    }
                             </tr>
                         }
 
