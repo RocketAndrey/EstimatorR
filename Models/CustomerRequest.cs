@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office.CustomUI;
-using DocumentFormat.OpenXml.Wordprocessing;
+﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using NPOI.Util;
@@ -140,6 +139,9 @@ namespace Estimator.Models
                 //коллекция операций 
                 Dictionary<string, RequestOperationLaborSummary> returnOperations = new Dictionary<string, RequestOperationLaborSummary>();
                 decimal labor;
+
+                _operationSummary = null;
+                _operationGroups = null;
                 //перебираем все типы ЭКБ
 
                 foreach (var itemRET in RequestElementTypes)
@@ -246,13 +248,13 @@ namespace Estimator.Models
                                 
 
                                     }
-                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).KitLaborSummary+= (itemRO.RequestElementType.KitCount * itemTA.KitLabor) *CompanyHistory.TotalFactor;
-                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).BanchLaborSummary += (itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0);
-                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).ItemLaborSummary += (groupOperationCount * itemTA.ItemLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0); 
+                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).KitLaborSummary += (itemRO.RequestElementType.KitCount * itemTA.KitLabor) * CompanyHistory.TotalFactor * this.Rate* (itemRO.IsExecute ? 1 : 0); ;
+                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).BanchLaborSummary += (itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) * CompanyHistory.TotalFactor *this.Rate* itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0);
+                                    returnGroup[itemRO.TestChainItem.Operation.OperationGroup.Code].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).ItemLaborSummary += (groupOperationCount * itemTA.ItemLabor) * CompanyHistory.TotalFactor*this.Rate * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0); 
 
-                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).KitLaborSummary= (itemRO.RequestElementType.KitCount * itemTA.KitLabor) * CompanyHistory.TotalFactor;
-                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).BanchLaborSummary= (itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0);
-                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).ItemLaborSummary= (groupOperationCount * itemTA.ItemLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0); 
+                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).KitLaborSummary= (itemRO.RequestElementType.KitCount * itemTA.KitLabor) * CompanyHistory.TotalFactor*this.Rate* (itemRO.IsExecute ? 1 : 0);
+                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).BanchLaborSummary= (itemRO.RequestElementType.BatchCount * itemTA.BatchLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0)*this.Rate;
+                                    returnOperations[itemRO.TestChainItem.Operation.OperationID.ToString()].QualificationLaborSummary.Single(e => e.Name == itemTA.Qualification.Name).ItemLaborSummary= (groupOperationCount * itemTA.ItemLabor) * CompanyHistory.TotalFactor * itemRO.ExecuteCount * (itemRO.IsExecute ? 1 : 0)*this.Rate; 
 
                                 }
 
@@ -289,7 +291,7 @@ namespace Estimator.Models
                         {
                             if (!returnGroup.ContainsKey(itemQ.QualificationID.ToString()))
                             {
-                                RequestQualLaborSummary item = new RequestQualLaborSummary();
+                                RequestQualLaborSummary item = new ();
                               
                                 item.Name = itemQ.Name;
                                 item.QualificationID = itemQ.QualificationID;
@@ -569,6 +571,72 @@ namespace Estimator.Models
                 return result / 60;
             }
         }
+        /// <summary>
+        /// трудоемкость изготовления оснастки для всей заявки, час
+        /// </summary>
+        [NotMapped]
+        public decimal TotaKitlLabor
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                if (this.RequestElementTypes != null)
+                {
+                    foreach (var itemOG in RequestElementTypes)
+                    {
+                        result += itemOG.KitLaborSummary;
+                    }
+                }
+                    return result;
+                
+            }
+        }
+        /// <summary>
+        /// трудоемкость партии  для всей , час
+        /// </summary>
+        [NotMapped]
+        public decimal TotalBatchLabor
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                if (this.RequestElementTypes != null)
+                {
+                    foreach (var itemOG in RequestElementTypes)
+                    {
+                        result += itemOG.BatchLaborSummary;
+                    }
+
+                }
+                return result ;
+            }
+        }
+        /// <summary>
+        /// трудоемкость элемента  для всей заявки, час
+        /// </summary>
+        [NotMapped]
+        public decimal TotalItemLabor
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                if (this.RequestElementTypes != null)
+                {
+                    foreach (var itemOG in RequestElementTypes)
+                    {
+                        result += itemOG.ItemLaborSummary;
+                    }
+
+                }
+                return result;
+            }
+        }
         [NotMapped]
         public CompanyHistory CompanyHistory { get; set; }
         [NotMapped]
@@ -692,6 +760,58 @@ namespace Estimator.Models
         {
             get;
             set;
+        }
+
+
+       /// <summary>
+       /// Стоимость испытаний дочернего элемента 
+       /// </summary>
+       /// <param name="element"></param>
+       /// <returns></returns>
+        public decimal GetChildElementTypeCost(XLSXElementType element)
+        {
+            int childElementTypeID = 0;
+            decimal result = 0;
+
+            foreach (RequestElementType requestType in this.RequestElementTypes)
+            {
+
+                if (requestType.ElementTypeID == element.ElementTypeID)
+                {
+
+                    childElementTypeID=(int)requestType.ElementType.ChildElementTypeID; 
+                  
+
+                }
+            }
+            foreach(RequestElementType requestType in this.ChildCustomerRequest.RequestElementTypes)
+            {
+                if (requestType.ElementTypeID == childElementTypeID)
+                {
+
+                    //стомость оснаски
+                    decimal costKit = 0;
+                    if (requestType.KitCount> 0)
+                    
+                    {
+                        costKit= requestType.KitCount == 0 ? 0 : (!element.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
+                    }
+
+                    if (requestType.ItemCount > 0 && requestType.BatchCount > 0)
+                    {
+                        //стоимость испытаний данной партии
+                        result = ((requestType.CostItems / requestType.ItemCount) * element.ElementCount
+                            + (requestType.CostBanchs / requestType.BatchCount)
+                         + costKit) * this.ChildCustomerRequest.Rate;
+                    }
+                    //oкругление
+                    result = decimal.Round(result, 0);
+
+
+                }
+            }
+            return result; 
+
         }
 
     }

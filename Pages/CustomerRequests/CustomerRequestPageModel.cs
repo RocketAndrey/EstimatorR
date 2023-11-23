@@ -27,6 +27,85 @@ namespace Estimator.Pages.CustomerRequests
         [BindProperty]
         public CustomerRequest CustomerRequest { get; set; }
 
+        protected void SetCustomerReguest( int id)
+        {
+            //получаем заявку
+            this.CustomerRequest =  _context.CustomerRequests
+                .Include(c => c.Customer)
+                .Include(c => c.Program)
+                    .ThenInclude(c => c.ElementntTypes)
+                .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.TestActions)
+                               .ThenInclude(i => i.Qualification)
+                 .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.Operation)
+                                .ThenInclude(e => e.OperationGroup)
+                    .Include(e => e.RequestElementTypes)
+                        .ThenInclude(e => e.ElementType)
+                .AsNoTracking()
+                .FirstOrDefault(m => m.CustomerRequestID == id);
+            
+            CustomerRequest.ElementImport = _context.ElementImports
+               .Include(e => e.XLSXElementTypes)
+
+                  .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+            // Родительская заявка
+            if ((CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+            {
+                CustomerRequest.ParentCustomerRequest =  _context.CustomerRequests
+                .Include(c => c.Customer)
+                .Include(c => c.Program)
+                    .ThenInclude(c => c.ElementntTypes)
+                .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.TestActions)
+                               .ThenInclude(i => i.Qualification)
+                   .Include(e => e.RequestElementTypes)
+                    .ThenInclude(e => e.RequestOperations)
+                        .ThenInclude(e => e.TestChainItem)
+                            .ThenInclude(e => e.Operation)
+                                .ThenInclude(e => e.OperationGroup)
+                    .Include(e => e.RequestElementTypes)
+                        .ThenInclude(e => e.ElementType)
+                .AsNoTracking()
+                .FirstOrDefault(m => m.CustomerRequestID == CustomerRequest.ParentCustomerRequestID);
+
+                CustomerRequest.ParentCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
+                CustomerRequest.ParentCustomerRequest.Rate = CustomerRequest.Rate;
+
+            }
+            //Дочерняя заявка
+            if (ChildCustomerRequestExists(CustomerRequest.CustomerRequestID))
+            {
+                CustomerRequest.ChildCustomerRequestID = ChildCustomerReguestID;
+                CustomerRequest.ChildCustomerRequest =  _context.CustomerRequests
+               .Include(c => c.Customer)
+               .Include(c => c.Program)
+                   .ThenInclude(c => c.ElementntTypes)
+               .Include(e => e.RequestElementTypes)
+                   .ThenInclude(e => e.RequestOperations)
+                       .ThenInclude(e => e.TestChainItem)
+                           .ThenInclude(e => e.TestActions)
+                              .ThenInclude(i => i.Qualification)
+                  .Include(e => e.RequestElementTypes)
+                   .ThenInclude(e => e.RequestOperations)
+                       .ThenInclude(e => e.TestChainItem)
+                           .ThenInclude(e => e.Operation)
+                               .ThenInclude(e => e.OperationGroup)
+                   .Include(e => e.RequestElementTypes)
+                       .ThenInclude(e => e.ElementType)
+               .AsNoTracking()
+               .FirstOrDefault(m => m.CustomerRequestID == CustomerRequest.ChildCustomerRequestID);
+
+                CustomerRequest.ChildCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
+                CustomerRequest.ChildCustomerRequest.Rate = CustomerRequest.Rate;
+            }
+        }
         public CompanyHistory CompanyHistory { get; set; }
 
         public List<AssignedRequestElementType> AssignedElementsList;

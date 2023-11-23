@@ -239,6 +239,12 @@ namespace Estimator.Migrations
                     b.Property<int>("CustomerRequestID")
                         .HasColumnType("int");
 
+                    b.Property<int>("DeliveryTimeColumn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DownloadPriceColumn")
+                        .HasColumnType("int");
+
                     b.Property<int>("ElementContractorPriceColumn")
                         .HasColumnType("int");
 
@@ -265,6 +271,9 @@ namespace Estimator.Migrations
 
                     b.Property<int>("FirstRowNumber")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ImportDeliveryTime")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("ImportElementContractorPrice")
                         .HasColumnType("bit");
@@ -741,6 +750,9 @@ namespace Estimator.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BeforeUploadedXLSXElementTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DeliveryTime")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ElementContractorPrice")

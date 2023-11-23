@@ -2,7 +2,7 @@
 @model Estimator.Pages.CustomerRequests.ReportModel
 
 @{
-    ViewData["Title"] = "Расчёт стоимости по заявке";
+    ViewData["Title"] = "Калькуляция стоимости по заявке";
 }
 <form method="post">
     <input type="hidden" asp-for="SelectedTab" />
@@ -424,9 +424,9 @@
                                 <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchCount)</th>
                                 <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemCount)</th>
                                 <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitCount)</th>
-                                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].LaborSummary)</th>
-                                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].CostSummary)</th>
-
+                                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].KitLaborSummary)</th>
+                                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].BatchLaborSummary)</th>
+                                <th>@Html.DisplayNameFor(model => model.CustomerRequest.RequestElementTypes.ToList()[0].ItemLaborSummary)</th>
                             </tr>
                             <tbody>
                                 @foreach (var item in Model.CustomerRequest.RequestElementTypes)
@@ -447,14 +447,18 @@
                                                 @item.KitCount
                                             </td>
                                             <td>
-                                                @item.LaborSummary.ToString("N2")
+                                                @item.KitLaborSummary.ToString("N2")
 
                                             </td>
                                             <td>
-                                                @item.CostSummary.ToString("N2")
+                                                @item.BatchLaborSummary.ToString("N2")
 
                                             </td>
 
+                                            <td>
+                                                @item.ItemLaborSummary.ToString("N2")
+
+                                            </td>
 
                                         </tr>
                                     }
@@ -483,13 +487,19 @@
                                     </td>
                                     <td>
                                         <b>
-                                            @Model.CustomerRequest.TotalLabor.ToString("N2")
+                                            @Model.CustomerRequest.TotaKitlLabor.ToString("N2")
                                         </b>
 
                                     </td>
                                     <td>
                                         <b>
-                                            @Model.CustomerRequest.TotalCost.ToString("N2")
+                                            @Model.CustomerRequest.TotalBatchLabor.ToString("N2")
+                                        </b>
+
+                                    </td>
+                                    <td>
+                                        <b>
+                                            @Model.CustomerRequest.TotalItemLabor.ToString("N2")
                                         </b>
 
                                     </td>
@@ -499,157 +509,205 @@
                     </div>
                     @*перечень*@
                     <div class="@tabs[5]" id="nav-item5" role="tabpanel" aria-labelledby="nav-item5-tab">
-                        <a target="_blank" asp-page="./Download" asp-route-reportType="elements" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-year="@Model.YearOfNoms">
-                            скачать эксель
-                       </a>
-                        <table class="table table-bordered">
-                            
-                           
-                                <tr>
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].RowNum)</th>
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementName)</th>
-                                
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementCount)</th>
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementPrice)</th>
-                                  @if (Model.ElementImport.ImportElementPrice)
-                            {
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].TotalPrice)</th>
-                            }
-                              @if (Model.ElementImport.ImportElementКitPrice)
-                            {
-                               <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementKitPrice)</th>
-                            }
-                                @if (Model.ElementImport.ImportElementContractorPrice)
-                            {
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementContractorPrice)</th>
-                            }
-                                @{
-                                    string colName = Model.CustomerRequest.Program.Name + " " + Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].OwnCost).ToString();
-                                }
-                                <th>@colName</th>
-                                @{
-                                    if (Model.CustomerRequest.ChildCustomerRequest !=null)
-                                    {
+                        @if (Model.ElementImport != null)
+                        {
+                            <div class="container">
+                                <div class="nav">
+                                  
+                                        <a class="nav-link" target="_blank" asp-page="./Download" asp-route-reportType="elements" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-year="@Model.YearOfNoms" data-toggle="tooltip" data-placement="bottom" title="Скачать все данные для рассчета в формате Excel">
+                                           Все данные
+                                        </a>
+                                    <a class="nav-link" target="_blank" asp-page="./Download" asp-route-reportType="FillElementList" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-year="@Model.YearOfNoms" data-toggle="tooltip" data-placement="bottom" title="Добавить  данные  рассчета в исходный файл Excel">
+                                            Заполнить исходный файл
+                                        </a>
+                                    <a class="nav-link" target="_blank" asp-page="./Download" asp-route-reportType="Invoce" asp-route-id="@Model.CustomerRequest.CustomerRequestID" asp-route-year="@Model.YearOfNoms" data-toggle="tooltip" data-placement="bottom" title="Коммерческое предложение в формате Excel">
+                                            КП
+                                        </a>
+                                   
+                                </div>
+                                <div class="form-row">
+
+
+                                    <table class="table table-bordered">
+
+
+                                        <tr>
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].RowNum)</th>
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementName)</th>
+
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementCount)</th>
                                         
-                                    }
-                                }
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementFullCost)</th>
-                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].FullCost)</th>
-                            </tr>
-                        
+                                            @if (Model.ElementImport.ImportElementPrice)
+                                            {
+                                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementPrice)</th>
+                                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].TotalPrice)</th>
+                                            }
+                                            @if (Model.ElementImport.ImportElementКitPrice)
+                                            {
+                                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementKitPrice)</th>
+                                            }
+                                            @if (Model.ElementImport.ImportElementContractorPrice)
+                                            {
+                                                <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementContractorPrice)</th>
+                                            }
+                                            @{
+                                                string colName = Model.CustomerRequest.Program.Name + " " + Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].OwnCost).ToString();
+                                            }
+                                            <th>@colName</th>
+                                            @{
+                                                if (Model.CustomerRequest.ChildCustomerRequest != null)
+                                                {
+                                                    string colNameChild = Model.CustomerRequest.ChildCustomerRequest.Program.Name + " " + Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].OwnCost).ToString();
 
-                            @if (Model.ElementImport != null)
-                            
-                            {
-                                @foreach (var item in Model.ElementImport.XLSXElementTypes)
-                                {
-                                    <tr>
-                                        <td>
-                                            @item.RowNum
-                                        </td>
-                                        <td>
-                                            @item.ElementName
-                                        </td>
-                                      
-                                        <td>
-                                            @item.ElementCount
-                                        </td>
-                                         <td>
+                                                    <th>@colNameChild</th>
+                                                }
+                                            }
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementFullCost)</th>
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].FullCost)</th>
+                                        </tr>
 
-                                            @item.ElementPrice.ToString("F2")
-                                        </td>
-                                        @if (Model.ElementImport.ImportElementPrice)
+
+                                        @if (Model.ElementImport != null)
+
                                         {
-                                            <td>
+                                            @foreach (var item in Model.ElementImport.XLSXElementTypes)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.RowNum
+                                                    </td>
+                                                    <td>
+                                                        @item.ElementName
+                                                    </td>
 
-                                                @item.TotalPrice.ToString("F2")
-                                            </td>
+                                                    <td>
+                                                        @item.ElementCount
+                                                    </td>
+                                                    
+                                                    @if (Model.ElementImport.ImportElementPrice)
+                                                    {
+                                                        <td>
+
+                                                            @item.ElementPrice.ToString("F2")
+                                                        </td>
+                                                        <td>
+
+                                                            @item.TotalPrice.ToString("F2")
+                                                        </td>
+                                                    }
+                                                    @if (Model.ElementImport.ImportElementКitPrice)
+                                                    {
+                                                        <td>
+
+                                                            @item.ElementKitPrice.ToString("F2")
+                                                        </td>
+                                                    }
+
+                                                    @if (Model.ElementImport.ImportElementContractorPrice)
+                                                    {
+                                                        <td>
+
+                                                            @item.ElementContractorPrice.ToString("F2")
+                                                        </td>
+                                                    }
+                                                    <td>
+
+                                                        @item.OwnCost.ToString("F2")
+                                                    </td>
+                                                    @if (Model.CustomerRequest.ChildCustomerRequest != null)
+                                                    {
+                                                    <td>
+                                                            @item.ChildElementOwnCost.ToString("F2")
+                                                       
+                                                    </td>
+                                                    }
+
+                                                    <td>
+
+                                                        @item.ElementFullCost.ToString("F2")
+                                                    </td>
+                                                    <td>
+
+                                                        @item.FullCost.ToString("F2")
+                                                    </td>
+                                                </tr>
+
+
+                                            }
+
                                         }
-                                        @if (Model.ElementImport.ImportElementКitPrice)
-                            {
-                                         <td>
 
-                                            @item.ElementKitPrice.ToString("F2")
-                                        </td>
-                            }
+                                        <tfoot>
 
-                                        @if (Model.ElementImport.ImportElementContractorPrice)
-                                        {
-                                            <td>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                @if (Model.ElementImport.ImportElementPrice)
+                                                {
+                                                    <td></td>
+                                                    <td>
 
-                                                @item.ElementContractorPrice.ToString("F2")
-                                            </td>
-                                        }
-                                        <td>
+                                                        <b>
+                                                            @Model.ElementImport.ElementPriceTotal.ToString("N2")
+                                                        </b>
 
-                                            @item.OwnCost.ToString("F2")
-                                        </td>
+                                                    </td>
+                                                }
+                                                @if (Model.ElementImport.ImportElementКitPrice)
+                                                {
+                                                    <td>
 
-                                        <td>
+                                                        <b>
+                                                            @Model.ElementImport.ElementKitPriceTotal.ToString("N2")
+                                                        </b>
 
-                                            @item.ElementFullCost.ToString("F2")
-                                        </td>
-                                        <td>
+                                                    </td>
+                                                }
+                                                @if (Model.ElementImport.ImportElementContractorPrice)
+                                                {
+                                                    <td>
+                                                        <b>
+                                                            @Model.ElementImport.ElementContractorPriceTotal.ToString("N2")
+                                                        </b>
 
-                                            @item.FullCost.ToString("F2")
-                                        </td>
-                                    </tr>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    <b>
+                                                        @Model.ElementImport.CustomerRequest.ElementImport.CostTotal.ToString("N2")
+                                                    </b>
+                                                </td>
+                                                @if (Model.CustomerRequest.ChildCustomerRequest != null)
+                                                {
+                                                    <td>
+                                                        <b>
+
+                                                        @Model.CustomerRequest.ChildCustomerRequest.TotalCost.ToString("N2")
+                                                        </b>
+                                                    </td>
+                                                }
+
+                                                <td>
+                                                    <b>
+                                                        @* @Model.ElementImport.CostTotal.ToString("N2") *@
+                                                    </b>
+                                                </td>
+                                               
+                                                <td>
+                                                    <b>
+                                                        @Model.ElementImport.FullCost.ToString("N2")
+                                                    </b>
+                                                </td>
+                                            </tr>
 
 
-                                }
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        }
 
-                            }
-
-                            <tfoot>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                     @if (Model.ElementImport.ImportElementPrice)
-                                        {
-                                    <td>
-
-                                        <b>
-                                            @Model.ElementImport.ElementPriceTotal.ToString("N2")
-                                        </b>
-
-                                    </td>
-                                        }
-                                                     @if (Model.ElementImport.ImportElementКitPrice)
-                            {
-                                    <td>
-
-                                        <b>
-                                            @Model.ElementImport.ElementKitPriceTotal.ToString("N2")
-                                        </b>
-
-                                    </td>
-                            }
-                              @if (Model.ElementImport.ImportElementContractorPrice)
-                                        {
-                                    <td>
-                                        <b>
-                                            @Model.ElementImport.ElementContractorPriceTotal.ToString("N2")
-                                        </b>
-
-                                    </td>
-                                        }
-                                    <td></td>
-                                  <td>
-                                        <b>
-                                            @Model.ElementImport.CostTotal.ToString("N2")
-                                        </b>
-                                  </td>
-
-                                    <td>
-                                        <b>
-                                            @Model.ElementImport.FullCost.ToString("N2")
-                                        </b>
-                                    </td>
-                                </tr>
-                               
-                          
-                            </tfoot>
-                        </table>
                     </div>
                     @*операции  *@
                     <div class="@tabs[4]" id="nav-item4" role="tabpanel" aria-labelledby="nav-item4-tab">
@@ -922,6 +980,12 @@
         document.getElementById('SelectedTab').value= tabnum;
 
        
+    }
+    function DownloadFile(control,id,year) {
+        var e = document.getElementById(control);
+        var location = "./Download?ReportType=download?id=" + id;
+
+        window.open(location);
     }
   
 </script>

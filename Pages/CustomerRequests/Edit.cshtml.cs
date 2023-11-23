@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System;
-using DocumentFormat.OpenXml.Drawing;
+
 using Microsoft.AspNetCore.Authorization;
 
 namespace Estimator.Pages.CustomerRequests
@@ -35,22 +35,9 @@ namespace Estimator.Pages.CustomerRequests
                 id = CreateRequestFromParent(parentid.Value);
                 return RedirectToPage("./edit", new { id = id });
             }
-
-            CustomerRequest = await _context.CustomerRequests
-                .Include(c => c.Customer)
-                .Include(c => c.Program)
-                    .ThenInclude(c => c.ElementntTypes)
-                .Include(c => c.RequestElementTypes)
-                    .ThenInclude(c => c.ElementType)
-                .Include(c => c.Program)
-                    .ThenInclude(c => c.Templates)
-                .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
-
-            ElementImport = _context.ElementImports
-                   .Include(c=>c.XLSXElementTypes)     
-                   .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+            base.SetCustomerReguest((int)id);
+ 
             
-            strRate = CustomerRequest.Rate.ToString();
 
             CustomerRequest.ElementImport = ElementImport; 
 

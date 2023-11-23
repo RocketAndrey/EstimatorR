@@ -1,4 +1,14 @@
 ﻿@page
 @model Estimator.Pages.CustomerRequests.DownloadModel
 @{
+    
+}
+@{
+    if(Model.ErrorMessage !="")
+    {
+        <div class="alert alert-danger" role="alert">
+            @Model.ErrorMessage; 
+        </div>
+
+    }
 }

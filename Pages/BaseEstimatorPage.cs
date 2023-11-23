@@ -46,7 +46,7 @@ namespace Estimator.Pages
 
 
             }
-            catch (Exception e)
+            catch 
             {
                 YearOfNoms = 2019;
                 UseAsu = false;

@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Расчёт стоимости испытаний</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-select/css/bootstrap-select.min.css" />
+
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -24,13 +26,34 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/About">Как этим пользоваться?</a>
+                            <a class="nav-link" asp-area="" asp-page="/About">Как этим пользоваться?</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/CustomerRequests/Index">Заявки</a>
+                            <a class="nav-link" asp-area="" asp-page="/CustomerRequests/Index">Заявки</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Customer/Index">Заказчики</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Справочники
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-page="/Customer/Index">Заказчики</a>
+                                   @if (User.Identity.IsAuthenticated)
+                                {
+
+                                    @if (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator")
+                                    {
+                                        <a class="dropdown-item" asp-area="" asp-page="/Program/Index">Программы</a>
+                                    }
+
+                                }
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Прайсы</a>
+                                <a class="dropdown-item" href="#">Заводы изготовители </a>
+                                <a class="dropdown-item" href="#">ЭКБ ОП</a>
+                            
+                                
+                            </div>
                         </li>
 
 
@@ -40,11 +63,9 @@
                             @if (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator")
                             {
 
+                               
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Program/Index">Программы</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Users/Index">Пользователи</a>
+                                    <a class="nav-link" asp-area="" asp-page="/Users/Index">Пользователи</a>
                                 </li>
 
                             }
@@ -56,6 +77,9 @@
               
             </div>
         </nav>
+
+
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -65,12 +89,13 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Расчёт стоимости испытаний - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2023 - Расчёт стоимости испытаний - <a asp-area="" asp-page="/Privacy">Политика конфиденциальности</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js"> </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)

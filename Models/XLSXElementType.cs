@@ -10,9 +10,7 @@ namespace Estimator.Models
 {
     public class XLSXElementType
     {
-        private decimal _price;
-        private decimal _kitPrice;
-        private decimal _contractorPrice; 
+       
         public XLSXElementType()
         {
             InList = true;
@@ -84,6 +82,13 @@ namespace Estimator.Models
         [Display(Name = "Строка")]
         public int? RowNum { get; set; }
         /// <summary>
+        /// срок поставки изделий от завода изготовителя 
+        /// измеряется в календарных днях
+        /// </summary>
+        [Display(Name = "Срок закупки, дней")]
+        [DefaultValue(0)]
+        public int? DeliveryTime { get; set; }
+        /// <summary>
         /// Цена закупки,1 шт без НДС
         /// </summary>
         [Display(Name = "Цена закупки, шт/руб.")]
@@ -143,13 +148,41 @@ namespace Estimator.Models
         {
             get
             {
-               
+                decimal result; 
                 if (ElementCount != 0)
                 {
-                    return decimal.Round( (ElementPrice * ElementCount + ElementKitPrice + ElementContractorPrice + OwnCost) / ElementCount,0);
+
+                    result=  (ElementPrice * ElementCount + ElementKitPrice + ElementContractorPrice + OwnCost) ;
+                    /// добавляем с стоимоcть дочернего элемента
+                    if (this?.ElementImport?.CustomerRequest?.ChildCustomerRequest != null  )
+                    {
+                        result = result + this.ElementImport.CustomerRequest.GetChildElementTypeCost(this);
+                    }
+
+                    return result / ElementCount;
                 }
                 else
                 { return 0; }
+            }
+        }
+        /// <summary>
+        /// стоимость работ дочернего элемента ,1 шт без НДС
+        /// </summary>
+        [Display(Name = "Стоимость работ элемента дочерней заявки, шт/руб.")]
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(0)]
+        public decimal ChildElementOwnCost
+        {
+            get
+                
+            {
+                
+                if(ElementImport?.CustomerRequest?.ChildCustomerRequest!=null)
+                {
+                    ElementImport?.CustomerRequest?.ChildCustomerRequest?.CalculateGroups();
+                    return ElementImport.CustomerRequest.GetChildElementTypeCost(this);
+                }
+                return 0;
             }
         }
     }

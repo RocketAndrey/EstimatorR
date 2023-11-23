@@ -24,9 +24,11 @@ namespace Estimator.Models
             ElementPriceColumn = ColumnNames.E;
             ElementKitPriceColumn = ColumnNames.F;
             ElementContractorPriceColumn = ColumnNames.G;
+            DeliveryTimeColumn = ColumnNames.H;
+            DownloadPriceColumn = ColumnNames.D;
         
             FirstRowIsHeader = true;
-            ImportElementPrice = true;
+            ImportElementPrice = false;
 
             FirstRowNumber = 2;
             UseLastRowNumber = false;
@@ -78,7 +80,11 @@ namespace Estimator.Models
 
         [Display(Name = "Импортировать цену элементов")]
         public bool ImportElementPrice { get; set; }
-        [Display(Name = "Цена закупки")]
+        
+        [Display(Name = "Импортировать срок поставки элементов, дней")]
+        public bool ImportDeliveryTime { get; set; }
+      
+        [Display(Name = "Цена элемента, руб/шт")]
         public ColumnNames ElementPriceColumn { get; set; }
 
         [Display(Name = "Импортировать цену оснастки")]
@@ -92,6 +98,10 @@ namespace Estimator.Models
         [Display(Name = "Цена соисполнитель")]
         public ColumnNames ElementContractorPriceColumn { get; set; }
 
+        [Display(Name = "Колонка Эксель для выгрузки стоимости испытаний")]
+        public ColumnNames DownloadPriceColumn { get; set; }
+        [Display(Name = "Срок поставки, дней")]
+        public ColumnNames DeliveryTimeColumn { get; set; }
         public List<XLSXElementType> XLSXElementTypes { get; set; }
         /// <summary>
         /// файл загружен?
@@ -165,8 +175,11 @@ namespace Estimator.Models
             // вычисляем стоимость испытаний 1 шт
             foreach (XLSXElementType type in this.XLSXElementTypes)
             {
+                //type.OwnCost = GetCostByElementTypeID(type.ElementTypeID, type.ElementCount);
+
                 foreach (RequestElementType requestType in CustomerRequest.RequestElementTypes)
                 {
+                   
                     if (requestType.ElementTypeID == type.ElementTypeID)
                     {
                         type.ElementTypeName = requestType.ElementType.Name;
@@ -177,14 +190,17 @@ namespace Estimator.Models
                             type.OwnCost = ((requestType.CostItems / requestType.ItemCount) * type.ElementCount
                                 + (requestType.CostBanchs / requestType.BatchCount)
                                 + costKit) * this.CustomerRequest.Rate;
+                            //oкругление
                             type.OwnCost = decimal.Round(type.OwnCost, 0);
 
                         }
                     }
                 }
+            
             }
 
         }
+        
         /// <summary>
         /// Равно true все элементы распознаны.
         /// </summary>
@@ -276,7 +292,7 @@ namespace Estimator.Models
         }
 
         /// <summary>
-        /// Стоимость испытаний, итого/руб
+        /// Стоимость испытаний собственные работы, итого/руб
         /// </summary>
         [Display(Name = "Стоимость испытаний, итого/руб.")]
             [Column(TypeName = "decimal(18, 4)")]

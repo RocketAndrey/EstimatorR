@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Estimator.Models.AsuViews;
 using Estimator.Migrations;
-using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace Estimator.Pages.CustomerRequests
 
@@ -95,7 +94,9 @@ namespace Estimator.Pages.CustomerRequests
                                                             .ThenInclude(c => c.ElementntTypes)
                                                                 .ThenInclude (c=>c.Keys)
                                                       .FirstOrDefault(m => m.CustomerRequestID == id);
-            }
+                ElementImport.CustomerRequestID = (int)id;
+
+                    }
             else
             {
                
@@ -121,6 +122,7 @@ namespace Estimator.Pages.CustomerRequests
             {
                 return Page();
             }
+           
             //установка этапа
             ImportStep = step;
 
@@ -135,6 +137,16 @@ namespace Estimator.Pages.CustomerRequests
             {
                 try
                 {
+                    ////если пытаемся заного загрузить файл,  когда уже 1 раз загрузили
+                    //if (ElementImport.XLSXElementTypes != null)
+
+                    //{
+                    //    if (ElementImport.XLSXElementTypes.Count > 0)
+                    //    {
+                    //        ErrorMessage = "Если вы загрузите новый файл, старые значения будут стерты!";
+                    //    }
+                    //}
+
                     if (ElementImport.ElementImportID == 0)
                     {
                         _context.ElementImports.Add(ElementImport);
@@ -180,12 +192,14 @@ namespace Estimator.Pages.CustomerRequests
                             }
                             else
                             {
-                                ErrorMessage = convertMessage;  
+                                ErrorMessage = convertMessage;
+                                return Page();
                             }
                         }
                         else
                         {
                             ErrorMessage = "Можно загружать файлы только в формате xslx. Другой форман файлов невозможен.";
+                            return Page(); 
                         }
 
                     }
@@ -193,15 +207,8 @@ namespace Estimator.Pages.CustomerRequests
                     {
                         //на шаге 1 файл не зегружен
                         ErrorMessage = "Вы не загрузили файл! ";
-                        //если пытаемся заного загрузить файл,  когда уже 1 раз загрузили
-                        if (ElementImport.XLSXElementTypes != null)
-
-                        {
-                            if (ElementImport.XLSXElementTypes.Count > 0)
-                            {
-                                ErrorMessage = "Если вы загрузите новый файл, старые значения будут стерты!";
-                            }
-                        }
+                        return Page();
+                       
 
                     }
 
@@ -338,39 +345,9 @@ namespace Estimator.Pages.CustomerRequests
                     returnValue = false;
                     continue;
                 }
-                //пустое место вместо ключ
-                if (PrepareStr(itemXLSX.ElementTypeKey) == "")
-                {
-                    //здесь пытаемся найти ключ в поле ElementName
-                    // ищем в коллекции ключей
-                    foreach (var key in keys)
-                    {
-                        if (PrepareStr(itemXLSX.ElementName).IndexOf(PrepareStr(key.Key))>=0)
-                        {
-                            
-                            itemXLSX.ElementTypeKey= key.Key;   
-                            break;
-                        }
- 
-                    }
-                   
-                }
-                //ключ всетаки не найден
-                if (PrepareStr(itemXLSX.ElementTypeKey) == "")
-                {
-                    itemXLSX.ErrorMessage = "Ключ для элемента не заполнен.";
-                    returnValue = false;
-                    continue;
-                }
+                // если ключ не пустой
 
-                    XLSXElementType beforeItem = null;
-                //если используем  данные предыдущих  импортов
-                if (this.ElementImport.UseLastCalculation)
-                {
-                    beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ElementName, itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID);
-                }
-               //Если предыдущий типономина найден и ему присвоен тип
-                if (!((beforeItem!=null? beforeItem.ElementTypeID:0) > 0))
+                if (PrepareStr(itemXLSX.ElementTypeKey) != "")
                 {
                     // ищем в коллекции ключей
                     foreach (var key in keys)
@@ -387,22 +364,53 @@ namespace Estimator.Pages.CustomerRequests
 
                     }
                 }
-                // берем значения из ранее загруженного изделия
-                else
+                //пустое место вместо ключа или ключ не нашли на предыдущем этапе 
+                if (PrepareStr(itemXLSX.ElementTypeKey) == "" | itemXLSX.ElementTypeID == null)
                 {
-                    
-                    itemXLSX.ElementTypeID = beforeItem.ElementTypeID ;
-                    itemXLSX.ElementTypeKey = beforeItem.ElementTypeKey;  
-                    itemXLSX.ErrorMessage = "";
-                    itemXLSX.Valid = true;
-                    itemXLSX.BeforeUploadedXLSXElementTypeID = beforeItem.ID;
-
-                    itemXLSX.ElementTypeName = ElementImport.CustomerRequest.Program.ElementntTypes.FirstOrDefault(m => m.ElementTypeID == itemXLSX.ElementTypeID).Name??"";
-
+                    //здесь пытаемся найти ключ в поле ElementName
+                 
+                    foreach (var key in keys)
+                    {
+                        if (PrepareStr(itemXLSX.ElementName).IndexOf(PrepareStr(key.Key))>=0)
+                        {
+                            
+                            itemXLSX.ElementTypeKey= key.Key;
+                            itemXLSX.ElementTypeID = keys[key.Key].ElementTypeID;
+                            itemXLSX.ElementTypeName = keys[key.Key].Name;
+                            itemXLSX.ErrorMessage = "";
+                            itemXLSX.Valid = true;
+                            break;
+                        }
+ 
+                    }
+                   
+                }
+                XLSXElementType beforeItem = null;
+                //или ключ не найден  или искать в предыдущем импорте
+                if ((PrepareStr(itemXLSX.ElementTypeKey) == "") | this.ElementImport.UseLastCalculation)
+                {
+                    beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ElementName, itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID);
+                    //Если предыдущий типономина  найден и ему присвоен тип
+                    if (((beforeItem != null ? beforeItem.ElementTypeID : 0) > 0))
+                    {
+                        itemXLSX.ElementTypeID = beforeItem.ElementTypeID;
+                        itemXLSX.ElementTypeKey = beforeItem.ElementTypeKey;
+                        itemXLSX.ErrorMessage = "";
+                        itemXLSX.Valid = true;
+                        itemXLSX.BeforeUploadedXLSXElementTypeID = beforeItem.ID;
+                        itemXLSX.ElementTypeName = ElementImport.CustomerRequest.Program.ElementntTypes.FirstOrDefault(m => m.ElementTypeID == itemXLSX.ElementTypeID).Name ?? "";
+                    }
                 }
 
+                //ключ всетаки не найден после всех  попыток
+                if (PrepareStr(itemXLSX.ElementTypeKey) == "")
+                {
+                    itemXLSX.ErrorMessage = "Ключ для элемента не заполнен.";
+                    returnValue = false;
+                    continue;
+                }
                 //присваеваем номер строки в эксель там где он не присвоем(до изменения где номер строки добавляется при импорте)
-                if(itemXLSX.RowNum == null) 
+                if (itemXLSX.RowNum == null) 
                 { 
                     itemXLSX.RowNum = rowNumber; 
                 }
@@ -430,20 +438,22 @@ namespace Estimator.Pages.CustomerRequests
                 }
                 if (saveChanges)
                 {
-                    XLSXElementType item = _context.XLSXElementTypes.FirstOrDefault(m => m.ID == itemXLSX.ID);
-                    item.ElementTypeKey = itemXLSX.ElementTypeKey ?? "";
-                    item.ElementName = itemXLSX.ElementName ?? "";
-                    item.ElementCount = itemXLSX.ElementCount;
-                    item.ElementTypeID = itemXLSX.ElementTypeID;
-                    if (item.RowNum == null)
-                    {
-                        item.RowNum = itemXLSX.RowNum;
-                    }
-                    item.BeforeUploadedXLSXElementTypeID  = itemXLSX.BeforeUploadedXLSXElementTypeID;
-                    _context.Entry(item).State = EntityState.Modified;
+                        XLSXElementType item = _context.XLSXElementTypes.FirstOrDefault(m => m.ID == itemXLSX.ID);
+                    
+                        item.ElementTypeKey = itemXLSX.ElementTypeKey ?? "";
+                        item.ElementName = itemXLSX.ElementName ?? "";
+                        item.ElementCount = itemXLSX.ElementCount;
+                        item.ElementTypeID = itemXLSX.ElementTypeID;
+                        if (item.RowNum == null)
+                        {
+                            item.RowNum = itemXLSX.RowNum;
+                        }
+                        item.BeforeUploadedXLSXElementTypeID = itemXLSX.BeforeUploadedXLSXElementTypeID;
+                        _context.Entry(item).State = EntityState.Modified;
 
-                    _context.SaveChanges();
-                }
+                        _context.SaveChanges();
+                    }
+                
             }
          
                 if (returnValue )
@@ -523,7 +533,7 @@ namespace Estimator.Pages.CustomerRequests
         private XLSXElementType BeforeUploadedXLSXElementType(string elementName, int id, int programid)
         {
             string selectStr= "SELECT [ID] ,[RowNum],[ElementImportID] ,[ElementName] ,[ElementTypeKey]" +
-            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[ElementPrice],[BeforeUploadedXLSXElementTypeID],[ElementContractorPrice],[ElementKitPrice] " +
+            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[ElementPrice],[BeforeUploadedXLSXElementTypeID],[ElementContractorPrice],[ElementKitPrice],[DeliveryTime] " +
             "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
             " AND  e.ProgramID = {2}";
            

@@ -136,9 +136,21 @@
       <div class="form-group row" >
             <div class ="col">
                 <div class="custom-control custom-switch">
-                    <input type="checkbox" asp-for="@Model.CustomerRequest.UseImport" class="custom-control-input" id="customSwitchUseImport" onclick="ShowImport()">
-                    <label class="custom-control-label" for="customSwitchUseImport">@Html.DisplayNameFor(mosel=>Model.CustomerRequest.UseImport) </label>
-                </div>
+                    @{
+                        if(Model.CustomerRequest?.ElementImport?.XLSXElementTypes.Count > 0 )
+                        {
+                            <input type="checkbox" asp-for="@Model.CustomerRequest.UseImport" class="custom-control-input" id="customSwitchUseImport"  disabled>
+                            <label class="custom-control-label" for="customSwitchUseImport">@Html.DisplayNameFor(mosel=>Model.CustomerRequest.UseImport) </label>
+
+                        }
+                        else
+                        {
+                            <input type="checkbox" asp-for="@Model.CustomerRequest.UseImport" class="custom-control-input" id="customSwitchUseImport" onclick="ShowImport()">
+                            <label class="custom-control-label" for="customSwitchUseImport">@Html.DisplayNameFor(mosel=>Model.CustomerRequest.UseImport) </label>
+
+                        }
+                        }
+                 </div>
             </div>
                 <div class="col col-auto">
                 <div id="divImportIcon" style="display:none">
@@ -166,8 +178,8 @@
                         }
   
                     }
-                  } 
-                <a  id="importButton" asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID" >
+                  }
+                    <a class="btn btn-outline-primary" id="importButton" asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
                    @btnText
                 </a>
                 </div>

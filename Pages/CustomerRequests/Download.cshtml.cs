@@ -8,11 +8,11 @@ using NPOI.HPSF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections;
-using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.Extensions.Logging;
 
 namespace Estimator.Pages.CustomerRequests
 {
-    public class DownloadModel :Estimator.Pages.BaseEstimatorPage
+    public class DownloadModel :CustomerRequestPageModel
     {
         public DownloadModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
@@ -21,52 +21,70 @@ namespace Estimator.Pages.CustomerRequests
           //  ImportStep = 1;
 
         }
+       
+        public string ErrorMessage { get; set; }
         public IActionResult  OnGet(string reportType , int id, int year)
         {
-          
-            string fileName = _appEnvironment.WebRootPath + "/Files/" + reportType + id.ToString() + ".xlsx" ;
-            //получаем заявку
-            CustomerRequest request =  _context.CustomerRequests
-                .Include(c => c.Customer)
-                .Include(c => c.Program)
-                    .ThenInclude(c => c.ElementntTypes)
-                .Include(e => e.RequestElementTypes)
-                    .ThenInclude(e => e.RequestOperations)
-                        .ThenInclude(e => e.TestChainItem)
-                            .ThenInclude(e => e.TestActions)
-                               .ThenInclude(i => i.Qualification)
-                   .Include(e => e.RequestElementTypes)
-                    .ThenInclude(e => e.RequestOperations)
-                        .ThenInclude(e => e.TestChainItem)
-                            .ThenInclude(e => e.Operation)
-                                .ThenInclude(e => e.OperationGroup)
-                    .Include(e => e.RequestElementTypes)
-                        .ThenInclude(e => e.ElementType)
-                .AsNoTracking()
-                .FirstOrDefault(m => m.CustomerRequestID == id);
 
-            ElementImport ElementImport = _context.ElementImports
-                .Include(e => e.XLSXElementTypes)
-                .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
 
-            ElementImport.CustomerRequest = request;
-            request.ElementImport = ElementImport;
+            string fileName;
+            base.SetCustomerReguest(id);
 
-            request.CompanyHistory = _context.CompanyHistories
+
+            CustomerRequest.CompanyHistory = _context.CompanyHistories
                   .Include(c => c.Staff)
                        .ThenInclude(e => e.Qualification)
             .Include(c => c.CalcFactors)
                   .FirstOrDefault(m => m.YearOfNorms == year);
 
-            // request.CalculateGroups();
-            ElementImport.CalculateXLSXCosts();
+           
+ 
 
-            XSLXWriter writer = new XSLXWriter(fileName);
+            XSLXWriter writer;
+            string errorMessage="";
+            fileName = _appEnvironment.WebRootPath + "/Files/" + reportType + id.ToString() + ".xlsx";
+
+            if (reportType == "elements")
+            {
+                
+                writer = new XSLXWriter(fileName);
+
+                if (writer.CreateXSLXFileElements(CustomerRequest.ElementImport,out errorMessage))
+                {
+
+                    return File("/files/" + reportType + id.ToString() + ".xlsx", "text/plain", reportType + id.ToString() + ".xlsx");
+                }
+            }
+            else if (reportType == "FillElementList")
+            {
+                fileName = _appEnvironment.WebRootPath + "/Files/"  + id.ToString() + ".xlsx";
+                writer = new XSLXWriter (fileName);
+               
+               if ( writer.AddReportDataToXLSX(CustomerRequest.ElementImport,out errorMessage))
+               {
+                    return File("/files/" + reportType + id.ToString() + ".xlsx", "text/plain", reportType + id.ToString() + ".xlsx");
+               }
+
+            }
+            else if (reportType == "Invoce")
+             {
+                writer = new XSLXWriter(fileName);
+
+                if (writer.CreateInvoce(CustomerRequest.ElementImport, out errorMessage))
+                {
+
+                    return File("/files/" + reportType + id.ToString() + ".xlsx", "text/plain", reportType + id.ToString() + ".xlsx");
+                }
+            }
+            else 
+            {
+                errorMessage = string.Format("Тип отчета {0} не найден", reportType); 
+            }
+              
+
             
-            writer.CreateXSLXFileElements(ElementImport);
-
-           return File ("/files/" + reportType  + id.ToString() + ".xlsx", "text/plain", reportType + id.ToString() + ".xlsx"); 
-
+            ErrorMessage = errorMessage;
+            return Page();
         }
         
     }

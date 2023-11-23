@@ -147,6 +147,59 @@ namespace Estimator.Models
                 return result / 60;
             }
         }
+
+        [Display(Name = "Трудоёмкость партии,час")]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
+        public decimal BatchLaborSummary
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.BanchLaborSummary;
+
+                }
+                return result / 60;
+            }
+        }
+
+        [Display(Name = "Трудоёмкость штук,час")]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
+        public decimal ItemLaborSummary
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.ItemLaborSummary;
+
+                }
+                return result / 60;
+            }
+        }
+        [Display(Name = "Трудоёмкость оснастки,час")]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
+        public decimal KitLaborSummary
+        {
+            get
+            {
+                decimal result;
+                result = 0;
+
+                foreach (var itemRQLS in QualificationLaborSummary)
+                {
+                    result += itemRQLS.Value.KitLaborSummary;
+
+                }
+                return result / 60;
+            }
+        }
         [Display(Name = "Стоимость,руб")]
         [DisplayFormat(DataFormatString = "{0:0.00}")]
         public decimal CostSummary

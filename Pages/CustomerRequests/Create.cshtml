@@ -35,7 +35,7 @@
                 </div>
                 <div class="form-group col-md-6">
                 <label asp-for="CustomerRequest.Customer.Name" class="control-label"></label>
-                 <select asp-for="CustomerRequest.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+            <select asp-for="CustomerRequest.CustomerID" class="form-control selectpicker" multiple title="Выберите заказчика..." data-live-search="true" asp-items="ViewBag.CustomerID"></select>
                 <span asp-validation-for="CustomerRequest.CustomerID" class="text-danger"></span>
                 </div>
                 

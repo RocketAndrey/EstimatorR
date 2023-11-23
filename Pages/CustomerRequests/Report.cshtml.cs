@@ -10,11 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Estimator.Models.AsuViews;
 using System.Collections.Generic;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DocumentFormat.OpenXml.InkML;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Estimator.Pages.CustomerRequests
@@ -33,9 +31,9 @@ namespace Estimator.Pages.CustomerRequests
             SelectedTab = 1; 
         }
         
-        public async Task<IActionResult> OnGetAsync(int? id, int? mode, int? year)
+        public async Task<IActionResult> OnGetAsync(int? id , int? mode, int? year)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
@@ -60,31 +58,8 @@ namespace Estimator.Pages.CustomerRequests
                     SelectedTab = i; 
                 }
             }
-            
-            //получаем заявку
-            CustomerRequest = await _context.CustomerRequests
-                .Include(c => c.Customer)
-                .Include(c => c.Program)
-                    .ThenInclude(c => c.ElementntTypes)
-                .Include(e => e.RequestElementTypes)
-                    .ThenInclude(e => e.RequestOperations)
-                        .ThenInclude(e => e.TestChainItem)
-                            .ThenInclude(e => e.TestActions)
-                               .ThenInclude(i => i.Qualification)
-                   .Include(e => e.RequestElementTypes)
-                    .ThenInclude(e => e.RequestOperations)
-                        .ThenInclude(e => e.TestChainItem)
-                            .ThenInclude(e => e.Operation)
-                                .ThenInclude(e => e.OperationGroup)
-                    .Include(e => e.RequestElementTypes)
-                        .ThenInclude (e=>e.ElementType)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
-
-            CustomerRequest.ElementImport = _context.ElementImports
-               .Include(e => e.XLSXElementTypes)
-
-                  .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+            base.SetCustomerReguest((int)id);
+        
             if (CustomerRequest == null)
             {
                 return NotFound();
@@ -102,58 +77,8 @@ namespace Estimator.Pages.CustomerRequests
             SetCompanyHistory(YearOfNoms);
             //сортируем
             CustomerRequest.RequestElementTypes = CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
-
+            //год применяемых нормативов
             ViewData["YearOfNorms"] = new SelectList(_context.CompanyHistories, "YearOfNorms", "YearOfNorms");
-
-            // Родительская заявка
-            if ((CustomerRequest.ParentCustomerRequestID?? 0)!=0)
-            {
-                CustomerRequest.ParentCustomerRequest= await _context.CustomerRequests
-                .Include(c => c.Customer)
-                .Include(c => c.Program)
-                    .ThenInclude(c => c.ElementntTypes)
-                .Include(e => e.RequestElementTypes)
-                    .ThenInclude(e => e.RequestOperations)
-                        .ThenInclude(e => e.TestChainItem)
-                            .ThenInclude(e => e.TestActions)
-                               .ThenInclude(i => i.Qualification)
-                   .Include(e => e.RequestElementTypes)
-                    .ThenInclude(e => e.RequestOperations)
-                        .ThenInclude(e => e.TestChainItem)
-                            .ThenInclude(e => e.Operation)
-                                .ThenInclude(e => e.OperationGroup)
-                    .Include(e => e.RequestElementTypes)
-                        .ThenInclude(e => e.ElementType)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.CustomerRequestID == CustomerRequest.ParentCustomerRequestID);
-
-                CustomerRequest.ParentCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
-            }
-            //Дочерняя заявка
-            if (ChildCustomerRequestExists (CustomerRequest.CustomerRequestID ))
-            {
-                CustomerRequest.ChildCustomerRequestID = ChildCustomerReguestID;
-                CustomerRequest.ChildCustomerRequest  = await _context.CustomerRequests
-               .Include(c => c.Customer)
-               .Include(c => c.Program)
-                   .ThenInclude(c => c.ElementntTypes)
-               .Include(e => e.RequestElementTypes)
-                   .ThenInclude(e => e.RequestOperations)
-                       .ThenInclude(e => e.TestChainItem)
-                           .ThenInclude(e => e.TestActions)
-                              .ThenInclude(i => i.Qualification)
-                  .Include(e => e.RequestElementTypes)
-                   .ThenInclude(e => e.RequestOperations)
-                       .ThenInclude(e => e.TestChainItem)
-                           .ThenInclude(e => e.Operation)
-                               .ThenInclude(e => e.OperationGroup)
-                   .Include(e => e.RequestElementTypes)
-                       .ThenInclude(e => e.ElementType)
-               .AsNoTracking()
-               .FirstOrDefaultAsync(m => m.CustomerRequestID == CustomerRequest.ChildCustomerRequestID);
-
-                CustomerRequest.ChildCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
-            }
 
             FillDefectedTypes();
 
@@ -192,6 +117,9 @@ namespace Estimator.Pages.CustomerRequests
         [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$",ErrorMessage ="Введите число в формате числа с плавающей запятой")]
         [DisplayFormat(DataFormatString = "{0:F4}")]
         public string RequestRate { get; set; }
+        /// <summary>
+        /// заполняем перечень забракованных изделмй
+        /// </summary>
         private void FillDefectedTypes()
         {
             //получаем список элементов 
