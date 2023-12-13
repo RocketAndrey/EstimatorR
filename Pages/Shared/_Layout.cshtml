@@ -31,31 +31,33 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/CustomerRequests/Index">Заявки</a>
                         </li>
-
+                        @if (User.Identity.IsAuthenticated)
+                        {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                                 Справочники
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-page="/Customer/Index">Заказчики</a>
-                                   @if (User.Identity.IsAuthenticated)
-                                {
+                           
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="" asp-page="/Customer/Index">Заказчики</a>
+
 
                                     @if (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator")
                                     {
                                         <a class="dropdown-item" asp-area="" asp-page="/Program/Index">Программы</a>
                                     }
 
-                                }
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Прайсы</a>
-                                <a class="dropdown-item" href="#">Заводы изготовители </a>
-                                <a class="dropdown-item" href="#">ЭКБ ОП</a>
-                            
-                                
-                            </div>
-                        </li>
 
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-page="/Price/Index">Прайсы</a>
+                                    <a class="dropdown-item" asp-page="/Manufacturer/Index"> Заводы изготовители </a>
+                                    <a class="dropdown-item" asp-page="/RuChips/Index">ЭКБ ОП</a>
+
+
+                                </div>
+
+                                </li>
+                            }
 
                         @if (User.Identity.IsAuthenticated)
                         {

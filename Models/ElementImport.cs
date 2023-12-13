@@ -29,7 +29,7 @@ namespace Estimator.Models
         
             FirstRowIsHeader = true;
             ImportElementPrice = false;
-
+            GroupSameTypes = false;
             FirstRowNumber = 2;
             UseLastRowNumber = false;
             LastRowNumber = 3;
@@ -38,8 +38,10 @@ namespace Estimator.Models
         public int ElementImportID { get; set; }
         public int CustomerRequestID { get; set; }
         public CustomerRequest CustomerRequest { get; set; }
-
-
+        /// <summary>
+        /// Если позиции повторяютя то они суммируются 
+        /// </summary>
+        public bool GroupSameTypes { get; set; }
 
         public bool FirstRowIsHeader { get; set; }
 

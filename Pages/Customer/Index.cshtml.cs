@@ -41,16 +41,11 @@ namespace Estimator.Pages.Customers
             }
 
 
-            switch (sortOrder)
+            custmersIQ = sortOrder switch
             {
-                case "name_desc":
-                    custmersIQ = custmersIQ.OrderByDescending(s => s.Name);
-                    break;
-                default:
-                    custmersIQ = custmersIQ.OrderBy(s => s.Name);
-                    break;
-            }
-
+                "name_desc" => custmersIQ.OrderByDescending(s => s.Name),
+                _ => custmersIQ.OrderBy(s => s.Name),
+            };
             Customer = await custmersIQ.AsNoTracking().ToListAsync();
 
 

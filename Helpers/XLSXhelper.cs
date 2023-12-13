@@ -35,8 +35,8 @@ namespace Estimator.Helpers
             //для идентификации ошибочноий строки 
                 int currentRowIndex = 0  ; 
 
-                IWorkbook workbook = null;  //IWorkbook determina si es xls o xlsx              
-                ISheet worksheet = null;
+                IWorkbook workbook;  //IWorkbook determina si es xls o xlsx              
+                ISheet worksheet;
 
             try
             {
@@ -162,17 +162,19 @@ namespace Estimator.Helpers
 
                                 bool elementExist = false;
 
-                                //услли такой элемент уже есть то просто добавляем колличествою 
-                                foreach (var element in returnValue)
+                                //Если такой элемент уже есть то просто добавляем колличество(группировка)
+                                if (importSettings.GroupSameTypes)
                                 {
-                                    if (element.ElementName ==  elementType.ElementName)
+                                    foreach (var element in returnValue)
                                     {
-                                        elementExist= true;
-                                        element.ElementCount += elementType.ElementCount;
-                                        break; 
+                                        if (element.ElementName == elementType.ElementName)
+                                        {
+                                            elementExist = true;
+                                            element.ElementCount += elementType.ElementCount;
+                                            break;
+                                        }
                                     }
                                 }
-
                                 // если колличествов данной строке = 0 то нефиг его и импортировать
                                 if (!elementExist && elementType.ElementCount > 0 && !String.IsNullOrEmpty(elementType.ElementName))
                                 {
@@ -216,9 +218,8 @@ namespace Estimator.Helpers
   
         private decimal ParceDecimal(ICell cell)
         {
-            decimal d;
             string svalue = GetCellvalue(cell).Trim().Replace(".", ",");
-           if ( decimal.TryParse(svalue, out d))  return d;
+            if ( decimal.TryParse(svalue, out decimal d))  return d;
             return 0;
         }
 

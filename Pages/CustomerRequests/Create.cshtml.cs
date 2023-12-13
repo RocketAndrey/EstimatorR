@@ -71,10 +71,10 @@ namespace Estimator.CustomerRequests
                 {
                     RequestElementType r = new RequestElementType
                     {
-                       ElementType = e,
-                    BatchCount = 0,
-                    ItemCount = 0,
-                   Order = e.Order};
+                        ElementType = e,
+                        BatchCount = 0,
+                        ItemCount = 0,
+                        Order = e.Order};
 
                     List<RequestOperation> roList = new List<RequestOperation>();
 

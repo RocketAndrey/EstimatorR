@@ -34,6 +34,8 @@ namespace Estimator.Pages.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
+                .Include(c => c.Program)
+                    .ThenInclude(c => c.Templates)
                 .Include(e => e.RequestElementTypes)
                     .ThenInclude(e => e.RequestOperations)
                         .ThenInclude(e => e.TestChainItem)
@@ -127,10 +129,17 @@ namespace Estimator.Pages.CustomerRequests
         public void PopulateAssignedElementTypes(CustomerRequest customerRequest)
         {
 
-            IQueryable<RequestElementType> elementTypesIQ = _context.RequestElementTypes.Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID);
+            List<RequestElementType> elementTypesIQ = _context.RequestElementTypes
+                .Include(e=>e.ElementType)
+                .Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID).ToList();
             //сортируем
-            elementTypesIQ = elementTypesIQ.OrderBy(r => r.ElementType.Order);
+            if (elementTypesIQ.Count > 0)
+            {
+                elementTypesIQ = elementTypesIQ.OrderBy(r => r.ElementType?.Order ?? 0).ToList();
+            }
+            
             AssignedElementsList = new List<AssignedRequestElementType>();
+           
             if (elementTypesIQ != null)
             {
                 foreach (var item in elementTypesIQ)
@@ -138,7 +147,7 @@ namespace Estimator.Pages.CustomerRequests
                     AssignedElementsList.Add(new AssignedRequestElementType
                     {
                         RequestElementTypeID = item.RequestElementTypeID,
-                        Name = item.ElementType.Name,
+                        Name = item.ElementType?.Name??"",
                         BatchCount = item.BatchCount,
                         ItemCount = item.ItemCount,
                         MissingKitCount = item.KitCount
