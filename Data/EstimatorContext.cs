@@ -9,8 +9,10 @@ namespace Estimator.Data
         public EstimatorContext(DbContextOptions<EstimatorContext> options)
             : base(options)
         {
+            Database.EnsureCreated();//
         }
-
+        public DbSet<Estimator.Models.Company> Companies { get; set; }
+        public DbSet<Estimator.Models.ImFileData> ImportData { get; set; }
         public DbSet<Estimator.Models.Customer> Customers { get; set; }
         public DbSet<Estimator.Models.ClassECB> ClassECBs { get; set; }
         public DbSet<Estimator.Models.CustomerRequest> CustomerRequests { get; set; }

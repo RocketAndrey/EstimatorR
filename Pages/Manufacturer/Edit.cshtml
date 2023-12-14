@@ -1,0 +1,25 @@
+﻿@page "{id:int}"
+@model Estimator.Pages.Manufacturer.EditModel
+
+
+<h2>Редактирование данных</h2>
+
+<form method="post">
+    <input name="id" value="@Model.Factory?.Id" type="hidden" />
+
+    <p>
+        <label>Код</label><br />
+        <input name="Code" value="@Model.Factory?.Code" />
+    </p>
+
+    <p>
+        <label>Наименование:</label><br />
+        <input name="Name" value="@Model.Factory?.Name" />
+    </p>
+    <p>
+        <label>Примечание:</label><br />
+        <input name="Note" value="@Model.Factory?.Note" />
+    </p>
+
+    <input type="submit" value="Сохранить" />
+</form>
