@@ -21,18 +21,19 @@ namespace Estimator.Pages.RuChips
 
         public List<string> tmpF = new List<string>();
 
-        public char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray(); // НЕ ХВАТАЕТ РАЗМЕРА ДЛЯ ВНИИРА
+        //public char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray(); // НЕ ХВАТАЕТ РАЗМЕРА ДЛЯ ВНИИРА
 
         [Display(Name = "Наименование")]
+
         public ColumnNames _codeCol { get; set; }
+       
         public enum ColumnNames
         {
 
-            A = 1, B = 2, C = 3, D = 4, E = 5, F = 6, G = 7, H = 8, I = 9, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, AA, AB, AC, AD, AE, AF, AG, AH, AI, AJ, AK, AL, AM, AN, AO, AP, AQ, AR, AS, AT, AU, AV, AW, AX, AY, AZ, BA, BB, BC, BD, BE
+            A = 1, B = 2, C = 3, D = 4, E = 5, F = 6, G = 7, H = 8, I = 9, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, AA, AB, AC, AD, AE, AF, AG, AH, AI, AJ, AK, AL, AM, AN, AO, AP, AQ, AR, AS, AT, AU, AV, AW, AX, AY, AZ, BA, BB, BC, BD, BE, BF, BG, BH, BI, BJ, BK
         }
 
-        Estimator.Data.EstimatorContext context;
-               
+        Estimator.Data.EstimatorContext context;               
 
         public List<Estimator.Models.RuChipsDB> addDirVniir;
         public ImFileData imFiles { get; set; } = new();
@@ -105,7 +106,7 @@ namespace Estimator.Pages.RuChips
             var _lastShowPathId = context.ImportData.Max(x => x.Id);
             var _lastPath = context.ImportData.FirstOrDefault(x => x.Id == _lastShowPathId).Path;
 
-            webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedGroup"].First()), int.Parse(Request.Form["SelectedSubgroup"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedManufacturer"].First()), int.Parse(Request.Form["SelectedCodeManufacturer"].First()), int.Parse(Request.Form["SelectedQuality"].First()), Request.Form["AreChecked"].IsNullOrEmpty());
+            webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedGroup"].First()), int.Parse(Request.Form["SelectedSubgroup"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedManufacturer"].First()), int.Parse(Request.Form["SelectedQuality"].First()), Request.Form["AreChecked"].IsNullOrEmpty(), context);
 
             addDirVniir = new List<Estimator.Models.RuChipsDB>();
             addDirVniir = h_Import.ImportFileRuChips();
@@ -117,14 +118,20 @@ namespace Estimator.Pages.RuChips
             {
                 for (int i = 0; i < addDirVniir.Count(); i++)
                 {
-                    //Проверка на существование производителя (по его номеру)
-                    var _isCompExist = context.DirVniir.Any(x => x.CodeManufacturer == addDirVniir.ElementAt(i).CodeManufacturer);
+                    //Проверка на существование
+                    var _isNameExist = context.DirVniir.Any(x => x.Name == addDirVniir.ElementAt(i).Name);
+                    var _isManExist = context.DirVniir.Any(x => x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer);
+                    var _isQLExist = context.DirVniir.Any(x => x.QLevel == addDirVniir.ElementAt(i).QLevel);
 
-                    if (_isCompExist)
+                    if (_isNameExist && _isManExist && _isQLExist)
                     {
-                        //context.DirVniir.Where(t => t.CodeManufacturer == addDirVniir.ElementAt(i).CodeManufacturer).
-                        //    ExecuteUpdate(b => b.SetProperty(u => u.g, addDirVniir.ElementAt(i).Note));
-                        //countUp++;
+                        context.DirVniir.Where(t => t.Name == addDirVniir.ElementAt(i).Name 
+                        && t.Manufacturer == addDirVniir.ElementAt(i).Manufacturer
+                        && t.QLevel == addDirVniir.ElementAt(i).QLevel).
+                            ExecuteUpdate(b => b.SetProperty(u => u.Group, addDirVniir.ElementAt(i).Group)
+                            .SetProperty(u => u.Subgroup, addDirVniir.ElementAt(i).Subgroup)
+                            .SetProperty(u => u.CodeManufacturer, addDirVniir.ElementAt(i).CodeManufacturer));
+                        countUp++;
                     }
                     else
                     {

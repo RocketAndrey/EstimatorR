@@ -8,6 +8,7 @@ using Estimator.Models;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Linq;
 
 namespace webApp.Models
 {
@@ -27,6 +28,8 @@ namespace webApp.Models
         
         public List<RuChipsDB> addDirVniir;
 
+        Estimator.Data.EstimatorContext context;
+
         public HandlerImport(string path_File)
         {
             this._path_File = path_File;
@@ -39,16 +42,17 @@ namespace webApp.Models
             this._selNote = selNote;
             this._useFirstRow = useFirstRow;
         }
-        public HandlerImport(string path_File, int selGroup, int selSubGroup, int selName, int selManuf, int selCodeManuf, int selQuality, bool useFirstRow)
+        public HandlerImport(string path_File, int selGroup, int selSubGroup, int selName, int selManuf, int selQuality, bool useFirstRow, Estimator.Data.EstimatorContext db)
         {
             this._path_File = path_File;
             this._selGroup = selGroup;
             this._selSubGroup = selSubGroup;
             this._selName = selName;
             this._selManuf = selManuf;
-            this._selCode = selCodeManuf;
             this._selQuality = selQuality;
             this._useFirstRow = useFirstRow;
+
+            context = db;
         }
         public List<Company> ImportFileManufacturer()
         {
@@ -117,7 +121,13 @@ namespace webApp.Models
                         row++;
 
                     IRow row_Line = worksheet.GetRow(row);
-                    if (row_Line.GetCell(_selCode - 1) != null && row_Line.GetCell(_selName - 1) != null )
+                    if (row_Line.GetCell(_selName - 1) != null) {
+
+                        string tmp_Man;
+                        //Проверка на существоание компании в "Списке производителей"
+                        if (context.Companies.FirstOrDefault(x => x.Name == row_Line.GetCell(_selManuf - 1).ToString()) != null)
+                            tmp_Man = context.Companies.FirstOrDefault(x => x.Name == row_Line.GetCell(_selManuf - 1).ToString()).Code;
+                        else tmp_Man = "-";
 
                         addDirVniir.Add(new RuChipsDB()
                         {
@@ -125,10 +135,10 @@ namespace webApp.Models
                             Subgroup = row_Line.GetCell(_selSubGroup - 1).ToString(),
                             Name = row_Line.GetCell(_selName - 1).ToString(),
                             Manufacturer = row_Line.GetCell(_selManuf - 1).ToString(),
-                            CodeManufacturer = row_Line.GetCell(_selCode - 1).ToString(),
+                            CodeManufacturer = tmp_Man,
                             QLevel = row_Line.GetCell(_selQuality - 1).ToString(),
-                            
                         });
+                    }
                 }
             }
             catch (Exception ex)

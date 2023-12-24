@@ -1,5 +1,6 @@
 ﻿@page 
 @using Estimator.Pages.RuChips
+@using NonFactors.Mvc.Grid
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @model Estimator.Pages.RuChips.ImportModel
 
@@ -33,12 +34,14 @@
     <br />
     <center><h3>Укажите стуктуру файла</h3></center>
     
-    <table border="1"  cellpadding="0" cellspacing="0">         //TODO ЗАМЕНИТЬ НА ГРИД (походу все столбцы не влезают)
+    <table border="1" class="table table-striped" style="width: 200px; height: 200px; overflow: scroll;background-color: antiquewhite;">
         <thead>
-            @for (var i = 0; i < Model.tmpF.Count; i++)
+            <tr>
+            @for (var i = 0; i < Model.tmpF.Count(); i++)
             {
-            <th>@Model.alpha.ElementAt(i)</th>
+                <th>@Enum.GetNames(Model._codeCol.GetType()).ElementAt(i)</th>      
             }
+            </tr>
         </thead>
         <tbody>
             <tr>
@@ -48,7 +51,7 @@
                 }
             </tr>
         </tbody>
-    </table>                                                // ЗАМЕНИТЬ НА ГРИД (походу все столбцы не влезают)
+    </table>
 
     <br />
 
@@ -71,10 +74,6 @@
      <p>
         <label>Завод изготовитель:</label>
         <select name="SelectedManufacturer" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
-    </p>
-    <p>
-        <label>Код изготовителя:</label>
-        <select name="SelectedCodeManufacturer" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
     </p>
     <p>
         <label>Уровень качества:</label>

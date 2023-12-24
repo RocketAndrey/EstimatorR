@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Estimator.Pages.RuChips
 {
@@ -36,6 +37,12 @@ namespace Estimator.Pages.RuChips
             if (countIm != null && countUp != null)
                 this.Message = "Import - " + countIm + " Update - " + countUp; //Что то с кодировкой?
 
+            //Синхронизация кодов с перечнем производителей
+            for(int i = 0; i < context.Companies.Count(); i++)
+            {
+                context.DirVniir.Where(t => t.Manufacturer == context.Companies.ToList().ElementAt(i).Name)
+                    .ExecuteUpdate(b => b.SetProperty(u => u.CodeManufacturer, context.Companies.ToList().ElementAt(i).Code));
+            }
 
             DirVniir = context.DirVniir.AsNoTracking().ToList();
 
