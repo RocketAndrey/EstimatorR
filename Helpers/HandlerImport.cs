@@ -112,8 +112,9 @@ namespace webApp.Models
 
                 var rowCount = worksheet.LastRowNum;
 
-                addDirVniir = new List<RuChipsDB>();
-
+                addDirVniir = new List<RuChipsDB>(); 
+                //System.Diagnostics.Debug.WriteLine();
+                System.Diagnostics.Debug.WriteLine("count in Ex:" + rowCount);
                 for (int row = 0; row <= rowCount; row++)
                 {
                     //Проверка на строку-заголовок
@@ -129,6 +130,11 @@ namespace webApp.Models
                             tmp_Man = context.Companies.FirstOrDefault(x => x.Name == row_Line.GetCell(_selManuf - 1).ToString()).Code;
                         else tmp_Man = "-";
 
+                        string tmp_Ql;
+                        if (row_Line.GetCell(_selQuality - 1) == null)
+                            tmp_Ql = "ВП [0001]";
+                        else tmp_Ql = row_Line.GetCell(_selQuality - 1).ToString();
+
                         addDirVniir.Add(new RuChipsDB()
                         {
                             Group = row_Line.GetCell(_selGroup - 1).ToString(),
@@ -136,13 +142,16 @@ namespace webApp.Models
                             Name = row_Line.GetCell(_selName - 1).ToString(),
                             Manufacturer = row_Line.GetCell(_selManuf - 1).ToString(),
                             CodeManufacturer = tmp_Man,
-                            QLevel = row_Line.GetCell(_selQuality - 1).ToString(),
+                            QLevel = tmp_Ql,
                         });
                     }
+                    System.Diagnostics.Debug.WriteLine(row_Line.ToString() + " || " + row);
                 }
+                System.Diagnostics.Debug.WriteLine("count in Ex:" + rowCount);
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
                 //Message = "Error while parsing the file. Check the column order and format.";
                 //return Page();
             }

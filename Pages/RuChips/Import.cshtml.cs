@@ -99,10 +99,10 @@ namespace Estimator.Pages.RuChips
             return Page();
             
         }
+                
 
         public async Task<IActionResult> OnPostFinishAsync()
         {
-
             var _lastShowPathId = context.ImportData.Max(x => x.Id);
             var _lastPath = context.ImportData.FirstOrDefault(x => x.Id == _lastShowPathId).Path;
 
@@ -116,6 +116,7 @@ namespace Estimator.Pages.RuChips
 
             if (addDirVniir != null)
             {
+                System.Diagnostics.Debug.WriteLine("addDirVniir in IM:" + addDirVniir.Count());
                 for (int i = 0; i < addDirVniir.Count(); i++)
                 {
                     //Проверка на существование

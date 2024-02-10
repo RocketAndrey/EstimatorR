@@ -24,7 +24,14 @@
        
         <span style="color:green">@Html.Raw(Model.Message)</span>
     </form>
-
+   @*  @if (Model.IsLoading)
+    {
+        <div class="loading" align="center">
+            Loading. Please wait.<br />
+            <br />
+            <img src="~/load_gif.gif" alt="" />
+        </div>
+    } *@
 </body>
 </html>
 
@@ -85,6 +92,7 @@
         <input type="submit" value="Импортировать" class="btn btn-outline-primary" asp-page-handler="Finish" />
     </center>
     <br />
+   
 </form>
 
  

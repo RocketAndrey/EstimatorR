@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "ЭКБ отечественного производства";
 }
+
 <center><h1>Cправочник ЭКБ ОП</h1></center>
 
 <td align="right">
@@ -63,9 +64,9 @@
             .Sortable()
             .Pageable(pager =>
             {
-                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 25, "25" }, { 50, "50" } };
+                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 10, "10" }, { 50, "50" }, { 100, "100" }, { 1000, "1000" } };
                 pager.ShowPageSizes = true;
-                pager.RowsPerPage = 3;
+                pager.RowsPerPage = 5;
             })
             )
     </form>

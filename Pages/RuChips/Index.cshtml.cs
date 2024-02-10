@@ -15,7 +15,7 @@ namespace Estimator.Pages.RuChips
     {
 
         public string Message { get; set; }
-
+        
         Estimator.Data.EstimatorContext context;
         public List<Estimator.Models.RuChipsDB> DirVniir { get; private set; } = new();
         public IndexModel(Estimator.Data.EstimatorContext db, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(db, appEnvironment, configuration)
