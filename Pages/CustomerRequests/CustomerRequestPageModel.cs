@@ -10,6 +10,7 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -27,10 +28,11 @@ namespace Estimator.Pages.CustomerRequests
         [BindProperty]
         public CustomerRequest CustomerRequest { get; set; }
 
-        protected void SetCustomerReguest( int id)
+        protected async Task SetCustomerReguest( int id, int year)
         {
+      
             //получаем заявку
-            this.CustomerRequest =  _context.CustomerRequests
+            this.CustomerRequest =  await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
@@ -49,16 +51,23 @@ namespace Estimator.Pages.CustomerRequests
                     .Include(e => e.RequestElementTypes)
                         .ThenInclude(e => e.ElementType)
                 .AsNoTracking()
-                .FirstOrDefault(m => m.CustomerRequestID == id);
+                .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
             
-            CustomerRequest.ElementImport = _context.ElementImports
+            CustomerRequest.ElementImport = await _context.ElementImports
                .Include(e => e.XLSXElementTypes)
+                  .FirstOrDefaultAsync(m => m.CustomerRequest.CustomerRequestID == id);
 
-                  .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+            if (CustomerRequest.ElementImport != null)
+            {
+                CustomerRequest.ElementImport.CustomerRequest = this.CustomerRequest;
+                CustomerRequest.ElementImport.CustomerRequest.CustomerRequestID = id;
+                
+            }
+            this.SetCompanyHistory(year);
             // Родительская заявка
             if ((CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
             {
-                CustomerRequest.ParentCustomerRequest =  _context.CustomerRequests
+                CustomerRequest.ParentCustomerRequest = await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
                     .ThenInclude(c => c.ElementntTypes)
@@ -75,7 +84,7 @@ namespace Estimator.Pages.CustomerRequests
                     .Include(e => e.RequestElementTypes)
                         .ThenInclude(e => e.ElementType)
                 .AsNoTracking()
-                .FirstOrDefault(m => m.CustomerRequestID == CustomerRequest.ParentCustomerRequestID);
+                .FirstOrDefaultAsync(m => m.CustomerRequestID == CustomerRequest.ParentCustomerRequestID);
 
                 CustomerRequest.ParentCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
                 CustomerRequest.ParentCustomerRequest.Rate = CustomerRequest.Rate;
@@ -85,7 +94,7 @@ namespace Estimator.Pages.CustomerRequests
             if (ChildCustomerRequestExists(CustomerRequest.CustomerRequestID))
             {
                 CustomerRequest.ChildCustomerRequestID = ChildCustomerReguestID;
-                CustomerRequest.ChildCustomerRequest =  _context.CustomerRequests
+                CustomerRequest.ChildCustomerRequest =  await _context.CustomerRequests
                .Include(c => c.Customer)
                .Include(c => c.Program)
                    .ThenInclude(c => c.ElementntTypes)
@@ -102,12 +111,14 @@ namespace Estimator.Pages.CustomerRequests
                    .Include(e => e.RequestElementTypes)
                        .ThenInclude(e => e.ElementType)
                .AsNoTracking()
-               .FirstOrDefault(m => m.CustomerRequestID == CustomerRequest.ChildCustomerRequestID);
+               .FirstOrDefaultAsync(m => m.CustomerRequestID == CustomerRequest.ChildCustomerRequestID);
 
                 CustomerRequest.ChildCustomerRequest.CompanyHistory = CustomerRequest.CompanyHistory;
                 CustomerRequest.ChildCustomerRequest.Rate = CustomerRequest.Rate;
             }
-        }
+            if (CustomerRequest.ElementImport !=null)   CustomerRequest.ElementImport.CalculateXLSXCosts(); 
+            }
+
         public CompanyHistory CompanyHistory { get; set; }
 
         public List<AssignedRequestElementType> AssignedElementsList;
@@ -126,12 +137,13 @@ namespace Estimator.Pages.CustomerRequests
             RequestOperationGroupViews = _context.RequestOperationGroupViews.FromSqlRaw(query, customerRequest.CustomerRequestID).ToList();
 
         }
-        public void PopulateAssignedElementTypes(CustomerRequest customerRequest)
+        public async Task PopulateAssignedElementTypes(CustomerRequest customerRequest)
         {
 
-            List<RequestElementType> elementTypesIQ = _context.RequestElementTypes
+            List<RequestElementType> elementTypesIQ = await _context.RequestElementTypes
                 .Include(e=>e.ElementType)
-                .Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID).ToList();
+                .AsNoTracking()
+                .Where(s => s.CustomerRequestID == customerRequest.CustomerRequestID).ToListAsync();
             //сортируем
             if (elementTypesIQ.Count > 0)
             {

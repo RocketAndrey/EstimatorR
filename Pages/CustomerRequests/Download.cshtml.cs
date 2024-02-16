@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -23,22 +24,15 @@ namespace Estimator.Pages.CustomerRequests
         }
        
         public string ErrorMessage { get; set; }
-        public IActionResult  OnGet(string reportType , int id, int year)
+        public async Task<IActionResult> OnGet(string reportType , int id, int year)
         {
 
 
             string fileName;
-            base.SetCustomerReguest(id);
 
-
-            CustomerRequest.CompanyHistory = _context.CompanyHistories
-                  .Include(c => c.Staff)
-                       .ThenInclude(e => e.Qualification)
-            .Include(c => c.CalcFactors)
-                  .FirstOrDefault(m => m.YearOfNorms == year);
-
+            base.SetCustomerReguest(id,year);
            
- 
+          
 
             XSLXWriter writer;
             string errorMessage="";

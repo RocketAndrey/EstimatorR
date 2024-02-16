@@ -292,6 +292,78 @@
                                 </div>
                             </td>
                         </tr>
+
+                    @*Технические условия*@
+                    <tr>
+                        <td colspan="7">
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+
+                                        <input type="checkbox" asp-for="@Model.ElementImport.ImportDatasheet" onclick="EnableDisableTextBox('ElementDSColumnSelector',this);" />
+
+                                    </div>
+
+                                    <span class="input-group-text">
+                                        @Html.DisplayNameFor(model => model.ElementImport.DatasheetColumn)
+                                    </span>
+
+
+                                </div>
+                                @{
+
+                                    if (Model.ElementImport.ImportDatasheet)
+                                    {
+                                        <select asp-for="ElementImport.DatasheetColumn" id="ElementDSColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select disabled asp-for="ElementImport.DatasheetColumn" id="ElementDSColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                        </select>
+                                    }
+                                }
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    @*Уровень качества*@
+                    <tr>
+                        <td colspan="7">
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+
+                                        <input type="checkbox" asp-for="@Model.ElementImport.ImportQualityLevel" onclick="EnableDisableTextBox('ElementQSColumnSelector',this);" />
+
+                                    </div>
+
+                                    <span class="input-group-text">
+                                        @Html.DisplayNameFor(model => model.ElementImport.QualityLevelColumn)
+                                    </span>
+
+
+                                </div>
+                                @{
+                                    if (Model.ElementImport.ImportDatasheet)
+                                    {
+                                        <select asp-for="ElementImport.QualityLevelColumn" id="ElementQSColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select disabled asp-for="ElementImport.QualityLevelColumn" id="ElementQSColumnSelector" asp-items="Html.GetEnumSelectList<Estimator.Models.ColumnNames>()" class="form-control">
+                                        </select>
+                                    }
+                                }
+
+                            </div>
+                        </td>
+
+                    </tr>
                         @* цена элементов *@
                         <tr>
                             <td colspan="7">

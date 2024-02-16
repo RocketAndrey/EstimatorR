@@ -63,10 +63,10 @@ namespace Estimator.Pages.CustomerRequests
             //установка шага 1 если  шаг не задан
             ImportStep = step == null ? 1 : step.Value;
 
-            ElementImport = _context.ElementImports
+             ElementImport = await _context.ElementImports
                 .Include(e => e.XLSXElementTypes)
-               
-                   .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.CustomerRequest.CustomerRequestID == id);
 
             //если шаг не задан
             if (step == null)
@@ -88,12 +88,13 @@ namespace Estimator.Pages.CustomerRequests
                     CustomerRequestID = id.Value
                 };
 
-                ElementImport.CustomerRequest =   _context.CustomerRequests
+                ElementImport.CustomerRequest =  await _context.CustomerRequests
                                                         .Include(c => c.Customer)
                                                         .Include(c => c.Program)
                                                             .ThenInclude(c => c.ElementntTypes)
                                                                 .ThenInclude (c=>c.Keys)
-                                                      .FirstOrDefault(m => m.CustomerRequestID == id);
+                                                      .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+                
                 ElementImport.CustomerRequestID = (int)id;
 
                     }
@@ -115,7 +116,7 @@ namespace Estimator.Pages.CustomerRequests
 
         [BindProperty]
         public ElementImport ElementImport { get; set; }
-        public async Task<IActionResult> OnPostAsync(IFormFile? uploadedFile, int step, XLSXElementType[] elementTypes)
+        public async Task<IActionResult> OnPostAsync(IFormFile uploadedFile, int step, XLSXElementType[] elementTypes)
 
         {
             if (!ModelState.IsValid)
@@ -137,15 +138,6 @@ namespace Estimator.Pages.CustomerRequests
             {
                 try
                 {
-                    ////если пытаемся заного загрузить файл,  когда уже 1 раз загрузили
-                    //if (ElementImport.XLSXElementTypes != null)
-
-                    //{
-                    //    if (ElementImport.XLSXElementTypes.Count > 0)
-                    //    {
-                    //        ErrorMessage = "Если вы загрузите новый файл, старые значения будут стерты!";
-                    //    }
-                    //}
 
                     if (ElementImport.ElementImportID == 0)
                     {
@@ -161,8 +153,9 @@ namespace Estimator.Pages.CustomerRequests
                         if (ElementImport.XLSXElementTypes != null)
                         {
                             ElementImport.XLSXElementTypes.Clear();
-                            await _context.SaveChangesAsync ();   
+                            
                         }
+                        await _context.SaveChangesAsync();
 
                         string ext = uploadedFile.FileName.ToLower();
                         //вычисляем расширение
@@ -438,8 +431,10 @@ namespace Estimator.Pages.CustomerRequests
                 }
                 if (saveChanges)
                 {
-                        XLSXElementType item = _context.XLSXElementTypes.FirstOrDefault(m => m.ID == itemXLSX.ID);
-                    
+                    XLSXElementType item = _context.XLSXElementTypes.FirstOrDefault(m => m.ID == itemXLSX.ID);
+                  
+                    if (item != null)
+                    {
                         item.ElementTypeKey = itemXLSX.ElementTypeKey ?? "";
                         item.ElementName = itemXLSX.ElementName ?? "";
                         item.ElementCount = itemXLSX.ElementCount;
@@ -452,6 +447,8 @@ namespace Estimator.Pages.CustomerRequests
                         _context.Entry(item).State = EntityState.Modified;
 
                         _context.SaveChanges();
+                    }
+
                     }
                 
             }
@@ -533,7 +530,8 @@ namespace Estimator.Pages.CustomerRequests
         private XLSXElementType BeforeUploadedXLSXElementType(string elementName, int id, int programid)
         {
             string selectStr= "SELECT [ID] ,[RowNum],[ElementImportID] ,[ElementName] ,[ElementTypeKey]" +
-            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[ElementPrice],[BeforeUploadedXLSXElementTypeID],[ElementContractorPrice],[ElementKitPrice],[DeliveryTime] " +
+            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[ElementPrice],[BeforeUploadedXLSXElementTypeID],[ElementContractorPrice],[ElementKitPrice],"+
+            "[DeliveryTime],[Datasheet],[ImportedQualificationLevel] " +
             "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
             " AND  e.ProgramID = {2}";
            

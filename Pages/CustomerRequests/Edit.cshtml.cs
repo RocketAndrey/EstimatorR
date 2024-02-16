@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 
 using Microsoft.AspNetCore.Authorization;
+using NPOI.SS.Formula.Functions;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -35,7 +36,9 @@ namespace Estimator.Pages.CustomerRequests
                 id = CreateRequestFromParent(parentid.Value);
                 return RedirectToPage("./edit", new { id = id });
             }
-            base.SetCustomerReguest((int)id);
+
+
+            base.SetCustomerReguest((int)id, int.Parse(_configuration.GetSection("YearOfNorms")["value"]));
  
             
 
