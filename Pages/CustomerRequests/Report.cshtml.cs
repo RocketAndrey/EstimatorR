@@ -68,7 +68,7 @@ namespace Estimator.Pages.CustomerRequests
             
             SelectedYear = YearOfNoms;
 
-            base.SetCustomerReguest((int)id, YearOfNoms);
+            await  base.SetCustomerReguest((int)id, YearOfNoms);
         
             if (CustomerRequest == null)
             {

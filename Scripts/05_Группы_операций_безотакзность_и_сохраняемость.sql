@@ -1,5 +1,4 @@
-use   [u1000209_ESTIMATOR]
-
+use   Estimator_160224
 
 
 declare @scriptNumber int, @year int;
@@ -50,12 +49,6 @@ BEGIN TRANSACTION
 
 		   select @OpID = OperationID  from [dbo].[Operation] where Code= N'Ñ24'
 
-		  
-
-  			WHERE OperationID = @OpID
 Commit 
 GO
-
-
-
 

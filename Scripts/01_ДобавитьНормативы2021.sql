@@ -1,4 +1,4 @@
-use   [u1000209_ESTIMATOR]
+use   Estimator_160224
 
 /****** Object:  Table [dbo].[database_updates]    Script Date: 26.06.2023 16:54:32 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[database_updates]') AND type in (N'U'))

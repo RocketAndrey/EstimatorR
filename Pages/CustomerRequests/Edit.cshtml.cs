@@ -38,14 +38,14 @@ namespace Estimator.Pages.CustomerRequests
             }
 
 
-            base.SetCustomerReguest((int)id, int.Parse(_configuration.GetSection("YearOfNorms")["value"]));
+            await base.SetCustomerReguest((int)id, int.Parse(_configuration.GetSection("YearOfNorms")["value"]));
  
             
 
             CustomerRequest.ElementImport = ElementImport; 
 
             // запролняем типы элементов
-            PopulateAssignedElementTypes(CustomerRequest);
+            await PopulateAssignedElementTypes(CustomerRequest);
             //Заполняем операции
             PopulateOperations(CustomerRequest);
 
@@ -132,7 +132,7 @@ namespace Estimator.Pages.CustomerRequests
             else
             {
                 // не получилось обновить 
-                PopulateAssignedElementTypes(requestToUpdate);
+                await PopulateAssignedElementTypes(requestToUpdate);
                 return Page();
             }
 
