@@ -1,10 +1,111 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using NonFactors.Mvc.Grid;
 @model Estimator.Pages.Manufacturer.IndexModel
 @{
     ViewData["Title"] = "Производители ЭКБ";
 }
-<div class="container">
-    <div class="row">
-        <h1>Здесь будет справочник производителей ЭКБ ОП</h1>
-    </div>
-</div>
+<center><h1>Заводы изготовители</h1></center>
+
+<td align="left">
+    <a asp-page="Create" class="btn btn-outline-primary btn-sm">Добавить</a>
+</td>
+<td align="right">
+    <a asp-page="Import" class="btn btn-outline-primary btn-sm">Импортировать список</a>
+</td>
+
+<br />
+
+<hr />
+
+@if (Model.Message != null)
+{
+    <script type="text/javascript">
+
+        var answer = window.confirm("@Model.Message"+"\nSave data?");
+        if (answer) {
+            window.location.href = "/Manufacturer";
+        }
+        else {
+            //some code Можно сделать отмену импорта производителей
+        }
+    </script>
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+</head>
+
+<body>
+    <form method="post">
+        @(
+            Html.Grid(Model.Companies).Build(columns =>
+            {
+                columns.Add(model => model.Code).Titled("Код").Sortable(true);
+                columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
+                columns.Add(model => model.Note).Titled("Примечание").Sortable(false);
+                //Edit
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/Edit/{model.Id}'><img src=\"/edit.png\"/></a>");
+                //Delete
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/?id={model.Id}'><img src=\"/delete.png\"/></a>");
+            })
+            .Using(GridFilterMode.Header)
+            .Empty("No data found")
+            .Filterable(GridFilterType.Double)
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 25, "25" }, { 50, "50" } };
+                pager.ShowPageSizes = true;
+                pager.RowsPerPage = 3;
+            })
+            )
+    </form>
+    <script src="~/js/mvc-grid/mvc-grid.js"></script>
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+    <script>
+        MvcGrid.lang = {
+            default: {
+                "equals": "Равно",
+                "not-equals": "Не равно"
+            },
+            text: {
+                "contains": "Содержит",
+                "equals": "Равно",
+                "not-equals": "Не равно",
+                "starts-with": "Начинается с",
+                "ends-with": "Заканчивается"
+            },
+            number: {
+                "equals": "Равно",
+                "not-equals": "Не равно",
+                "less-than": "Меньше чем",
+                "greater-than": "Больше чем",
+                "less-than-or-equal": "Меньше или равно",
+                "greater-than-o-requal": "Больше или равно"
+            },
+            guid: {
+                "equals": "Равно",
+                "not-equals": "Не равно",
+            },
+            filter: {
+                "apply": "✓",
+                "remove": "✘"
+            },
+            operator: {
+                "select": "",
+                "and": "et",
+                "or": "ou"
+            }
+        };
+    </script>
+</body>
+
+</html>
