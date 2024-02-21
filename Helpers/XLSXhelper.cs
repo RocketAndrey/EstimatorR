@@ -75,6 +75,9 @@ namespace Estimator.Helpers
                         string refKitPrice = importSettings.ElementKitPriceColumn.ToString() + rowindex.ToString();
                         string refContractorPrice = importSettings.ElementContractorPriceColumn.ToString() + rowindex.ToString();
                         string refDeliveryTime = importSettings.DeliveryTimeColumn.ToString() + rowindex.ToString();
+                        string refDS = importSettings.DatasheetColumn.ToString() + rowindex.ToString();
+                        string refQl = importSettings.QualityLevelColumn.ToString() + rowindex.ToString();
+
                         if (row.RowNum >= (importSettings.FirstRowNumber - 1) | !importSettings.FirstRowIsHeader)
                         {
                             if (!importSettings.UseLastRowNumber | row.RowNum <= (importSettings.LastRowNumber - 1))
@@ -138,6 +141,18 @@ namespace Estimator.Helpers
                                         }
                                         elementType.ElementContractorPrice = d;
                                     }
+                                    //datasheet 
+                                    else if (cell.Address.ToString() == refDS && importSettings.ImportDatasheet)
+                                    {
+
+                                        elementType.Datasheet = GetCellvalue(cell); ;
+                                    }
+                                    //QL
+                                    else if (cell.Address.ToString() == refQl && importSettings.ImportQualityLevel)
+                                    {
+
+                                        elementType.ImportedQualificationLevel = GetCellvalue(cell); ;
+                                    }
                                     //срок закупки (поставки)
                                     else if (cell.Address.ToString() == refDeliveryTime && importSettings.ImportDeliveryTime)
                                     {
@@ -153,8 +168,6 @@ namespace Estimator.Helpers
 
                                         }
                                     }
-
-
                                 }
                                 if (elementType.ElementCount == 0) { emptyCounts++; }
 

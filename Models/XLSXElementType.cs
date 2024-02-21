@@ -27,6 +27,11 @@ namespace Estimator.Models
         public string ElementTypeKey { get; set; }
         [Display(Name = "Кол-во,шт")]
         public int ElementCount { get; set; }
+        [Display(Name = "ТУ")]
+        [DefaultValue("")]
+        public string Datasheet { get; set; }
+        [DefaultValue ("")]
+        public string ImportedQualificationLevel { get; set; }  
 
         [NotMapped]
         public bool InList { get; set; }

@@ -4,6 +4,7 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,16 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20240122104919_QualityLevel")]
+    partial class QualityLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Estimator.Models.AsuViews.DefectedType", b =>
                 {
@@ -28,7 +30,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"), 1L, 1);
 
                     b.Property<long>("DefectCount")
                         .HasColumnType("bigint");
@@ -70,7 +72,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CalcFactorID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CalcFactorID"), 1L, 1);
 
                     b.Property<int>("CompanyHistoryID")
                         .HasColumnType("int");
@@ -79,7 +81,7 @@ namespace Estimator.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("FactorValue")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("CalcFactorID");
 
@@ -94,7 +96,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassECBID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassECBID"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -106,50 +108,28 @@ namespace Estimator.Migrations
                     b.ToTable("ClassECB", (string)null);
                 });
 
-            modelBuilder.Entity("Estimator.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Companies");
-                });
-
             modelBuilder.Entity("Estimator.Models.CompanyHistory", b =>
                 {
                     b.Property<int>("CompanyHistoryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyHistoryID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyHistoryID"), 1L, 1);
 
                     b.Property<decimal>("AdditionalSalary")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("CompanyName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Margin")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<decimal>("OverHead")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<decimal>("PensionTax")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("YearOfNorms")
                         .HasColumnType("int");
@@ -165,7 +145,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerID"), 1L, 1);
 
                     b.Property<string>("INN")
                         .IsRequired()
@@ -188,7 +168,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerRequestID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerRequestID"), 1L, 1);
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -217,7 +197,7 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
@@ -256,7 +236,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementImportID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementImportID"), 1L, 1);
 
                     b.Property<int>("CustomerRequestID")
                         .HasColumnType("int");
@@ -346,7 +326,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementKeyID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementKeyID"), 1L, 1);
 
                     b.Property<int>("ElementTypeID")
                         .HasColumnType("int");
@@ -368,7 +348,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementTypeID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementTypeID"), 1L, 1);
 
                     b.Property<bool>("CheckInAsu")
                         .HasColumnType("bit");
@@ -399,29 +379,13 @@ namespace Estimator.Migrations
                     b.ToTable("ElementType", (string)null);
                 });
 
-            modelBuilder.Entity("Estimator.Models.ImFileData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ImportData");
-                });
-
             modelBuilder.Entity("Estimator.Models.Operation", b =>
                 {
                     b.Property<int>("OperationID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperationID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperationID"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -458,7 +422,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperationGroupID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperationGroupID"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -481,7 +445,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QualificationID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QualificationID"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -499,7 +463,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestElementTypeID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestElementTypeID"), 1L, 1);
 
                     b.Property<int>("BatchCount")
                         .HasColumnType("int");
@@ -534,7 +498,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestOperationID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestOperationID"), 1L, 1);
 
                     b.Property<int>("ExecuteCount")
                         .HasColumnType("int");
@@ -560,44 +524,13 @@ namespace Estimator.Migrations
                     b.ToTable("RequestOperation", (string)null);
                 });
 
-            modelBuilder.Entity("Estimator.Models.RuChipsDB", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CodeManufacturer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QLevel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Subgroup")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DirVniir");
-                });
-
             modelBuilder.Entity("Estimator.Models.StaffItem", b =>
                 {
                     b.Property<int>("StaffItemID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffItemID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffItemID"), 1L, 1);
 
                     b.Property<int>("CompanyHistoryID")
                         .HasColumnType("int");
@@ -609,7 +542,7 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("StaffItemID");
 
@@ -626,13 +559,13 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestActionID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestActionID"), 1L, 1);
 
                     b.Property<int>("BatchLabor")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ItemLabor")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("KitLabor")
                         .HasColumnType("int");
@@ -658,7 +591,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestChainItemID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestChainItemID"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -691,7 +624,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestProgramID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestProgramID"), 1L, 1);
 
                     b.Property<bool>("AllowEditChain")
                         .HasColumnType("bit");
@@ -720,7 +653,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestProgramTemplateID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestProgramTemplateID"), 1L, 1);
 
                     b.Property<string>("TemplateName")
                         .HasColumnType("nvarchar(max)");
@@ -741,7 +674,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestProgramTemplateItemID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestProgramTemplateItemID"), 1L, 1);
 
                     b.Property<int>("ExecuteCount")
                         .HasColumnType("int");
@@ -770,7 +703,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -831,7 +764,7 @@ namespace Estimator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
                     b.Property<string>("AsuProtokolCode")
                         .HasColumnType("nvarchar(max)");
@@ -846,7 +779,7 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ElementContractorPrice")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("ElementCount")
                         .HasColumnType("int");
@@ -855,13 +788,13 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ElementKitPrice")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("ElementName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ElementPrice")
-                        .HasColumnType("decimal(18, 4)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int?>("ElementTypeID")
                         .HasColumnType("int");

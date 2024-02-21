@@ -58,30 +58,33 @@ namespace Estimator.Pages.CustomerRequests
                     SelectedTab = i; 
                 }
             }
-            base.SetCustomerReguest((int)id);
-        
-            if (CustomerRequest == null)
-            {
-                return NotFound();
-            }
+
             //получаем показатели рассчитываеомго года
             if (year != null)
             {
                 YearOfNoms = (int)year;
 
             }
-            //получаем кооф.сложности
-            RequestRate = CustomerRequest.StringRate; 
+            
             SelectedYear = YearOfNoms;
 
-            SetCompanyHistory(YearOfNoms);
+            await  base.SetCustomerReguest((int)id, YearOfNoms);
+        
+            if (CustomerRequest == null)
+            {
+                return NotFound();
+            }
+           
+            //получаем кооф.сложности
+            RequestRate = CustomerRequest.StringRate; 
+            
             //сортируем
             CustomerRequest.RequestElementTypes = CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
-            //год применяемых нормативов
-            ViewData["YearOfNorms"] = new SelectList(_context.CompanyHistories, "YearOfNorms", "YearOfNorms");
+            
 
             FillDefectedTypes();
-
+            //год применяемых нормативов
+            ViewData["YearOfNorms"] = new SelectList(_context.CompanyHistories, "YearOfNorms", "YearOfNorms");
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(int? id, int? mode)
@@ -123,10 +126,7 @@ namespace Estimator.Pages.CustomerRequests
         private void FillDefectedTypes()
         {
             //получаем список элементов 
-             ElementImport = _context.ElementImports
-                       .Include(e => e.XLSXElementTypes)
-                      .FirstOrDefault(m => m.CustomerRequest.CustomerRequestID == CustomerRequest.CustomerRequestID);
-            
+            ElementImport = CustomerRequest.ElementImport;
             //если нет импорта то и нет элементов
             if (ElementImport == null) return;
 
@@ -169,7 +169,6 @@ namespace Estimator.Pages.CustomerRequests
 
             }
             ElementImport.DefectedTypes = returnTypes.Values.ToList();
-
 
         }
 

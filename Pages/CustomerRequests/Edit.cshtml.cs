@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 
 using Microsoft.AspNetCore.Authorization;
+using NPOI.SS.Formula.Functions;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -35,14 +36,16 @@ namespace Estimator.Pages.CustomerRequests
                 id = CreateRequestFromParent(parentid.Value);
                 return RedirectToPage("./edit", new { id = id });
             }
-            base.SetCustomerReguest((int)id);
+
+
+            await base.SetCustomerReguest((int)id, int.Parse(_configuration.GetSection("YearOfNorms")["value"]));
  
             
 
             CustomerRequest.ElementImport = ElementImport; 
 
             // запролняем типы элементов
-            PopulateAssignedElementTypes(CustomerRequest);
+            await PopulateAssignedElementTypes(CustomerRequest);
             //Заполняем операции
             PopulateOperations(CustomerRequest);
 
@@ -129,7 +132,7 @@ namespace Estimator.Pages.CustomerRequests
             else
             {
                 // не получилось обновить 
-                PopulateAssignedElementTypes(requestToUpdate);
+                await PopulateAssignedElementTypes(requestToUpdate);
                 return Page();
             }
 

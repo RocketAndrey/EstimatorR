@@ -121,9 +121,13 @@ namespace Estimator.Helpers
                     if (elementImport.FirstRowNumber > 1)
                     {
                         var prop = elementImport.XLSXElementTypes[0].GetType().GetProperty("OwnCost");
-
-                        if (prop != null) CreateCell(sheet.GetRow(0), maxColimnCount, GetProrertyDisplayName(prop), cellStyle);
-
+                        
+                        IRow row = sheet.GetRow(elementImport.FirstRowNumber - 1);
+                        //    иногда почему то не находит
+                        if (row != null)
+                        {
+                            if (prop != null) CreateCell(sheet.GetRow(elementImport.FirstRowNumber - 1), maxColimnCount, GetProrertyDisplayName(prop), cellStyle);
+                        }
                     }
                     // а теперь добвавляем колонку с данными 
                     for (int i = 0; i <= sheet.LastRowNum; i++)
@@ -183,6 +187,7 @@ namespace Estimator.Helpers
                 errorMessage = "ElementImport не найден!";
                 return false;
             }
+        //    elementImport.CalculateXLSXCosts(); 
             try
             {
                 IWorkbook workbook = new XSSFWorkbook();

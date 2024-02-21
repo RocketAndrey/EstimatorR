@@ -21,20 +21,25 @@ namespace Estimator.Models
             ElementNameColumn = ColumnNames.B;
             ElementTypeKeyColumn = ColumnNames.C;
             ElementCountColumn = ColumnNames.D;
+            QualityLevelColumn = ColumnNames.E;  
+            DatasheetColumn = ColumnNames.F;
             ElementPriceColumn = ColumnNames.E;
             ElementKitPriceColumn = ColumnNames.F;
             ElementContractorPriceColumn = ColumnNames.G;
             DeliveryTimeColumn = ColumnNames.H;
-            DownloadPriceColumn = ColumnNames.D;
+            DownloadPriceColumn = ColumnNames.I;
         
             FirstRowIsHeader = true;
-            ImportElementPrice = false;
+            _importElementPrice = false;
+            ImportDatasheet  = false;
+            ImportQualityLevel = false;
             GroupSameTypes = false;
             FirstRowNumber = 2;
             UseLastRowNumber = false;
             LastRowNumber = 3;
         }
-      
+        private bool _importElementPrice;
+        private bool _useElementPrice; 
         public int ElementImportID { get; set; }
         public int CustomerRequestID { get; set; }
         public CustomerRequest CustomerRequest { get; set; }
@@ -81,7 +86,36 @@ namespace Estimator.Models
         public ColumnNames ElementCountColumn { get; set; }
 
         [Display(Name = "Импортировать цену элементов")]
-        public bool ImportElementPrice { get; set; }
+        public bool ImportElementPrice 
+        {
+            get
+            { 
+                return _importElementPrice; 
+            }
+
+            set
+            {
+               if (value) { UseElementPrice = true; }   
+                _importElementPrice = value;    
+            }
+        }
+        /// <summary>
+        /// Указывает необходимость расчета цены элемента из  прайса 
+        /// </summary>
+        [Display(Name = "Учитывать цену элементов в расчете")]
+        public bool UseElementPrice {
+            get
+            {
+          
+           
+                    return _useElementPrice;
+                
+            }
+            set
+            {
+                _useElementPrice  = value;  
+            }
+        }  
         
         [Display(Name = "Импортировать срок поставки элементов, дней")]
         public bool ImportDeliveryTime { get; set; }
@@ -104,6 +138,15 @@ namespace Estimator.Models
         public ColumnNames DownloadPriceColumn { get; set; }
         [Display(Name = "Срок поставки, дней")]
         public ColumnNames DeliveryTimeColumn { get; set; }
+        [Display(Name = "Импортировать уровень качества")]
+        public bool ImportQualityLevel {  get; set; }
+        [Display(Name = "Уровень качества")]
+        public ColumnNames QualityLevelColumn { get; set; }
+        [Display(Name = "Импортировать ТУ")]
+        public bool ImportDatasheet { get; set; }
+        [Display(Name = "ТУ")]
+        public ColumnNames DatasheetColumn { get; set; }    
+
         public List<XLSXElementType> XLSXElementTypes { get; set; }
         /// <summary>
         /// файл загружен?

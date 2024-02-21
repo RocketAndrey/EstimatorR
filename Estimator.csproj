@@ -38,6 +38,7 @@
     </Content>
   </ItemGroup>
 
+
   <ItemGroup>
     <Folder Include="Scripts\" />
   </ItemGroup>
@@ -46,6 +47,7 @@
     <None Include="Pages\Shared\MvcGrid\_Grid.cshtml" />
     <None Include="Pages\Shared\MvcGrid\_Pager.cshtml" />
   </ItemGroup>
+
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
