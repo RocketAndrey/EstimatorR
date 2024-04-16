@@ -12,7 +12,7 @@ namespace Estimator.Data
            // Database.EnsureCreated();//
         }
         public DbSet<Estimator.Models.RuChipsDB> DirVniir { get; set; }
-        public DbSet<Estimator.Models.Company> Companies { get; set; }
+        public DbSet<Estimator.Models.Manufactures> Companies { get; set; }
         public DbSet<Estimator.Models.ImFileData> ImportData { get; set; }
         public DbSet<Estimator.Models.Customer> Customers { get; set; }
         public DbSet<Estimator.Models.ClassECB> ClassECBs { get; set; }

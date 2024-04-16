@@ -34,7 +34,7 @@ namespace Estimator.Pages.Manufacturer
         Estimator.Data.EstimatorContext context;
                
 
-        public List<Estimator.Models.Company> addCompanies;
+        public List<Estimator.Models.Manufactures> addCompanies;
         public ImFileData imFiles { get; set; } = new();
         
         private IWebHostEnvironment Environment;
@@ -107,7 +107,7 @@ namespace Estimator.Pages.Manufacturer
 
             webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedCode"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedNote"].First()), Request.Form["AreChecked"].IsNullOrEmpty());
 
-            addCompanies = new List<Estimator.Models.Company>();
+            addCompanies = new List<Estimator.Models.Manufactures>();
             addCompanies = h_Import.ImportFileManufacturer();
 
             int countIm = 0;

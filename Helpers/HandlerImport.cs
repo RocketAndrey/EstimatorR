@@ -23,9 +23,11 @@ namespace webApp.Models
         public int _selSubGroup { get; set; }
         public int _selManuf { get; set; }
         public int _selQuality { get; set; }
+        public int _selDescrip { get; set; }
+        public int _selTechCond { get; set; }
 
-        public List<Company> addFactory ;
-        
+        public List<Manufactures> addFactory;
+
         public List<RuChipsDB> addDirVniir;
 
         Estimator.Data.EstimatorContext context;
@@ -42,7 +44,7 @@ namespace webApp.Models
             this._selNote = selNote;
             this._useFirstRow = useFirstRow;
         }
-        public HandlerImport(string path_File, int selGroup, int selSubGroup, int selName, int selManuf, int selQuality, bool useFirstRow, Estimator.Data.EstimatorContext db)
+        public HandlerImport(string path_File, int selGroup, int selSubGroup, int selName, int selManuf, int selQuality, int selDescrip, int selTechCond, bool useFirstRow, Estimator.Data.EstimatorContext db)
         {
             this._path_File = path_File;
             this._selGroup = selGroup;
@@ -50,11 +52,13 @@ namespace webApp.Models
             this._selName = selName;
             this._selManuf = selManuf;
             this._selQuality = selQuality;
+            this._selDescrip = selDescrip;
+            this._selTechCond = selTechCond;
             this._useFirstRow = useFirstRow;
 
             context = db;
         }
-        public List<Company> ImportFileManufacturer()
+        public List<Manufactures> ImportFileManufacturer()
         {
             try
             {
@@ -65,29 +69,29 @@ namespace webApp.Models
                 {
                     workbook = new XSSFWorkbook(fileStream);
                 }
-                
+
                 ISheet worksheet = workbook.GetSheetAt(0);
 
                 var rowCount = worksheet.LastRowNum;
-                
-                addFactory = new List<Company>();
-                
-                for (int row = 0; row <= rowCount; row++) 
+
+                addFactory = new List<Manufactures>();
+
+                for (int row = 0; row <= rowCount; row++)
                 {
                     //Проверка на строку-заголовок
                     if (row == 0 && _useFirstRow == false)
                         row++;
 
                     IRow row_Line = worksheet.GetRow(row);
-                    if (row_Line.GetCell(_selCode - 1) != null && row_Line.GetCell(_selName - 1) != null && row_Line.GetCell(_selNote - 1) != null)                      
+                    if (row_Line.GetCell(_selCode - 1) != null && row_Line.GetCell(_selName - 1) != null && row_Line.GetCell(_selNote - 1) != null)
 
-                        addFactory.Add(new Company()
-                    {                        
-                        Code = row_Line.GetCell(_selCode - 1).ToString(),
-                        Name = row_Line.GetCell(_selName - 1).ToString(),
-                        Note = row_Line.GetCell(_selNote - 1).ToString(),                           
-                    });
-                }                
+                        addFactory.Add(new Manufactures()
+                        {
+                            Code = row_Line.GetCell(_selCode - 1).ToString(),
+                            Name = row_Line.GetCell(_selName - 1).ToString(),
+                            Note = row_Line.GetCell(_selNote - 1).ToString(),
+                        });
+                }
             }
             catch (Exception ex)
             {
@@ -112,7 +116,7 @@ namespace webApp.Models
 
                 var rowCount = worksheet.LastRowNum;
 
-                addDirVniir = new List<RuChipsDB>(); 
+                addDirVniir = new List<RuChipsDB>();
                 //System.Diagnostics.Debug.WriteLine();
                 System.Diagnostics.Debug.WriteLine("count in Ex:" + rowCount);
                 for (int row = 0; row <= rowCount; row++)
@@ -122,7 +126,8 @@ namespace webApp.Models
                         row++;
 
                     IRow row_Line = worksheet.GetRow(row);
-                    if (row_Line.GetCell(_selName - 1) != null) {
+                    if (row_Line.GetCell(_selName - 1) != null)
+                    {
 
                         string tmp_Man;
                         //Проверка на существоание компании в "Списке производителей"
@@ -130,10 +135,17 @@ namespace webApp.Models
                             tmp_Man = context.Companies.FirstOrDefault(x => x.Name == row_Line.GetCell(_selManuf - 1).ToString()).Code;
                         else tmp_Man = "-";
 
+                        //Проверка на наличие Qlevel
                         string tmp_Ql;
                         if (row_Line.GetCell(_selQuality - 1) == null)
-                            tmp_Ql = "ВП [0001]";
-                        else tmp_Ql = row_Line.GetCell(_selQuality - 1).ToString();
+                            tmp_Ql = "ВП";
+                        else tmp_Ql = row_Line.GetCell(_selQuality - 1).ToString().Split()[0]; // Взята первая часть строки до пробела
+
+                        //Проверка на наличие Description
+                        string tmp_Descrip;
+                        if (row_Line.GetCell(_selDescrip - 1) == null)
+                            tmp_Descrip = "-";
+                        else tmp_Descrip = row_Line.GetCell(_selDescrip - 1).ToString();
 
                         addDirVniir.Add(new RuChipsDB()
                         {
@@ -143,6 +155,8 @@ namespace webApp.Models
                             Manufacturer = row_Line.GetCell(_selManuf - 1).ToString(),
                             CodeManufacturer = tmp_Man,
                             QLevel = tmp_Ql,
+                            Description = tmp_Descrip,
+                            TechCondition = row_Line.GetCell(_selTechCond - 1).ToString(),
                         });
                     }
                     System.Diagnostics.Debug.WriteLine(row_Line.ToString() + " || " + row);
@@ -174,20 +188,20 @@ namespace webApp.Models
                 ISheet worksheet = workbook.GetSheetAt(0);
 
                 var rowCount = worksheet.LastRowNum;
-                               
+
                 IRow row_Line = worksheet.GetRow(0);
 
-                for(int i=0; i < row_Line.LastCellNum; i++)
+                for (int i = 0; i < row_Line.LastCellNum; i++)
                 {
-                    if(row_Line.GetCell(i) != null )
+                    if (row_Line.GetCell(i) != null)
                     {
-                        _firstRow.Add(row_Line.GetCell(i).ToString()); 
+                        _firstRow.Add(row_Line.GetCell(i).ToString());
                     }
                     else
                     {
                         _firstRow.Add("-");
                     }
-                }            
+                }
             }
             catch (Exception ex)
             {

@@ -106,7 +106,7 @@ namespace Estimator.Pages.RuChips
             var _lastShowPathId = context.ImportData.Max(x => x.Id);
             var _lastPath = context.ImportData.FirstOrDefault(x => x.Id == _lastShowPathId).Path;
 
-            webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedGroup"].First()), int.Parse(Request.Form["SelectedSubgroup"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedManufacturer"].First()), int.Parse(Request.Form["SelectedQuality"].First()), Request.Form["AreChecked"].IsNullOrEmpty(), context);
+            webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedGroup"].First()), int.Parse(Request.Form["SelectedSubgroup"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedManufacturer"].First()), int.Parse(Request.Form["SelectedQuality"].First()), int.Parse(Request.Form["SelectedDescription"].First()), int.Parse(Request.Form["SelectedTechCondition"].First()), Request.Form["AreChecked"].IsNullOrEmpty(), context);
 
             addDirVniir = new List<Estimator.Models.RuChipsDB>();
             addDirVniir = h_Import.ImportFileRuChips();
@@ -123,15 +123,18 @@ namespace Estimator.Pages.RuChips
                     var _isNameExist = context.DirVniir.Any(x => x.Name == addDirVniir.ElementAt(i).Name);
                     var _isManExist = context.DirVniir.Any(x => x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer);
                     var _isQLExist = context.DirVniir.Any(x => x.QLevel == addDirVniir.ElementAt(i).QLevel);
+                    var _isDescrip = context.DirVniir.Any(x => x.Description == addDirVniir.ElementAt(i).Description);
 
-                    if (_isNameExist && _isManExist && _isQLExist)
+                    if (_isNameExist && _isManExist && _isQLExist && _isDescrip)
                     {
-                        context.DirVniir.Where(t => t.Name == addDirVniir.ElementAt(i).Name 
+                        context.DirVniir.Where(t => t.Name == addDirVniir.ElementAt(i).Name
                         && t.Manufacturer == addDirVniir.ElementAt(i).Manufacturer
-                        && t.QLevel == addDirVniir.ElementAt(i).QLevel).
+                        && t.QLevel == addDirVniir.ElementAt(i).QLevel
+                        && t.Description == addDirVniir.ElementAt(i).Description).
                             ExecuteUpdate(b => b.SetProperty(u => u.Group, addDirVniir.ElementAt(i).Group)
                             .SetProperty(u => u.Subgroup, addDirVniir.ElementAt(i).Subgroup)
-                            .SetProperty(u => u.CodeManufacturer, addDirVniir.ElementAt(i).CodeManufacturer));
+                            .SetProperty(u => u.CodeManufacturer, addDirVniir.ElementAt(i).CodeManufacturer)
+                            .SetProperty(u => u.TechCondition, addDirVniir.ElementAt(i).TechCondition));
                         countUp++;
                     }
                     else

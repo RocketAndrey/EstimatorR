@@ -9,7 +9,7 @@ namespace Estimator.Pages.Manufacturer
     {
         Estimator.Data.EstimatorContext context;
         [BindProperty]
-        public Estimator.Models.Company? Factory { get; set; }
+        public Estimator.Models.Manufactures? Factory { get; set; }
 
         public EditModel(Estimator.Data.EstimatorContext db)
         {

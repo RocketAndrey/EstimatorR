@@ -1,6 +1,6 @@
 ﻿namespace Estimator.Models
 {
-    public class Company
+    public class Manufactures
     {
         public int Id { get; set; }
         public string Code { get; set; }

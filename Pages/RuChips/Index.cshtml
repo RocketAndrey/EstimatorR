@@ -43,18 +43,25 @@
         @(
             Html.Grid(Model.DirVniir).Build(columns =>
             {
-                columns.Add(model => model.Group).Titled("Группа").Sortable(true);
-                columns.Add(model => model.Subgroup).Titled("Подгруппа").Sortable(true);
+                //Edit
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/Edit/{model.Id}'><img src=\"/edit.png\"/></a>");
+
+                //columns.Add(model => model.Group).Titled("Группа").Sortable(true);
+                //columns.Add(model => model.Subgroup).Titled("Подгруппа").Sortable(true);
+
                 columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
-                
+
                 columns.Add(model => model.Manufacturer).Titled("Завод изготовитель").Sortable(true);
-                columns.Add().Titled("Код").Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'>{model.CodeManufacturer}</a>");
+
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'><img src=\"/inf.png\"/></a>");
+                //columns.Add().Titled("Код").Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'>{model.CodeManufacturer}</a>");
+                
                 //columns.Add().Titled("Завод изготовитель").Sortable(true).Filterable(true).Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Name-contains={model.Manufacturer}'>{model.Manufacturer}</a>");
                 //columns.Add(model => model.CodeManufacturer).Titled("Код изготовителя").Sortable(true);
 
                 columns.Add(model => model.QLevel).Titled("Уровень качества").Sortable(true);
-                //Edit
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/Edit/{model.Id}'><img src=\"/edit.png\"/></a>");
+                columns.Add(model => model.Description).Titled("Описание").Sortable(true);
+                columns.Add(model => model.TechCondition).Titled("ТУ").Sortable(true);
                 //Delete
                 columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/?id={model.Id}'><img src=\"/delete.png\"/></a>");
             })

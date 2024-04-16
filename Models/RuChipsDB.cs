@@ -9,5 +9,7 @@
         public string Manufacturer { get; set; }
         public string CodeManufacturer { get; set; }
         public string QLevel { get; set; }
+        public string Description { get; set; }
+        public string TechCondition { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Estimator.Pages.Manufacturer
         public string Message { get; set; }
 
         Estimator.Data.EstimatorContext context;
-        public List<Estimator.Models.Company> Companies { get; private set; } = new();
+        public List<Estimator.Models.Manufactures> Companies { get; private set; } = new();
         public IndexModel(Estimator.Data.EstimatorContext db, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(db, appEnvironment, configuration)
         {
             context = db;
