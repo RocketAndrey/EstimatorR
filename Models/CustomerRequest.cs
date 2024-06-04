@@ -1,13 +1,18 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using NPOI.SS.Formula.Functions;
 using NPOI.Util;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 
 namespace Estimator.Models
 {
@@ -18,16 +23,22 @@ namespace Estimator.Models
 
     {
         private decimal rate;
+        private decimal materialRate;
         private List<RequestOperationLaborSummary> _operationSummary;
         private List<RequestOperationGroup> _operationGroups;
-        private bool useimport;
+        private bool _useimport;
+        private bool _usePurchase;
         public CustomerRequest()
         {
             CompanyHistory = new CompanyHistory();
             RequestDate = DateTime.Now;
             UseTemplate = false;
             rate = 1;
-            useimport = true; 
+            materialRate=1;
+            _useimport = true;
+            _usePurchase = true;
+            HideSamplePrice = true;
+            HidePackingSample = true;
         }
 
         public int CustomerRequestID { get; set; }
@@ -39,9 +50,10 @@ namespace Estimator.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Дата исх.")]
         public DateTime RequestDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Введите описание заявки!")]
         [StringLength(250)]
         [Display(Name = "Описание заявки")]
+
         public string Description { get; set; }
         /// <summary>
         /// Используется при обработке новой заявки
@@ -51,8 +63,181 @@ namespace Estimator.Models
         public int TestProgramID { get; set; }
         public TestProgram Program { get; set; }
         [Display(Name = "Заказчик")]
+        [Required(ErrorMessage = "Укажите Заказчика!")]
         public int CustomerID { get; set; }
         public Customer Customer { get; set; }
+
+        /// <summary>
+        /// заявка предполагает закупку ЭКБ?
+        /// </summary>
+        [Display(Name = "Pacчет с закупкой ЭКБ")]
+        public bool UsePurchaseElements
+        { 
+            get
+            {
+                if(UseImport)
+                {
+                   if (this.ElementImport?.ImportElementPrice?? false)
+                    {
+                        return true;
+                    }
+               
+                   
+                }
+                return _usePurchase;
+            }
+            set
+            {
+                _usePurchase = value; 
+            }
+        
+        }
+        /// <summary>
+        /// Если = 1 то использзуется расчет на основе списка элементов
+        /// </summary>
+        
+        [Display(Name = "Поэлементный расчёт")]
+        public bool UseImport
+        {
+            get
+            {
+
+                // вот это все надо чтобы корректно отображались старые заявки
+                if (!_useimport)
+                {
+                    if (this.ElementImport?.XLSXElementTypes?.Count > 0)
+                    {
+                        return true;
+                    }
+                }
+                return _useimport;
+            }
+            set
+            {
+                if (this.ElementImport?.XLSXElementTypes?.Count > 0)
+                {
+                    _useimport = true;
+                }
+                else _useimport = value;
+            }
+
+        }
+
+        #region Validation checking
+
+
+        /// <summary>
+        /// указывает на то что полностью введены данные по закупке
+        /// </summary>
+        [NotMapped]
+        public bool PurchaseValid
+        {
+            get
+            {
+                if (!UsePurchaseElements) return false;
+
+                if(ElementImport != null)
+                {
+                    return (ElementImport?.XLSXElementTypes?.Where(e => e.PurchaseValid == false).Count() == 0) ;
+                }
+                return false; 
+            }
+        }
+        /// <summary>
+        ///  колличество заполненных (валидных) элементов  в части закупки
+        /// </summary>
+        public int ValidPurchaseElementsCount
+        {
+            get
+            {
+                if (!UsePurchaseElements) return 0;
+
+                if (ElementImport != null)
+                {
+                    return ElementImport?.XLSXElementTypes?.Where(e => e.PurchaseValid == true)?.Count() ?? 0;
+                }
+                return 0;
+            }
+        }
+        /// <summary>
+        ///  колличество незаполненных (невалидных) элементов в части закупки
+        /// </summary>
+        public int InValidPurchaseElementsCount
+        {
+            get
+            {
+                if (!UsePurchaseElements) return 0;
+
+                if (ElementImport != null)
+                {
+                    return ElementImport?.XLSXElementTypes?.Where(e => e.PurchaseValid == false)?.Count()??0;
+                }
+                return 0;
+            }
+        }
+        /// <summary>
+        /// указывает на то что имрорт элементов проведен корректно
+        /// </summary>
+        public bool ImportValid
+        {
+            get
+            {
+                if (!UseImport) return false;
+
+                if (ElementImport != null)
+                {
+                    return (ElementImport?.XLSXElementTypes?.Where(e => e.ElementTypeID  ==null && e.Included)?.Count() == 0);
+                }
+                return false;
+            }
+            /// <summary>
+            ///  колличество незаполненных (невалидных) элементов в части импорта
+            /// </summary>
+        }
+        public int ValidImportElementsCount
+        {
+            get
+            {
+                if (!UseImport) return 0;
+
+                if (ElementImport != null)
+                {
+                    return ElementImport?.XLSXElementTypes?.Where(e => e.ElementTypeID !=null && e.Included)?.Count()??0;
+                }
+                return 0;
+            }
+        }
+        /// <summary>
+        ///  колличество незаполненных (невалидных) элементов в части импорта
+        /// </summary>
+        public int InValidImportElementsCount
+        {
+            get
+            {
+                if (!UseImport) return 0;
+
+                if (ElementImport != null)
+                {
+                    return ElementImport?.XLSXElementTypes?.Where(e => e.ElementTypeID ==null && e.Included)?.Count()??0;
+                }
+                return 0;
+            }
+        }
+        #endregion
+
+
+
+        /// <summary>
+        /// Стоимость выборки в цене изделия
+        /// </summary
+        [Display(Name = "Выборка в цене изделия")]
+        public bool HideSamplePrice {  get; set; }
+        /// <summary>
+        /// Стоимость нормы упаковки и минимальной партии в  цене изделия
+        /// </summary>
+        [Display(Name = "Норма упаковки в цене изделия")]
+        public bool HidePackingSample { get; set; }
+
         /// <summary>
         ///Коофициент сложности
         /// </summary>
@@ -71,6 +256,26 @@ namespace Estimator.Models
 
             }
         }
+        /// <summary>
+        ///Коофициент закупки
+        /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
+        [DefaultValue(1.02)]
+        public decimal MaterialRate
+        {
+            get
+            {
+                return materialRate == 0 ? 1 : materialRate;
+            }
+            set
+            {
+                materialRate = value == 0 ? 1 : value;
+                if (materialRate < 0) materialRate = 0;
+                if (materialRate > 100) materialRate = 100;
+
+            }
+        }
+
         /// <summary>
         /// строковое значение к-та сложности для правильного отображения в форме
         /// </summary>
@@ -97,33 +302,30 @@ namespace Estimator.Models
             }
 
         }
-
-        /// <summary>
-        /// Если = 1 то использзуется расчет на основе списка элементов
-        /// </summary>
-        [Display(Name = "Поэлементный расчёт")]
-        public bool  UseImport
+        [NotMapped]
+        [Display(Name = "Коэффициент закупки")]
+        [Required(ErrorMessage = "Введитe число с плавающей точкой")]
+        [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$", ErrorMessage = "Введите число в формате числа с плавающей запятой")]
+        [DisplayFormat(DataFormatString = "{0:F4}")]
+        public string StringMaterialRate
         {
             get
             {
-           
-                    // вот это все надо чтобы корректно отображались старые заявки
-                    if (!useimport)
-                    {
-                        if (this.ElementImport?.XLSXElementTypes?.Count > 0)
-                        {
-                            return true;
-                        }
-                    }
-                    return useimport;
-                
+                return string.Format("{0:f4}", MaterialRate);
+
             }
             set
-            { 
-                useimport = value;  
+            {
+                decimal outputValue;
+                if (decimal.TryParse(value, out outputValue))
+                {
+                    MaterialRate = outputValue;
+                }
+
             }
-            
+
         }
+       
         [NotMapped]
         public ElementImport ElementImport { get; set; }    
         public IEnumerable<RequestElementType> RequestElementTypes { get; set; }
@@ -340,6 +542,7 @@ namespace Estimator.Models
             }
         }
 
+        #region Finance
         /// <summary>
         /// Материальные затраты
         /// </summary>
@@ -719,6 +922,60 @@ namespace Estimator.Models
             }
         }
         /// <summary>
+        /// Стоимость испытаний дочернего элемента 
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public decimal GetChildElementTypeCost(XLSXElementType element)
+        {
+            int childElementTypeID = 0;
+            decimal result = 0;
+
+            foreach (RequestElementType requestType in this.RequestElementTypes)
+            {
+
+                if (requestType.ElementTypeID == element.ElementTypeID)
+                {
+
+                    childElementTypeID = (int)requestType.ElementType.ChildElementTypeID;
+
+
+                }
+            }
+            foreach (RequestElementType requestType in this.ChildCustomerRequest.RequestElementTypes)
+            {
+                if (requestType.ElementTypeID == childElementTypeID)
+                {
+
+                    //стомость оснаски
+                    decimal costKit = 0;
+                    if (requestType.KitCount > 0)
+
+                    {
+                        costKit = requestType.KitCount == 0 ? 0 : (!element.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
+                    }
+
+                    if (requestType.ItemCount > 0 && requestType.BatchCount > 0)
+                    {
+                        //стоимость испытаний данной партии
+                        result = ((requestType.CostItems / requestType.ItemCount) * element.ElementCount
+                            + (requestType.CostBanchs / requestType.BatchCount)
+                         + costKit) * this.ChildCustomerRequest.Rate;
+                    }
+                    //oкругление
+                    result = decimal.Round(result, 0);
+
+
+                }
+            }
+            return result;
+
+        }
+
+        #endregion
+
+
+        /// <summary>
         /// Ссылка на родительскую заявку ( когда заявка создана из другой заявки)
         /// </summary>
         public int? ParentCustomerRequestID
@@ -727,7 +984,7 @@ namespace Estimator.Models
             set;
         }
         /// <summary>
-        /// 
+        /// ссылка на дочернюю заявку
         /// </summary>
         public CustomerRequest ParentCustomerRequest
         {
@@ -744,7 +1001,7 @@ namespace Estimator.Models
         public User LastModificateUser { get; set; }
         public DateTime ModificateDate { get; set; }
         /// <summary>
-        /// использоват шаблон при выборе операция программы
+        /// использовать шаблон при выборе операция программы
         /// </summary>
         [NotMapped]
         public bool UseTemplate { get; set;}
@@ -763,56 +1020,6 @@ namespace Estimator.Models
         }
 
 
-       /// <summary>
-       /// Стоимость испытаний дочернего элемента 
-       /// </summary>
-       /// <param name="element"></param>
-       /// <returns></returns>
-        public decimal GetChildElementTypeCost(XLSXElementType element)
-        {
-            int childElementTypeID = 0;
-            decimal result = 0;
-
-            foreach (RequestElementType requestType in this.RequestElementTypes)
-            {
-
-                if (requestType.ElementTypeID == element.ElementTypeID)
-                {
-
-                    childElementTypeID=(int)requestType.ElementType.ChildElementTypeID; 
-                  
-
-                }
-            }
-            foreach(RequestElementType requestType in this.ChildCustomerRequest.RequestElementTypes)
-            {
-                if (requestType.ElementTypeID == childElementTypeID)
-                {
-
-                    //стомость оснаски
-                    decimal costKit = 0;
-                    if (requestType.KitCount> 0)
-                    
-                    {
-                        costKit= requestType.KitCount == 0 ? 0 : (!element.IsAsuProtokolExists ? (requestType.CostKits / requestType.KitCount) : 0);
-                    }
-
-                    if (requestType.ItemCount > 0 && requestType.BatchCount > 0)
-                    {
-                        //стоимость испытаний данной партии
-                        result = ((requestType.CostItems / requestType.ItemCount) * element.ElementCount
-                            + (requestType.CostBanchs / requestType.BatchCount)
-                         + costKit) * this.ChildCustomerRequest.Rate;
-                    }
-                    //oкругление
-                    result = decimal.Round(result, 0);
-
-
-                }
-            }
-            return result; 
-
-        }
 
     }
 }

@@ -11,7 +11,8 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims; 
+using System.Security.Claims;
+using System.Text;
 
 namespace Estimator.Pages
 {
@@ -94,6 +95,7 @@ namespace Estimator.Pages
         /// <returns></returns>
         protected string PrepareStr(string value)
         {
+            if (value == null) { return ""; }
             // новая строка для записи строки без пробелов
             string newstr = "";
             // цыкл
@@ -126,5 +128,6 @@ namespace Estimator.Pages
             }
 
         }
+      
     }
 }

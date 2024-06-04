@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Estimator.Pages;
 using Estimator.Models.ViewModels;
 
-namespace FilterSortPagingApp.TagHelpers
+namespace Estimator.TagHelpers
 {
     public class PageLinkTagHelper : TagHelper
     {

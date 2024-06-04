@@ -1,31 +1,39 @@
-use   Estimator_160224
+use   Estimator
 
 
 declare @scriptNumber int, @year int;
 declare @scriptName nvarchar (100);
-select @scriptName = N'06_добавление ключей из тестовой базы';
-select @scriptNumber = 05;
-
-
-
-INSERT INTO [dbo].[database_updates]
-           ([ScriptNumber]
-           ,[ScriptName]
-           ,[ScriptDate])
-     VALUES
-           (@scriptNumber
-           ,@scriptName
-           ,Getdate())
+select @scriptName = N'07_заполнение истории цены ';
+select @scriptNumber = 07;
 
 BEGIN TRANSACTION
- 
-Insert into Estimator_160224.dbo.ElementKey (ElementTypeID,[key])
 
-select ec.ElementTypeID,ec.[Key]
-from  ESTIMATOR.dbo.ElementKey ec 
-where isnull((select [key] from Estimator_160224.dbo.ElementKey e where  e.[key]= ec.[key] and e.ElementTypeID=ec.ElementTypeID) ,'')=''
 
-Commit 
+
+		   if (select count(*) from [database_updates] where[ScriptNumber] = 7) = 0 
+		   BEGIN   
+			   INSERT INTO [dbo].[database_updates]
+			   ([ScriptNumber]
+			   ,[ScriptName]
+			   ,[ScriptDate])
+				VALUES
+			   (@scriptNumber
+			   ,@scriptName
+			   ,Getdate())
+				update [XLSXElementType] set [ImportedPrice] = [ElementPrice],[PriceType] = 0
+
+				INSERT INTO [dbo].[ElementPriceHistory]
+						   ([XLSXElementTypeID]
+						   ,[CustomerRequestID]
+						   ,[PriceType]
+						   ,[PriceAmount])
+				select id,e.CustomerRequestID,0,ElementPrice
+				FROM [dbo].[XLSXElementType] X, ElementImports E
+				WHERE E.ElementImportID = x.ElementImportID and x.ElementPrice >0 
+				COMMIT
+			END
+			ELSE ROLLBACK 
+
 GO
 
 

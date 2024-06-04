@@ -2,29 +2,38 @@
 @model Estimator.Pages.CustomerRequests.ReportModel
 
 @{
-    ViewData["Title"] = "Калькуляция стоимости по заявке";
+    ViewData["Title"] =  "Калькуляция стоимости по заявке:" + Model.CustomerRequest.CustomerRequestID.ToString(); 
 }
 <form method="post">
     <input type="hidden" asp-for="SelectedTab" />
-    <div class="container">
+   
       <div class="form-row">
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="./Index">Заявки</a></li>
-                        <li class="breadcrumb-item "><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID">@Model.CustomerRequest.CustomerRequestID</a></li>
+                        <li class="breadcrumb-item active"><a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID">@Model.CustomerRequest.CustomerRequestID</a></li>
+                        @{
+                            if (Model.CustomerRequest.UsePurchaseElements)
+                            {
+                                <li class="breadcrumb-item">
+                                    <a asp-page="./Purchase" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
+                                        Закупка
+                                    </a>
+                                </li>
+                            }
+                        }
                         @{
                             if (Model.CustomerRequest.UseImport)
                             {
                                 <li class="breadcrumb-item">
                                     <a asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
-                                        Импорт перечня
+                                        Импорт
                                     </a>
                                 </li>
-
                             }
                         }
-                        <li class="breadcrumb-item active">
+                        <li class="breadcrumb-item">
                             <a asp-page="./Report" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
                                 Калькуляция
                             </a>
@@ -35,65 +44,152 @@
                 </nav>
             </div>
         </div>
-        <div class="row">
-            <div class="col-11"><h4>Расчёт стоимости испытаний заявки&nbsp;@Model.CustomerRequest.CustomerRequestID</h4></div>
-            <div class="col text-right">
-                <a asp-page="./Edit" asp-route-id="@Model.CustomerRequest.CustomerRequestID"><img src="~/Request.png" width="32" height="32" /></a>
-            </div>
-        </div>
-    
-    
-
-        <dl class="row">
-            <dt class="col-sm-4">
-                Заявка:
-            </dt>
-            <dd class="col-sm-8">
-                @String.Concat(Model.CustomerRequest.RequestNumber, " от ", @Model.CustomerRequest.RequestDate.ToShortDateString())
-            </dd>
-            <dt class="col-sm-4">
-                Заказчик:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.CustomerRequest.Customer.Name)
-            </dd>
-            <dt class="col-sm-4">
-                Программа испытаний:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.CustomerRequest.Program.Name)
-            </dd>
-            <dt class="col-sm-4">
-                Описание:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.CustomerRequest.Description)
-            </dd>
-            <dt class="col-sm-4">
-                Экономические показатели:
-            </dt>
-            <dd class="col-sm-8">
-                <select asp-for="SelectedYear" class="form-control" asp-items="ViewBag.YearOfNorms"></select>
-            </dd>
-            <dt class="col-sm-4">
-                Коэфициент сложности:
-            </dt>
-            <dd class="col-sm-8">
-               
-
-               <input id="inputrate" asp-for="RequestRate " class="form-control" placeholder=@Html.DisplayNameFor(m=>m.CustomerRequest.StringRate) />
-                <span asp-validation-for="RequestRate" class="text-danger"></span>
-                <small id="inputrateHelpBlock" class="form-text text-muted">
-                    Диапазон значений от 0,00 до 100,00,  разделитель разрядов - запятая.
-                </small>
-            </dd>
-        </dl>
-        <div class="form-row">
-            <div class="col-10"></div>
+    @if (Model.CustomerRequest.InValidPurchaseElementsCount > 0)
+    {
+        <div class="form-row no-gutters">
             <div class="col">
-                <input type="submit" value="Пересчитать" class="btn btn-outline-info" />
+                @{
+
+                    string alertType = Model.CustomerRequest.InValidPurchaseElementsCount == 0 ? "alert alert-success alert-dismissible fade show" : "alert alert-warning alert-dismissible fade show";
+                    string alertMessage = string.Format(" Закупка ЭКБ! Корректных элементов {0} из {1}. Заполните цену и срок поставки  каждого элемента!", Model.CustomerRequest.ValidPurchaseElementsCount, Model.CustomerRequest.ValidPurchaseElementsCount + Model.CustomerRequest.InValidPurchaseElementsCount);
+
+
+
+                    <div class="@alertType" role="alert">
+
+
+                        <p class="mb-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
+                                <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                            </svg>
+                            @alertMessage
+                        </p>
+
+
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+
+
+                    </div>
+                }
             </div>
         </div>
+    }
+    @if (Model.CustomerRequest.InValidImportElementsCount > 0)
+    {
+        <div class="form-row">
+            <div class="col">
+                @{
+
+                    string alertTypeI = "alert alert-info alert-dismissible fade show";
+                    string alertMessageI = string.Format("Импорт ЭКБ! Корректных  элементов {0} из {1}. Установите правильные ключи!", Model.CustomerRequest.ValidImportElementsCount, Model.CustomerRequest.ValidImportElementsCount + Model.ElementImport.CustomerRequest.InValidImportElementsCount);
+
+
+
+                    <div class="@alertTypeI" role="alert">
+
+
+                        <p class="mb-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
+                                <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                            </svg>
+                            @alertMessageI
+                        </p>
+
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                }
+
+
+            </div>
+
+        </div>
+    }
+        
+   
+        <div class="form-row">
+
+            <div class="col">
+                <div class="card mb-3">
+                    <div class="card-header">
+                    Калькуляция стоимости испытаний по зявке &nbsp;@Model.CustomerRequest.CustomerRequestID
+                    </div>
+                    <div class="card-body">
+                    <dl class="form-row">
+                        <dt class="col-4">
+                            Заявка:
+                        </dt>
+                        <dd class="col-8">
+                            @String.Concat(Model.CustomerRequest.RequestNumber, " от ", @Model.CustomerRequest.RequestDate.ToShortDateString())
+                        </dd>
+                        <dt class="col-4">
+                            Заказчик:
+                        </dt>
+                        <dd class="col-8">
+                            @Html.DisplayFor(model => model.CustomerRequest.Customer.Name)
+                        </dd>
+                        <dt class="col-4">
+                            Программа испытаний:
+                        </dt>
+                        <dd class="col-8">
+                            @Html.DisplayFor(model => model.CustomerRequest.Program.Name)
+                        </dd>
+                        <dt class="col-4">
+                            Описание:
+                        </dt>
+                        <dd class="col-8">
+                            @Html.DisplayFor(model => model.CustomerRequest.Description)
+                        </dd>
+                        <dt class="col-4">
+                            Экономические показатели:
+                        </dt>
+                        <dd class="col-8">
+                            <select asp-for="SelectedYear" class="form-control" asp-items="ViewBag.YearOfNorms"></select>
+                        </dd>
+                        <dt class="col-4">
+                            Коэфициент сложности:
+                        </dt>
+                        <dd class="col-8">
+
+
+                            <input id="inputrate" asp-for="RequestRate " class="form-control" placeholder=@Html.DisplayNameFor(m=>m.CustomerRequest.StringRate) />
+                            <span asp-validation-for="RequestRate" class="text-danger"></span>
+                            <small id="inputrateHelpBlock" class="form-text text-muted">
+                                Диапазон значений от 0,00 до 100,00,  разделитель разрядов - запятая.
+                            </small>
+                        </dd>
+                        <dt class="col-4">
+                            Коэфициент закупки:
+                        </dt>
+                        <dd class="col-8">
+
+
+                            <input id="inputrate" asp-for="RequestMaterialRate" class="form-control" placeholder=@Html.DisplayNameFor(m=>m.CustomerRequest.StringMaterialRate) />
+                            <span asp-validation-for="RequestMaterialRate" class="text-danger"></span>
+                            <small id="inputrateHelpBlock" class="form-text text-muted">
+                                Диапазон значений от 0,00 до 100,00,  разделитель разрядов - запятая.
+                            </small>
+                        </dd>
+                    </dl>
+                    <div class="form-row">
+
+                        <div class="col text-right">
+                            <input type="submit" value="Пересчитать" class="btn btn-outline-info" />
+                        </div>
+                    </div>
+                 </div>
+                
+                </div>
+            </div>
+        </div>
+       
+
+      
         @{
             string[] navs = new string[8];//{ "nav-item-tab1", "nav-item-tab2", "nav-item-tab3", "nav-item-tab4", "nav-item-tab5", "nav-item-tab5" }
             string[] tabs = new string[8];
@@ -535,8 +631,8 @@
                                             <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].RowNum)</th>
                                             <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementName)</th>
 
-                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementCount)</th>
-                                        
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].SuppliedCount)</th>
+                                            <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].PurchasedCount)</th>
                                             @if (Model.ElementImport.ImportElementPrice)
                                             {
                                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementPrice)</th>
@@ -581,14 +677,17 @@
                                                     </td>
 
                                                     <td>
-                                                        @item.ElementCount
+                                                        @item.SuppliedCount
+                                                    </td>
+                                                    <td>
+                                                        @item.PurchasedCount
                                                     </td>
                                                     
                                                     @if (Model.ElementImport.ImportElementPrice)
                                                     {
                                                         <td>
 
-                                                            @item.ElementPrice.ToString("F2")
+                                                            @{ (item.ElementPrice * (Model.CustomerRequest?.MaterialRate ?? 1)).ToString("F2");}
                                                         </td>
                                                         <td>
 
@@ -969,9 +1068,7 @@
 
             </div>
         </div>
-    </div>
-    
-
+ 
   
 </form>
 <script>

@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System;
 
-using Microsoft.AspNetCore.Authorization;
-using NPOI.SS.Formula.Functions;
 
 namespace Estimator.Pages.CustomerRequests
 {
@@ -22,7 +20,7 @@ namespace Estimator.Pages.CustomerRequests
         {
 
         }
-        public ElementImport ElementImport;
+        public  ElementImport ElementImport;
         public TestProgram ChildProgram;
         public string strRate; 
         public async Task<IActionResult> OnGetAsync(int? id, int? parentid)
@@ -40,9 +38,8 @@ namespace Estimator.Pages.CustomerRequests
 
             await base.SetCustomerReguest((int)id, int.Parse(_configuration.GetSection("YearOfNorms")["value"]));
  
-            
-
-            CustomerRequest.ElementImport = ElementImport; 
+           
+           ElementImport =CustomerRequest.ElementImport;
 
             // запролняем типы элементов
             await PopulateAssignedElementTypes(CustomerRequest);
@@ -114,7 +111,14 @@ namespace Estimator.Pages.CustomerRequests
                 i => i.RequestDate,
                 i => i.CustomerID,
                 i=>i.UseImport, 
-                 i => i.Description, i => i.UseTemplate, i => i.TestProgramTemplateID, i => i.StringRate)
+               i => i.Description,
+               i => i.UseTemplate, 
+               i => i.TestProgramTemplateID,
+               i => i.StringRate,
+               i=>i.StringMaterialRate,
+               i=>i.UsePurchaseElements,
+               i=>i.HidePackingSample,
+              i => i.HideSamplePrice)
                 )
             {
                 if (!requestToUpdate.UseImport)

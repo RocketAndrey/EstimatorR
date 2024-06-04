@@ -1,7 +1,7 @@
 {
+  "version": "1.0",
   "defaultProvider": "cdnjs",
   "libraries": [
-
     {
       "library": "bootstrap-select@1.13.18",
       "destination": "wwwroot/lib/bootstrap-select/"
@@ -9,8 +9,7 @@
     {
       "provider": "cdnjs",
       "library": "bootstrap@4.6.2",
-      "destination": "wwwroot/lib/bootstrap/"
+      "destination": "wwwroot/lib/bootstrap/462/"
     }
-  ],
-  "version": "1.0"
+  ]
 }
