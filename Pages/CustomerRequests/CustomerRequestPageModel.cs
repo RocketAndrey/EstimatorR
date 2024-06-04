@@ -54,8 +54,11 @@ namespace Estimator.Pages.CustomerRequests
                 .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
             
             CustomerRequest.ElementImport = await _context.ElementImports
-               .Include(e => e.XLSXElementTypes)
-                  .FirstOrDefaultAsync(m => m.CustomerRequest.CustomerRequestID == id);
+               .Include(e => e.XLSXElementTypes).ThenInclude(e=>e.PriceHistory)
+               .Include(e => e.XLSXElementTypes).ThenInclude(x=>x.Company)
+               .Include(e => e.XLSXElementTypes).ThenInclude(x => x.PriceHistorySource)
+               .AsNoTracking()
+               .FirstOrDefaultAsync(m => m.CustomerRequest.CustomerRequestID == id);
 
             if (CustomerRequest.ElementImport != null)
             {
@@ -134,6 +137,7 @@ namespace Estimator.Pages.CustomerRequests
                             "FROM[RequestOperation],[TestChainItem],[Operation],[dbo].[RequestElementType],[OperationGroup] WHERE[RequestOperation].[TestChainItemID]= [TestChainItem].TestChainItemID " +
                                 "and[dbo].[Operation].OperationID= [TestChainItem].OperationID and[RequestOperation].RequestElementTypeID=[dbo].[RequestElementType].RequestElementTypeID " +
                                 "and [RequestElementType].CustomerRequestID ={0} and [OperationGroup].OperationGroupID=[Operation].OperationGroupID GROUP BY[Operation].OperationID, [Operation].Name,[RequestOperation].SampleCount,[ExecuteCount], [OperationGroup].Code,  [IsExecute],[TestChainItem].[Order] ORDER BY[TestChainItem].[Order]";
+            
             RequestOperationGroupViews = _context.RequestOperationGroupViews.FromSqlRaw(query, customerRequest.CustomerRequestID).ToList();
 
         }
@@ -183,11 +187,12 @@ namespace Estimator.Pages.CustomerRequests
                    .Include(c => c.Staff)
                         .ThenInclude(e => e.Qualification)
                    .Include(c => c.CalcFactors)
+                   .AsNoTracking()
                    .FirstOrDefault(m => m.YearOfNorms == year);
             }
-            catch (Exception e)
+            catch 
             {
-                throw e;
+                throw new Exception("Не удалось установить нормативы!");
             }
 
         }

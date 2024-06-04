@@ -34,6 +34,11 @@ namespace Estimator.Models
         /// Шаблоны программ
         /// </summary>
         public List<TestProgramTemplate> Templates { get; set; }
+        /// <summary>
+        /// Использовать  справочник  ВНИИР для рассчета цены закупки 
+        /// </summary>
+
+        public bool UseRuChipsDB {  get; set; } 
 
 
     }

@@ -110,6 +110,8 @@ namespace Estimator.Pages.CustomerRequests
                     ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.Valid).ToList();
                 }
             }
+            //обратная ссылка
+            ElementImport.CustomerRequest.ElementImport = ElementImport;    
 
             return Page();
         }
@@ -179,6 +181,10 @@ namespace Estimator.Pages.CustomerRequests
                             
                             if (convertResult)
                             {
+                                if (convertMessage.Trim().Length >0 )
+                                {
+                                    ErrorMessage = convertMessage;
+                                }
                                 ImportStep += 1;
 
                                 await _context.SaveChangesAsync();
@@ -264,7 +270,10 @@ namespace Estimator.Pages.CustomerRequests
                     ElementImport.CustomerRequest.LastModificateUserID = UserID;
                 }
                 await _context.SaveChangesAsync();
+
+
                 ValidateXLSX(true);
+
                 return RedirectToPage("Import", new { id = ElementImport.CustomerRequestID, step = 2 });
 
             }
@@ -287,15 +296,16 @@ namespace Estimator.Pages.CustomerRequests
             //получаем коллекцию ключей
             Dictionary<string, ElementType> keys = new Dictionary<string, ElementType>();
 
+            if (ElementImport.CustomerRequest == null)
+            {
 
-
-            ElementImport.CustomerRequest = _context.CustomerRequests
-                                .Include(e => e.Customer)
-                                .Include(m => m.Program)
-                                    .ThenInclude(e => e.ElementntTypes)
-                                        .ThenInclude(e => e.Keys)
-                                .FirstOrDefault(e => e.CustomerRequestID == ElementImport.CustomerRequestID);
-
+                ElementImport.CustomerRequest = _context.CustomerRequests
+                                    .Include(e => e.Customer)
+                                    .Include(m => m.Program)
+                                        .ThenInclude(e => e.ElementntTypes)
+                                            .ThenInclude(e => e.Keys)
+                                 .FirstOrDefault(e => e.CustomerRequestID == ElementImport.CustomerRequestID);
+            }
 
             //заполняем коллецию ключей
             foreach (var itemET in ElementImport.CustomerRequest.Program.ElementntTypes)
@@ -321,18 +331,32 @@ namespace Estimator.Pages.CustomerRequests
                 itemXLSX.Valid = false;
                 itemXLSX.ErrorMessage = "";
 
-                itemXLSX.ElementName ??= "";
+                itemXLSX.ImportedElementName ??= "";
                 itemXLSX.ElementTypeKey ??= "";
+
+
                 //удаление вычеркнутого элемента
-                if (!itemXLSX.InList & saveChanges)
+                //Не удаляем а отмечаем как удаленный
+                if (!itemXLSX.Included & saveChanges)
                 {
-                    _context.Attach(itemXLSX).State = EntityState.Deleted;
                     XLSXElementType item = _context.XLSXElementTypes.FirstOrDefault(m => m.ID == itemXLSX.ID);
-                    continue;
+
+                    if (item != null)
+                    {
+                       
+                        item.Included = false;
+                      
+                        _context.Entry(item).State = EntityState.Modified;
+
+                        _context.SaveChanges();
+                        continue;
+                    }
+
                 }
+            
 
                 //нет имени - не загружаем
-                if (PrepareStr(itemXLSX.ElementName) == "")
+                if (PrepareStr(itemXLSX.ImportedElementName) == "")
                 {
                     itemXLSX.ErrorMessage = "Имя элемента не заполнено";
                     returnValue = false;
@@ -364,7 +388,7 @@ namespace Estimator.Pages.CustomerRequests
                  
                     foreach (var key in keys)
                     {
-                        if (PrepareStr(itemXLSX.ElementName).IndexOf(PrepareStr(key.Key))>=0)
+                        if (PrepareStr(itemXLSX.ImportedElementName).IndexOf(PrepareStr(key.Key))>=0)
                         {
                             
                             itemXLSX.ElementTypeKey= key.Key;
@@ -382,7 +406,7 @@ namespace Estimator.Pages.CustomerRequests
                 //или ключ не найден  или искать в предыдущем импорте
                 if ((PrepareStr(itemXLSX.ElementTypeKey) == "") | this.ElementImport.UseLastCalculation)
                 {
-                    beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ElementName, itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID);
+                    beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ImportedElementName, itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID);
                     //Если предыдущий типономина  найден и ему присвоен тип
                     if (((beforeItem != null ? beforeItem.ElementTypeID : 0) > 0))
                     {
@@ -417,7 +441,7 @@ namespace Estimator.Pages.CustomerRequests
                     
                     if (UseAsu & itemXLSX.Valid & checkElemenTypeInAsu)
                     {
-                        string protokolName = LastAsuProtokolNumber(itemXLSX.ElementName);
+                        string protokolName = LastAsuProtokolNumber(itemXLSX.ImportedElementName);
                         if (!String.IsNullOrWhiteSpace(protokolName))
                         {
                             itemXLSX.AsuProtokolCode = protokolName;
@@ -436,7 +460,8 @@ namespace Estimator.Pages.CustomerRequests
                     if (item != null)
                     {
                         item.ElementTypeKey = itemXLSX.ElementTypeKey ?? "";
-                        item.ElementName = itemXLSX.ElementName ?? "";
+                        item.Included  = itemXLSX.Included;
+                        item.ImportedElementName = itemXLSX.ImportedElementName ?? "";
                         item.ElementCount = itemXLSX.ElementCount;
                         item.ElementTypeID = itemXLSX.ElementTypeID;
                         if (item.RowNum == null)
@@ -529,9 +554,9 @@ namespace Estimator.Pages.CustomerRequests
         /// <returns></returns>
         private XLSXElementType BeforeUploadedXLSXElementType(string elementName, int id, int programid)
         {
-            string selectStr= "SELECT [ID] ,[RowNum],[ElementImportID] ,[ElementName] ,[ElementTypeKey]" +
-            ",[ElementCount] ,e.[ElementTypeID] ,[AsuProtokolCode] ,[ElementPrice],[BeforeUploadedXLSXElementTypeID],[ElementContractorPrice],[ElementKitPrice],"+
-            "[DeliveryTime],[Datasheet],[ImportedQualificationLevel] " +
+            string selectStr= "SELECT [ID],[ElementImportID],[ElementName] ,[ElementTypeKey],[ElementCount] ,e.[ElementTypeID],[AsuProtokolCode],[BeforeUploadedXLSXElementTypeID] ,[RowNum], " +
+                "[ElementPrice] ,[ElementContractorPrice],[ElementKitPrice],[DeliveryTime] ,[Datasheet],[ImportedQualificationLevel] ,[ImportedPrice] ,[PriceType], [ImportedElementName] ," +
+                "[QualificationLevel] , [CompanyId], [ImportedDatasheet], [SampleCount], [Included] ,[MinPackingSize] ,[PackingSample], [PriceHistorySourceID] " +
             "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
             " AND  e.ProgramID = {2}";
            
