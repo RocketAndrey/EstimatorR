@@ -127,6 +127,7 @@ namespace Estimator.Helpers
                                             PriceType=ElementPriceType.ImportedfromExcel,
                                             PriceAmount= elementType.ImportedPrice,
                                             CreateDate= DateTime.Now
+                                            
                                         });
 
                                     }

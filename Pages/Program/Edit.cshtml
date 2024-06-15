@@ -81,20 +81,20 @@
             {
                 <tr>
                     <td>
-                        <input type="hidden" asp-for="TestActionViewList[i].TestActionID" name="views[@i].TestActionID" />
+                                <input type="hidden" asp-for="TestActionViewList[i].TestActionID" name="TestActionViewList[@i].TestActionID" />
                         @Html.DisplayFor(model => model.TestActionViewList[i].QualificationName)
                     </td>
                     <td>
-                        <input asp-for="TestActionViewList[i].BatchLabor" class="form-control" name="views[@i].BatchLabor" />
-                        <span asp-validation-for="views[@i].BatchLabor" class="text-danger"></span>
+                                <input asp-for="TestActionViewList[i].BatchLabor" class="form-control" name="TestActionViewList[@i].BatchLabor" />
+                                 <span asp-validation-for="TestActionViewList[i].BatchLabor" class="text-danger"></span> 
                     </td>
                     <td>
-                        <input asp-for="TestActionViewList[i].ItemLabor" class="form-control" name="views[@i].ItemLabor" type="text" />
-                        <span asp-validation-for="views[@i].ItemLabor" class="text-danger"></span>
+                                <input asp-for="TestActionViewList[i].ItemLabor" class="form-control" name="TestActionViewList[@i].ItemLabor" type="text" />
+                                <span asp-validation-for="TestActionViewList[i].ItemLabor" class="text-danger"></span>
                     </td>
                     <td>
-                        <input asp-for="TestActionViewList[i].KitLabor" class="form-control" name="views[@i].KitLabor" />
-                        <span asp-validation-for="views[@i].KitLabor" class="text-danger"></span>
+                                <input asp-for="TestActionViewList[i].KitLabor" class="form-control" name="TestActionViewList[@i].KitLabor" />
+                                <span asp-validation-for="TestActionViewList[i].KitLabor" class="text-danger"></span> 
 
                     </td>
                 </tr>
