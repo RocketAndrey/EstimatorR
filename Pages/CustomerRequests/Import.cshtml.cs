@@ -181,7 +181,7 @@ namespace Estimator.Pages.CustomerRequests
                             
                             if (convertResult)
                             {
-                                if (convertMessage.Trim().Length >0 )
+                                if (convertMessage.Trim().Length > 0 )
                                 {
                                     ErrorMessage = convertMessage;
                                 }
