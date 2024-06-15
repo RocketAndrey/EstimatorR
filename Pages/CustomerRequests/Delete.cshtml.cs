@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 
-namespace Estimator.CustomerRequests
+namespace Estimator.Pages.CustomerRequests
 {
-   
+
     public class DeleteModel : PageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        private readonly Data.EstimatorContext _context;
 
-        public DeleteModel(Estimator.Data.EstimatorContext context)
+        public DeleteModel(Data.EstimatorContext context)
         {
             _context = context;
         }

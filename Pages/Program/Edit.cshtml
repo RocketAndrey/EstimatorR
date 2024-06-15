@@ -79,25 +79,31 @@
 
             @for (int i = 0; i < Model.TestActionViewList.Count; i++)
             {
-                <tr>
-                    <td>
-                        <input type="hidden" asp-for="TestActionViewList[i].TestActionID" name="views[@i].TestActionID" />
-                        @Html.DisplayFor(model => model.TestActionViewList[i].QualificationName)
-                    </td>
-                    <td>
-                        <input asp-for="TestActionViewList[i].BatchLabor" class="form-control" name="views[@i].BatchLabor" />
-                        <span asp-validation-for="views[@i].BatchLabor" class="text-danger"></span>
-                    </td>
-                    <td>
-                        <input asp-for="TestActionViewList[i].ItemLabor" class="form-control" name="views[@i].ItemLabor" type="text" />
-                        <span asp-validation-for="views[@i].ItemLabor" class="text-danger"></span>
-                    </td>
-                    <td>
-                        <input asp-for="TestActionViewList[i].KitLabor" class="form-control" name="views[@i].KitLabor" />
-                        <span asp-validation-for="views[@i].KitLabor" class="text-danger"></span>
+                        <tr>
+                            <td>
+                                <input type="hidden" asp-for="TestActionViewList[i].TestActionID" name="views[@i].TestActionID" />
+                                @Html.DisplayFor(model => model.TestActionViewList[i].QualificationName)
+                            </td>
+                            <td>
+                                <input asp-for="TestActionViewList[i].BatchLabor" class="form-control" name="views[@i].BatchLabor" />
 
-                    </td>
-                </tr>
+                                <span asp-validation-for="TestActionViewList[i].BatchLabor" class="text-danger"></span>@* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ РАБОТАЕТ (ПРОБЛЕМЫ С КОМПИЛЯЦИЕЙ) ХЗ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *@
+                                @* <span asp-validation-for="views[@i].BatchLabor" class="text-danger"></span> *@ @* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ РАБОТАЕТ (ПРОБЛЕМЫ С КОМПИЛЯЦИЕЙ) ХЗ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *@
+                            </td>
+                            <td>
+                                <input asp-for="TestActionViewList[i].ItemLabor" class="form-control" name="views[@i].ItemLabor" type="text" />
+
+                                <span asp-validation-for="TestActionViewList[i].ItemLabor" class="text-danger"></span>@* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ РАБОТАЕТ (ПРОБЛЕМЫ С КОМПИЛЯЦИЕЙ) ХЗ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *@
+                                @*  <span asp-validation-for="views[@i].ItemLabor" class="text-danger"></span> *@@* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ РАБОТАЕТ (ПРОБЛЕМЫ С КОМПИЛЯЦИЕЙ) ХЗ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *@
+                            </td>
+                            <td>
+                                <input asp-for="TestActionViewList[i].KitLabor" class="form-control" name="views[@i].KitLabor" />
+
+                                <span asp-validation-for="TestActionViewList[i].KitLabor" class="text-danger"></span>@* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ РАБОТАЕТ (ПРОБЛЕМЫ С КОМПИЛЯЦИЕЙ) ХЗ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *@
+                                @* <span asp-validation-for="views[@i].KitLabor" class="text-danger"></span> *@@* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НЕ РАБОТАЕТ (ПРОБЛЕМЫ С КОМПИЛЯЦИЕЙ) ХЗ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! *@
+
+                            </td>
+                        </tr>
             }
             <tr>
                 <td>

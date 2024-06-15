@@ -9,9 +9,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using webApp.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Estimator.Helpers;
 
 namespace Estimator.Pages.RuChips
 {
@@ -106,7 +106,7 @@ namespace Estimator.Pages.RuChips
             var _lastShowPathId = context.ImportData.Max(x => x.Id);
             var _lastPath = context.ImportData.FirstOrDefault(x => x.Id == _lastShowPathId).Path;
 
-            webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedGroup"].First()), int.Parse(Request.Form["SelectedSubgroup"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedManufacturer"].First()), int.Parse(Request.Form["SelectedQuality"].First()), Request.Form["AreChecked"].IsNullOrEmpty(), context);
+            HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedGroup"].First()), int.Parse(Request.Form["SelectedSubgroup"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedManufacturer"].First()), int.Parse(Request.Form["SelectedQuality"].First()), Request.Form["AreChecked"].IsNullOrEmpty(), context);
 
             addDirVniir = new List<Estimator.Models.RuChipsDB>();
             addDirVniir = h_Import.ImportFileRuChips();

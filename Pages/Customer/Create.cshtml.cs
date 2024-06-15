@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
-namespace Estimator.Pages.Customers
+namespace Estimator.Pages.Customer
 {
     public class CreateModel : PageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        private readonly Data.EstimatorContext _context;
 
-        public CreateModel(Estimator.Data.EstimatorContext context)
+        public CreateModel(Data.EstimatorContext context)
         {
             _context = context;
         }
@@ -19,7 +19,7 @@ namespace Estimator.Pages.Customers
         }
 
         [BindProperty]
-        public Estimator.Models.Customer Customer { get; set; }
+        public Models.Customer Customer { get; set; }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

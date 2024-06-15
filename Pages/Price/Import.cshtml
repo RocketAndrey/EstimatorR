@@ -1,0 +1,143 @@
+﻿@page
+@model Estimator.Pages.Price.ImportModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h1>Импорт данных</h1>
+
+<br />
+@if (Model.countExistPrice != 0)
+{ 
+    <form method="post" >
+
+    <hr />
+
+    <label>Для данного производителя импортированно @Model.countExistPrice наименований </label>
+    <br />
+     <input type="submit" value="Экспортировать" class="btn btn-outline-primary" asp-page-handler="Export" />
+    <input type="submit" value="Очистить" class="btn btn-outline-primary" asp-page-handler="Clear" />
+
+    <hr />
+    <br />
+
+    </form>
+}
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<style>
+    .demotable {
+        border-collapse: collapse;
+        counter-reset: schetchik; /* счётчик с названием "schetchik" работает в рамках класса .demotable */
+    }
+
+        .demotable tr {
+            counter-increment: schetchik; /* при встрече тега tr счётчик с названием "schetchik" увеличивается на единицу */
+        }
+
+            .demotable td,
+            .demotable tr:before {
+                padding: .1em .5em;
+                border: 1px solid ;
+            }
+
+            .demotable tr:before {
+                content: counter(schetchik); /* значение счётчика с названием "schetchik" записывается в первую клетку строки */
+                display: table-cell;
+                vertical-align: middle;
+                
+            }
+</style>
+
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+
+        <input type="file" name="postedFiles" class="form-control" /><br />
+        <br />
+        <input type="submit" value="Загрузить" class="btn btn-outline-primary" asp-page-handler="Upload" />
+
+        <span style="color:green">@Html.Raw(Model.Message)</span>
+    </form>
+
+</body>
+</html>
+
+<form method="post" hidden="@Model._disable" >
+    <hr />
+    <br />
+    <center><h3>Укажите структуру файла</h3></center>
+    
+    <table class="demotable"@*  border="1" cellpadding="0" cellspacing="0" *@>
+        <thead>
+            @for (var i = 0; i < Model.size; i++)
+            {
+            <th>@Model.alpha.ElementAt(i)</th>
+            }
+        </thead>
+        <tbody>
+            <tr>
+                @foreach (List<string> subList in Model.tmpF)
+                {
+                <tr>
+                    @foreach (string item in subList)
+                    {
+                        <td>@item</td>
+                    }
+                </tr>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+    <br />
+    <hr />
+
+    <p>
+        <label>Строка начала данных:</label>
+        <select name="SelectedRow">
+            @for (int i=1; i < 22; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </p>
+    <p>
+        <label>Наименование:</label>
+        <select name="SelectedName" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+    </p>
+    <p>
+        <label>Цена:</label>
+        <select name="SelectedCost" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+    </p>
+    <p>
+        <label>Норма упаковки:</label>
+        <select name="SelectedStandartPack" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+    </p>
+    <p>
+        <label>Норма поставки:</label>
+        <select name="SelectedStandartDelivery" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+    </p>
+    <p>
+        <label>Срок поставки:</label>
+        <select name="SelectedTimeDelivery" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+    </p>
+    <br />
+    <center>
+        <input type="submit" value="Импортировать" class="btn btn-outline-primary" asp-page-handler="Finish" />
+    </center>
+    <br />
+
+
+</form>

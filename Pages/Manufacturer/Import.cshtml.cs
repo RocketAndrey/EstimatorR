@@ -9,9 +9,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using webApp.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Estimator.Helpers;
 
 namespace Estimator.Pages.Manufacturer
 {
@@ -105,7 +105,7 @@ namespace Estimator.Pages.Manufacturer
             var _lastShowPathId = context.ImportData.Max(x => x.Id);
             var _lastPath = context.ImportData.FirstOrDefault(x => x.Id == _lastShowPathId).Path;
 
-            webApp.Models.HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedCode"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedNote"].First()), Request.Form["AreChecked"].IsNullOrEmpty());
+            HandlerImport h_Import = new HandlerImport(_lastPath, int.Parse(Request.Form["SelectedCode"].First()), int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedNote"].First()), Request.Form["AreChecked"].IsNullOrEmpty());
 
             addCompanies = new List<Estimator.Models.Company>();
             addCompanies = h_Import.ImportFileManufacturer();

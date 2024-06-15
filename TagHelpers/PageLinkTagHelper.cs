@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Estimator.Pages;
 using Estimator.Models.ViewModels;
 
-namespace FilterSortPagingApp.TagHelpers
+namespace Estimator.TagHelpers
 {
     public class PageLinkTagHelper : TagHelper
     {
@@ -19,7 +19,7 @@ namespace FilterSortPagingApp.TagHelpers
         [ViewContext]
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
-        public PaginatedList <CustomerRequestView> PageModel{ get; set; }
+        public PaginatedList<CustomerRequestView> PageModel { get; set; }
         public string PageAction { get; set; }
 
         [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
@@ -35,12 +35,12 @@ namespace FilterSortPagingApp.TagHelpers
             tag.AddCssClass("pagination");
 
             // формируем три ссылки - на текущую, предыдущую и следующую
-            TagBuilder currentItem = CreateTag(PageModel.PageIndex , urlHelper, PageModel.PageIndex.ToString());
+            TagBuilder currentItem = CreateTag(PageModel.PageIndex, urlHelper, PageModel.PageIndex.ToString());
 
             // создаем ссылку на предыдущую страницу, если она есть
             if (PageModel.HasPreviousPage)
             {
-                TagBuilder prevItem = CreateTag(PageModel.PageIndex - 1, urlHelper,"<-туда");
+                TagBuilder prevItem = CreateTag(PageModel.PageIndex - 1, urlHelper, "<-туда");
                 tag.InnerHtml.AppendHtml(prevItem);
             }
 
@@ -58,7 +58,7 @@ namespace FilterSortPagingApp.TagHelpers
         {
             TagBuilder item = new TagBuilder("li");
             TagBuilder link = new TagBuilder("a");
-            if (pageNumber == this.PageModel.PageIndex)
+            if (pageNumber == PageModel.PageIndex)
             {
                 item.AddCssClass("active");
             }
@@ -70,7 +70,7 @@ namespace FilterSortPagingApp.TagHelpers
             item.AddCssClass("page-item");
             link.AddCssClass("page-link");
 
-          //  link.InnerHtml.Append(pageNumber.ToString());
+            //  link.InnerHtml.Append(pageNumber.ToString());
             link.InnerHtml.Append(text);
 
             item.InnerHtml.AppendHtml(link);

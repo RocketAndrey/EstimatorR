@@ -3,19 +3,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace Estimator.Pages.Customers
+namespace Estimator.Pages.Customer
 {
     public class DeleteModel : PageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        private readonly Data.EstimatorContext _context;
 
-        public DeleteModel(Estimator.Data.EstimatorContext context)
+        public DeleteModel(Data.EstimatorContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Estimator.Models.Customer Customer { get; set; }
+        public Models.Customer Customer { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

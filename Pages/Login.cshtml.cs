@@ -14,13 +14,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
 
-namespace Estimator
+namespace Estimator.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        private readonly EstimatorContext _context;
 
-        public LoginModel(Estimator.Data.EstimatorContext context)
+        public LoginModel(EstimatorContext context)
         {
             _context = context;
         }
@@ -28,10 +28,10 @@ namespace Estimator
         [BindProperty]
         public LoginView Login { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id,string? action)
+        public async Task<IActionResult> OnGetAsync(int? id, string action)
         {
-          
-            if(!String.IsNullOrEmpty(action))
+
+            if (!string.IsNullOrEmpty(action))
             {
                 if (action == "logout")
                 {
@@ -39,7 +39,7 @@ namespace Estimator
                 }
             }
             string path = Request.Path;
-            Login  = new LoginView();
+            Login = new LoginView();
 
             return Page();
         }
@@ -52,20 +52,20 @@ namespace Estimator
             {
                 return Page();
             }
-            
+
             User user = await _context.User.FirstOrDefaultAsync(u => u.Email == Login.Email && u.Password == Login.Password);
             if (user != null)
             {
                 await Authenticate(user); // аутентификация
-              //  HttpContext.Request.
+                                          //  HttpContext.Request.
                 return RedirectToPage("./index");
             }
-            
+
             ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             return Page();
         }
-          
-        
+
+
         private async Task Authenticate(User user)
         {
             // создаем один claim
@@ -74,14 +74,14 @@ namespace Estimator
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email ),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType , user.Role.ToString ()),
                 new Claim("identity",user.Id.ToString())
-               
+
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id), new AuthenticationProperties
             {
-                IsPersistent= true,
+                IsPersistent = true,
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(1440)
             });
         }

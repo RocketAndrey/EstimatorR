@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
-namespace Estimator
+namespace Estimator.Pages.Shared
 {
     public class _loginPartialModel : PageModel
     {
         public void OnGet()
         {
-           
+
 
         }
     }
