@@ -1,10 +1,91 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using NonFactors.Mvc.Grid;
 @model Estimator.Pages.Price.IndexModel
 @{
     ViewData["Title"] = "Прайсы";
 }
-<div class="container">
-    <div class="row">
-        <h1>Здесь будут Прайсы заводов изготовителей</h1>
-    </div>
-</div>
+
+<center><h1>Прайсы</h1></center>
+
+<td align="left">
+    <a asp-page="Create" class="btn btn-outline-primary btn-sm">Добавить</a>
+</td>
+
+<br />
+<hr />
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+</head>
+
+<body>
+    <form method="post">
+        @(
+            Html.Grid(Model.PriceList).Build(columns =>
+            {
+                columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
+                columns.Add(model => model.Manufacturer).Titled("Производитель").Sortable(true);
+                columns.Add(model => model.DateStart.Date.ToShortDateString()).Titled("Дата введения").Sortable(true);
+                columns.Add(model => model.DateEnd.Date.ToShortDateString()).Titled("Дата окончания").Sortable(true);
+                columns.Add(model => model.Description).Titled("Описание").Sortable(false);
+                //Edit
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><img src=\"/edit.png\"/></a>");
+                //Delete
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/?id={model.PriceListId}'><img src=\"/delete.png\"/></a>");
+                //Import
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Import/?id={model.PriceListId}'>Импорт</a>");
+            })
+            .Using(GridFilterMode.Header)
+            .Empty("No data found")
+            .Filterable(GridFilterType.Double)
+            .Sortable()
+            )
+    </form>
+    <script src="~/js/mvc-grid/mvc-grid.js"></script>
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+    <script>
+        MvcGrid.lang = {
+            default: {
+                "equals": "Равно",
+                "not-equals": "Не равно"
+            },
+            text: {
+                "contains": "Содержит",
+                "equals": "Равно",
+                "not-equals": "Не равно",
+                "starts-with": "Начинается с",
+                "ends-with": "Заканчивается"
+            },
+            number: {
+                "equals": "Равно",
+                "not-equals": "Не равно",
+                "less-than": "Меньше чем",
+                "greater-than": "Больше чем",
+                "less-than-or-equal": "Меньше или равно",
+                "greater-than-o-requal": "Больше или равно"
+            },
+            guid: {
+                "equals": "Равно",
+                "not-equals": "Не равно",
+            },
+            filter: {
+                "apply": "✓",
+                "remove": "✘"
+            },
+            operator: {
+                "select": "",
+                "and": "et",
+                "or": "ou"
+            }
+        };
+    </script>
+</body>
+
+</html>

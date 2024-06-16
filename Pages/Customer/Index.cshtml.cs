@@ -5,36 +5,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Estimator.Pages.Customers
+namespace Estimator.Pages.Customer
 {
     public class IndexModel : PageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        private readonly Data.EstimatorContext _context;
         public string NameSort { get; set; }
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
 
 
-        public IndexModel(Estimator.Data.EstimatorContext context)
+        public IndexModel(Data.EstimatorContext context)
         {
             _context = context;
         }
 
-        public IList<Estimator.Models.Customer> Customer { get; set; }
+        public IList<Models.Customer> Customer { get; set; }
 
         public async Task OnGetAsync(string sortOrder, string searchString)
 
         {
             //сортировка
-            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
             // Фильтрация
             CurrentFilter = searchString;
             //все заказчики
-            IQueryable<Estimator.Models.Customer> custmersIQ = from s in _context.Customers
-                                                               select s;
+            IQueryable<Models.Customer> custmersIQ = from s in _context.Customers
+                                                     select s;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 //фильтрованные заказчики
                 custmersIQ = custmersIQ.Where(s => s.Name.Contains(searchString));

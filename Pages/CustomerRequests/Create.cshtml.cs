@@ -10,15 +10,15 @@ using Microsoft.AspNetCore.Hosting;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Estimator.CustomerRequests
+namespace Estimator.Pages.CustomerRequests
 {
-   
-    public class CreateModel : Estimator.Pages.BaseEstimatorPage 
+
+    public class CreateModel : BaseEstimatorPage
     {
-       
-     
-        public CreateModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration):base( context,  appEnvironment, configuration)
-        { 
+
+
+        public CreateModel(Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
+        {
         }
         public IActionResult OnGet()
         {
@@ -39,7 +39,7 @@ namespace Estimator.CustomerRequests
             {
                 return Page();
             }
-           
+
             CustomerRequest.CreateDate = System.DateTime.Now;
             if (UserID > 0)
             {
@@ -52,7 +52,7 @@ namespace Estimator.CustomerRequests
             // await _context.SaveChangesAsync();
             int num = _context.SaveChanges();
             int id = CustomerRequest.CustomerRequestID;
-           
+
             CustomerRequest = await _context.CustomerRequests
                 .Include(c => c.Customer)
                 .Include(c => c.Program)
@@ -76,19 +76,20 @@ namespace Estimator.CustomerRequests
                         ElementType = e,
                         BatchCount = 0,
                         ItemCount = 0,
-                        Order = e.Order};
+                        Order = e.Order
+                    };
 
                     List<RequestOperation> roList = new List<RequestOperation>();
 
                     foreach (TestChainItem tci in e.ChainItems)
                     {
-                        RequestOperation rO = new RequestOperation 
+                        RequestOperation rO = new RequestOperation
                         {
-                        TestChainItem = tci,
-                        RequestElementType = r,
-                        IsExecute = tci.Operation.IsExecuteDefault,
-                        SampleCount = tci.Operation.SampleCount,
-                        ExecuteCount = 1
+                            TestChainItem = tci,
+                            RequestElementType = r,
+                            IsExecute = tci.Operation.IsExecuteDefault,
+                            SampleCount = tci.Operation.SampleCount,
+                            ExecuteCount = 1
                         };
 
                         roList.Add(rO);
@@ -108,15 +109,15 @@ namespace Estimator.CustomerRequests
 
             num = _context.SaveChanges();
 
-       
+
 
             if ((mode ?? "") == "import")
             {
-                return RedirectToPage("./import", new { id = id });
+                return RedirectToPage("./import", new { id });
             }
             else
             {
-                return RedirectToPage("./Edit", new { id = id });
+                return RedirectToPage("./Edit", new { id });
 
             }
 

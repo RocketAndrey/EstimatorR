@@ -4,19 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Estimator.Pages.Customers
+namespace Estimator.Pages.Customer
 {
     public class EditModel : PageModel
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        private readonly Data.EstimatorContext _context;
 
-        public EditModel(Estimator.Data.EstimatorContext context)
+        public EditModel(Data.EstimatorContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Estimator.Models.Customer Customer { get; set; }
+        public Models.Customer Customer { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

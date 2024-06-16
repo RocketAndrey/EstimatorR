@@ -532,6 +532,77 @@ namespace Estimator.Migrations
                     b.ToTable("OperationGroup", (string)null);
                 });
 
+            modelBuilder.Entity("Estimator.Models.Price", b =>
+                {
+                    b.Property<int>("PriceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceId"));
+
+                    b.Property<double>("Cost")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PriceListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StandartDelivery")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StandartPack")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TimeDelivery")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Ty")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VniirId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PriceId");
+
+                    b.ToTable("Prices");
+                });
+
+            modelBuilder.Entity("Estimator.Models.PriceList", b =>
+                {
+                    b.Property<int>("PriceListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceListId"));
+
+                    b.Property<DateTime>("DateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDifficult")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Manufacturer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ScanOfPrice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PriceListId");
+
+                    b.ToTable("PriceLists");
+                });
+
             modelBuilder.Entity("Estimator.Models.Qualification", b =>
                 {
                     b.Property<int>("QualificationID")
