@@ -45,7 +45,6 @@ namespace Estimator.Pages.RuChips
             }
 
             DirVniir = context.DirVniir.AsNoTracking().ToList();
-            System.Diagnostics.Debug.WriteLine("____________________________________!!!321343313123213213123213123213");
             return Page();
         }
     }

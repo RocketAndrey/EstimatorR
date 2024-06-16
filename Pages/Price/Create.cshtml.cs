@@ -45,40 +45,43 @@ namespace Estimator.Pages.Price
 
         public async Task<IActionResult> OnPostUpload(IFormFile postedFiles)
         {
-            if (postedFiles == null || postedFiles.Length <= 0)
+            if (postedFiles != null )
             {
-                Message = "This is not a valid file.";
-                return Page();
-            }
+                if (postedFiles.Length <= 0)
+                {
+                    Message = "This is not a valid file.";
+                    return Page();
+                }
 
-            if (!Path.GetExtension(postedFiles.FileName).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
-            {
-                Message = "Wrong file format. Should be pdf.";
-                return Page();
-            }
+                if (!Path.GetExtension(postedFiles.FileName).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+                {
+                    Message = "Wrong file format. Should be pdf.";
+                    return Page();
+                }
 
-            string path = Path.Combine(this.Environment.WebRootPath, "Prices");
+                string path = Path.Combine(this.Environment.WebRootPath, "Prices");
 
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
 
-            List<string> uploadedFiles = new List<string>();
+                List<string> uploadedFiles = new List<string>();
 
-            string fileName = Path.GetFileName(postedFiles.FileName);
-            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-            {
-                postedFiles.CopyTo(stream);
-                uploadedFiles.Add(fileName);                
-                path = path + "\\" + fileName;
-            }
+                string fileName = Path.GetFileName(postedFiles.FileName);
+                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                {
+                    postedFiles.CopyTo(stream);
+                    uploadedFiles.Add(fileName);
+                    path = path + "\\" + fileName;
+                }
 
-            PriceList.ScanOfPrice = path;
+                PriceList.ScanOfPrice = path;
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
             }
 
             _context.PriceLists.Add(PriceList);

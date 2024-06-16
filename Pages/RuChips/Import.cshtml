@@ -63,10 +63,10 @@
     <br />
 
     <p>
-        <label>Первая строка - заголовок:</label> <input name="AreChecked" type="checkbox"/>
+        <label>Первая строка - заголовок:</label> <input name="AreChecked" type="checkbox" />
     </p>
     <p>
-        <label>Группа:</label> 
+        <label>Группа:</label>
         <select name="SelectedGroup" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
     </p>
     <p>
@@ -78,7 +78,7 @@
         <select name="SelectedName" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
     </p>
 
-     <p>
+    <p>
         <label>Завод изготовитель:</label>
         <select name="SelectedManufacturer" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
     </p>
@@ -86,13 +86,20 @@
         <label>Уровень качества:</label>
         <select name="SelectedQuality" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
     </p>
-
-        <br />
+    <p>
+        <label>Описание:</label>
+        <select name="SelectedDescription" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
+    </p>
+    <p>
+        <label>ТУ:</label>
+        <select name="SelectedTechCondition" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()" class="form-control"></select>
+    </p>
+    <br />
     <center>
         <input type="submit" value="Импортировать" class="btn btn-outline-primary" asp-page-handler="Finish" />
     </center>
     <br />
-   
+
 </form>
 
  

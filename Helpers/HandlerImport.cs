@@ -29,6 +29,8 @@ namespace Estimator.Helpers
         public int _selSubGroup { get; set; }
         public int _selManuf { get; set; }
         public int _selQuality { get; set; }
+        public int _selDescrip { get; set; }
+        public int _selTechCond { get; set; }
 
         public List<Company> addFactory;
 
@@ -50,7 +52,7 @@ namespace Estimator.Helpers
             _selNote = selNote;
             _useFirstRow = useFirstRow;
         }
-        public HandlerImport(string path_File, int selGroup, int selSubGroup, int selName, int selManuf, int selQuality, bool useFirstRow, Data.EstimatorContext db)
+        public HandlerImport(string path_File, int selGroup, int selSubGroup, int selName, int selManuf, int selQuality, int selDescrip, int selTechCond, bool useFirstRow, Estimator.Data.EstimatorContext db)
         {
             _path_File = path_File;
             _selGroup = selGroup;
@@ -58,7 +60,10 @@ namespace Estimator.Helpers
             _selName = selName;
             _selManuf = selManuf;
             _selQuality = selQuality;
+            _selDescrip = selDescrip;
+            _selTechCond = selTechCond;
             _useFirstRow = useFirstRow;
+
 
             context = db;
         }
@@ -136,8 +141,8 @@ namespace Estimator.Helpers
                 var rowCount = worksheet.LastRowNum;
 
                 addDirVniir = new List<RuChipsDB>();
-
-                //System.Diagnostics.Debug.WriteLine("count in Ex:" + rowCount);
+                //System.Diagnostics.Debug.WriteLine();
+                System.Diagnostics.Debug.WriteLine("count in Ex:" + rowCount);
                 for (int row = 0; row <= rowCount; row++)
                 {
                     //Проверка на строку-заголовок
@@ -154,10 +159,17 @@ namespace Estimator.Helpers
                             tmp_Man = context.Companies.FirstOrDefault(x => x.Name == row_Line.GetCell(_selManuf - 1).ToString()).Code;
                         else tmp_Man = "-";
 
+                        //Проверка на наличие Qlevel
                         string tmp_Ql;
                         if (row_Line.GetCell(_selQuality - 1) == null)
-                            tmp_Ql = "ВП [0001]";
-                        else tmp_Ql = row_Line.GetCell(_selQuality - 1).ToString();
+                            tmp_Ql = "ВП";
+                        else tmp_Ql = row_Line.GetCell(_selQuality - 1).ToString().Split()[0]; // Взята первая часть строки до пробела
+
+                        //Проверка на наличие Description
+                        string tmp_Descrip;
+                        if (row_Line.GetCell(_selDescrip - 1) == null)
+                            tmp_Descrip = "-";
+                        else tmp_Descrip = row_Line.GetCell(_selDescrip - 1).ToString();
 
                         addDirVniir.Add(new RuChipsDB()
                         {
@@ -167,6 +179,8 @@ namespace Estimator.Helpers
                             Manufacturer = row_Line.GetCell(_selManuf - 1).ToString(),
                             CodeManufacturer = tmp_Man,
                             QLevel = tmp_Ql,
+                            Description = tmp_Descrip,
+                            TechCondition = row_Line.GetCell(_selTechCond - 1).ToString(),
                         });
                     }
                     System.Diagnostics.Debug.WriteLine(row_Line.ToString() + " || " + row);
