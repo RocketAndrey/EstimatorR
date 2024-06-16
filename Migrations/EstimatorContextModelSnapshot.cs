@@ -204,11 +204,20 @@ namespace Estimator.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<bool>("HidePackingSample")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HideSamplePrice")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsProceed")
                         .HasColumnType("bit");
 
                     b.Property<int?>("LastModificateUserID")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("MaterialRate")
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<DateTime>("ModificateDate")
                         .HasColumnType("datetime2");
@@ -231,6 +240,9 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("UseImport")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("UsePurchaseElements")
                         .HasColumnType("bit");
 
                     b.HasKey("CustomerRequestID");
@@ -318,14 +330,17 @@ namespace Estimator.Migrations
                     b.Property<bool>("ImportQualityLevel")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("ImportSampleSize")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LastRowNumber")
                         .HasColumnType("int");
 
                     b.Property<int>("QualityLevelColumn")
                         .HasColumnType("int");
 
-                    b.Property<bool>("UseElementPrice")
-                        .HasColumnType("bit");
+                    b.Property<int>("SampleSizeColumn")
+                        .HasColumnType("int");
 
                     b.Property<bool>("UseLastCalculation")
                         .HasColumnType("bit");
@@ -360,6 +375,48 @@ namespace Estimator.Migrations
                     b.HasIndex("ElementTypeID");
 
                     b.ToTable("ElementKey");
+                });
+
+            modelBuilder.Entity("Estimator.Models.ElementPriceHistory", b =>
+                {
+                    b.Property<int>("ElementPriceHistoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementPriceHistoryID"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CustomerRequestID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeliveryTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ElementName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MinPackingSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PackingSample")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("PriceAmount")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<int>("PriceType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("XLSXElementTypeID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ElementPriceHistoryID");
+
+                    b.HasIndex("XLSXElementTypeID");
+
+                    b.ToTable("ElementPriceHistory");
                 });
 
             modelBuilder.Entity("Estimator.Models.ElementType", b =>
@@ -780,6 +837,9 @@ namespace Estimator.Migrations
                     b.Property<int?>("ParentProgramID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("UseRuChipsDB")
+                        .HasColumnType("bit");
+
                     b.HasKey("TestProgramID");
 
                     b.ToTable("TestProgram", (string)null);
@@ -910,6 +970,9 @@ namespace Estimator.Migrations
                     b.Property<int>("BeforeUploadedXLSXElementTypeID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Datasheet")
                         .HasColumnType("nvarchar(max)");
 
@@ -940,13 +1003,45 @@ namespace Estimator.Migrations
                     b.Property<string>("ElementTypeKey")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImportedDatasheet")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImportedElementName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ImportedPrice")
+                        .HasColumnType("decimal(18, 4)");
+
                     b.Property<string>("ImportedQualificationLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Included")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MinPackingSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PackingSample")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PriceHistorySourceID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PriceType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QualificationLevel")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RowNum")
                         .HasColumnType("int");
 
+                    b.Property<int>("SampleCount")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ElementImportID");
 
@@ -1028,6 +1123,16 @@ namespace Estimator.Migrations
                         .IsRequired();
 
                     b.Navigation("ElementType");
+                });
+
+            modelBuilder.Entity("Estimator.Models.ElementPriceHistory", b =>
+                {
+                    b.HasOne("Estimator.Models.XLSXElementType", "XLSXElementType")
+                        .WithMany("PriceHistory")
+                        .HasForeignKey("XLSXElementTypeID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("XLSXElementType");
                 });
 
             modelBuilder.Entity("Estimator.Models.ElementType", b =>
@@ -1179,11 +1284,17 @@ namespace Estimator.Migrations
 
             modelBuilder.Entity("Estimator.Models.XLSXElementType", b =>
                 {
+                    b.HasOne("Estimator.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
                     b.HasOne("Estimator.Models.ElementImport", "ElementImport")
                         .WithMany("XLSXElementTypes")
                         .HasForeignKey("ElementImportID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("ElementImport");
                 });
@@ -1236,6 +1347,11 @@ namespace Estimator.Migrations
             modelBuilder.Entity("Estimator.Models.TestProgramTemplate", b =>
                 {
                     b.Navigation("TemplateItems");
+                });
+
+            modelBuilder.Entity("Estimator.Models.XLSXElementType", b =>
+                {
+                    b.Navigation("PriceHistory");
                 });
 #pragma warning restore 612, 618
         }

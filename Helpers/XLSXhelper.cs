@@ -77,6 +77,7 @@ namespace Estimator.Helpers
                         string refDeliveryTime = importSettings.DeliveryTimeColumn.ToString() + rowindex.ToString();
                         string refDS = importSettings.DatasheetColumn.ToString() + rowindex.ToString();
                         string refQl = importSettings.QualityLevelColumn.ToString() + rowindex.ToString();
+                        string refSc = importSettings.SampleSizeColumn.ToString() + rowindex.ToString();
 
                         if (row.RowNum >= (importSettings.FirstRowNumber - 1) | !importSettings.FirstRowIsHeader)
                         {
@@ -93,20 +94,16 @@ namespace Estimator.Helpers
                                     elementType.RowNum = (int)row.RowNum + 1;
 
                                     //Наименование элемента
-                                    if (cell.Address.ToString() == refName) elementType.ElementName = GetCellvalue(cell);
+                                    if (cell.Address.ToString() == refName) elementType.ImportedElementName = GetCellvalue(cell);
 
                                     //ключ элемента
                                     else if (cell.Address.ToString() == refKey) elementType.ElementTypeKey = GetCellvalue(cell);
                                     //колличество
                                     else if (cell.Address.ToString() == refCount)
                                     {
-                                        string strValue = GetCellvalue(cell).Replace(" ", "").Trim();
 
-                                        if (int.TryParse(strValue, out int i))
-                                        {
-                                            elementType.ElementCount = i;
-                                        }
-
+                                           elementType.ElementCount = ParceInt (cell);
+                                      
                                     }
                                     //цена 1 элемента
                                     else if (cell.Address.ToString() == refPrice && importSettings.ImportElementPrice)
@@ -119,7 +116,20 @@ namespace Estimator.Helpers
                                             d = ParceDecimal(cell);
                                         }
 
-                                        elementType.ElementPrice = d;
+                                        elementType.ImportedPrice = d;
+                                        elementType.PriceType = ElementPriceType.ImportedfromExcel;
+
+                                        // сохранение истории цены
+                                        if (elementType.PriceHistory == null) { elementType.PriceHistory = new(); }
+                                        elementType.PriceHistory.Add (new ElementPriceHistory { CustomerRequestID = importSettings.CustomerRequestID,
+                                            XLSXElementType=elementType,
+                                            ElementName=elementType.ElementName,
+                                            PriceType=ElementPriceType.ImportedfromExcel,
+                                            PriceAmount= elementType.ImportedPrice,
+                                            CreateDate= DateTime.Now
+                                            
+                                        });
+
                                     }
                                     //стоимость остнастки
                                     else if (cell.Address.ToString() == refKitPrice && importSettings.ImportElementКitPrice)
@@ -145,9 +155,17 @@ namespace Estimator.Helpers
                                     else if (cell.Address.ToString() == refDS && importSettings.ImportDatasheet)
                                     {
 
-                                        elementType.Datasheet = GetCellvalue(cell); ;
+                                        elementType.ImportedDatasheet = GetCellvalue(cell); ;
                                     }
-                                    //QL
+                                    //объем выборки
+                                    else if (cell.Address.ToString() == refSc && importSettings.ImportSampleSize)
+                                    {
+
+                                        elementType.SampleCount = ParceInt(cell);
+
+
+                                    }
+                                    //Уровень качества
                                     else if (cell.Address.ToString() == refQl && importSettings.ImportQualityLevel)
                                     {
 
@@ -158,20 +176,17 @@ namespace Estimator.Helpers
                                     {
                                         if (importSettings.ImportDeliveryTime)
                                         {
-                                            string strValue = GetCellvalue(cell).Replace(" ", "").Trim();
+                                            
 
-                                            if (int.TryParse(strValue, out int i))
-                                            {
-
-                                                elementType.DeliveryTime = i;
-                                            }
+                                                elementType.DeliveryTime = ParceInt(cell);
+                                            
 
                                         }
                                     }
                                 }
                                 if (elementType.ElementCount == 0) { emptyCounts++; }
 
-                                if (String.IsNullOrEmpty(elementType.ElementName)) { emptyNames++; }
+                                if (String.IsNullOrEmpty(elementType.ImportedElementName)) { emptyNames++; }
 
                                 bool elementExist = false;
 
@@ -189,7 +204,7 @@ namespace Estimator.Helpers
                                     }
                                 }
                                 // если колличествов данной строке = 0 то нефиг его и импортировать
-                                if (!elementExist && elementType.ElementCount > 0 && !String.IsNullOrEmpty(elementType.ElementName))
+                                if (!elementExist && elementType.ElementCount > 0 && !String.IsNullOrEmpty(elementType.ImportedElementName))
                                 {
                                     returnValue.Add(elementType);
                                 }
@@ -199,25 +214,27 @@ namespace Estimator.Helpers
                         }
 
 
-                        if (emptyCounts > 0 || emptyNames > 0)
-                        {
-                            if (returnValue.Count == 0)
-                            {
-                                ///ничего не импортнулось 
-                                result = false;
-                                errorMessage = string.Format("Не найдено ни одной строки для импорта. Строк с пустым имненем {0}. Строк с нулевым количеством {1}.", emptyNames, emptyCounts);
-                            }
-                            else
-                            {
-                                errorMessage = string.Format("Строк с пустым именем {0}. Строк с нулевым количеством {1}.", emptyNames, emptyCounts);
-                            }
-                        }
 
 
                     }
 
                 }
 
+                //проверка колличеств для каждой позиции
+                if (emptyCounts > 0 || emptyNames > 0)
+                {
+                    if (returnValue.Count == 0)
+                    {
+                        ///ничего не импортнулось 
+                        result = false;
+                        errorMessage = string.Format("Не найдено ни одной строки для импорта. Строк с пустым имненем {0}. Строк с нулевым количеством {1}.", emptyNames, emptyCounts);
+                    }
+                    else
+                    {
+
+                        errorMessage = string.Format("Строк с пустым именем {0}. Строк с нулевым количеством {1}.", emptyNames, emptyCounts);
+                    }
+                }
             }
             catch (Exception ex)
 
@@ -229,10 +246,19 @@ namespace Estimator.Helpers
             return returnValue;
         }
   
+        private int ParceInt(ICell cell)
+        {
+
+            string strValue = GetCellvalue(cell).Replace(" ", "").Trim().Replace(".", ",");
+
+            if ( int.TryParse(strValue, out int d))  return d;
+            return 0;
+        }
+
         private decimal ParceDecimal(ICell cell)
         {
             string svalue = GetCellvalue(cell).Trim().Replace(".", ",");
-            if ( decimal.TryParse(svalue, out decimal d))  return d;
+            if (decimal.TryParse(svalue, out decimal d)) return d;
             return 0;
         }
 

@@ -76,13 +76,16 @@ namespace Estimator.Pages.CustomerRequests
             }
            
             //получаем кооф.сложности
-            RequestRate = CustomerRequest.StringRate; 
-            
+            RequestRate = CustomerRequest.StringRate;
+            RequestMaterialRate= CustomerRequest.StringMaterialRate;
             //сортируем
             CustomerRequest.RequestElementTypes = CustomerRequest.RequestElementTypes.OrderBy(e => e.Order);
             
-
-            FillDefectedTypes();
+            if (base.UseAsu )
+            {
+                FillDefectedTypes();
+            }
+            
             //год применяемых нормативов
             ViewData["YearOfNorms"] = new SelectList(_context.CompanyHistories, "YearOfNorms", "YearOfNorms");
             return Page();
@@ -101,6 +104,8 @@ namespace Estimator.Pages.CustomerRequests
                 {
                     // Обновляет извлеченную сущность CustomerRequest, используя значения из связывателя модели. TryUpdateModel позволяет предотвратить чрезмерную передачу данных.
                     CustomerRequest.StringRate = RequestRate;
+                    CustomerRequest.StringMaterialRate = RequestMaterialRate;   
+
                     _context.SaveChanges(); 
                 }
             }
@@ -120,6 +125,12 @@ namespace Estimator.Pages.CustomerRequests
         [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$",ErrorMessage ="Введите число в формате числа с плавающей запятой")]
         [DisplayFormat(DataFormatString = "{0:F4}")]
         public string RequestRate { get; set; }
+        [BindProperty]
+        [Display(Name = "Коэффициент закупки")]
+        [Required(ErrorMessage = "Введитe число с плавающей точкой")]
+        [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$", ErrorMessage = "Введите число в формате числа с плавающей запятой")]
+        [DisplayFormat(DataFormatString = "{0:F4}")]
+        public string RequestMaterialRate { get; set; }
         /// <summary>
         /// заполняем перечень забракованных изделмй
         /// </summary>

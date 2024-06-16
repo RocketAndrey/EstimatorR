@@ -61,7 +61,7 @@ namespace Estimator.Pages.CustomerRequests
             }
 
 
-            CurrentFilter = searchString;
+           this.filter.DescFilter = searchString;
 
             IList<CustomerRequestView> customerRequestViewsIQ = await _context.CustomerRequests
                 .Select(p => new CustomerRequestView
@@ -75,19 +75,20 @@ namespace Estimator.Pages.CustomerRequests
                     ProgramName = p.Program.Name,
                     CustomerID =p.CustomerID ,
                     ProgramID = p.Program.TestProgramID,
-                    UseImport = p.UseImport
+                    UseImport = p.UseImport,
+                    UsePurchase = p.UsePurchaseElements
 
                 }).AsNoTracking().ToListAsync();
 
 
-            DateSort = String.IsNullOrEmpty(sortOrder) ? "Date_desc" : "";
+            DateSort = String.IsNullOrEmpty(sortOrder) ? "Date_desc" : "Date";
             ProgramSort = sortOrder == "Program" ? "Program_desc" : "Program";
             CustomerSort = sortOrder == "Customer" ? "Customer_desc" : "Customer";
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(filter.DescFilter))
             {
-                customerRequestViewsIQ = customerRequestViewsIQ.Where(s => s.Description.Contains(searchString)
-                                       || s.CustomerName.Contains(searchString)).ToList();
+                customerRequestViewsIQ = customerRequestViewsIQ.Where(s => s.Description.Contains(filter.DescFilter))
+                                       .ToList();
             }
            
             if (customerID != 0)

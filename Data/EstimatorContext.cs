@@ -36,6 +36,7 @@ namespace Estimator.Data
 
         public DbSet<Estimator.Models.CalcFactor> CalcFactors { get; set; }
         public DbSet <Estimator.Models.XLSXElementType> XLSXElementTypes { get; set; }
+        public DbSet<Estimator.Models.ElementPriceHistory> ElementPriceHistory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>().ToTable("Customer");
@@ -62,7 +63,11 @@ namespace Estimator.Data
             modelBuilder.Entity<XLSXElementType>().ToTable("XLSXElementType");
             modelBuilder.Entity<TestProgramTemplateItem>().ToTable("TestProgramTemplateItem");
             modelBuilder.Entity<TestProgramTemplate>().ToTable("TestProgramTemplate");
-
+            modelBuilder.Entity<ElementPriceHistory>()
+                .HasOne(u => u.XLSXElementType)
+                .WithMany(c => c.PriceHistory)
+                 .OnDelete(DeleteBehavior.SetNull);
+           
         }
         public DbSet<Estimator.Models.ElementImport> ElementImports { get; set; }
      

@@ -45,6 +45,8 @@ namespace Estimator.Pages.CustomerRequests
             {
                 CustomerRequest.CreateUserID = UserID;
             }
+            CustomerRequest.MaterialRate = decimal.Parse(_configuration.GetSection("DefaultMaterialRate")["value"]);
+
             _context.CustomerRequests.Add(CustomerRequest);
 
             // await _context.SaveChangesAsync();

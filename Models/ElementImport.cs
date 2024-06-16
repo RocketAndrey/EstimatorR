@@ -23,11 +23,12 @@ namespace Estimator.Models
             ElementCountColumn = ColumnNames.D;
             QualityLevelColumn = ColumnNames.E;  
             DatasheetColumn = ColumnNames.F;
-            ElementPriceColumn = ColumnNames.E;
-            ElementKitPriceColumn = ColumnNames.F;
-            ElementContractorPriceColumn = ColumnNames.G;
-            DeliveryTimeColumn = ColumnNames.H;
-            DownloadPriceColumn = ColumnNames.I;
+            ElementPriceColumn = ColumnNames.G;
+            ElementKitPriceColumn = ColumnNames.H;
+            ElementContractorPriceColumn = ColumnNames.I;
+            DeliveryTimeColumn = ColumnNames.J;
+            DownloadPriceColumn = ColumnNames.K;
+            SampleSizeColumn = ColumnNames.L;   
         
             FirstRowIsHeader = true;
             _importElementPrice = false;
@@ -37,6 +38,8 @@ namespace Estimator.Models
             FirstRowNumber = 2;
             UseLastRowNumber = false;
             LastRowNumber = 3;
+            ImportSampleSize = true;
+
         }
         private bool _importElementPrice;
         private bool _useElementPrice; 
@@ -95,27 +98,11 @@ namespace Estimator.Models
 
             set
             {
-               if (value) { UseElementPrice = true; }   
+               
                 _importElementPrice = value;    
             }
         }
-        /// <summary>
-        /// Указывает необходимость расчета цены элемента из  прайса 
-        /// </summary>
-        [Display(Name = "Учитывать цену элементов в расчете")]
-        public bool UseElementPrice {
-            get
-            {
-          
-           
-                    return _useElementPrice;
-                
-            }
-            set
-            {
-                _useElementPrice  = value;  
-            }
-        }  
+   
         
         [Display(Name = "Импортировать срок поставки элементов, дней")]
         public bool ImportDeliveryTime { get; set; }
@@ -133,6 +120,14 @@ namespace Estimator.Models
         public bool ImportElementContractorPrice { get; set; }
         [Display(Name = "Цена соисполнитель")]
         public ColumnNames ElementContractorPriceColumn { get; set; }
+
+        [Display(Name = "Импортировать объём выборки")]
+        public bool ImportSampleSize { get; set; }
+        [Display(Name = "Объём выборки")]
+        public ColumnNames SampleSizeColumn { get; set; }
+
+
+
 
         [Display(Name = "Колонка Эксель для выгрузки стоимости испытаний")]
         public ColumnNames DownloadPriceColumn { get; set; }

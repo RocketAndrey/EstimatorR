@@ -1,6 +1,7 @@
 ﻿@page
 @model Estimator.Pages.CustomerRequests.IndexModel
-
+@using NonFactors.Mvc.Grid;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Заявки";
@@ -20,65 +21,64 @@
             </td>
     </table>
 
+  
+
+
     <table class="table table-bordered">
         <thead>
             <tr class="table-secondary table-sm">
-                <th>    @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID)</th>
-               
+                <th width="120">
+                    @if (Model.filter.CustomerRequestID != 0)
+                    {
+                        <input class="form-control " type="text" name="customerRequestID" value="@Model.filter.CustomerRequestID" />
+                    }
+                    else
+                    {
+                        <input class="form-control " type="text" name="customerRequestID" placeholder="@Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerRequestID)" />
+                    }
+
+                </th>
+
                 <th>
                     @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestNumber)
                 </th>
                 <th>
-                    <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
-                       asp-route-currentFilter="@Model.CurrentFilter">
+                    <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">
 
                         @Html.DisplayNameFor(model => model.CustomerRequestList[0].RequestDate)
                     </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CustomerRequestList[0].Description)
+                    <input class="form-control form-control" type="text" name="SearchString" value="@Model.filter.DescFilter" asp-for="@Model.filter.DescFilter" placeholder=" @Html.DisplayNameFor(model => model.CustomerRequestList[0].Description)" />
                 </th>
                 <th>
-                    <a asp-page="./Index" asp-route-sortOrder="@Model.ProgramSort"
-                       asp-route-currentFilter="@Model.CurrentFilter">
-
-                        @Html.DisplayNameFor(model => model.CustomerRequestList[0].ProgramName)
-                    </a>
+                    <select class="form-control form-control" asp-for="@Model.filter.ProgramID" name="programID" class="form-control" asp-items="ViewBag.TestProgramID"></select>
                 </th>
                 <th>
-                    <a asp-page="./Index" asp-route-sortOrder="@Model.CustomerSort"
-                       asp-route-currentFilter="@Model.CurrentFilter">
+                    <select class="form-control form-control selectpicker" data-live-search="true" asp-for="@Model.filter.CustomerID" name="customerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
 
-                        @Html.DisplayNameFor(model => model.CustomerRequestList[0].CustomerName)
-                    </a>
                 </th>
-                <th></th>
+                <th>
+                    <button  type="submit" value="Поиск" class="btn btn-outline-secondary">
+                   
+                    @if (Model?.filter?.Empty??false)
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+                                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                            </svg>
+                        }
+                        else
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z" />
+                            </svg>
+                        }
+                    </button>
+                </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="table-secondary table-sm">
-                <td width="100">
-                    <input class="form-control form-control" type="text" name="customerRequestID" value="@Model.filter.CustomerRequestID" />
-                </td>
-               
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                    <input class="form-control form-control" type="text" name="SearchString" value="@Model.CurrentFilter" />
-                </td>
-                <td>
-                    <select class="form-control form-control" asp-for="@Model.filter.ProgramID" name="programID" class="form-control" asp-items="ViewBag.TestProgramID"></select>
-                </td>
-                <td>
-                    <select class="form-control form-control selectpicker" data-live-search="true"  asp-for="@Model.filter.CustomerID" name="customerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
-
-                </td>
-                <td>
-                    <input type="submit" value="Поиск" class="btn btn-outline-primary btn-sm " />
-                </td>
-            </tr>
+            
             @foreach (var item in Model.CustomerRequestList)
             {
                 <tr>
@@ -90,11 +90,30 @@
 
                    
                             <a asp-page="./Report" asp-route-id="@item.CustomerRequestID" data-toggle="tooltip" data-placement="bottom" title="Калькуляция">
-                            <img src="~/contract2.png" width="20" height="20" /></a>
-                        @if (item.UseImport)
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-journal-text text-info" viewBox="0 0 20 20">
+                                    <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+                                    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+                                </svg>
+                            
+                        </a>
+                          @if(item.UsePurchase)
+                            {
+                                <a asp-page="./Purchase" asp-route-id="@item.CustomerRequestID" data-toggle="tooltip" data-placement="bottom" title="Закупка ЭКБ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-kanban" viewBox="0 0 20 20">
+                                        <path d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                        <path d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z" />
+                                    </svg>
+                                </a>
+                            }
+                            @if (item.UseImport)
                         {
                                 <a asp-page="./Import" asp-route-id="@item.CustomerRequestID" data-toggle="tooltip" data-placement="bottom" title="Импорт элементов из Excel">
-                                <img src="~/xlsx.png" width="20" height="20" /></a>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-spreadsheet text-success" viewBox="0 0 20 20">
+                                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z" />
+                                    </svg>
+                                
+                            </a>
                         }
 
                         </div>
@@ -112,24 +131,33 @@
                         @Html.DisplayFor(modelItem => item.ProgramName)
                     </td>
                     <td>
-                        <!-- @Html.DisplayFor(modelItem => item.CustomerName)-->
+                        @* <!-- @Html.DisplayFor(modelItem => item.CustomerName)--> *@
                         <a href=@String.Concat("https://www.rusprofile.ru/search?query=",item.CustomerINN) target="_blank">@Html.DisplayFor(modelItem => item.CustomerName)</a>
                     </td>
                     <td>
 
                         <a asp-page="./Delete" asp-route-id="@item.CustomerRequestID" data-toggle="tooltip" data-placement="bottom" title="Удалить заявку">
-                            <img src="~/delete.png" /></a>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 22 22">
+                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                            </svg>
+                            
+                        </a>
 
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
 </form>
 @{
     var prevDisabled = !Model.CustomerRequestList.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.CustomerRequestList.HasNextPage ? "disabled" : "";
 }
+
+<script>
+    document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+</script>
 
 
 @*<a asp-page="./Index"
