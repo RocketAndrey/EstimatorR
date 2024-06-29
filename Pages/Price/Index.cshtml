@@ -3,10 +3,10 @@
 @using NonFactors.Mvc.Grid;
 @model Estimator.Pages.Price.IndexModel
 @{
-    ViewData["Title"] = "Прайсы";
+    ViewData["Title"] = "Прейскуранты";
 }
 
-<center><h1>Прайсы</h1></center>
+<center><h1>Прейскуранты</h1></center>
 
 <td align="left">
     <a asp-page="Create" class="btn btn-outline-primary btn-sm">Добавить</a>
@@ -29,7 +29,7 @@
             Html.Grid(Model.PriceList).Build(columns =>
             {
                 columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
-                columns.Add(model => model.Manufacturer).Titled("Производитель").Sortable(true);
+                columns.Add(model => model.Manufacture.Name).Titled("Производитель").Sortable(true);
                 columns.Add(model => model.DateStart.Date.ToShortDateString()).Titled("Дата введения").Sortable(true);
                 columns.Add(model => model.DateEnd.Date.ToShortDateString()).Titled("Дата окончания").Sortable(true);
                 columns.Add(model => model.Description).Titled("Описание").Sortable(false);

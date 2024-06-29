@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Estimator.Models.ViewModels
 {
@@ -26,8 +27,10 @@ namespace Estimator.Models.ViewModels
             ImportedDatasheetName = item.ImportedDatasheet;
             DeliveryTime = item.DeliveryTime??0;
             PriceType= item.PriceType;
-            PriceHistorySourceID= (int)item.PriceHistorySourceID;
+            PriceHistorySourceID= item.PriceHistorySourceID;
             PriceHistoryItem = item.PriceHistorySource;
+            VniirItemId = item.VniirItemId;
+            Price = item.Price;
             Manufactory = new Company { Id = item.Company?.Id ?? 0, Name = item.Company?.Name ?? "", Code = item.Company?.Code ?? "" } ;
 
         }
@@ -48,7 +51,7 @@ namespace Estimator.Models.ViewModels
 
         public string ImportedDatasheetName { get; set; }   
         public string Datasheet { get; set; }  
-        public int PriceHistorySourceID { get; set; }   
+        public int? PriceHistorySourceID { get; set; }   
         public bool Valid
         {
             get
@@ -158,5 +161,10 @@ namespace Estimator.Models.ViewModels
         public string MаnufactorySearchErrorString { get; set; }
 
         public ElementPriceType PriceType { get; set; }
+
+        public int? VniirItemId { get; set; }
+        public RuChipsDB VniirItemID { get; set; }  
+
+        public Price Price { get; set; }
     }
 }

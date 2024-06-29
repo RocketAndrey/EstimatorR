@@ -5,21 +5,49 @@
 <h2>Редактирование данных</h2>
 
 <form method="post">
-    <input name="id" value="@Model.Factory?.Id" type="hidden" />
 
-    <p>
-        <label>Код</label><br />
-        <input name="Code" value="@Model.Factory?.Code" />
-    </p>
+    <div class="row">
+        <div class="col mb-3">
+            <div class="card">
+                <div class="card-header">
+                    Производитель:&nbsp;@Model.Factory?.Name:
+                </div>
 
-    <p>
-        <label>Наименование:</label><br />
-        <input name="Name" value="@Model.Factory?.Name" />
-    </p>
-    <p>
-        <label>Примечание:</label><br />
-        <input name="Note" value="@Model.Factory?.Note" />
-    </p>
+                <div class="card-body">
+                    <input name="id" value="@Model.Factory?.Id" type="hidden" />
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="Name">Код изготовителя</label>
+                            <input class="form-control" id="Name" placeholder="Код изготовителя" value="@Model.Factory?.Code">
 
-    <input type="submit" value="Сохранить" />
+                        </div>
+                      
+                    </div>
+                    <div class="form-group row">
+
+                        <div class="col">
+                            <label for="Manufacturer">Изготовитель</label>
+                            <input class="form-control" id="Manufacturer" placeholder="Изготовитель" value="@Model.Factory?.Name">
+
+                        </div>
+                    </div>
+               
+                   
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="Description">Описание</label>
+                            <textarea rows="3" class="form-control" id="Description" placeholder="Описание" > @Model.Factory?.Note</textarea>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <input type="submit" class="btn btn-outline-primary" value="Сохранить" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
 </form>

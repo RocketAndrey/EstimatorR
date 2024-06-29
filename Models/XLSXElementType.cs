@@ -43,7 +43,7 @@ namespace Estimator.Models
             MinPackingSize = 1;
             PackingSample = 1;
             _priceHistoryCalculated = false;
-            PriceHistorySourceID = 0;
+          
         }
         public int ID { get; set; }
         public int ElementImportID { get; set; }
@@ -243,6 +243,18 @@ namespace Estimator.Models
         /// </summary>(
         public Company? Company { get; set; }
         /// <summary>
+        /// ID Элемента найденного в справочник
+        /// </summary>
+        public int? VniirItemId { get; set; }
+        /// <summary>
+        /// ID элемента из прейскуранта
+        /// </summary>
+        public RuChipsDB VniirItem { get; set; }
+
+        public int? PriceId { get; set; }   
+        public Price Price {  get; set; }    
+        
+        /// <summary>
         /// Если = false то позиция исключена
         /// </summary>
         [DefaultValue(true)]
@@ -326,8 +338,9 @@ namespace Estimator.Models
         /// элемента Price Historу откуда взаялась цена. 
         /// </summary>
         public int? PriceHistorySourceID {  get; set; }
-        [ForeignKey("PriceHistorySourceID")]
-        public ElementPriceHistory? PriceHistorySource { get; set; }
+
+      
+        public ElementPriceHistory PriceHistorySource { get; set; }
 
         #region PriceCalculation
 

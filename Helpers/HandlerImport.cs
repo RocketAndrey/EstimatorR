@@ -248,9 +248,9 @@ namespace Estimator.Helpers
                             VniirId= tmp_VniirId,
                             Name = row_Line.GetCell(_selName - 1).ToString(),
                             Cost = tmp_Price,
-                            StandartDelivery = tmp_SD,
-                            StandartPack = tmp_SP,
-                            TimeDelivery = int.Parse(row_Line.GetCell(_selTimeDelivery - 1).ToString()),
+                            MinPackingSize = tmp_SD,
+                            PackingSample = tmp_SP,
+                            DeliveryTime = int.Parse(row_Line.GetCell(_selTimeDelivery - 1).ToString()),
 
                         });
                     }

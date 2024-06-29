@@ -129,6 +129,7 @@ namespace Estimator.Helpers
                                             CreateDate= DateTime.Now
                                             
                                         });
+                                  
 
                                     }
                                     //стоимость остнастки

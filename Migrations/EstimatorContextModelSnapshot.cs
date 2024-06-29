@@ -17,7 +17,7 @@ namespace Estimator.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "7.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -543,28 +543,30 @@ namespace Estimator.Migrations
                     b.Property<double>("Cost")
                         .HasColumnType("float");
 
+                    b.Property<int?>("DeliveryTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinPackingSize")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PackingSample")
+                        .HasColumnType("int");
+
                     b.Property<int>("PriceListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StandartDelivery")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StandartPack")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TimeDelivery")
                         .HasColumnType("int");
 
                     b.Property<string>("Ty")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VniirId")
+                    b.Property<int?>("VniirId")
                         .HasColumnType("int");
 
                     b.HasKey("PriceId");
+
+                    b.HasIndex("PriceListId");
 
                     b.ToTable("Prices");
                 });
@@ -576,6 +578,9 @@ namespace Estimator.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceListId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateEnd")
                         .HasColumnType("datetime2");
@@ -589,9 +594,6 @@ namespace Estimator.Migrations
                     b.Property<bool>("IsDifficult")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -599,6 +601,8 @@ namespace Estimator.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PriceListId");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("PriceLists");
                 });
@@ -699,6 +703,9 @@ namespace Estimator.Migrations
                     b.Property<string>("CodeManufacturer")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Group")
                         .HasColumnType("nvarchar(max)");
 
@@ -712,6 +719,9 @@ namespace Estimator.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subgroup")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TechCondition")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1024,7 +1034,10 @@ namespace Estimator.Migrations
                     b.Property<int>("PackingSample")
                         .HasColumnType("int");
 
-                    b.Property<int>("PriceHistorySourceID")
+                    b.Property<int?>("PriceHistorySourceID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PriceId")
                         .HasColumnType("int");
 
                     b.Property<int>("PriceType")
@@ -1039,11 +1052,20 @@ namespace Estimator.Migrations
                     b.Property<int>("SampleCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("VniirItemId")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("ElementImportID");
+
+                    b.HasIndex("PriceHistorySourceID");
+
+                    b.HasIndex("PriceId");
+
+                    b.HasIndex("VniirItemId");
 
                     b.ToTable("XLSXElementType", (string)null);
                 });
@@ -1161,6 +1183,28 @@ namespace Estimator.Migrations
                         .HasForeignKey("OperationGroupID");
 
                     b.Navigation("OperationGroup");
+                });
+
+            modelBuilder.Entity("Estimator.Models.Price", b =>
+                {
+                    b.HasOne("Estimator.Models.PriceList", "PriceList")
+                        .WithMany()
+                        .HasForeignKey("PriceListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PriceList");
+                });
+
+            modelBuilder.Entity("Estimator.Models.PriceList", b =>
+                {
+                    b.HasOne("Estimator.Models.Company", "Manufacture")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manufacture");
                 });
 
             modelBuilder.Entity("Estimator.Models.RequestElementType", b =>
@@ -1294,9 +1338,27 @@ namespace Estimator.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Estimator.Models.ElementPriceHistory", "PriceHistorySource")
+                        .WithMany()
+                        .HasForeignKey("PriceHistorySourceID");
+
+                    b.HasOne("Estimator.Models.Price", "Price")
+                        .WithMany()
+                        .HasForeignKey("PriceId");
+
+                    b.HasOne("Estimator.Models.RuChipsDB", "VniirItem")
+                        .WithMany()
+                        .HasForeignKey("VniirItemId");
+
                     b.Navigation("Company");
 
                     b.Navigation("ElementImport");
+
+                    b.Navigation("Price");
+
+                    b.Navigation("PriceHistorySource");
+
+                    b.Navigation("VniirItem");
                 });
 
             modelBuilder.Entity("Estimator.Models.CompanyHistory", b =>

@@ -4,16 +4,18 @@
 @{
     ViewData["Title"] = "ЭКБ отечественного производства";
 }
+<link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
 
-<center><h1>Cправочник ЭКБ ОП</h1></center>
 
-<td align="right">
-    <a asp-page="Import" class="btn btn-outline-primary btn-sm">Импортировать список</a>
-</td>
+<div class="row">
+    <div class="col">
+        <h3>Cправочник ЭКБ ОП</h3>
+    </div>
+    <div class="col text-right">
+        <a asp-page="Import" class="btn btn-outline-primary btn-sm">Импортировать список</a>
+    </div>
+</div>
 
-<br />
-
-<hr />
 
 @if (Model.Message != null)
 {
@@ -29,54 +31,44 @@
     </script>
 
 }
+<div class="row">
+<div class="col">
+   
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
-</head>
-
-<body>
     <form method="post">
         @(
             Html.Grid(Model.DirVniir).Build(columns =>
             {
                 //Edit
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/Edit/{model.Id}'><img src=\"/edit.png\"/></a>");
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/Edit/{model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-pencil-square\"></use></svg></a>");
 
                 //columns.Add(model => model.Group).Titled("Группа").Sortable(true);
                 //columns.Add(model => model.Subgroup).Titled("Подгруппа").Sortable(true);
 
                 columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
-
+                columns.Add(model => model.TechCondition).Titled("ТУ").Sortable(true);
+                    columns.Add(model => model.QLevel).Titled("УК").Sortable(true).Filterable(GridFilterType.Multi);
                 columns.Add(model => model.Manufacturer).Titled("Завод изготовитель").Sortable(true);
 
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'><img src=\"/inf.png\"/></a>");
-                //columns.Add().Titled("Код").Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'>{model.CodeManufacturer}</a>");
-
-                //columns.Add().Titled("Завод изготовитель").Sortable(true).Filterable(true).Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Name-contains={model.Manufacturer}'>{model.Manufacturer}</a>");
-                //columns.Add(model => model.CodeManufacturer).Titled("Код изготовителя").Sortable(true);
-
-                columns.Add(model => model.QLevel).Titled("Уровень качества").Sortable(true);
-                //columns.Add(model => model.Description).Titled("Описание").Sortable(true);
-                columns.Add(model => model.TechCondition).Titled("ТУ").Sortable(true);
-                //Delete
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/?id={model.Id}'><img src=\"/delete.png\"/></a>");
+                    columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-book\"></use></svg></a>");
+              
+                    columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/?id={model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-trash\"></use></svg></a>");
             })
             .Using(GridFilterMode.Header)
-            .Empty("No data found")
+            .Empty("Не найдено")
             .Filterable(GridFilterType.Double)
             .Sortable()
             .Pageable(pager =>
             {
                 pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 10, "10" }, { 50, "50" }, { 100, "100" }, { 1000, "1000" } };
                 pager.ShowPageSizes = true;
-                pager.RowsPerPage = 5;
+                pager.RowsPerPage = 50;
             })
             )
     </form>
+
+    </div>
+</div>
     <script src="~/js/mvc-grid/mvc-grid.js"></script>
     <script>
         document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
@@ -116,7 +108,9 @@
                 "or": "ou"
             }
         };
+        document.addEventListener('rowclick', function (e) {
+    console.log('data: ', e.detail.data);
+    console.log('grid: ', e.detail.grid);
+    console.log('original event: ', e.detail.originalEvent);
+});
     </script>
-</body>
-
-</html>

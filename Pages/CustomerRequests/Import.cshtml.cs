@@ -556,7 +556,7 @@ namespace Estimator.Pages.CustomerRequests
         {
             string selectStr= "SELECT [ID],[ElementImportID],[ElementName] ,[ElementTypeKey],[ElementCount] ,e.[ElementTypeID],[AsuProtokolCode],[BeforeUploadedXLSXElementTypeID] ,[RowNum], " +
                 "[ElementPrice] ,[ElementContractorPrice],[ElementKitPrice],[DeliveryTime] ,[Datasheet],[ImportedQualificationLevel] ,[ImportedPrice] ,[PriceType], [ImportedElementName] ," +
-                "[QualificationLevel] , [CompanyId], [ImportedDatasheet], [SampleCount], [Included] ,[MinPackingSize] ,[PackingSample], [PriceHistorySourceID] " +
+                "[QualificationLevel] , [CompanyId], [ImportedDatasheet], [SampleCount], [Included] ,[MinPackingSize] ,[PackingSample],[PriceId],[VniirItemId], [PriceHistorySourceID] " +
             "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
             " AND  e.ProgramID = {2}";
            

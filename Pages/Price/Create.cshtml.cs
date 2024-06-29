@@ -33,7 +33,7 @@ namespace Estimator.Pages.Price
 
         public IActionResult OnGet()
         {
-            companyList = new SelectList(_context.Companies.ToList(), "Name", "Name");
+            ViewData["CompanyID"]  = new SelectList(_context.Companies.ToList(), "Id", "Name");
             
             return Page();
         }

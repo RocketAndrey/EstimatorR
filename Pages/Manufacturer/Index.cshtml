@@ -5,6 +5,8 @@
 @{
     ViewData["Title"] = "Производители ЭКБ";
 }
+
+<link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
 <center><h1>Заводы изготовители</h1></center>
 
 <td align="left">
@@ -38,31 +40,34 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+   
 </head>
 
 <body>
     <form method="post">
         @(
             Html.Grid(Model.Companies).Build(columns =>
+
             {
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/Edit/{model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-pencil-square\"></use></svg></a>");
+
                 columns.Add(model => model.Code).Titled("Код").Sortable(true);
                 columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
                 columns.Add(model => model.Note).Titled("Примечание").Sortable(false);
-                //Edit
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/Edit/{model.Id}'><img src=\"/edit.png\"/></a>");
+               
                 //Delete
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/?id={model.Id}'><img src=\"/delete.png\"/></a>");
+    
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/?id={model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-trash\"></use></svg></a>");
             })
             .Using(GridFilterMode.Header)
-            .Empty("No data found")
+            .Empty("Нет данных")
             .Filterable(GridFilterType.Double)
             .Sortable()
             .Pageable(pager =>
             {
                 pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 25, "25" }, { 50, "50" } };
                 pager.ShowPageSizes = true;
-                pager.RowsPerPage = 3;
+                pager.RowsPerPage = 50;
             })
             )
     </form>
