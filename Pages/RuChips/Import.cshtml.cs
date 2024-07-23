@@ -119,13 +119,16 @@ namespace Estimator.Pages.RuChips
                 System.Diagnostics.Debug.WriteLine("addDirVniir in IM:" + addDirVniir.Count());
                 for (int i = 0; i < addDirVniir.Count(); i++)
                 {
-                    //Проверка на существование
-                    var _isNameExist = context.DirVniir.Any(x => x.Name == addDirVniir.ElementAt(i).Name);
-                    var _isManExist = context.DirVniir.Any(x => x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer);
-                    var _isQLExist = context.DirVniir.Any(x => x.QLevel == addDirVniir.ElementAt(i).QLevel);
-                    var _isDescrip = context.DirVniir.Any(x => x.Description == addDirVniir.ElementAt(i).Description);
 
-                    if (_isNameExist && _isManExist && _isQLExist && _isDescrip)
+                    var _isNameExist = context.DirVniir.Any(x => x.Name == addDirVniir.ElementAt(i).Name && x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer &&
+                    x.QLevel == addDirVniir.ElementAt(i).QLevel &&
+                    x.Description == addDirVniir.ElementAt(i).Description);
+
+                    //var _isManExist = context.DirVniir.Any(x => x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer);
+                    //var _isQLExist = context.DirVniir.Any(x => x.QLevel == addDirVniir.ElementAt(i).QLevel);
+                    //var _isDescrip = context.DirVniir.Any(x => x.Description == addDirVniir.ElementAt(i).Description);
+                                            
+                    if (_isNameExist)
                     {
                         context.DirVniir.Where(t => t.Name == addDirVniir.ElementAt(i).Name
                         && t.Manufacturer == addDirVniir.ElementAt(i).Manufacturer
