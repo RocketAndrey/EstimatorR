@@ -120,13 +120,10 @@ namespace Estimator.Pages.RuChips
                 for (int i = 0; i < addDirVniir.Count(); i++)
                 {
 
-                    var _isNameExist = context.DirVniir.Any(x => x.Name == addDirVniir.ElementAt(i).Name && x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer &&
+                    var _isNameExist = context.DirVniir.Any(x => x.Name == addDirVniir.ElementAt(i).Name &&
+                    x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer &&
                     x.QLevel == addDirVniir.ElementAt(i).QLevel &&
                     x.Description == addDirVniir.ElementAt(i).Description);
-
-                    //var _isManExist = context.DirVniir.Any(x => x.Manufacturer == addDirVniir.ElementAt(i).Manufacturer);
-                    //var _isQLExist = context.DirVniir.Any(x => x.QLevel == addDirVniir.ElementAt(i).QLevel);
-                    //var _isDescrip = context.DirVniir.Any(x => x.Description == addDirVniir.ElementAt(i).Description);
                                             
                     if (_isNameExist)
                     {
