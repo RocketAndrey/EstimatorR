@@ -5,18 +5,34 @@
 @{
     ViewData["Title"] = "Производители ЭКБ";
 }
-<center><h1>Заводы изготовители</h1></center>
 
-<td align="left">
-    <a asp-page="Create" class="btn btn-outline-primary btn-sm">Добавить</a>
-</td>
-<td align="right">
-    <a asp-page="Import" class="btn btn-outline-primary btn-sm">Импортировать список</a>
-</td>
 
-<br />
+<div class="row mb-3">
+    <div class="col-10">
+        <h3>Заводы изготовители</h3>
+    </div>
 
-<hr />
+    <div class="col-2 text-right">
+        @if (Model.isAdministrator)
+        {
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <a  class="btn btn-outline-primary" asp-page="Edit" asp-route-id="0">Создать</a>
+           
+               @* //только для администратора *@
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+               
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" asp-page="Import">Импортировать список</a> 
+                    </div>
+                </div>
+            
+        </div> 
+        }
+    </div>
+</div>
+
 
 @if (Model.Message != null)
 {
@@ -32,40 +48,39 @@
     </script>
 
 }
+<div class="row mb-3">
+    <div class="col">
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
-</head>
+        <form method="post">
+            @(
+                Html.Grid(Model.Companies).Build(columns =>
 
-<body>
-    <form method="post">
-        @(
-            Html.Grid(Model.Companies).Build(columns =>
-            {
-                columns.Add(model => model.Code).Titled("Код").Sortable(true);
-                columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
-                columns.Add(model => model.Note).Titled("Примечание").Sortable(false);
-                //Edit
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/Edit/{model.Id}'><img src=\"/edit.png\"/></a>");
-                //Delete
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/?id={model.Id}'><img src=\"/delete.png\"/></a>");
-            })
-            .Using(GridFilterMode.Header)
-            .Empty("No data found")
-            .Filterable(GridFilterType.Double)
-            .Sortable()
-            .Pageable(pager =>
-            {
-                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 25, "25" }, { 50, "50" } };
-                pager.ShowPageSizes = true;
-                pager.RowsPerPage = 3;
-            })
-            )
-    </form>
+                {
+                    columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/Edit/{model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-pencil-square\"></use></svg></a>");
+
+                    columns.Add(model => model.Code).Titled("Код").Sortable(true);
+                    columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
+                    columns.Add(model => model.Note).Titled("Примечание").Sortable(false);
+
+                    //Delete
+
+                    @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer/?id={model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-trash\"></use></svg></a>"); *@
+                })
+                .Using(GridFilterMode.Header)
+                .Empty("Нет данных")
+                .Filterable(GridFilterType.Double)
+                .Sortable()
+                .Pageable(pager =>
+                {
+                    pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 25, "25" }, { 50, "50" } , { 100, "100" }, { 250, "250" }, };
+                    pager.ShowPageSizes = true;
+                    pager.RowsPerPage = 50;
+                })
+                )
+        </form>
+        </div>
+ </div>
+
     <script src="~/js/mvc-grid/mvc-grid.js"></script>
     <script>
         document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
@@ -105,7 +120,7 @@
                 "or": "ou"
             }
         };
+ 
     </script>
-</body>
 
-</html>
+

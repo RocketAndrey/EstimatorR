@@ -14,8 +14,7 @@ namespace Estimator.Pages.Price
     public class IndexModel : BaseEstimatorPage
     {
 
-        private readonly Estimator.Data.EstimatorContext _context;
-
+       
         public List<Estimator.Models.PriceList> PriceList { get; private set; } = new();
         public IndexModel(Estimator.Data.EstimatorContext db, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(db, appEnvironment, configuration)
         {
@@ -37,7 +36,11 @@ namespace Estimator.Pages.Price
                 }
             }
 
-            PriceList = await _context.PriceLists.AsNoTracking().ToListAsync();
+            PriceList = await _context
+                .PriceLists
+                .Include(e=>e.Manufacture)
+                .AsNoTracking()
+                .ToListAsync();
             
             return Page();
         }

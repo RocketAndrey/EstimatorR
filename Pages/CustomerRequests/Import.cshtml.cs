@@ -164,7 +164,7 @@ namespace Estimator.Pages.CustomerRequests
                         ext = ext.Substring(ext.Length - 4, 4);
                         if (ext == "xlsx")
                         {
-                            XLSXhelper xhelper = new XLSXhelper();
+                            XLSXhelper xhelper = new XLSXhelper(_context);
                             //сохраняем  файл на сервере 
                             using (var fileStream = new FileStream(FilePath, FileMode.Create))
                             {
@@ -356,7 +356,7 @@ namespace Estimator.Pages.CustomerRequests
             
 
                 //нет имени - не загружаем
-                if (PrepareStr(itemXLSX.ImportedElementName) == "")
+                if (Funct.PrepareStr(itemXLSX.ImportedElementName) == "")
                 {
                     itemXLSX.ErrorMessage = "Имя элемента не заполнено";
                     returnValue = false;
@@ -364,12 +364,12 @@ namespace Estimator.Pages.CustomerRequests
                 }
                 // если ключ не пустой
 
-                if (PrepareStr(itemXLSX.ElementTypeKey) != "")
+                if (Funct.PrepareStr(itemXLSX.ElementTypeKey) != "")
                 {
                     // ищем в коллекции ключей
                     foreach (var key in keys)
                     {
-                        if (PrepareStr(itemXLSX.ElementTypeKey) == PrepareStr(key.Key))
+                        if (Funct.PrepareStr(itemXLSX.ElementTypeKey) == Funct.PrepareStr(key.Key))
                         {
 
                             itemXLSX.ElementTypeID = keys[key.Key].ElementTypeID;
@@ -382,13 +382,13 @@ namespace Estimator.Pages.CustomerRequests
                     }
                 }
                 //пустое место вместо ключа или ключ не нашли на предыдущем этапе 
-                if (PrepareStr(itemXLSX.ElementTypeKey) == "" | itemXLSX.ElementTypeID == null)
+                if (Funct.PrepareStr(itemXLSX.ElementTypeKey) == "" | itemXLSX.ElementTypeID == null)
                 {
                     //здесь пытаемся найти ключ в поле ElementName
                  
                     foreach (var key in keys)
                     {
-                        if (PrepareStr(itemXLSX.ImportedElementName).IndexOf(PrepareStr(key.Key))>=0)
+                        if (Funct.PrepareStr(itemXLSX.ImportedElementName).IndexOf(Funct.PrepareStr(key.Key))>=0)
                         {
                             
                             itemXLSX.ElementTypeKey= key.Key;
@@ -404,7 +404,7 @@ namespace Estimator.Pages.CustomerRequests
                 }
                 XLSXElementType beforeItem = null;
                 //или ключ не найден  или искать в предыдущем импорте
-                if ((PrepareStr(itemXLSX.ElementTypeKey) == "") | this.ElementImport.UseLastCalculation)
+                if ((Funct.PrepareStr(itemXLSX.ElementTypeKey) == "") | this.ElementImport.UseLastCalculation)
                 {
                     beforeItem = BeforeUploadedXLSXElementType(itemXLSX.ImportedElementName, itemXLSX.ID, ElementImport.CustomerRequest.TestProgramID);
                     //Если предыдущий типономина  найден и ему присвоен тип
@@ -420,7 +420,7 @@ namespace Estimator.Pages.CustomerRequests
                 }
 
                 //ключ всетаки не найден после всех  попыток
-                if (PrepareStr(itemXLSX.ElementTypeKey) == "")
+                if (Funct.PrepareStr(itemXLSX.ElementTypeKey) == "")
                 {
                     itemXLSX.ErrorMessage = "Ключ для элемента не заполнен.";
                     returnValue = false;
@@ -531,7 +531,7 @@ namespace Estimator.Pages.CustomerRequests
                     "l.PrefixNumber + '-' + CAST(l.Number AS VARCHAR(32)) + (CASE WHEN(l.SuffixNumber IS NULL) THEN('') ELSE l.SuffixNumber END) AS [ProtokolNumber] " +
                      "from Wares w, Lot l where w.WareId = l.WareId and UPPER(LTRIM(RTRIM(w.TypeNominal))) = {0} " +
                      "order by l.LotId Desc";
-                List<TestedType> list = _asuContext.TestedTypes.FromSqlRaw(query, PrepareStr(elementName)).ToList();
+                List<TestedType> list = _asuContext.TestedTypes.FromSqlRaw(query, Funct.PrepareStr(elementName)).ToList();
 
                 if (list != null)
                 {
@@ -556,14 +556,14 @@ namespace Estimator.Pages.CustomerRequests
         {
             string selectStr= "SELECT [ID],[ElementImportID],[ElementName] ,[ElementTypeKey],[ElementCount] ,e.[ElementTypeID],[AsuProtokolCode],[BeforeUploadedXLSXElementTypeID] ,[RowNum], " +
                 "[ElementPrice] ,[ElementContractorPrice],[ElementKitPrice],[DeliveryTime] ,[Datasheet],[ImportedQualificationLevel] ,[ImportedPrice] ,[PriceType], [ImportedElementName] ," +
-                "[QualificationLevel] , [CompanyId], [ImportedDatasheet], [SampleCount], [Included] ,[MinPackingSize] ,[PackingSample], [PriceHistorySourceID] " +
+                "[QualificationLevel] , [CompanyId], [ImportedDatasheet], [SampleCount], [Included] ,[MinPackingSize] ,[PackingSample],[PriceId],[VniirItemId], [PriceHistorySourceID] " +
             "FROM [XLSXElementType] x, ElementType e where e.ElementTypeID=x.ElementTypeID and  RTRIM(LTRIM(UPPER(replace(ElementName,' ','')))) ={0} and ID <> {1} " + 
             " AND  e.ProgramID = {2}";
            
-            List<XLSXElementType> list = _context.XLSXElementTypes.FromSqlRaw(selectStr, PrepareStr(elementName),id,programid).ToList();
+            List<XLSXElementType> list = _context.XLSXElementTypes.FromSqlRaw(selectStr, Funct.PrepareStr(elementName),id,programid).ToList();
 
             return list.Count > 0 ? list[0] : null;
-        
+      
 
         }
     }

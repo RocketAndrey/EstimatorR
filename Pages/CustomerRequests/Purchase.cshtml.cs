@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Globalization;
 using Microsoft.AspNetCore.Http.Connections;
 using System.IO;
+using Estimator.Helpers;
 
 
 namespace Estimator.Pages.CustomerRequests
@@ -108,9 +109,27 @@ namespace Estimator.Pages.CustomerRequests
             await base.SetCustomerReguest((int)id, int.Parse(_configuration.GetSection("YearOfNorms")["value"]));
 
             await _context.SaveChangesAsync();
+            foreach(XLSXElementType xitem in CustomerRequest?.ElementImport?.XLSXElementTypes)
+            {
+                if (xitem.PriceType ==ElementPriceType.Price)
+                {
+                    xitem.VniirItem = await _context.DirVniir.FirstOrDefaultAsync(e => e.Id == xitem.VniirItemId);
+                    xitem.Price = await _context.Prices
+                        .Include (r=>r.PriceList)
+                        .FirstOrDefaultAsync(e=>e.PriceId == xitem.PriceId);   
+                }
+                else if(xitem.PriceType == ElementPriceType.FromPreviosCustomerRequest)
+                {
+                    xitem.PriceHistorySource = await _context.ElementPriceHistory.FirstOrDefaultAsync(e => e.ElementPriceHistoryID == xitem.PriceHistorySourceID);
+                }
+                
+
+            }
+            
 
             PurchaseView = CustomerRequest.ElementImport.XLSXElementTypes
              .Select(p => new PurchaseElementView(p))
+             
              .ToList();
 
             if (CustomerRequest == null)
@@ -245,6 +264,7 @@ namespace Estimator.Pages.CustomerRequests
                         PurchaseElementView someItem = PurchaseView.FirstOrDefault
                         (e=>e.ElementPrice >0 && e.ElementName == view.ElementName && e.ID!= view.ID
                         && e.Datasheet == view.Datasheet);
+                        
                         if (someItem != null)
                         {
                             changeFlag = true;
@@ -253,6 +273,7 @@ namespace Estimator.Pages.CustomerRequests
                             view.MinPackingSize = someItem.MinPackingSize;
                             view.PackingSample = someItem.PackingSample;    
                             view.DeliveryTime = someItem.DeliveryTime;
+                            view.VniirItemId = someItem.VniirItemId;    
                             if (view.Manufactory.Id == 0 && someItem.Manufactory.Id != 0)
                             {
                                 item.CompanyId = someItem.Manufactory.Id;
@@ -266,7 +287,7 @@ namespace Estimator.Pages.CustomerRequests
                     {
                         view.MànufactorySearchErrorString = string.Empty;
                         List<Company> coms = _manufactures
-                            .Where(j => PrepareStr(j.Name).Contains(PrepareStr(view.MànufactorySearchString)))
+                            .Where(j => Funct.PrepareStr(j.Name).Contains(Funct.PrepareStr(view.MànufactorySearchString)))
                             .ToList();
                         //íàøëè
                         if (coms.Count == 1)
@@ -292,10 +313,11 @@ namespace Estimator.Pages.CustomerRequests
                         {
                             item.ElementName = view.ElementName;
                         }
-                        if (view.ElementPrice > 0 ){item.ElementPrice = view.ElementPrice;}
+                        if (view.ElementPrice >= 0 ){item.ElementPrice = view.ElementPrice;}
+
                         if (view.MinPackingSize > 0 ) { item.MinPackingSize = view.MinPackingSize; }
                         if (view.PackingSample > 0 ) { item.PackingSample = view.PackingSample; }
-                         if (item.DeliveryTime>0) { item.DeliveryTime = view.DeliveryTime; }
+                         if (item.DeliveryTime>=0) { item.DeliveryTime = view.DeliveryTime; }
                        
                         item.Datasheet = view.Datasheet;
                         
@@ -326,7 +348,8 @@ namespace Estimator.Pages.CustomerRequests
                             priceItem.PriceAmount = item.ElementPrice;
                             priceItem.MinPackingSize = item.MinPackingSize;
                             priceItem.PackingSample = item.PackingSample;
-                            priceItem.DeliveryTime = (int)item.DeliveryTime;
+                            priceItem.DeliveryTime = (int)(item.DeliveryTime??0);
+
 
                         }
                         _context.Entry(item).State = EntityState.Modified;

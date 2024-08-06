@@ -1,42 +1,98 @@
 ﻿@page "{id:int}"
 @model Estimator.Pages.RuChips.EditModel
+
 @{
+    ViewData["Title"] = @Model?.editDirVniir?.Name;
 }
-
-
-<h2>Редактирование данных</h2>
-
+<div class="row">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-page="./Index">Заводы изготовители</a></li>
+                @if (Model.editDirVniir.Id > 0)
+                {
+                    <li class="breadcrumb-item active"><a asp-page="./Edit" asp-route-id="@Model.editDirVniir.Id">@Model.editDirVniir.Name</a></li>
+                }
+            </ol>
+        </nav>
+    </div>
+</div>
 <form method="post">
-    <input name="id" value="@Model.editDirVniir?.Id" type="hidden" />
-    <input name="CodeManufacturer" value="@Model.editDirVniir?.CodeManufacturer" type="hidden" />
-    <p>
-        <label>Группа:</label><br />
-        <input name="Group" value="@Model.editDirVniir?.Group" />
-    </p>
 
-    <p>
-        <label>Подгруппа:</label><br />
-        <input name="Subgroup" value="@Model.editDirVniir?.Subgroup" />
-    </p>
-    <p>
-        <label>Наименование:</label><br />
-        <input name="Name" value="@Model.editDirVniir?.Name" />
-    </p>
-    <p>
-        <label>Завод изготовитель:</label><br />
-        <input name="Manufacturer" value="@Model.editDirVniir?.Manufacturer" />
-    </p>
-    <p>
-        <label>Уровень качества:</label><br />
-        <input name="QLevel" value="@Model.editDirVniir?.QLevel" />
-    </p>
-    <p>
-        <label>Описание:</label><br />
-        <input name="Description" value="@Model.editDirVniir?.Description" />
-    </p>
-    <p>
-        <label>ТУ:</label><br />
-        <input name="TechCondition" value="@Model.editDirVniir?.TechCondition" />
-    </p>
-    <input type="submit" value="Сохранить" />
+<input name="id" asp-for="editDirVniir.Id" type="hidden" />
+<input name="CodeManufacturer" value="@Model.editDirVniir?.CodeManufacturer" type="hidden" />
+
+<div class="row">
+    <div class="col mb-3">
+        <div class="card">
+            <div class="card-header"> 
+                Изделие:&nbsp;@Model.editDirVniir?.Name:
+            </div>
+
+            <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="Name">Наименование</label>
+                            <input class="form-control" id="Name" placeholder="Наименование изделия" asp-for="editDirVniir.Name">
+
+                        </div>
+                        <div class="col">
+                            <label for="Qlevel">Уровень качества</label>
+                            <input class="form-control" id="Qlevel" placeholder="Уровень качества (ВП,ОС,ОСМ)" asp-for="editDirVniir.QLevel">
+
+                        </div>
+                        <div class="col">
+                            <label for="TY">Технические условия</label>
+                            <input class="form-control" id="TY" placeholder="Технические условия" asp-for="editDirVniir.TechCondition">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                       
+                        <div class="col">
+                            <label for="CodeManufacturer">Код изготовителя</label>
+                            <input class="form-control" id="CodeManufacturer" placeholder="Код изготовителя" asp-for="editDirVniir.CodeManufacturer">
+
+                        </div>
+                        <div class="col">
+                            <label for="Manufacturer">Изготовитель</label>
+                            <input class="form-control" id="Manufacturer" placeholder="Изготовитель" asp-for="editDirVniir.Manufacturer">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="Group">Группа</label>
+                            <input class="form-control" id="Group" placeholder="Группа по справочнику" asp-for="editDirVniir.Group">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="SubGroup">Подгруппа</label>
+                            <input class="form-control" id="SubGroup" placeholder="Подгруппа по справочнику" asp-for="editDirVniir.Subgroup">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="Description">Описание</label>
+                            <textarea rows="3"class="form-control" id="Description" placeholder="Описание" asp-for ="editDirVniir.Description"> </textarea>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                   @if(Model.isAdministrator)
+                   {
+                            <input type="submit" class="btn btn-outline-primary" value="Сохранить" />
+                   }
+                        </div>
+                    </div>
+             </div>
+        </div>
+    </div>
+</div>
+  
 </form>

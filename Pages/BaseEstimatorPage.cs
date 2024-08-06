@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Estimator.Pages
 {
@@ -88,28 +89,7 @@ namespace Estimator.Pages
                 return (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator"); 
             }
         }
-        /// <summary>
-        /// функция удалает из строки все пробелы и переводит в нижний регистр 
-        /// </summary>
-        /// <param name="value">Исходная строка</param>
-        /// <returns></returns>
-        protected string PrepareStr(string value)
-        {
-            if (value == null) { return ""; }
-            // новая строка для записи строки без пробелов
-            string newstr = "";
-            // цыкл
-            for (int i = 0; i < value.Length; i++)
-            {
-                // если елемент i-ый елемент не пробел - пишем его в новую строку "newstr"
-                if (value[i] != ' ')
-                {
-                    // - пишем его в новую строку "newstr"
-                    newstr += value[i];
-                }
-            }
-            return newstr.Trim().ToUpper();
-        }
+       
         /// <summary>
         /// Подключение к базе данных ASU  для получения данных о ранее проведенных  испытаниях
         /// </summary>
@@ -129,5 +109,29 @@ namespace Estimator.Pages
 
         }
       
+        /// <summary>
+        /// Возвращает ошибки валидации модели на стороне сервера
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        protected string GetModelStateErrors(ModelStateDictionary state)
+        {
+            string errorMessages = "";
+            // проходим по всем элементам в ModelState
+            foreach (var item in ModelState)
+            {
+                // если для определенного элемента имеются ошибки
+                if (item.Value.ValidationState == ModelValidationState.Invalid)
+                {
+                    errorMessages = $"{errorMessages}\nОшибки для свойства {item.Key}:\n";
+                    // пробегаемся по всем ошибкам
+                    foreach (var error in item.Value.Errors)
+                    {
+                        errorMessages = $"{errorMessages}{error.ErrorMessage}\n";
+                    }
+                }
+            }
+            return errorMessages;
+        }
     }
 }

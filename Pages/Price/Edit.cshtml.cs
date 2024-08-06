@@ -8,16 +8,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Estimator.Data;
 using Estimator.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Estimator.Pages.Price
 {
-    public class EditModel : PageModel
+    public class EditModel : BaseEstimatorPage
     {
-        private readonly Estimator.Data.EstimatorContext _context;
+        public string ErrorMessage { get; set; } = String.Empty; 
         public SelectList companyList { get; set; }
-        public EditModel(Estimator.Data.EstimatorContext context)
+        public EditModel(Estimator.Data.EstimatorContext context, IWebHostEnvironment appEnvironment, IConfiguration configuration) : base(context, appEnvironment, configuration)
         {
-            _context = context;
+
         }
 
         [BindProperty]
@@ -25,14 +30,26 @@ namespace Estimator.Pages.Price
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            companyList = new SelectList(_context.Companies.ToList(), "Name", "Name");
+            ErrorMessage = String.Empty; 
+
+
 
             if (id == null)
             {
-                return NotFound();
+               PriceList = new PriceList ();
+            }
+            else
+            {
+                PriceList = await _context.PriceLists
+                .Include(e => e.PriceItems)
+                .Include (e=>e.Manufacture)
+                .Include (e=>e.PriceItemType).ThenInclude(e=>e.PricePropertyNames)
+                .FirstOrDefaultAsync(m => m.PriceListId == id);
             }
 
-            PriceList = await _context.PriceLists.FirstOrDefaultAsync(m => m.PriceListId == id);
+            ViewData["companyList"] = new SelectList(_context.Companies.OrderBy(e => e.Name), "Id", "Name");
+            ViewData["PriceTypes"] = new SelectList (_context.PriceItemType, "PriceItemTypeID", "PriceItemTypeName");  
+        
 
             if (PriceList == null)
             {
@@ -41,36 +58,95 @@ namespace Estimator.Pages.Price
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+
+        public async Task<IActionResult> OnPostSaveAsync(IFormFile uploadedFile)
         {
             if (!ModelState.IsValid)
             {
+          
+                ErrorMessage = GetModelStateErrors (ModelState);   
                 return Page();
             }
-
-            _context.Attach(PriceList).State = EntityState.Modified;
-
+            if (PriceList.PriceListId == 0)
+            {
+                _context.PriceLists.Add(PriceList);
+            }
+            else
+            { 
+               _context.Attach(PriceList).State = EntityState.Modified;
+        }
             try
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PriceListExists(PriceList.PriceListId))
+
+                if (uploadedFile != null)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    if (uploadedFile.Length <= 0)
+                    {
+                        ErrorMessage = "Некорректный файл";
+                        return Page();
+                    }
+
+                    if (!Path.GetExtension(uploadedFile.FileName).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ErrorMessage = "Прейскурант должен быть в формате pdf.";
+                        return Page();
+                    }
+
+                    string path = Path.Combine(base._appEnvironment.WebRootPath,"Uploads", "Prices");
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                  
+
+                    string fileName = PriceList.PriceListId.ToString()+ "_" + PriceList.DateStart.ToShortDateString()  + ".pdf"; //Path.GetFileName(postedFiles.FileName);
+                    using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                    {
+                        uploadedFile.CopyTo(stream);
+                        //path = path + "\\" + fileName;
+                    }
+
+                    PriceList.ScanOfPrice = fileName;
+
+                    _context.Attach(PriceList).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+             
                 }
             }
 
+
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                return Page();
+            }
+            return Page();
+
+           // return RedirectToPage("./Index");
+        }
+        public async Task<IActionResult> OnPostDeleteAsync()
+        {
+            if (PriceList  != null && isAdministrator)
+            {
+
+                try
+                {
+                    _context.PriceLists.Remove(PriceList);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex) 
+                {
+                    ErrorMessage = ex.Message;
+                    return Page();
+                }
+
+            }
             return RedirectToPage("./Index");
         }
-
         private bool PriceListExists(int id)
         {
             return _context.PriceLists.Any(e => e.PriceListId == id);

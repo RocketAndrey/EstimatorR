@@ -9,7 +9,7 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Hosting;
 using System.Drawing;
 using System.Linq;
@@ -55,6 +55,7 @@ namespace Estimator.Pages.Price
             TempData["PriceListId"] = (int)id;
 
             var existPrices = context.Prices.Where(x => x.PriceListId == id);
+
             if (existPrices.Any())
             {
                 countExistPrice = existPrices.Count();
@@ -149,7 +150,7 @@ namespace Estimator.Pages.Price
                 row1.Cells.ElementAt(0).SetCellValue("Наименование");
                 row1.Cells.ElementAt(1).SetCellValue("ТУ");
                 row1.Cells.ElementAt(2).SetCellValue("Цена");
-                row1.Cells.ElementAt(3).SetCellValue("Норма доставки"); //Заголовок
+                row1.Cells.ElementAt(3).SetCellValue("Минимальная партия"); //Заголовок
                 row1.Cells.ElementAt(4).SetCellValue("Норма упаковки");
                 row1.Cells.ElementAt(5).SetCellValue("Срок поставки");
 
@@ -166,9 +167,9 @@ namespace Estimator.Pages.Price
                     row.Cells.ElementAt(0).SetCellValue(exdata.Name);
                     row.Cells.ElementAt(1).SetCellValue(exdata.Ty);
                     row.Cells.ElementAt(2).SetCellValue(exdata.Cost);
-                    row.Cells.ElementAt(3).SetCellValue(exdata.StandartDelivery); //Данные
-                    row.Cells.ElementAt(4).SetCellValue(exdata.StandartPack);
-                    row.Cells.ElementAt(5).SetCellValue(exdata.TimeDelivery.ToString());
+                    row.Cells.ElementAt(3).SetCellValue(exdata.MinPackingSize); //Данные
+                    row.Cells.ElementAt(4).SetCellValue(exdata.PackingSample);
+                    row.Cells.ElementAt(5).SetCellValue(exdata.DeliveryTime.ToString());
 
                     rowCount++;
                 }

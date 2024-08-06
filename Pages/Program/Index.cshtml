@@ -12,7 +12,7 @@
         @{
             if (Model.SelectedProgram!=null)
             {
-                <li class="breadcrumb-item"><a asp-page="./Index" asp-route-id="@Model.TestProgramID">@Model.SelectedProgram.Name</a></li>
+                <li class="breadcrumb-item"><a asp-page="./Index?id=0" asp-route-id="@Model.TestProgramID">@Model.SelectedProgram.Name</a></li>
             }
             if (Model.SelectedElementType!=null)
             {
