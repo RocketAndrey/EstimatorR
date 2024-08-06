@@ -1,70 +1,239 @@
 ﻿@page
 @model Estimator.Pages.Price.EditModel
-
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using NonFactors.Mvc.Grid;
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = @Model?.PriceList?.Name; ;
 }
-
-<h1>Редактирование</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PriceList.PriceListId" />
-            <div class="form-group">
-                <label for="manufacture" class="control-label">Производитель</label>
-                <select asp-for="PriceList.CompanyId" asp-items="Model.companyList" class="form-control" id="manufacture" >
-                </select>
-               
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceList.Name" class="control-label">Наименование</label>
-                <input asp-for="PriceList.Name" class="form-control" />
-                <span asp-validation-for="PriceList.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceList.DateStart" class="control-label">Дата введения</label>
-                <input asp-for="PriceList.DateStart" class="form-control" />
-                <span asp-validation-for="PriceList.DateStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceList.DateEnd" class="control-label">Дата окончания</label>
-                <input asp-for="PriceList.DateEnd" class="form-control" />
-                <span asp-validation-for="PriceList.DateEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceList.Description" class="control-label">Описание</label>
-                <input asp-for="PriceList.Description" class="form-control" />
-                <span asp-validation-for="PriceList.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriceList.ScanOfPrice" class="control-label">Скан прайса(*.pdf)</label>
-                <br />                
-                <a href="@Model.PriceList.ScanOfPrice" target="_blank">@Model.PriceList.ScanOfPrice</a>
-                <hr />
-                <label>Для изменения файла - выберите новый</label>
-                <br />
-                <input type="file" name="postedFiles" class="form-control" enctype="multipart/form-data" />
-                <hr />
-                <span asp-validation-for="PriceList.ScanOfPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="PriceList.IsDifficult" /> @Html.DisplayNameFor(model => model.PriceList.IsDifficult)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="row mb-3">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-page="./Index">Прейскуранты</a></li>
+                @if (Model.PriceList.PriceListId > 0)
+                {
+                    <li class="breadcrumb-item active"><a asp-page="./Edit" asp-route-id="@Model.PriceList.PriceListId">@Model.PriceList.Name</a></li>
+                }
+            </ol>
+        </nav>
     </div>
 </div>
+<div class="row mb-3">
+    <div class="col">
+        @if (Model.ErrorMessage.Length > 0)
+        {
+            <div class="alert alert-danger" role="alert">
+                @Html.DisplayFor(model => model.ErrorMessage)
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
-<div>
-    <a asp-page="./Index">Назад</a>
+            </div>
+        }
+    </div>
 </div>
+<form method="post" enctype="multipart/form-data">
+<div class="row">
+    <div class="col">
+     
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card">
+                <div class="card-header">
+                   
+                    @{
+                        string header = "Создание нового прейскуранта"; 
+
+                    if (Model.PriceList.PriceListId > 0)
+                    {
+                    header = "Редактирование прейскуранта: " + Model.PriceList?.Name; 
+                    }
+                    }
+                    @header
+                 </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col">
+                            <input type="hidden" asp-for="PriceList.PriceListId" />
+                            <label for="PriceListName" class="control-label">@Html.DisplayNameFor(m => m.PriceList.Name)</label>
+                            <input asp-for="PriceList.Name" id="PriceListName" class="form-control" />
+                            <span asp-validation-for="PriceList.Name" class="text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label for="manufactureId" class="control-label">@Html.DisplayNameFor(m => m.PriceList.CompanyId)</label>
+                            @if (Model.PriceList.PriceListId > 0)
+                            {
+                                <input type="hidden" asp-for="PriceList.CompanyId" />
+                                <input asp-for="PriceList.Manufacture.Name" id="manufactureId" class="form-control" readonly />
+            
+                            }
+                            else
+                            {
+                                <select asp-for="PriceList.CompanyId" asp-items="ViewBag.companyList" id="manufactureId" class="form-control selectpicker"  title="Выберите производителя..." data-live-search="true">
+                                </select>
+                            }
+
+                            <span asp-validation-for="PriceList.CompanyId" class="text-danger"></span>
+                        </div>
+                   </div>
+                   
+            <div class="form-group row">
+                    <div class="col">
+                    <label asp-for="PriceList.DateStart" class="control-label">@Html.DisplayNameFor(m => m.PriceList.DateStart)</label>
+                    <input asp-for="PriceList.DateStart" class="form-control" />
+                    <span asp-validation-for="PriceList.DateStart" class="text-danger"></span>
+                    </div>
+                <div class="col">
+                    <label asp-for="PriceList.DateEnd" class="control-label">@Html.DisplayNameFor(m => m.PriceList.DateEnd)</label>
+                    <input asp-for="PriceList.DateEnd" class="form-control" />
+                    <span asp-validation-for="PriceList.DateEnd" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col">
+                    <label asp-for="PriceList.Description" class="control-label">@Html.DisplayNameFor(m => m.PriceList.Description)</label>
+                    <input asp-for="PriceList.Description" class="form-control" />
+                    <span asp-validation-for="PriceList.Description" class="text-danger"></span>
+                </div>
+               
+            </div>
+            <div class="row form-group">
+                        <div class="col">
+                            <label for="PriceTypesId" class="control-label">@Html.DisplayNameFor(m => m.PriceList.PriceItemTypeID)</label>
+                            @if (Model.PriceList.PriceListId > 0)
+                            {
+                                <input type="hidden" asp-for="PriceList.PriceItemTypeID" />
+                                <input asp-for="PriceList.PriceItemType.PriceItemTypeName" id="PriceTypesId" class="form-control" readonly />
+
+                            }
+                            else
+                            {
+                                <select asp-for="PriceList.PriceItemTypeID" asp-items="ViewBag.PriceTypes" id="PriceTypesId" class="form-control selectpicker" title="Выберите тип..." data-live-search="true">
+                                </select>
+                            }
+                            <span asp-validation-for="PriceList.PriceItemTypeID" class="text-danger"></span>
+                        </div>
+                </div>
+               <div class="row form-group">
+                        <div class="col">
+                            <label for="uploadedFile" class="control-label">Для изменения файла - выберите новый</label>
+                            <input type="file" name="uploadedFile" accept="*.pdf" class="form-control" />
+
+                        </div>
+                        <div class="col">
+                            @if((Model.PriceList.ScanOfPrice??"") != "")
+                            {
+                                <a href="~/uploads/prices/@Model.PriceList.ScanOfPrice" target="_blank" class="text-decoration-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-file-earmark-pdf-fill" width="20" height="20"><use href="#bi-file-earmark-pdf-fill"></use></svg>
+                                    Скан прайса(*.pdf)
+                                </a>
+                            }
+                            
+                            </div>
+                      
+
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    
+                          
+                            <div class="btn-toolbar" role="toolbar" aria-label="dsds">
+                                @if (Model.isAdministrator)
+                                {
+                                    <div class="btn-group mr-2" role="group">
+                                        <a class="btn btn-outline-success" asp-page="import" asp-route-id="@Model.PriceList.PriceListId">
+                                            Импортировать
+                                        </a>
+                                    </div>
+
+                                    <div class="btn-group mr-2" role="group">
+                                        <button type="button" class="btn btn-outline-danger" value="Удалить" data-toggle="modal" data-target="#deleteModal">
+                                            Удалить
+                                        </button>
+                                    </div>
+
+                                    <div class="btn-group mr-2" role="group">
+
+                                        <input type="submit" class="btn btn-outline-primary" value="Сохранить" asp-page-handler="Save" />
+                                    </div>
+                                }
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Удаление прейскуранта</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Вы уверены что хотите удалить прейскурант @Model.PriceList?.Name ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn-toolbar" role="toolbar" aria-label="dsds">
+                                            <div class="btn-group mr-2" role="group">
+
+                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Закрыть</button>
+                                                </div>
+                                                
+                                                @if (Model.isAdministrator && Model.PriceList?.PriceListId > 0)
+                                                {
+                                                    <div class="btn-group mr-2" role="group">
+
+                                                    <input type="submit" class="btn btn-outline-danger" class="btn btn-outline-primary" value="Удалить" asp-page-handler="Delete" />
+                                                    </div> 
+                                                }
+                                               
+                                            </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                </div>
+            </div>
+           
+            </div>
+
+            </div>
+      
+    </div>
+</div>
+  
+
+
+@if(Model.PriceList.PriceListId > 0)
+
+    {
+        
+    
+    <div class="row mt-3">
+    <div class=" col">
+        @(
+            Html.Grid(Model.PriceList.PriceItems).Build(columns =>
+            {
+                @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-pencil-square\"></use></svg></a>"); *@
+                columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
+                @* columns.Add(model => model.Ty).Titled("Тех. условия").Sortable(true); *@
+                columns.Add(model => model.MinPackingSize).Titled("МП").Sortable(true);
+                columns.Add(model => model.PackingSample).Titled("НУ").Sortable(true);
+                columns.Add(model => model.DeliveryTime).Titled("Срок, дней").Sortable(false);
+                columns.Add(model => model.Cost).Titled("Цена, руб.").Sortable(false);
+                
+            })
+            .Using(GridFilterMode.Header)
+            .Empty("Нет данных")
+            .Filterable(GridFilterType.Double)
+            .Sortable()
+            )
+
+    </div>
+</div>
+}
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

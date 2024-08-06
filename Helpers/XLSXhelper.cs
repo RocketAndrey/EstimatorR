@@ -12,18 +12,31 @@ using NPOI.XSSF.Model;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration.Design;
+using MathNet.Numerics;
+using NPOI.SS.Formula.Functions;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace Estimator.Helpers
 {
     public class XLSXhelper
     {
+        protected Estimator.Data.EstimatorContext _context;
+        public XLSXhelper(Estimator.Data.EstimatorContext context)
+        { 
+            _context = context; 
+        
+        }
         /// <summary>
         /// https://stackoverflow.com/questions/5855813/how-to-read-file-using-npoi
         /// </summary>
         /// <param name="memStream"></param>
         /// <returns></returns>
         public List<Estimator.Models.XLSXElementType> Convert(Stream memStream, Estimator.Models.ElementImport importSettings, out bool result, out string errorMessage)
-        { 
+           
+        {
+            List<string> datasheetPrefixes =  null ;
             XLSXElementType elementType;
                 List<Models.XLSXElementType> returnValue = new();
                 result = true;
@@ -185,6 +198,37 @@ namespace Estimator.Helpers
                                         }
                                     }
                                 }
+
+                              
+                                if (importSettings.CustomerRequest.Program.UseRuChipsDB)
+                                {
+                                    /// Если ТУ пустое то пытаемся найти ТУ в поле имя
+                                    if (!String.IsNullOrEmpty(elementType.ImportedElementName) && String.IsNullOrEmpty(elementType.ImportedDatasheet))
+                                    {
+                                        if (datasheetPrefixes == null)
+                                        {
+                                            datasheetPrefixes = DatasheetPrefix();
+                                        }
+
+                                        int dsIndex = 0; 
+                                            foreach(var prefix in datasheetPrefixes)
+                                            {
+                                                int index = elementType.ImportedElementName.ToLower().IndexOf(prefix.ToString().ToLower()); 
+                                                if ( index> 0)
+                                                {
+                                                    if (dsIndex == 0 || index < dsIndex)//проверка на самое ранне вхождение.
+                                                    {
+                                                        dsIndex = index;    
+                                                        //все что после префикса-это наименование ТУ !
+                                                        elementType.ImportedDatasheet = elementType.ImportedElementName.Substring(index);
+
+                                                    }
+
+                                                }
+                                            }
+                                        
+                                    }
+                                }
                                 if (elementType.ElementCount == 0) { emptyCounts++; }
 
                                 if (String.IsNullOrEmpty(elementType.ImportedElementName)) { emptyNames++; }
@@ -291,6 +335,24 @@ namespace Estimator.Helpers
                     
             }
             return result;
+        }
+
+        /// <summary>
+        /// Список всех префиксов ТУ найденных в базе данных вниир (справа  до точки в названии ТУ )
+        /// </summary>
+        /// <returns></returns>
+        private List<string>  DatasheetPrefix ()
+        {
+      
+
+            FormattableString  selectStr =  $"select distinct SUBSTRING(TechCondition,0,  PATINDEX('%.%', TechCondition)) as Prefix from DirVniir where PATINDEX('%.%', TechCondition) > 0 and  LEFT(TechCondition,3)  not in (N'ТУ.','015','026','12.')";
+
+           var returnValue = _context.Database.SqlQuery<string>(selectStr).ToList() ;
+
+         //  returnValue.Add("ТУ");
+
+          return returnValue; 
+    
         }
 
     }

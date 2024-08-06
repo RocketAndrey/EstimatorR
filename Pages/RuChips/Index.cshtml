@@ -2,17 +2,27 @@
 @using NonFactors.Mvc.Grid
 @model Estimator.Pages.RuChips.IndexModel
 @{
-    ViewData["Title"] = "ЭКБ отечественного производства";
-}
-<link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+    ViewData["Title"] = "ЭКБ отечественного производства";}
 
 
 <div class="row">
     <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="./Index">Cправочник ЭКБ ОП</a></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-8">
         <h3>Cправочник ЭКБ ОП</h3>
     </div>
-    <div class="col text-right">
-        <a asp-page="Import" class="btn btn-outline-primary btn-sm">Импортировать список</a>
+    <div class="col-4 text-right">
+         @if (Model.isAdministrator)
+        {
+            <a asp-page="Import" class="btn btn-outline-primary btn-sm">Импортировать список</a>
+        }
     </div>
 </div>
 
@@ -50,9 +60,9 @@
                     columns.Add(model => model.QLevel).Titled("УК").Sortable(true).Filterable(GridFilterType.Multi);
                 columns.Add(model => model.Manufacturer).Titled("Завод изготовитель").Sortable(true);
 
-                    columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-book\"></use></svg></a>");
+                    // columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Manufacturer?Code-equals={model.CodeManufacturer}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-book\"></use></svg></a>");
               
-                    columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/?id={model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-trash\"></use></svg></a>");
+                   @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/RuChips/?id={model.Id}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-trash\"></use></svg></a>"); *@
             })
             .Using(GridFilterMode.Header)
             .Empty("Не найдено")

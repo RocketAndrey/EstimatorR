@@ -21,7 +21,7 @@
         <br />
         <input type="submit" value="Загрузить" class="btn btn-outline-primary" asp-page-handler="Upload" />
        
-        <span style="color:green">@Html.Raw(Model.Message)</span>
+        <div class="alert alert-danger">@Html.Raw(Model.Message)</div>
     </form>
 
 </body>

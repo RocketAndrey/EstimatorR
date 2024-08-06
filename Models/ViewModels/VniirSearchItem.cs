@@ -7,6 +7,7 @@ namespace Estimator.Models.ViewModels
         public int VniirItemID {  get; set; }   
         public bool IsSelected { get; set; }    
         public string VniirItemName { get; set; } = string.Empty;
+        public string VniirDatasheet { get; set; } = string.Empty;
         public string ManufactutureCode { get; set; }
         public string ManufactutureName { get; set; }   
         public string Key { get; set; }

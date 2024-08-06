@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Estimator.Migrations;
+using Estimator.Helpers;
 
 namespace Estimator.Pages.ElementKey
 {
@@ -80,7 +81,7 @@ namespace Estimator.Pages.ElementKey
             {
                 //проверка ключа на существование
                 Estimator.Models.ElementKey  keyExists = elementType.Keys
-                   .FirstOrDefault(c => PrepareStr(c.Key) == PrepareStr(ElementKey.Key));
+                   .FirstOrDefault(c => Funct.PrepareStr(c.Key) == Funct.PrepareStr(ElementKey.Key));
                 if (keyExists!=null)
                 {
                     if (keyExists.ElementKeyID != ElementKey.ElementKeyID)

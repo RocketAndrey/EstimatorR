@@ -57,6 +57,7 @@ namespace Estimator.Pages.CustomerRequests
                .Include(e => e.XLSXElementTypes).ThenInclude(e=>e.PriceHistory)
                .Include(e => e.XLSXElementTypes).ThenInclude(x=>x.Company)
                .Include(e => e.XLSXElementTypes).ThenInclude(x => x.PriceHistorySource)
+               .Include(e => e.XLSXElementTypes).ThenInclude(x => x.VniirItem)
                .AsNoTracking()
                .FirstOrDefaultAsync(m => m.CustomerRequest.CustomerRequestID == id);
 

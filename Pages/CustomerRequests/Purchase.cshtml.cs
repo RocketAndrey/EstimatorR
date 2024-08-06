@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Globalization;
 using Microsoft.AspNetCore.Http.Connections;
 using System.IO;
+using Estimator.Helpers;
 
 
 namespace Estimator.Pages.CustomerRequests
@@ -113,7 +114,7 @@ namespace Estimator.Pages.CustomerRequests
                 if (xitem.PriceType ==ElementPriceType.Price)
                 {
                     xitem.VniirItem = await _context.DirVniir.FirstOrDefaultAsync(e => e.Id == xitem.VniirItemId);
-               xitem.Price = await _context.Prices
+                    xitem.Price = await _context.Prices
                         .Include (r=>r.PriceList)
                         .FirstOrDefaultAsync(e=>e.PriceId == xitem.PriceId);   
                 }
@@ -286,7 +287,7 @@ namespace Estimator.Pages.CustomerRequests
                     {
                         view.M‡nufactorySearchErrorString = string.Empty;
                         List<Company> coms = _manufactures
-                            .Where(j => PrepareStr(j.Name).Contains(PrepareStr(view.M‡nufactorySearchString)))
+                            .Where(j => Funct.PrepareStr(j.Name).Contains(Funct.PrepareStr(view.M‡nufactorySearchString)))
                             .ToList();
                         //Ì‡¯ÎË
                         if (coms.Count == 1)

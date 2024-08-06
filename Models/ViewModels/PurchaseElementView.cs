@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Estimator.Helpers;
 
 namespace Estimator.Models.ViewModels
 {
@@ -31,6 +32,7 @@ namespace Estimator.Models.ViewModels
             PriceHistoryItem = item.PriceHistorySource;
             VniirItemId = item.VniirItemId;
             Price = item.Price;
+            VniirItem = item.VniirItem;
             Manufactory = new Company { Id = item.Company?.Id ?? 0, Name = item.Company?.Name ?? "", Code = item.Company?.Code ?? "" } ;
 
         }
@@ -75,6 +77,17 @@ namespace Estimator.Models.ViewModels
             {
                 return ((ElementName?.Trim()?? "") != (ImportedElementName?.Trim()??""));
             }
+        }
+
+        public bool DatasheetNotIdenticalVniir
+        {
+            get
+            {
+                if (VniirItem == null) return false;
+                return  Funct.PrepareDatasheet( VniirItem.TechCondition) != Funct.PrepareDatasheet( Datasheet);
+            }
+         
+
         }
         public string QualityLevel {  get; set; }   
         public decimal ElementPrice
@@ -163,7 +176,7 @@ namespace Estimator.Models.ViewModels
         public ElementPriceType PriceType { get; set; }
 
         public int? VniirItemId { get; set; }
-        public RuChipsDB VniirItemID { get; set; }  
+        public RuChipsDB VniirItem { get; set; }  
 
         public Price Price { get; set; }
     }

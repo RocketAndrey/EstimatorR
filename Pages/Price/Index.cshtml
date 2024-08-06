@@ -6,46 +6,48 @@
     ViewData["Title"] = "Прейскуранты";
 }
 
-<center><h1>Прейскуранты</h1></center>
+<div class="row mb-3">
+    <div class="col-8">
+        <h3>Прейскуранты</h3>
+    </div>
+    <div class="col-4 text-right">
+        @if (Model.isAdministrator)
+        {
+            <a asp-page="Edit" class="btn btn-outline-primary btn-sm">Создать</a>
+        }
+    </div>
+</div>
 
-<td align="left">
-    <a asp-page="Create" class="btn btn-outline-primary btn-sm">Добавить</a>
-</td>
+<div class="row mb-3">
+    <div class="col">
 
-<br />
-<hr />
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
-</head>
-
-<body>
     <form method="post">
         @(
             Html.Grid(Model.PriceList).Build(columns =>
             {
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-pencil-square\"></use></svg></a>");
                 columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
                 columns.Add(model => model.Manufacture.Name).Titled("Производитель").Sortable(true);
                 columns.Add(model => model.DateStart.Date.ToShortDateString()).Titled("Дата введения").Sortable(true);
                 columns.Add(model => model.DateEnd.Date.ToShortDateString()).Titled("Дата окончания").Sortable(true);
                 columns.Add(model => model.Description).Titled("Описание").Sortable(false);
                 //Edit
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><img src=\"/edit.png\"/></a>");
+                @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><img src=\"/edit.png\"/></a>"); *@
                 //Delete
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/?id={model.PriceListId}'><img src=\"/delete.png\"/></a>");
+                @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/?id={model.PriceListId}'><img src=\"/delete.png\"/></a>"); *@
                 //Import
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Import/?id={model.PriceListId}'>Импорт</a>");
+                @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Import/?id={model.PriceListId}'>Импорт</a>"); *@
             })
             .Using(GridFilterMode.Header)
-            .Empty("No data found")
+            .Empty("Нет данных")
             .Filterable(GridFilterType.Double)
             .Sortable()
             )
     </form>
+   </div>
+
+   </div>
+
     <script src="~/js/mvc-grid/mvc-grid.js"></script>
     <script>
         document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
@@ -86,6 +88,3 @@
             }
         };
     </script>
-</body>
-
-</html>

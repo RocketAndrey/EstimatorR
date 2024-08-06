@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Policy;
 using NPOI.SS.Formula.Functions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Estimator.Helpers
 {
@@ -44,7 +45,7 @@ namespace Estimator.Helpers
             .Include(e => e.PriceHistory)
                   .FirstOrDefault(m => m.ID == pView.ID);
 
-            if (pView.ElementPrice == 0)
+            if (pView.ElementPrice == 0 || pView.DeliveryTime<1)
             //Ищем для позиций у которых  нет цены
             {
                 List<Price> priceList;
@@ -154,7 +155,9 @@ namespace Estimator.Helpers
             {
                 //коллекция найденных элементов
                 searchItems.Clear();
+
                 string[] words = SplitElementName(pView.ElementName);
+
                 // перебор всей БД ВНИИР 
                 foreach (RuChipsDB item in _dirVniir)
                 {
@@ -168,7 +171,7 @@ namespace Estimator.Helpers
                             {
                                 if (key.Length > 3)
                                 {
-                                    if (PrepareStr(word).Contains(PrepareStr(key)))
+                                    if (Funct.PrepareStr(word).Contains(Funct.PrepareStr(key)))
                                     {
                                         // нашли элемент
                                         VniirSearchItem sitem = new VniirSearchItem
@@ -178,8 +181,9 @@ namespace Estimator.Helpers
                                             ManufactutureCode = item.CodeManufacturer,
                                             ManufactutureName = item.Manufacturer,
                                             Key = key,
+                                            VniirDatasheet =item.TechCondition,
                                             // вес ключа 
-                                            KeyLenght = PrepareStr(key).Length
+                                            KeyLenght = Funct.PrepareStr(key).Length
                                         };
                                         if (!searchItems.Contains(sitem))
                                         {
@@ -310,7 +314,11 @@ namespace Estimator.Helpers
         protected string[] SplitElementName(string elementValue)
         {
           //тут бы побольше мусорных слов
-            string[] garbageWords = { "микросхема", "операционный", "усилитель" };
+          string words=  "oперационный,усилитель, Микросхема,Транзистор,Фильтр,Терморезистор,Термометр,Диод,Источник,вторичного, электропитания,помехоподавляющий,симметричный, Генератор,кварцевый, Чип-индуктивности,Чип-индуктивность, Резистор, Диод, Дроссель,Стабилитрон,Блок,трансформаторов,Трансформатор,Микросхема";
+            words = words.ToUpper();    
+            string[] garbageWords = words.Split(",");
+
+            elementValue= elementValue.ToUpper();   
 
             for (int i = 0; i < garbageWords.Length; i++)
             {
@@ -389,27 +397,6 @@ namespace Estimator.Helpers
 
             return (ql == qlKey);
         }
-        /// <summary>
-        /// функция удалает из строки все пробелы и переводит в нижний регистр 
-        /// </summary>
-        /// <param name="value">Исходная строка</param>
-        /// <returns></returns>
-        protected string PrepareStr(string value)
-        {
-            if (value == null) { return ""; }
-            // новая строка для записи строки без пробелов
-            string newstr = "";
-            // цыкл
-            for (int i = 0; i < value.Length; i++)
-            {
-                // если елемент i-ый елемент не пробел - пишем его в новую строку "newstr"
-                if (value[i] != ' ')
-                {
-                    // - пишем его в новую строку "newstr"
-                    newstr += value[i];
-                }
-            }
-            return newstr.Trim().ToUpper();
-        }
+      
     }
 }

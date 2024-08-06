@@ -2,7 +2,23 @@
 @model Estimator.Pages.Manufacturer.EditModel
 
 
-<h2>Редактирование данных</h2>
+@{
+    ViewData["Title"] = @Model?.Factory?.Name;
+}
+
+<div class="row">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-page="./Index">Заводы изготовители</a></li>
+                @if(Model.Factory.Id > 0)
+                {
+                <li class="breadcrumb-item active"><a asp-page="./Edit" asp-route-id="@Model.Factory.Id">@Model.Factory.Name</a></li>
+                }
+            </ol>
+        </nav>
+    </div>
+</div>
 
 <form method="post">
 
@@ -14,11 +30,11 @@
                 </div>
 
                 <div class="card-body">
-                    <input name="id" value="@Model.Factory?.Id" type="hidden" />
+                    <input type="hidden" asp-for="Factory.Id" />
                     <div class="form-group row">
                         <div class="col">
                             <label for="Name">Код изготовителя</label>
-                            <input class="form-control" id="Name" placeholder="Код изготовителя" value="@Model.Factory?.Code">
+                            <input class="form-control" id="Name" placeholder="Код изготовителя" asp-for="Factory.Code">
 
                         </div>
                       
@@ -27,7 +43,7 @@
 
                         <div class="col">
                             <label for="Manufacturer">Изготовитель</label>
-                            <input class="form-control" id="Manufacturer" placeholder="Изготовитель" value="@Model.Factory?.Name">
+                            <input class="form-control" id="Manufacturer" placeholder="Изготовитель" asp-for="Factory.Name">
 
                         </div>
                     </div>
@@ -36,14 +52,48 @@
                     <div class="form-group row">
                         <div class="col">
                             <label for="Description">Описание</label>
-                            <textarea rows="3" class="form-control" id="Description" placeholder="Описание" > @Model.Factory?.Note</textarea>
+                            <textarea rows="3" class="form-control" id="Description" placeholder="Описание" asp-for="Factory.Note"> </textarea>
 
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col">
-                            <input type="submit" class="btn btn-outline-primary" value="Сохранить" />
+                          
+                            <div class="btn-group" role="group" >
+                                <input type="button" class="btn btn-outline-danger" value="Удалить" data-toggle="modal" data-target="#deleteModal" />
+                                <input type="submit" class="btn btn-outline-primary" value="Сохранить" />
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Удаление производителя</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Вы уверены что хотите удалить производителя @Model.Factory?.Name ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Закрыть</button>
+                                                @if (Model.isAdministrator && Model.Factory?.Id>0)
+                                                {
+
+                                                    <a type="button" class="btn btn-outline-danger" asp-page="index" asp-route-id="@Model.Factory?.Id">Удалить</a>
+
+
+                                                }
+                                                </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
+
                     </div>
                 </div>
             </div>

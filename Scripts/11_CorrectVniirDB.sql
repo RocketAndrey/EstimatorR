@@ -10,7 +10,7 @@ BEGIN TRANSACTION
 
 
 
-		   if (select count(*) from [database_updates] where[ScriptNumber] = @scriptNumber) = 0 
+		   if (select count(*) from [database_updates] where[ScriptNumber] = @scriptNumber) = 0
 		   BEGIN
 		   INSERT INTO [dbo].[database_updates]
 			   ([ScriptNumber]
