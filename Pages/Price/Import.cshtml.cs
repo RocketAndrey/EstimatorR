@@ -23,6 +23,9 @@ using NPOI.XWPF.UserModel;
 using NuGet.Protocol;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NPOI.SS.Formula.Functions;
+using System.Diagnostics;
+using Estimator.Migrations;
+using NPOI.OpenXmlFormats.Wordprocessing;
 
 namespace Estimator.Pages.Price
 {
@@ -34,6 +37,7 @@ namespace Estimator.Pages.Price
 
         Estimator.Data.EstimatorContext context;
         public bool _disable { get; set; }
+        public bool _showDiff { get; set; }
 
         public List<List<string>> tmpF = new List<List<string>>();
 
@@ -45,10 +49,18 @@ namespace Estimator.Pages.Price
         public int countExistPrice = 0;
         [Display(Name = "Наименование")]
         public ColumnNames _codeCol { get; set; }
+
+        public List<Models.PricePropertyName> _pricePropertyName = new List<Models.PricePropertyName>();
+                
         public enum ColumnNames
         {
 
-            A = 1, B = 2, C = 3, D = 4, E = 5, F = 6, G = 7, H = 8, I = 9, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+           A = 1, B = 2, C = 3, D = 4, E = 5, F = 6, G = 7, H = 8, I = 9, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, 
+        }
+        public enum ColumnNamesDifficult
+        {
+
+            Отсутвует = 0, A = 1, B = 2, C = 3, D = 4, E = 5, F = 6, G = 7, H = 8, I = 9, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
         }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -61,6 +73,9 @@ namespace Estimator.Pages.Price
                 countExistPrice = existPrices.Count();
             }
 
+            int priceItemType = context.PriceLists.First(x => x.PriceListId == id).PriceItemTypeID; //Получаем ID прайса
+            TempData["priceItemType"] = priceItemType;
+
             return Page();
         }
         public ImportModel(IWebHostEnvironment _environment, Estimator.Data.EstimatorContext db)
@@ -68,6 +83,7 @@ namespace Estimator.Pages.Price
             Environment = _environment;
             context = db;
             _disable = true;
+            _showDiff = true;
         }
         public IActionResult OnPostUpload(IFormFile postedFiles)
         {
@@ -104,10 +120,25 @@ namespace Estimator.Pages.Price
             HandlerImport h_Import = new HandlerImport(path);
 
             tmpF = h_Import.takeAllData(path);
-
             TempData["path"] = path;
+
+
+            var PricePropertyName = context.PriceItemType.Include(e => e.PricePropertyNames).Where(c => c.PriceItemTypeID == (int)TempData["priceItemType"]); //Получаем свойства элемента по ID
+            TempData.Keep();
+
+            foreach (var x in PricePropertyName)
+            {
+                foreach (var y in x.PricePropertyNames)
+                {
+                    _pricePropertyName.Add(y);
+                }
+            }
             
-            _disable = false;
+            if (_pricePropertyName.IsNullOrEmpty())
+                _disable=false;
+            else _showDiff=false;
+
+            
             size = tmpF.ElementAt(tmpF.Count-1).Count();
             return Page();
 
@@ -120,13 +151,9 @@ namespace Estimator.Pages.Price
 
             return Page();
         }
-        public async Task<FileResult> OnPostExport()
+        public async Task<FileResult> OnPostExport() //добавить функционал экспорта для сложных прайсов
         {
             var exDatas = context.Prices.Where(x => x.PriceListId == (int)TempData["PriceListId"]);
-
-
-
-
 
             string sWebRootFolder = Environment.WebRootPath;
             string sFileName = @"exportPrice.xlsx";
@@ -211,5 +238,49 @@ namespace Estimator.Pages.Price
 
             return RedirectToPage("Index", new { countIm = countIm.ToString(), countUp = countUp.ToString() }); //ДОБАВИТЬ В INDEX функционал с уведомлением
         }
+
+        public async Task<IActionResult> OnPostFinishDiffAsync()
+        {
+            var PricePropertyName = context.PriceItemType.Include(e => e.PricePropertyNames).Where(c => c.PriceItemTypeID == (int)TempData["priceItemType"]); //Получаем свойства элемента по ID
+
+            foreach (var x in PricePropertyName)
+            {
+                foreach (var y in x.PricePropertyNames)
+                {
+                    _pricePropertyName.Add(y);
+                }
+            }
+
+            List<int> position = new List<int>();
+
+            foreach(var x in _pricePropertyName)
+            {
+                position.Add(int.Parse(Request.Form[x.PropertyName].First()));
+            }
+
+            HandlerImport h_Import = new HandlerImport(TempData["path"].ToString(), int.Parse(Request.Form["SelectedRow"].First()), position, int.Parse(Request.Form["SelectedName"].First()), int.Parse(Request.Form["SelectedCost"].First()), int.Parse(Request.Form["SelectedStandartPack"].First()), int.Parse(Request.Form["SelectedStandartDelivery"].First()), int.Parse(Request.Form["SelectedTimeDelivery"].First()), (int)TempData["priceItemType"], (int)TempData["PriceListId"], context);
+
+            addPrice = new List<Estimator.Models.Price>();
+            addPrice = h_Import.ImportFileDiffPrice();
+
+            int countIm = 0;
+            int countUp = 0;
+
+            if (addPrice != null)
+            {
+                for (int i = 0; i < addPrice.Count(); i++)
+                {
+                    context.Prices.Add(addPrice.ElementAt(i));
+                    countIm++;
+
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToPage("Index", new { countIm = countIm.ToString(), countUp = countUp.ToString() }); //ДОБАВИТЬ В INDEX функционал с уведомлением
+        }
+
+        
+
     }
 }
