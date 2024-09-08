@@ -15,6 +15,8 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
 using Estimator.Migrations;
+using NPOI.SS.Formula.Functions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Estimator.Pages.Price
 {
@@ -31,7 +33,10 @@ namespace Estimator.Pages.Price
         public PriceList PriceList { get; set; }
         public bool _isSimple {  get; set; }
 
+
+        
         public List<string> ListPropety = new List<string>();
+        public List<string> ListElementPropetyName = new List<string>();
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             ErrorMessage = String.Empty; 
@@ -61,9 +66,10 @@ namespace Estimator.Pages.Price
                 {
                     foreach (var y in x.PricePropertyNames)
                     {
-                        ListPropety.Add(y.ToString());
+                        ListPropety.Add(y.PropertyName);
+                        ListElementPropetyName.Add(y.ElementPropertyName);                        
                     }
-                }
+                }               
 
             }
 

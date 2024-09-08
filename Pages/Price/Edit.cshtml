@@ -224,12 +224,74 @@
                         columns.Add(model => model.Cost).Titled("Цена, руб.").Sortable(false);
 
                         if (Model._isSimple == false)
-                        {
-                            columns.Add(Model => Model.Property0).Titled("PR0").Sortable(false);
-
+                        {                            
+                            if (Model.ListPropety.Contains("Property0"))
+                            {
+                                columns.Add(model => model.Property0).Titled(Model.ListElementPropetyName.ElementAt(0)).Sortable(false);
                             }
-                
-            })
+                            if (Model.ListPropety.Contains("Property1"))
+                            {
+                                columns.Add(model => model.Property1).Titled(Model.ListElementPropetyName.ElementAt(1)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property2"))
+                            {
+                                columns.Add(model => model.Property2).Titled(Model.ListElementPropetyName.ElementAt(2)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property3"))
+                            {
+                                columns.Add(model => model.Property3).Titled(Model.ListElementPropetyName.ElementAt(3)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property4"))
+                            {
+                                columns.Add(model => model.Property4).Titled(Model.ListElementPropetyName.ElementAt(4)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property5"))
+                            {
+                                columns.Add(model => model.Property5).Titled(Model.ListElementPropetyName.ElementAt(5)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property6"))
+                            {
+                                columns.Add(model => model.Property6).Titled(Model.ListElementPropetyName.ElementAt(6)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property7"))
+                            {
+                                columns.Add(model => model.Property7).Titled(Model.ListElementPropetyName.ElementAt(7)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property8"))
+                            {
+                                columns.Add(model => model.Property8).Titled(Model.ListElementPropetyName.ElementAt(8)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property9"))
+                            {
+                                columns.Add(model => model.Property9).Titled(Model.ListElementPropetyName.ElementAt(9)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property10"))
+                            {
+                                columns.Add(model => model.Property10).Titled(Model.ListElementPropetyName.ElementAt(10)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property11"))
+                            {
+                                columns.Add(model => model.Property11).Titled(Model.ListElementPropetyName.ElementAt(11)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property12"))
+                            {
+                                columns.Add(model => model.Property12).Titled(Model.ListElementPropetyName.ElementAt(12)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property13"))
+                            {
+                                columns.Add(model => model.Property13).Titled(Model.ListElementPropetyName.ElementAt(13)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property14"))
+                            {
+                                columns.Add(model => model.Property14).Titled(Model.ListElementPropetyName.ElementAt(14)).Sortable(false);
+                            }
+                            if (Model.ListPropety.Contains("Property15"))
+                            {
+                                columns.Add(model => model.Property15).Titled(Model.ListElementPropetyName.ElementAt(15)).Sortable(false);
+                            }
+
+                        }
+                        })
             .Using(GridFilterMode.Header)
             .Empty("Нет данных")
             .Filterable(GridFilterType.Double)
