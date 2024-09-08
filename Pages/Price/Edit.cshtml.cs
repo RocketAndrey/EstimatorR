@@ -32,8 +32,7 @@ namespace Estimator.Pages.Price
         [BindProperty]
         public PriceList PriceList { get; set; }
         public bool _isSimple {  get; set; }
-
-
+        public bool _isAccessImport = true;
         
         public List<string> ListPropety = new List<string>();
         public List<string> ListElementPropetyName = new List<string>();
@@ -46,6 +45,7 @@ namespace Estimator.Pages.Price
             if (id == null)
             {
                PriceList = new PriceList ();
+               _isAccessImport = false;
             }
             else
             {
