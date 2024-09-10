@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Policy;
 using NPOI.SS.Formula.Functions;
 using Microsoft.IdentityModel.Tokens;
+using NPOI.XSSF.Streaming.Values;
 
 namespace Estimator.Helpers
 {
@@ -162,6 +163,10 @@ namespace Estimator.Helpers
                 foreach (RuChipsDB item in _dirVniir)
                 {
                     string[] keys = SplitElementName(item.Name);
+                    if (pView.RowNum ==104)
+                    {
+                        pView.RowNum = 104;
+                    }
                     // проверяем соответствует ли уровень качества 
                     if (qualityLevelEquval(words, keys))
                     {
@@ -246,8 +251,27 @@ namespace Estimator.Helpers
                         }
                         else
                         {
-                            pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", searchItems.Count);
-                            pView.SupposedManufactory = searchItems.ToList(); 
+                            ///пробуем найти соответствие по ТУ
+                           
+                               if (searchItems.Where(e => Funct.PrepareDatasheet(e.VniirDatasheet) == Funct.PrepareDatasheet(pView.Datasheet)).Count()==1)
+                                {
+                                    foreach (var item in searchItems)
+                                    {
+                                        if (Funct.PrepareDatasheet(item.VniirDatasheet) == Funct.PrepareDatasheet(pView.Datasheet))
+                                        {
+
+                                            fillPurchaseViewManufacture(pView, item);
+                                        }
+                                    }
+                                }
+                            
+                              
+                            else
+                            {
+                                pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", searchItems.Count);
+                                pView.SupposedManufactory = searchItems.ToList();
+                            }
+                        
                         }
 
 
@@ -302,7 +326,7 @@ namespace Estimator.Helpers
 
                 view.MаnufactorySearchErrorString = "Не найден производитель:" ;
                 view.MаnufactorySearchString = item.ManufactutureName ; 
-               // item.v
+              
 
             }
         }
@@ -315,7 +339,8 @@ namespace Estimator.Helpers
         {
           //тут бы побольше мусорных слов
           string words=  "oперационный,усилитель, Микросхема,Транзистор,Фильтр,Терморезистор,Термометр,Диод,Источник,вторичного, электропитания,помехоподавляющий,симметричный, Генератор,кварцевый, Чип-индуктивности,Чип-индуктивность, Резистор, Диод, Дроссель,Стабилитрон,Блок,трансформаторов,Трансформатор,Микросхема";
-            words = words.ToUpper();    
+            words = words.ToUpper(); 
+         
             string[] garbageWords = words.Split(",");
 
             elementValue= elementValue.ToUpper();   
@@ -325,7 +350,23 @@ namespace Estimator.Helpers
 
                 elementValue = elementValue.Replace(garbageWords[i], "");
             }
-            return  elementValue.Split(" ");
+            // новая строка для записи строки без пробелов
+            string newstr = "";
+           
+            // цикл
+            for (int i = 0; i < elementValue.Length; i++)
+            {
+                char symvol = elementValue[i];  
+
+                // если елемент i-ый елемент специальный пробел то заменяем его на обыкновенный
+                if (char.IsWhiteSpace(symvol) && symvol != ' ')
+                {
+                    // - пишем его в новую строку "newstr"
+                    symvol = ' ';   
+                }
+                newstr += symvol;
+            }
+            return newstr.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
         /// <summary>
         /// расстояние левенштейна, https://habr.com/ru/articles/331174/

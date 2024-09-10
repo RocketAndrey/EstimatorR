@@ -67,6 +67,7 @@ namespace Estimator.Pages.CustomerRequests
                 CustomerRequest.ElementImport.CustomerRequest.CustomerRequestID = id;
                 
             }
+            CustomerRequest.UsePurchaseSetting = base.UsePurchaseSetting;
             this.SetCompanyHistory(year);
             // Родительская заявка
             if ((CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
@@ -210,6 +211,6 @@ namespace Estimator.Pages.CustomerRequests
         {
             return _context.CustomerRequests.Any(e => e.ParentCustomerRequestID == id);
         }
-
+      
     }
 }

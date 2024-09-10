@@ -115,38 +115,47 @@
         <div class="col">
         <div class="card mb-3">
             <div class="card-header">
+                    @if (Model.ElementImport.FileUploaded)
+                    {
+                      
+                            <a href="@Model.ElementImport.FileWWWPath">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-spreadsheet text-success" viewBox="0 0 16 16">
+                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z" />
+                                </svg>
+                            </a>
+                     
+                    }
                 Заявка&nbsp;@Model.ElementImport.CustomerRequestID .&nbsp;Импорт перечня из XLSX (эксель) файла.
             </div>
             <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                          <div class="form-row">
-                                
-                                    @if (Model.ElementImport.FileUploaded)
-                                    {
-                                    <div class="col-1">
-                                        <a href="@Model.ElementImport.FileWWWPath">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-spreadsheet text-success" viewBox="0 0 16 16">
-                                                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z" />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                    }
+                            @if (Model.UsePurchaseSetting)
+                            {
+                                <div class="form-row mb-3">
 
-                               
-                                <div class="col">
+                                    <div class="col">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" asp-for="@Model.UsePurchase" class="custom-control-input" id="customSwitch2">
+                                            <label class="custom-control-label" for="customSwitch2">Заявка с закупкой ЭКБ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-row">
+                                <div class="col-5">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" asp-for="@Model.ElementImport.UseLastCalculation" class="custom-control-input" id="customSwitch1">
                                         <label class="custom-control-label" for="customSwitch1">Искать элементы в предыдущих расчётах</label>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-5">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" asp-for="@Model.ElementImport.GroupSameTypes" class="custom-control-input" id="customSwitch2">
                                         <label class="custom-control-label" for="customSwitch2">Группировать повторяющиеся типы</label>
                                     </div>
                                 </div>
-                                <div class="col text-right" >
+                                <div class="col text-right">
                                     <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseKeys" role="button" aria-expanded="false" aria-controls="collapseKeys">
                                         Ключи
                                     </a>

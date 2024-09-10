@@ -34,6 +34,9 @@ namespace Estimator.Pages.CustomerRequests
         /// 1- загрузка файла,2- обработка данных,3- загрузка данных в базу
         /// </summary>
         public int ImportStep { get; set; }
+
+        [BindProperty]
+        public bool UsePurchase { get; set; }
         public string StepName
         {
             get
@@ -88,14 +91,7 @@ namespace Estimator.Pages.CustomerRequests
                     CustomerRequestID = id.Value
                 };
 
-                ElementImport.CustomerRequest =  await _context.CustomerRequests
-                                                        .Include(c => c.Customer)
-                                                        .Include(c => c.Program)
-                                                            .ThenInclude(c => c.ElementntTypes)
-                                                                .ThenInclude (c=>c.Keys)
-                                                      .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
                 
-                ElementImport.CustomerRequestID = (int)id;
 
                     }
             else
@@ -110,8 +106,20 @@ namespace Estimator.Pages.CustomerRequests
                     ElementImport.XLSXElementTypes = ElementImport.XLSXElementTypes.OrderBy(e => e.Valid).ToList();
                 }
             }
+            ElementImport.CustomerRequest =  await _context.CustomerRequests
+                                                        .Include(c => c.Customer)
+                                                        .Include(c => c.Program)
+                                                            .ThenInclude(c => c.ElementntTypes)
+                                                                .ThenInclude (c=>c.Keys)
+                                                      .FirstOrDefaultAsync(m => m.CustomerRequestID == id);
+            
+            ElementImport.CustomerRequest.UsePurchaseSetting = base.UsePurchaseSetting;
+
+            ElementImport.CustomerRequestID = (int)id;
             //обратная ссылка
-            ElementImport.CustomerRequest.ElementImport = ElementImport;    
+            ElementImport.CustomerRequest.ElementImport = ElementImport;
+
+            UsePurchase = ElementImport.CustomerRequest.UsePurchaseElements; 
 
             return Page();
         }
@@ -133,9 +141,9 @@ namespace Estimator.Pages.CustomerRequests
                                                 .Include(c => c.Customer)
                                                 .Include(c => c.Program)
                                                     .ThenInclude(c => c.ElementntTypes)
-            .ThenInclude(c => c.Keys)
+                                                     .ThenInclude(c => c.Keys)
                                               .FirstOrDefault(m => m.CustomerRequestID == ElementImport.CustomerRequestID);
-
+            ElementImport.CustomerRequest.UsePurchaseSetting = base.UsePurchaseSetting;
             if (ImportStep == 1)
             {
                 try
@@ -149,6 +157,7 @@ namespace Estimator.Pages.CustomerRequests
                     {
                         _context.Attach(ElementImport).State = EntityState.Modified;
                     }
+
                     if (uploadedFile != null)
                     {
                         //очищаем элементы,  мы загружаем их заного
@@ -225,6 +234,7 @@ namespace Estimator.Pages.CustomerRequests
                     //запоминаем кто отредактировать заявку
                     ElementImport.CustomerRequest.ModificateDate = System.DateTime.Now;
                     ElementImport.CustomerRequest.UseImport = true;
+                    ElementImport.CustomerRequest.UsePurchaseElements = UsePurchase; 
 
 
                     if (UserID > 0)
@@ -269,6 +279,8 @@ namespace Estimator.Pages.CustomerRequests
                 {
                     ElementImport.CustomerRequest.LastModificateUserID = UserID;
                 }
+
+                ElementImport.CustomerRequest.UsePurchaseElements = UsePurchase;
                 await _context.SaveChangesAsync();
 
 

@@ -210,8 +210,6 @@
 
         <div class="row">
             <div class="col">
-
-
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="@navs[1]" id="nav-item-tab1" data-toggle="tab" href="#nav-item1" role="tab" aria-controls="nav-item1" onclick="saveSelectedTab('1')" >Структура цены</a>
@@ -621,9 +619,10 @@
                                         </a>
                                    
                                 </div>
+
                                 <div class="form-row">
 
-
+                                    <div class="col"> 
                                     <table class="table table-bordered">
 
 
@@ -633,7 +632,8 @@
 
                                             <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].SuppliedCount)</th>
                                             <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].PurchasedCount)</th>
-                                            @if (Model.ElementImport.ImportElementPrice)
+
+                                            @if (Model.CustomerRequest.UsePurchaseElements)
                                             {
                                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].ElementPrice)</th>
                                                 <th>@Html.DisplayNameFor(model => model.ElementImport.XLSXElementTypes[0].TotalPrice)</th>
@@ -683,12 +683,13 @@
                                                         @item.PurchasedCount
                                                     </td>
                                                     
-                                                    @if (Model.ElementImport.ImportElementPrice)
+                                                    @if (Model.CustomerRequest.UsePurchaseElements)
                                                     {
                                                         <td>
-
-                                                            @{ (item.ElementPrice * (Model.CustomerRequest?.MaterialRate ?? 1)).ToString("F2");}
+                                                      
+                                                               @item.ElementPriceRated.ToString("F2")
                                                         </td>
+
                                                         <td>
 
                                                             @item.TotalPrice.ToString("F2")
@@ -803,6 +804,8 @@
 
                                         </tfoot>
                                     </table>
+                                    </div>
+
                                 </div>
                             </div>
                         }

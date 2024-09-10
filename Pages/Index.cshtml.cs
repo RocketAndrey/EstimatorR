@@ -16,8 +16,8 @@ namespace Estimator.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            RedirectToPage("./CustomerRequest/Index");
-            return Page();
+            //return RedirectToPage("/CustomerRequest/Index");
+           return Page();
         }
     }
 }

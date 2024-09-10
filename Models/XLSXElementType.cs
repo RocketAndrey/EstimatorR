@@ -10,6 +10,8 @@ using MathNet.Numerics;
 using NuGet.Packaging.Signing;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Math.EC.Multiplier;
+using Estimator.Helpers;
+using NPOI.OpenXml4Net.OPC.Internal;
 
 namespace Estimator.Models
 {
@@ -186,8 +188,10 @@ namespace Estimator.Models
                     {
                         if (ElementName != null)
                         { 
+                            ElementName= Funct.PrepareWhiteSpaces(ElementName); 
                         //ищем в названии
-                        string[] words = ElementName.Split(" ");
+                        string[] words = ElementName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
 
                         foreach (string word in words)
                         {
@@ -374,7 +378,13 @@ namespace Estimator.Models
                 _elementPrice = value;
             } 
         }
-
+        public decimal ElementPriceRated
+        {
+            get
+            {
+                return ElementPrice * ElementImport?.CustomerRequest?.MaterialRate?? 1;  
+            }
+        }
         [Display(Name = "Цена закупки партии,руб.")]
         [Column(TypeName = "decimal(18, 4)")]
         [DefaultValue(0)]
@@ -382,7 +392,8 @@ namespace Estimator.Models
         {
             get
             {
-                return ElementPrice * PurchasedCount * (ElementImport?.CustomerRequest?.MaterialRate ?? 1); 
+                //если элемент исключен те не считаем стоимость его закупки
+                return (Included? ElementPrice : 0) * PurchasedCount * (ElementImport?.CustomerRequest?.MaterialRate ?? 1); 
                 
             }
                 

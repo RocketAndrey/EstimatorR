@@ -1,18 +1,12 @@
 ﻿
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using NPOI.SS.Formula.Functions;
-using NPOI.Util;
-using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
+using System.Security.Policy;
 
 namespace Estimator.Models
 {
@@ -28,6 +22,7 @@ namespace Estimator.Models
         private List<RequestOperationGroup> _operationGroups;
         private bool _useimport;
         private bool _usePurchase;
+        private bool _usePurchaseSetting =  true ;
         public CustomerRequest()
         {
             CompanyHistory = new CompanyHistory();
@@ -75,6 +70,8 @@ namespace Estimator.Models
         { 
             get
             {
+                if(!_usePurchaseSetting) return false;  
+
                 if(UseImport)
                 {
                    if (this.ElementImport?.ImportElementPrice?? false)
@@ -552,6 +549,7 @@ namespace Estimator.Models
         {
         get
             {
+                //сторонние + ПКИ + стоимость оснастки
                 return ServicesCost + PartsCost + AccessoriesCost;
             }
         }
@@ -586,12 +584,15 @@ namespace Estimator.Models
         {
             get
             {
+                //нет закупки- нет стоимости
+                if (!UsePurchaseElements) return 0;
 
                 decimal result = 0;
                 if (this?.ElementImport?.XLSXElementTypes != null)
                 {
                     foreach (XLSXElementType type in this?.ElementImport?.XLSXElementTypes)
                     {
+                       
                         result += type.TotalPrice;
                     }
                 }
@@ -1018,7 +1019,21 @@ namespace Estimator.Models
             get;
             set;
         }
-
+        [NotMapped]
+        /// <summary>
+        /// Включает настройку не использовать механизм закупки
+        /// </summary>
+        public bool UsePurchaseSetting
+        {
+            get
+            {
+                return _usePurchaseSetting; 
+            }
+             set
+            {
+                _usePurchaseSetting = value;
+            } 
+        }   
 
 
     }

@@ -133,5 +133,13 @@ namespace Estimator.Pages
             }
             return errorMessages;
         }
+        public bool UsePurchaseSetting
+        {
+            get
+            {
+                return bool.Parse(_configuration.GetSection("UsePurchase")["value"]);
+            }
+        }
     }
 }
+
