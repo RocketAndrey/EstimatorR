@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Linq;
+//using Estimator.Migrations;
 
 namespace Estimator.Helpers
 {
@@ -31,7 +32,8 @@ namespace Estimator.Helpers
         public int _selQuality { get; set; }
         public int _selDescrip { get; set; }
         public int _selTechCond { get; set; }
-
+        public List<int> _position = new List<int>();
+        public int _PriceItemTypeID { get; set; }
         public List<Company> addFactory;
 
         public List<RuChipsDB> addDirVniir;
@@ -81,7 +83,21 @@ namespace Estimator.Helpers
 
             context = db;
         }
+        public HandlerImport(string path_File, int selRow, List <int> position, int selName, int selCost, int selStandartPack, int selStandartDelivery, int selTimeDelivery, int PriceItemTypeID, int PriceListID, Data.EstimatorContext db)
+        {
+            _path_File = path_File;
+            _selRow = selRow;
+            _position = position;
+            _selName = selName;
+            _selCost = selCost;
+            _selStandartPack = selStandartPack;
+            _selStandartDelivery = selStandartDelivery;
+            _selTimeDelivery = selTimeDelivery;
+            _PriceItemTypeID = PriceItemTypeID;
+            _PriceListId=PriceListID;
 
+            context = db;
+        }
         public List<Company> ImportFileManufacturer()
         {
             try
@@ -124,7 +140,7 @@ namespace Estimator.Helpers
             }
             return addFactory;
         }
-        public List<RuChipsDB> ImportFileRuChips()
+        public List<Models.RuChipsDB> ImportFileRuChips()
         {
             try
             {
@@ -264,6 +280,128 @@ namespace Estimator.Helpers
             }
             return addPrice;
         }
+
+
+        public List<Price> ImportFileDiffPrice()
+        {
+            //System.Diagnostics.Debug.WriteLine("HanImport___");
+
+            //System.Diagnostics.Debug.WriteLine("path= "+ _path_File);
+            //System.Diagnostics.Debug.WriteLine("sel_row= " + _selRow);
+           
+
+            //System.Diagnostics.Debug.WriteLine("selName= " + _selName);//
+            //System.Diagnostics.Debug.WriteLine("selCost"+_selCost);//
+            //System.Diagnostics.Debug.WriteLine("selStandartPack" + _selStandartPack);//
+            //System.Diagnostics.Debug.WriteLine("selStandartDelivery" + _selStandartDelivery);//
+            //System.Diagnostics.Debug.WriteLine("selTimeDelivery" + _selTimeDelivery);//
+
+            //System.Diagnostics.Debug.WriteLine("__positionS");
+            //foreach (var x in _position)
+            //    System.Diagnostics.Debug.WriteLine(x);
+            //System.Diagnostics.Debug.WriteLine("__positionE");
+
+            //System.Diagnostics.Debug.WriteLine("priceItemType = " + _PriceItemTypeID);//
+            //System.Diagnostics.Debug.WriteLine("priceListId = " + _PriceListId); //
+
+
+            try
+            {
+                // Открытие существующей рабочей книги
+                IWorkbook workbook;
+
+                using (FileStream fileStream = new FileStream(_path_File, FileMode.Open, FileAccess.Read))
+                {
+                    workbook = new XSSFWorkbook(fileStream);
+                }
+
+                ISheet worksheet = workbook.GetSheetAt(0);
+
+                var rowCount = worksheet.LastRowNum;
+
+                addPrice = new List<Price>();
+
+                for (int row = _selRow - 2; row <= rowCount; row++)
+                {
+                    IRow row_Line = worksheet.GetRow(row);
+                    if (row_Line.GetCell(_selName - 1) != null)
+                    {
+
+                        int tmp_VniirId;
+
+                        //Проверка на существоание компании в "Справочнике ВНИИР"
+                        if (context.DirVniir.FirstOrDefault(x => x.Name == row_Line.GetCell(_selName - 1).ToString()) != null)
+                            tmp_VniirId = context.DirVniir.FirstOrDefault(x => x.Name == row_Line.GetCell(_selName - 1).ToString()).Id;
+                        else tmp_VniirId = 0;
+
+                        int tmp_SD;
+                        if (row_Line.GetCell(_selStandartDelivery - 1) == null)
+                            tmp_SD = 1;
+                        else int.TryParse(row_Line.GetCell(_selStandartDelivery - 1).ToString(), out tmp_SD);
+
+                        int tmp_SP;
+                        if (row_Line.GetCell(_selStandartPack - 1) == null)
+                            tmp_SP = 1;
+                        else int.TryParse(row_Line.GetCell(_selStandartPack - 1).ToString(), out tmp_SP);
+
+                        double tmp_Price;
+                        if (row_Line.GetCell(_selCost - 1).CellType == CellType.Formula)
+                            tmp_Price = row_Line.GetCell(_selCost - 1).NumericCellValue;
+                        else tmp_Price = double.Parse(row_Line.GetCell(_selCost - 1).ToString());
+
+                        int tmp_DeliveryTime;
+                        if (_selTimeDelivery == 0)
+                            tmp_DeliveryTime = 0;
+                        else tmp_DeliveryTime=int.Parse(row_Line.GetCell(_selTimeDelivery - 1).ToString());
+
+
+                        List <string> tmp_Property = new List<string>();
+                        for (int i = 0; i < 15; i++)
+                        {
+                            if (_position.ElementAtOrDefault(i) != 0)
+                                tmp_Property.Add(row_Line.GetCell(_position.ElementAt(i)-1).ToString());
+                            else tmp_Property.Add(null);
+                        }
+
+                        addPrice.Add(new Price()
+                        {
+                            PriceListId = _PriceListId,//obz
+                            VniirId = tmp_VniirId,
+                            Name = row_Line.GetCell(_selName - 1).ToString(),
+                            Cost = tmp_Price,//obz
+                            MinPackingSize = tmp_SD,//obz
+                            PackingSample = tmp_SP,//obz
+                            DeliveryTime = tmp_DeliveryTime,
+                            PriceItemTypeId = _PriceItemTypeID,
+                            Property0 = tmp_Property.ElementAtOrDefault(0),
+                            Property1 = tmp_Property.ElementAtOrDefault(1),
+                            Property2 = tmp_Property.ElementAtOrDefault(2),
+                            Property3 = tmp_Property.ElementAtOrDefault(3),
+                            Property4 = tmp_Property.ElementAtOrDefault(4),
+                            Property5 = tmp_Property.ElementAtOrDefault(5),
+                            Property6 = tmp_Property.ElementAtOrDefault(6),
+                            Property7 = tmp_Property.ElementAtOrDefault(7),
+                            Property8 = tmp_Property.ElementAtOrDefault(8),
+                            Property9 = tmp_Property.ElementAtOrDefault(9),
+                            Property10 = tmp_Property.ElementAtOrDefault(10),
+                            Property11 = tmp_Property.ElementAtOrDefault(11),
+                            Property12 = tmp_Property.ElementAtOrDefault(12),
+                            Property13 = tmp_Property.ElementAtOrDefault(13),
+                            Property14 = tmp_Property.ElementAtOrDefault(14),
+                            Property15 = tmp_Property.ElementAtOrDefault(15)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                //Message = "Error while parsing the file. Check the column order and format.";
+                //return Page();
+            }
+            return addPrice;
+        }
+
 
         public List<string> takeData(string _path)
         {

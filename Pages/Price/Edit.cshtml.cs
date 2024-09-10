@@ -13,6 +13,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
+using Estimator.Migrations;
+using NPOI.SS.Formula.Functions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Estimator.Pages.Price
 {
@@ -27,7 +31,11 @@ namespace Estimator.Pages.Price
 
         [BindProperty]
         public PriceList PriceList { get; set; }
-
+        public bool _isSimple {  get; set; }
+        public bool _isAccessImport = true;
+        
+        public List<string> ListPropety = new List<string>();
+        public List<string> ListElementPropetyName = new List<string>();
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             ErrorMessage = String.Empty; 
@@ -37,6 +45,7 @@ namespace Estimator.Pages.Price
             if (id == null)
             {
                PriceList = new PriceList ();
+               _isAccessImport = false;
             }
             else
             {
@@ -45,11 +54,28 @@ namespace Estimator.Pages.Price
                 .Include (e=>e.Manufacture)
                 .Include (e=>e.PriceItemType).ThenInclude(e=>e.PricePropertyNames)
                 .FirstOrDefaultAsync(m => m.PriceListId == id);
+
+
+                int priceItemType = _context.PriceLists.First(x => x.PriceListId == id).PriceItemTypeID;
+                var PricePropertyName = _context.PriceItemType.Include(e => e.PricePropertyNames.Where(e => e.PriceItemTypeId == priceItemType)).ToList();
+
+                _isSimple = PricePropertyName.ElementAt(0).PricePropertyNames.IsNullOrEmpty();
+
+                var PropertyName = _context.PriceItemType.Include(e => e.PricePropertyNames).Where(c => c.PriceItemTypeID == priceItemType); //Получаем свойства элемента по ID
+                foreach (var x in PropertyName)
+                {
+                    foreach (var y in x.PricePropertyNames)
+                    {
+                        ListPropety.Add(y.PropertyName);
+                        ListElementPropetyName.Add(y.ElementPropertyName);                        
+                    }
+                }               
+
             }
 
             ViewData["companyList"] = new SelectList(_context.Companies.OrderBy(e => e.Name), "Id", "Name");
-            ViewData["PriceTypes"] = new SelectList (_context.PriceItemType, "PriceItemTypeID", "PriceItemTypeName");  
-        
+            ViewData["PriceTypes"] = new SelectList (_context.PriceItemType, "PriceItemTypeID", "PriceItemTypeName");
+            
 
             if (PriceList == null)
             {
