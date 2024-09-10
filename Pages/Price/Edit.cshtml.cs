@@ -55,11 +55,13 @@ namespace Estimator.Pages.Price
                 .Include (e=>e.PriceItemType).ThenInclude(e=>e.PricePropertyNames)
                 .FirstOrDefaultAsync(m => m.PriceListId == id);
 
-
                 int priceItemType = _context.PriceLists.First(x => x.PriceListId == id).PriceItemTypeID;
-                var PricePropertyName = _context.PriceItemType.Include(e => e.PricePropertyNames.Where(e => e.PriceItemTypeId == priceItemType)).ToList();
+               
+                var PricePropertyName = _context.PriceItemType.Include(e => e.PricePropertyNames).Where(e => e.PriceItemTypeID == priceItemType).ToList();
 
                 _isSimple = PricePropertyName.ElementAt(0).PricePropertyNames.IsNullOrEmpty();
+
+                System.Diagnostics.Debug.WriteLine("213213123123_" + _isSimple);
 
                 var PropertyName = _context.PriceItemType.Include(e => e.PricePropertyNames).Where(c => c.PriceItemTypeID == priceItemType); //Получаем свойства элемента по ID
                 foreach (var x in PropertyName)
@@ -150,9 +152,9 @@ namespace Estimator.Pages.Price
                 ErrorMessage = ex.Message;
                 return Page();
             }
-            return Page();
+            //return Page();
 
-           // return RedirectToPage("./Index");
+            return RedirectToPage("./Edit", new { id = PriceList.PriceListId });
         }
         public async Task<IActionResult> OnPostDeleteAsync()
         {
@@ -161,7 +163,11 @@ namespace Estimator.Pages.Price
 
                 try
                 {
-                    _context.PriceLists.Remove(PriceList);
+                    PriceList forDeletePriceList = _context.PriceLists
+                    .Include(a => a.PriceItems)
+                    .FirstOrDefault(m => m.PriceListId == PriceList.PriceListId);
+
+                    _context.PriceLists.Remove(forDeletePriceList);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex) 

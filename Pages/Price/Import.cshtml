@@ -199,11 +199,11 @@
     </p>
     <p>
         <label>Норма упаковки:</label>
-        <select name="SelectedStandartPack" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+        <select name="SelectedStandartPack" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNamesDifficult>()"></select>
     </p>
     <p>
         <label>Норма поставки:</label>
-        <select name="SelectedStandartDelivery" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNames>()"></select>
+        <select name="SelectedStandartDelivery" asp-for="@Model._codeCol" asp-items="Html.GetEnumSelectList<ImportModel.ColumnNamesDifficult>()"></select>
     </p>
     <p>
         <label>Срок поставки:</label>
