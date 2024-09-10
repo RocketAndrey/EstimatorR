@@ -97,7 +97,8 @@
                                 </svg>
                             
                         </a>
-                          @if(item.UsePurchase)
+                        
+                          @if(item.UsePurchase && Model.UsePurchaseSetting)
                             {
                                 <a asp-page="./Purchase" asp-route-id="@item.CustomerRequestID" data-toggle="tooltip" data-placement="bottom" title="Закупка ЭКБ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-kanban" viewBox="0 0 20 20">

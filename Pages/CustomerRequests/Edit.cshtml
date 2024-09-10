@@ -125,7 +125,7 @@
     <div class="col mb-3">
 
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header">
                     Pедактирование заявки&nbsp;@Model.CustomerRequest.CustomerRequestID:
                 </div>
@@ -273,15 +273,17 @@
                                     <a class="btn btn-outline-success" id="importButton" asp-page="./Import" asp-route-id="@Model.CustomerRequest.CustomerRequestID">
                                         @btnText
                                     </a>
-                                
-                            }
 
+                                }
+
+                            </div>
                         </div>
                     </div>
-                    </div>
                 </div>
-             </div>
-            <div class="card" id="PurchaseCard">
+            </div>
+            @if (Model.UsePurchaseSetting)
+            {
+                <div class="card" id="PurchaseCard">
                     <div class="card-header">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" asp-for="@Model.CustomerRequest.UsePurchaseElements" class="custom-control-input" id="customSwitchUsePurchaseElements"
@@ -317,6 +319,7 @@
                     </div>
 
             </div>
+            }
             <div class="card" id="SubmitCard">
                  <div class="card-body">
                    
@@ -345,9 +348,9 @@
 </div>
 
     <div class="row mb-3">
-            <div class="col mb-3">
+    <div class="col mb-3">
     <div class="accordion" id="accordionRequestTypes">
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header" id="headingTwo">
                 <h4 class="mb-0">
                     <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -397,7 +400,7 @@
             
     </div>
     </div>
-    <div class="row" mb-3>
+    <div class="row mb-3">
      <div class="col">
     @if (Model.CustomerRequest.Program.AllowEditChain)
     {
