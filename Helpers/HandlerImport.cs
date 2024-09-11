@@ -335,12 +335,12 @@ namespace Estimator.Helpers
                         else tmp_VniirId = 0;
 
                         int tmp_SD;
-                        if (row_Line.GetCell(_selStandartDelivery - 1) == null)
+                        if (_selStandartDelivery == 0)
                             tmp_SD = 1;
                         else int.TryParse(row_Line.GetCell(_selStandartDelivery - 1).ToString(), out tmp_SD);
 
                         int tmp_SP;
-                        if (row_Line.GetCell(_selStandartPack - 1) == null)
+                        if (_selStandartPack == 0)
                             tmp_SP = 1;
                         else int.TryParse(row_Line.GetCell(_selStandartPack - 1).ToString(), out tmp_SP);
 
