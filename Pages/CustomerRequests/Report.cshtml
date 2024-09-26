@@ -381,18 +381,33 @@
                                     <td> @Model.CustomerRequest.ChildCustomerRequest.PensionTax.ToString("N2")  </td>
                                 }
                             </tr>
+                        <tr>
+                            <td>0800</td>
+                            <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.ProductionExpenses.ToString("N2")%)</td>
+                            @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
+                            {
+                                <td>@Model.CustomerRequest.ParentCustomerRequest.ProductionExpenses.ToString("N2") </td>
+                            }
+                            <td>@Model.CustomerRequest.ProductionExpenses.ToString("N2") </td>
+                            @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
+                            {
+                                <td>
+                                    @Model.CustomerRequest.ChildCustomerRequest.ProductionExpenses.ToString("N2")
+                                </td>
+                            }
+                        </tr>
                             <tr>
                                 <td>0900</td>
-                                <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.OverHead.ToString("N2")%)</td>
+                                <td>Общехозяйственные затраты, руб (@Model.CustomerRequest.CompanyHistory.GeneralionExpenses.ToString("N2")%)</td>
                                 @if ((Model.CustomerRequest.ParentCustomerRequestID ?? 0) != 0)
                                 {
-                                    <td>@Model.CustomerRequest.ParentCustomerRequest.OverHead.ToString("N2") </td>
+                                    <td>@Model.CustomerRequest.ParentCustomerRequest.GeneralionExpenses.ToString("N2") </td>
                                 }
-                                <td>@Model.CustomerRequest.OverHead.ToString("N2") </td>
+                            <td>@Model.CustomerRequest.GeneralionExpenses.ToString("N2") </td>
                                 @if ((Model.CustomerRequest.ChildCustomerRequestID ?? 0) != 0)
                                 {
                                     <td>
-                                        @Model.CustomerRequest.ChildCustomerRequest.OverHead.ToString("N2")
+                                    @Model.CustomerRequest.ChildCustomerRequest.GeneralionExpenses.ToString("N2")
                                     </td>
                                 }
                             </tr>

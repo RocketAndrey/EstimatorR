@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Estimator.Models
@@ -9,6 +10,8 @@ namespace Estimator.Models
 
     public class CompanyHistory
     {
+        private decimal _overhead; 
+        private decimal _gExpences;
         public CompanyHistory()
         {
             //YearOfNorms = 2019;
@@ -38,7 +41,50 @@ namespace Estimator.Models
         /// Накладные расходы (в % от основной заработной платы)
         /// </summary>
         [Column(TypeName = "decimal(18, 4)")]
-        public decimal OverHead { get; set; }
+        public decimal OverHead 
+        {
+            get
+            {
+                if (_overhead == 0)
+                {
+                    return GeneralionExpenses + ProductionExpenses;
+                }
+                else
+                {
+                    return _overhead;   
+                }
+            }
+            set
+            {
+                _overhead = value;
+            }
+            
+        }
+        /// <summary>
+        /// Общепроизводственные затраты 
+        /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal ProductionExpenses {  get; set; }
+        /// <summary>
+        /// Общехозяйственные  затраты 
+        /// </summary>
+        [Column(TypeName = "decimal(18, 4)")]
+
+        public decimal GeneralionExpenses 
+        {
+            get
+            {
+                if (_overhead == 0 && _gExpences > 0 )
+                {
+                    return _gExpences;
+                } 
+               return _overhead;    
+            }
+            set
+            {
+                _gExpences = value;
+            }
+        }
         /// <summary>
         ///  Рентабельность (в %) от собственной себестоимости  
         /// </summary>
@@ -99,7 +145,7 @@ namespace Estimator.Models
         {
             get
             {
-                return (1 + AdditionalSalary / 100 + (1 + AdditionalSalary / 100) * PensionTax / 100 + OverHead / 100) * (1 + Margin / 100);
+                return (1 + AdditionalSalary / 100 + (1 + AdditionalSalary / 100) * PensionTax / 100 + GeneralionExpenses / 100+ ProductionExpenses / 100) * (1 + Margin / 100);
             }
         }
     }

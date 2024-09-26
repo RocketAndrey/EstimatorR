@@ -19,6 +19,11 @@ namespace Estimator.Models
         [Required(ErrorMessage = "Введите наименование прейскуранта!")]
         [Display(Name = "Наименование прейскуранта")]
         public string Name { get; set; }
+
+       
+        [Display(Name = "Виды изделий в прайсе,через точку с запятой")]
+        public string ElementName { get; set; }
+
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Введите начало действия прейскуранта!")]

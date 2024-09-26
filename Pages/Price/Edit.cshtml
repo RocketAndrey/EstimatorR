@@ -99,6 +99,14 @@
                 </div>
                
             </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label asp-for="PriceList.ElementName" class="control-label">@Html.DisplayNameFor(m => m.PriceList.ElementName)</label>
+                            <input asp-for="PriceList.ElementName" class="form-control" />
+                            <span asp-validation-for="PriceList.ElementName" class="text-danger"></span>
+                        </div>
+
+                    </div>
             <div class="row form-group">
                         <div class="col">
                             <label for="PriceTypesId" class="control-label">@Html.DisplayNameFor(m => m.PriceList.PriceItemTypeID)</label>
@@ -223,7 +231,7 @@
                         columns.Add(model => model.MinPackingSize).Titled("МП").Sortable(true);
                         columns.Add(model => model.PackingSample).Titled("НУ").Sortable(true);
                         columns.Add(model => model.DeliveryTime).Titled("Срок, дней").Sortable(false);
-                        columns.Add(model => model.Cost).Titled("Цена, руб.").Sortable(false);
+                        columns.Add(model => model.Cost).Titled("Цена, руб.").Sortable(false).Formatted("{0:f2}");
 
                         if (Model._isSimple == false)
                         {                            

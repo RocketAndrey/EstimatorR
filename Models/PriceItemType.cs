@@ -11,8 +11,6 @@ namespace Estimator.Models
 
         public string PriceItemTypeName { get; set; }
 
-     
-
         public List<PricePropertyName> PricePropertyNames { get; set; }
 
 

@@ -4,6 +4,7 @@ using Estimator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estimator.Migrations
 {
     [DbContext(typeof(EstimatorContext))]
-    partial class EstimatorContextModelSnapshot : ModelSnapshot
+    [Migration("20240926092523_ProductionExpenses")]
+    partial class ProductionExpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -266,25 +269,6 @@ namespace Estimator.Migrations
                     b.HasIndex("TestProgramID");
 
                     b.ToTable("CustomerRequests", (string)null);
-                });
-
-            modelBuilder.Entity("Estimator.Models.Deflator", b =>
-                {
-                    b.Property<int>("DeflatorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeflatorID"));
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("DeflatorID");
-
-                    b.ToTable("Deflators");
                 });
 
             modelBuilder.Entity("Estimator.Models.ElementImport", b =>
