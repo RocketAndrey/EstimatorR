@@ -140,6 +140,13 @@ namespace Estimator.Pages
                 return bool.Parse(_configuration.GetSection("UsePurchase")["value"]);
             }
         }
+        public string AppVersion
+        {
+            get
+            {
+                return (_configuration.GetSection("AppVersion")["value"]);
+            }
+        }
     }
 }
 

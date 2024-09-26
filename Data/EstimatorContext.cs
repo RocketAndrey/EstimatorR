@@ -38,7 +38,7 @@ namespace Estimator.Data
         public DbSet <Estimator.Models.XLSXElementType> XLSXElementTypes { get; set; }
         public DbSet<Estimator.Models.ElementPriceHistory> ElementPriceHistory { get; set; }
         public DbSet<Estimator.Models.PriceItemType> PriceItemType { get; set; }
-
+        public DbSet<Estimator.Models.Deflator> Deflators { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>().ToTable("Customer");

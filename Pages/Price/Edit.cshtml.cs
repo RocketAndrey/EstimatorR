@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Estimator.Migrations;
 using NPOI.SS.Formula.Functions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.AccessControl;
 
 namespace Estimator.Pages.Price
 {
@@ -97,11 +98,15 @@ namespace Estimator.Pages.Price
             }
             if (PriceList.PriceListId == 0)
             {
+
+              
+
                 _context.PriceLists.Add(PriceList);
             }
             else
-            { 
-               _context.Attach(PriceList).State = EntityState.Modified;
+            {
+                PriceList.PriceItemType.PriceItemTypeID = PriceList.PriceItemTypeID;
+                _context.Attach(PriceList).State = EntityState.Modified;
         }
             try
             {

@@ -693,11 +693,23 @@ namespace Estimator.Models
         /// </summary>
         [NotMapped]
         [Display(Description = "0900", Name = "Общехозяйственные затраты ")]
-        public decimal OverHead
+        public decimal GeneralionExpenses
         {
             get
             {
-                return Math.Round(CompanyHistory.OverHead / 100 * BasicSalary,0);
+                return Math.Round(CompanyHistory.GeneralionExpenses / 100 * BasicSalary,0);
+            }
+        }
+        /// <summary>
+        /// накладные расходы (Общехозяйственные затраты )
+        /// </summary>
+        [NotMapped]
+        [Display(Description = "0800", Name = "Общепроизводственные  затраты ")]
+        public decimal ProductionExpenses
+        {
+            get
+            {
+                return Math.Round(CompanyHistory.ProductionExpenses / 100 * BasicSalary, 0);
             }
         }
         /// <summary>
@@ -722,7 +734,7 @@ namespace Estimator.Models
         {
             get
             {
-                return   TotalSalary + PensionTax + OverHead;
+                return   TotalSalary + PensionTax + ProductionExpenses+GeneralionExpenses;
             }
         }
       
@@ -735,7 +747,7 @@ namespace Estimator.Models
         {
             get
             {
-                return MaterialCost+TotalSalary + PensionTax + OverHead;
+                return MaterialCost+TotalSalary + PensionTax + ProductionExpenses+GeneralionExpenses;
             }
         }
         [NotMapped]
