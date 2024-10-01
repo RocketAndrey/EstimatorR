@@ -58,11 +58,21 @@
                     </div>
                     <div class="form-group row">
                         <div class="col">
-                          
-                            <div class="btn-group" role="group" >
+                         @if (Model.isAdministrator)
+                           
+               {
+                            <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group mr-2" role="group">
                                 <input type="button" class="btn btn-outline-danger" value="Удалить" data-toggle="modal" data-target="#deleteModal" />
-                                <input type="submit" class="btn btn-outline-primary" value="Сохранить" />
+                                            
                             </div>
+                                    <div class="btn-group mr-2" role="group">
+                                        <input type="submit" class="btn btn-outline-primary" value="Сохранить" />
+                                    </div> 
+
+                            </div>
+                       
+
                             <!-- Modal -->
                             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -91,10 +101,14 @@
                                 </div>
                             </div>
 
+                                </div>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary" asp-page="./Index"> К списку</a>
+
+                            }
                         </div>
-
-
-                    </div>
                 </div>
             </div>
         </div>

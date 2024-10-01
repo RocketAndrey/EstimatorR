@@ -1,9 +1,9 @@
-use   Estimator
+use   u1000209_ESTIMATOR
 
 
 declare @scriptNumber int, @year int;
 declare @scriptName nvarchar (100);
-select @scriptName = N'08_Программы испытаний для работы с справлочником ВНИИР';
+select @scriptName = N'08_TestProgramRuchipsDB';
 select @scriptNumber = 08;
 
 BEGIN TRANSACTION

@@ -155,7 +155,7 @@ namespace Estimator.Pages.Price
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
-                return Page();
+           
             }
             //return Page();
 

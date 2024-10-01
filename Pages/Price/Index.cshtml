@@ -22,15 +22,24 @@
     <div class="col">
 
     <form method="post">
+     
         @(
             Html.Grid(Model.PriceList).Build(columns =>
             {
-                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><svg class=\"bi\" width=\"16\" height=\"16\"><use href=\"#bi-pencil-square\"></use></svg></a>");
+                columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><svg class=\"bi\" width=\"20\" height=\"20\"><use href=\"#bi-pencil-square\"></use></svg></a>");
                 columns.Add(model => model.Name).Titled("Наименование").Sortable(true);
                 columns.Add(model => model.Manufacture.Name).Titled("Производитель").Sortable(true);
                 columns.Add(model => model.DateStart.Date.ToShortDateString()).Titled("Дата введения").Sortable(true);
                 columns.Add(model => model.DateEnd.Date.ToShortDateString()).Titled("Дата окончания").Sortable(true);
-                columns.Add(model => model.Description).Titled("Описание").Sortable(false);
+                    columns.Add().Encoded(false).RenderedAs(model => $"<a href='/uploads/prices/{model.ScanOfPrice}' target = \"_blank\"><svg xmlns = \"http://www.w3.org/2000/svg\" class=\"bi bi-file-earmark-pdf-fill\" width=\"20\" height=\"20\"><use href = \"#bi-file-earmark-pdf-fill\" ></use ></svg ></a>");
+                @* columns.Add(model => model.Description).Titled("Описание").Sortable(false); *@
+
+
+           @*      < a href = "~/uploads/prices/@Model.PriceList.ScanOfPrice" target = "_blank" class="text-decoration-none">
+            <svg xmlns = "http://www.w3.org/2000/svg" class="bi bi-file-earmark-pdf-fill" width="20" height="20"><use href = "#bi-file-earmark-pdf-fill" ></ use ></ svg >
+            Скан прайса(*.pdf)
+            </a>
+            } *@
                 //Edit
                 @* columns.Add().Encoded(false).RenderedAs(model => $"<a href='/Price/Edit/?id={model.PriceListId}'><img src=\"/edit.png\"/></a>"); *@
                 //Delete

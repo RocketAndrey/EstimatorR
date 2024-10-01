@@ -125,49 +125,35 @@
                         </div>
                 </div>
                <div class="row form-group">
-                        <div class="col">
-                            <label for="uploadedFile" class="control-label">Для изменения файла - выберите новый</label>
-                            <input type="file" name="uploadedFile" accept="*.pdf" class="form-control" />
+                        <div class="col text-right">
 
-                        </div>
-                        <div class="col">
-                            @if((Model.PriceList.ScanOfPrice??"") != "")
-                            {
-                                <a href="~/uploads/prices/@Model.PriceList.ScanOfPrice" target="_blank" class="text-decoration-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-file-earmark-pdf-fill" width="20" height="20"><use href="#bi-file-earmark-pdf-fill"></use></svg>
-                                    Скан прайса(*.pdf)
-                                </a>
-                            }
-                            
-                            </div>
-                      
-
-            </div>
-            <div class="form-group row">
-                <div class="col">
-                    
-                          
                             <div class="btn-toolbar" role="toolbar" aria-label="dsds">
                                 @if (Model.isAdministrator)
                                 {
-                                    @if (Model._isAccessImport)
-                                    {
-                                        <div class="btn-group mr-2" role="group">
-                                            <a class="btn btn-outline-success" asp-page="import" asp-route-id="@Model.PriceList.PriceListId">
-                                                Импортировать
-                                            </a>
-                                        </div>                                        
-                                    }
-                                    <div class="btn-group mr-2" role="group">
-                                        <button type="button" class="btn btn-outline-danger" value="Удалить" data-toggle="modal" data-target="#deleteModal">
-                                            Удалить
-                                        </button>
-                                    </div>
-
-                                    <div class="btn-group mr-2" role="group">
-
+                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                         <input type="submit" class="btn btn-outline-primary" value="Сохранить" asp-page-handler="Save" />
+
+                                        @* //только для администратора *@
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            </button>
+
+
+                                            <div class="dropdown-menu">
+                                                @if (Model._isAccessImport)
+                                                {
+                                                    <a class="dropdown-item" asp-page="import" asp-route-id="@Model.PriceList.PriceListId">
+                                                        Импортировать
+                                                    </a>
+                                                }
+                                                <button type="button" class="dropdown-item" value="Удалить" data-toggle="modal" data-target="#deleteModal">
+                                                    Удалить
+                                                </button>
+                                            </div>
+                                        </div>
+
                                     </div>
+
                                 }
                             </div>
                             <!-- Modal -->
@@ -185,26 +171,48 @@
                                         </div>
                                         <div class="modal-footer">
                                             <div class="btn-toolbar" role="toolbar" aria-label="dsds">
-                                            <div class="btn-group mr-2" role="group">
+                                                <div class="btn-group mr-2" role="group">
 
-                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Закрыть</button>
+                                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Закрыть</button>
                                                 </div>
-                                                
+
                                                 @if (Model.isAdministrator && Model.PriceList?.PriceListId > 0)
                                                 {
                                                     <div class="btn-group mr-2" role="group">
 
-                                                    <input type="submit" class="btn btn-outline-danger" class="btn btn-outline-primary" value="Удалить" asp-page-handler="Delete" />
-                                                    </div> 
+                                                        <input type="submit" class="btn btn-outline-danger" class="btn btn-outline-primary" value="Удалить" asp-page-handler="Delete" />
+                                                    </div>
                                                 }
-                                               
+
                                             </div>
-                                            </div> 
                                         </div>
                                     </div>
                                 </div>
-                </div>
-            </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            @if ((Model.PriceList.ScanOfPrice ?? "") != "")
+                            {
+                                <a href="~/uploads/prices/@Model.PriceList.ScanOfPrice" target="_blank" class="text-decoration-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-file-earmark-pdf-fill" width="40" height="40"><use href="#bi-file-earmark-pdf-fill"></use></svg>
+                                    Скан прайса(*.pdf)
+                                </a>
+                            }
+
+                        </div>
+                   @if(Model.isAdministrator)
+                   {
+                        <div class="col">
+                            @* <label for="uploadedFile" class="control-label">Для изменения файла - выберите новый</label> *@
+                            <input type="file" name="uploadedFile" accept="*.pdf" class="form-control" />
+
+                        </div>
+                   }
+                      
+               
+
+                    </div>
+           
            
             </div>
 

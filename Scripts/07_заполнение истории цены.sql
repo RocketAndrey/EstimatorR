@@ -1,9 +1,9 @@
-use   Estimator
+use   u1000209_ESTIMATOR
 
 
 declare @scriptNumber int, @year int;
 declare @scriptName nvarchar (100);
-select @scriptName = N'07_заполнение истории цены ';
+select @scriptName = N'07_fillPriceHistory ';
 select @scriptNumber = 07;
 
 BEGIN TRANSACTION

@@ -83,7 +83,12 @@
         <thead>
             @for (var i = 0; i < Model.size; i++)
             {
-            <th>@Model.alpha.ElementAt(i)</th>
+                if(i<26)
+                {
+                    // это потому что длина массива alpha -  26 
+                <th>@Model.alpha.ElementAt(i)</th>
+                }
+              
             }
         </thead>
         <tbody>
@@ -157,7 +162,12 @@
         <thead>
             @for (var i = 0; i < Model.size; i++)
             {
-            <th>@Model.alpha.ElementAt(i)</th>
+                if (i < 26)
+                {
+                    // это потому что длина массива alpha -  26
+                <th>@Model.alpha.ElementAt(i)</th>
+                }
+
             }
         </thead>
         <tbody>
