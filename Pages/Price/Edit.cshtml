@@ -105,7 +105,11 @@
                             <input asp-for="PriceList.ElementName" class="form-control" />
                             <span asp-validation-for="PriceList.ElementName" class="text-danger"></span>
                         </div>
-
+                        <div class="col">
+                            <label asp-for="PriceList.Template" class="control-label">@Html.DisplayNameFor(m => m.PriceList.Template)</label>
+                            <input asp-for="PriceList.Template" class="form-control" />
+                            <span asp-validation-for="PriceList.Template" class="text-danger"></span>
+                        </div>
                     </div>
             <div class="row form-group">
                         <div class="col">

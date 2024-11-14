@@ -8,8 +8,10 @@ namespace Estimator.Models.ViewModels
         public bool IsSelected { get; set; }    
         public string VniirItemName { get; set; } = string.Empty;
         public string VniirDatasheet { get; set; } = string.Empty;
+        public int ManufactutureId { get; set; }
         public string ManufactutureCode { get; set; }
-        public string ManufactutureName { get; set; }   
+        public string ManufactutureName { get; set; }
+        public string ManufactutureNote { get; set; }
         public string Key { get; set; }
         public int KeyLenght {  get; set; }
         public override bool Equals(object? obj)

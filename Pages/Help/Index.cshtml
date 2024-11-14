@@ -2,19 +2,32 @@
 @model Estimator.Pages.Help.IndexModel
 @{
 }
-<nav class="d-none d-xl-block col-xl-2 bd-toc" aria-label="Secondary navigation">
-    <nav id="TableOfContents">
-        <ul>
-            <li><a href="#overview">Overview</a></li>
-            <li>
-                <a href="#form-controls">Form controls</a>
-                <ul>
-                    <li><a href="#sizing">Sizing</a></li>
-                    <li><a href="#readonly">Readonly</a></li>
-                    <li><a href="#readonly-plain-text">Readonly plain text</a></li>
+<div class="row"> 
+<nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse bd-toc">
+    <nav class="pt-3 d-none d-xl-block col-xl-2">
+            <ul>
+                <li ><a  href="#overview">Общие сведения</a></li>
+                <li >
+                    <a  href="#housekeeping">Справочники</a>
+                    <ul >
+                        <li >
+                            <a href="#vniir">ЭКБ ОП</a>
+                        </li>
+                        <li >
+                            <a  href="#manufactory">Заводы-изготовители</a>
+                        </li>
+                        <li >
+                            <a  href="#prices">Прейскуранты</a>
+                        </li>
+                   @*  <li><a href="#readonly">Readonly</a></li>
+                    <li><a href="#readonly-plain-text">Readonly plain text</a></li> *@
                 </ul>
             </li>
-            <li><a href="#range-inputs">Range Inputs</a></li>
+
+
+                
+
+                @*    <li><a href="#range-inputs">Range Inputs</a></li>
             <li>
                 <a href="#checkboxes-and-radios">Checkboxes and radios</a>
                 <ul>
@@ -82,7 +95,39 @@
                         </ul>
                     </li>
                 </ul>
-            </li>
+            </li> *@
         </ul>
     </nav>
+
+
 </nav>
+<div class="col-md-9 ml-sm-auto col-lg-10 px-md-4" role="main">
+
+   
+        <h1 class="h2" id="overview">Работа с калькулятором</h1>
+        <h2 id="overview">Общие сведения</h2>
+        <p>Калькулятор трудоемкости испытаний предназначен для расчета стоимости закупки и испытаний ЭКБ в испытательном центре  АО "КБ Ракета".
+        </p>
+        <ul>
+            <li>
+                Исходными данными для расчета являются:
+                <ul>
+                    <li>Программа испытаний;</li>
+                    <li>Перечень изделий подлежащих испытаниям.</li>
+                </ul>
+            </li>
+        </ul>
+        <h2 id="housekeeping">Справочники</h2>
+        <p>Справочники содержат необходимую исходную информацию для расчетов.</p>
+
+        <h3 id="vniir">Электронная компонентная база отечественного производства</h3>
+        <p>все про справочник ВНИИР</p>
+        <h3 id="manufactory">Заводы-изготовители</h3>
+        <p>все про заводы изготовители </p>
+        <h3 id="prices">Прейскуранты</h3>
+        <p>все про прайсы </p>
+      
+       
+   
+</div>
+</div>

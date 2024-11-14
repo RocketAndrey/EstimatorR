@@ -1,0 +1,255 @@
+﻿@page
+@model Estimator.Pages.Price.ElementPriceModel
+@{
+}
+@{
+    ViewData["Title"] = "Стоимость элемента:";
+}
+
+@addTagHelper  *, Estimator
+
+<form method="post"> 
+  
+    <div class="row no-gutters">
+        <div class="col">
+            <h4>
+                Стоимость элемента по прейскуранту производителя :
+            </h4>
+        </div>
+    </div>
+    <div class="row no-gutters">
+        <div class="col">
+            @{
+                if(!String.IsNullOrEmpty(Model.ErrorMessage) )
+                {
+                    
+
+                    string alertType = "alert alert-warning alert-dismissible fade show";
+                    string alertMessage = Model.ErrorMessage;
+
+
+
+                <div class="@alertType" role="alert">
+                   
+                     
+                        <p class="mb-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle" viewBox="0 0 16 16">
+                                <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
+                            </svg>
+                            @alertMessage
+                            
+                            @if(Model.view?.SupposedManufactory?.Count > 0 )
+                            {
+                                <hr />
+                               
+                                @for(int i=0; i < Model.view.SupposedManufactory.Count; i++)
+                                    {
+                                        
+                                            
+                                            <div class="form-check">
+                                        <input class="form-check-input" asp-for="@Model.view.Manufactory.Id" type="radio" id="Model.view.SupposedManufactory[@i]" value="@Model.view.SupposedManufactory[i].ManufactutureCode" />
+                                                <label class="form-check-label" for="Model.PurchaseView[@i].SupposedManufactory[@i]">
+                                            @Model.view.SupposedManufactory[i].ManufactutureName (@Model.view.SupposedManufactory[i].VniirItemName)
+                                                </label>
+                                            </div>
+                                            
+                                    }
+
+                            }
+                        </p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+
+
+                </div>
+                }
+            }
+        </div>
+
+    </div>
+<div class="form-row">
+        <div class="input-group">
+            <input type="text" asp-for="ElementName"  class="form-control" placeholder="Введите наименование изделия" aria-label="" aria-describedby="button-addon4">
+            <div class="input-group-append" id="button-addon4">
+                <button class="btn btn-outline-primary" type="submit">Узнать цену</button>
+               
+            </div>
+        </div>
+    </div>
+    @if(Model.view?.CalculatedElementPrice > 0)
+    {
+    <div class="card  mt-3">
+        <div class="card-header">
+            Результат расчёта
+        </div>
+        <div class="card-body">
+
+            <dl class="form-row">
+                <dt class="col-6">
+                    @Html.DisplayNameFor(m => m.view.CalculatedElementPrice)
+                </dt>
+                <dd class="col-6">
+                    @Model.view.CalculatedElementPrice.ToString("F2")
+                </dd>
+                <dt class="col-6">
+                    @Html.DisplayNameFor(m => m.view.DeliveryTime)
+                </dt>
+                <dd class="col-6">
+                    @Model.view.DeliveryTime
+                <dt class="col-6">
+                        @Html.DisplayNameFor(m => m.view.ElementPrice)
+                </dt>
+                <dd class="col-6">
+                        @Model.view.ElementPrice.ToString("F2")
+                </dd>
+                <dt class="col-6">
+                        @Html.DisplayNameFor(m => m.view.IndexDeflator)
+                </dt>
+                <dd class="col-6">
+                        @Model.view.IndexDeflator.ToString("F4")
+                </dd>
+                        @if (@Model.view.PriceType == Models.ElementPriceType.Price)
+                        {
+
+                        <dt class="col-6">
+                                @Html.DisplayNameFor(m => m.view.Price)
+                        </dt>
+
+                        <dd class="col-6">
+                      
+                            <!-- Button trigger modal -->
+                            <button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#priceModal_@Model.view.ID">
+                                
+                                 @Html.DisplayFor(model => Model.view.Price.PriceList.Name)
+                            </button>
+                        
+
+                        <!-- Modal Price -->
+                        <div class="modal fade" id="priceModal_@Model.view.ID" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                        <h5 class="modal-title" id="priceModalLabel_@Model.view.ID">Цена из прейскуранта</h5>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-3">Прейскурант:</dt>
+                                            <dd class="col-sm-9">@Model.view.Price.PriceList.Name</dd>
+                                            <dt class="col-sm-3">Введен:</dt>
+                                            <dd class="col-sm-9">@Model.view?.Price?.PriceList?.DateStart.ToShortDateString()</dd>
+                                            <dt class="col-sm-3">Окончание:</dt>
+                                            <dd class="col-sm-9">@Model.view?.Price?.PriceList?.DateEnd.ToShortDateString() </dd>
+                                        </dl>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        </dd>
+                        }
+
+                @if(Model.view.Manufactory.Id> 0 )
+                {
+                    <dt class="col-6">
+                            @Html.DisplayNameFor(m => m.view.Manufactory)
+                    </dt>
+                    <dd class="col-6">
+                            <!-- Button trigger modal -->
+                            <button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#manufactoryModal_@Model.view.ID">
+
+                                    @Html.DisplayFor(model => Model.view.Manufactory.Name)
+                            </button>
+
+
+                            <!-- Modal Price -->
+                            <div class="modal fade" id="manufactoryModal_@Model.view.ID" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+
+                                            <h5 class="modal-title" id="priceModalLabel_@Model.view.ID">Предприятие-изготовитель</h5>
+
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <dl class="row">
+                                                
+                                                <dt class="col-sm-3">Код:</dt>
+                                                <dd class="col-sm-9">@Model.view?.Manufactory.Code</dd>
+                                                <dt class="col-sm-3">Наименование:</dt>
+                                                <dd class="col-sm-9">@Model.view.Manufactory.Name</dd>
+                                                <dt class="col-sm-3">Описание:</dt>
+                                                <dd class="col-sm-9">@Model.view.Manufactory.Note</dd>
+                                            </dl>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                    </dd>
+                }
+
+                        @if (Model.view.VniirItem != null)
+                        {
+                        <dt class="col-6">
+                                @Html.DisplayNameFor(m => m.view.VniirItem)
+                        </dt>
+                        <dd lass="col-6">
+                        <span data-toggle="tooltip" data-placement="bottom" title="Элемент в справочнике ВНИИР">
+                            <!-- Button trigger modal -->
+                                <button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#VniirModal_@Model.view?.VniirItemId">
+                                
+                                        @Html.DisplayFor(model => Model.view.VniirItem.Name)
+                            </button>
+
+                        </span>
+
+                        <div class="modal fade" id="VniirModal_@Model.view?.VniirItemId" tabindex="-1" aria-labelledby="vniirModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                        <h5 class="modal-title" id="vniirModalLabel">Элемент в справочнике ВНИИР</h5>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-3">@Html.DisplayNameFor(model => Model.view.VniirItem.Group):</dt>
+                                            <dd class="col-sm-9">@Model.view.VniirItem.Group</dd>
+                                            <dt class="col-sm-3">@Html.DisplayNameFor(model => Model.view.VniirItem.Subgroup):</dt>
+                                            <dd class="col-sm-9">@Model.view.VniirItem.Subgroup</dd>
+                                            <dt class="col-sm-3">@Html.DisplayNameFor(model => Model.view.VniirItem.Name):</dt>
+                                            <dd class="col-sm-9">@Model.view.VniirItem.Name</dd>
+                                            <dt class="col-sm-3">@Html.DisplayNameFor(model => Model.view.VniirItem.TechCondition):</dt>
+                                            <dd class="col-sm-9">@Model.view.VniirItem.TechCondition</dd>
+                                            <dt class="col-sm-3">@Html.DisplayNameFor(model => Model.view.VniirItem.Description):</dt>
+                                            <dd class="col-sm-9">@Model.view.VniirItem.Description</dd>
+                                        </dl>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        </dd>
+                        }
+             </dl>
+
+
+
+        </div>
+    </div>
+    }
+</form>

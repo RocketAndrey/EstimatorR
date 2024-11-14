@@ -19,6 +19,7 @@ using System.Security.Policy;
 using NPOI.SS.Formula.Functions;
 using Microsoft.IdentityModel.Tokens;
 using NPOI.XSSF.Streaming.Values;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Estimator.Helpers
 {
@@ -42,46 +43,118 @@ namespace Estimator.Helpers
 
             if(pView.PriceType==ElementPriceType.AddByUser && pView.ElementPrice!=0) { return; }
 
-            XLSXElementType item = _context.XLSXElementTypes
-            .Include(e => e.PriceHistory)
-                  .FirstOrDefault(m => m.ID == pView.ID);
+            Price elementPriceItem = null; 
 
-            if (pView.ElementPrice == 0 || pView.DeliveryTime<1)
+            XLSXElementType item = null;
+
+            baseCostSearch costSearcher = null;
+            PriceList currentPrice = null;
+
+            if (pView.ID != 0)
+            {
+                item = _context.XLSXElementTypes
+                .Include(e => e.PriceHistory)
+                      .FirstOrDefault(m => m.ID == pView.ID);
+            }
+
+            if (pView.ElementPrice == 0 || pView.DeliveryTime < 1)
             //Ищем для позиций у которых  нет цены
             {
-                List<Price> priceList;
+                //сначала разбираемся с типом прайса:
+                
+              
                 //для позиций найденных в справочнике
                 if (pView.VniirItemId != null)
                 {
-                    priceList = await _context.Prices
-                        .Where(e => e.VniirId == pView.VniirItemId)
-                        .Include(e => e.PriceList)
-                        .OrderByDescending(r => r.PriceList.DateStart)
-                        .ToListAsync();
+                    //определяем тип прайса 
+                    pView.VniirItem= await _context.DirVniir.FirstOrDefaultAsync(e => e.Id == (pView.VniirItemId ?? 0));
 
+                    if (pView.VniirItemId != null)
+                    {
+
+                        //находим все прайсы производителя 
+                        List<PriceList> priceList = await _context.PriceLists
+                             .Where(e => e.Manufacture.Id == pView.Manufactory.Id)
+                              .Include(e => e.Manufacture)
+                              .Include (e => e.PriceItemType) 
+                             .ToListAsync();
+                        //теперь проверяем есть ли спец.прайс для данного типа изделий
+                        List<PriceList> specialPriceList = priceList.
+                            Where(e => String.IsNullOrEmpty(e.ElementName?.Trim()) == false)
+                            .OrderByDescending(r => r.DateEnd)
+                           .ToList();
+                        //! Такие прайсы есть !!
+              
+
+                        if (specialPriceList.Count > 0)
+                        {
+                            for(int i = 0; i < specialPriceList.Count; i++)
+                            {
+                                string[] words = specialPriceList[i].ElementName.Split(';');
+                               
+                                for (int j = 0;j<words.Length;j++)
+                                {
+                                    if (words[j]== pView.VniirItem.Name)
+                                    {
+                                        //УРА Мы нашли тот самый прайс
+                                        currentPrice = specialPriceList[i]; 
+                                        break;
+                                    }
+                                }
+                                if (currentPrice != null) { break; }
+                            }
+                        
+                        }
+                        else
+                        {
+                            //прайс  простой
+                            costSearcher = new ElementCostSearch(_context,_asuContext); 
+                        }
+                        ///определяем тип прайса и создаем сооответствующий класс для обработки цены 
+                        if (currentPrice != null)
+                        {
+                            switch (currentPrice.PriceItemType.PriceItemTypeName) 
+                            {
+                                case "Резисторы постоянные непроволочные":
+                                    costSearcher = new ResistorCostSearch(_context, _asuContext);
+                                    break;
+                                case "Конденсаторы постоянной емкости керамические":
+                                    costSearcher = new CapasitorCostSearch(_context, _asuContext);
+                                    break;
+                                case "Общий":
+                                    costSearcher = new ElementCostSearch(_context, _asuContext);
+                                    break;
+
+
+                            }
+                        }
+                    }
+                    elementPriceItem = await costSearcher.GetCost(pView,  currentPrice); 
                 }
                 else
                 {
-                    priceList = await _context.Prices
-                       .Where(e => e.Name == pView.ElementName)
-                       .Include(e => e.PriceList)
-                       .OrderByDescending(r => r.PriceList.DateStart)
-                       .ToListAsync();
-
+                    elementPriceItem = await  costSearcher.GetCost(pView,  currentPrice);
                 }
+               
                 //нашли 
-                if (priceList.Count != 0)
+                if (elementPriceItem !=null)
                 {
-                    item.ElementPrice = (decimal)priceList[0].Cost;
-                    item.VniirItemId = priceList[0].VniirId;
-                    item.PackingSample = priceList[0].PackingSample;
-                    item.MinPackingSize = priceList[0].MinPackingSize;
-                    item.DeliveryTime = priceList[0].DeliveryTime;
-                    item.PriceType = ElementPriceType.Price;
-                    item.PriceId = priceList[0].PriceId;
-                    _context.Entry(item).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                    pView.ElementPrice = item.ElementPrice; 
+
+                    if (item != null)
+                    { 
+                            item.ElementPrice = (decimal)elementPriceItem.Cost;
+                            item.VniirItemId = elementPriceItem.VniirId;
+                            item.PackingSample = elementPriceItem.PackingSample;
+                            item.MinPackingSize = elementPriceItem.MinPackingSize;
+                            item.DeliveryTime = elementPriceItem.DeliveryTime;
+                            item.PriceType = ElementPriceType.Price;
+                            item.PriceId = elementPriceItem.PriceId;
+                            _context.Entry(item).State = EntityState.Modified;
+                            await _context.SaveChangesAsync();
+                        pView.ElementPrice = item.ElementPrice;
+                    }
+                    
+
                 }
 
             }
@@ -183,13 +256,15 @@ namespace Estimator.Helpers
                                         {
                                             VniirItemID = item.Id,
                                             VniirItemName = item.Name,
+                                            
                                             ManufactutureCode = item.CodeManufacturer,
                                             ManufactutureName = item.Manufacturer,
+                                            
                                             Key = key,
-                                            VniirDatasheet =item.TechCondition,
+                                            VniirDatasheet = item.TechCondition,
                                             // вес ключа 
                                             KeyLenght = Funct.PrepareStr(key).Length
-                                        };
+                                        }; 
                                         if (!searchItems.Contains(sitem))
                                         {
                                             searchItems.Add(sitem);
@@ -203,6 +278,7 @@ namespace Estimator.Helpers
                 }
                 //сортировка по весу 
                 searchItems = searchItems.OrderByDescending(e => e.KeyLenght).ToList();
+
                 if (searchItems.Count == 0)
                 {
                    pView.MаnufactorySearchErrorString = "Производитель не найден";
@@ -268,10 +344,13 @@ namespace Estimator.Helpers
                               
                             else
                             {
-                                pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", searchItems.Count);
-                                pView.SupposedManufactory = searchItems.ToList();
+                            
+                                //оставляем значения только с максимальным ключем
+                                pView.SupposedManufactory = searchItems.Where(p => p.KeyLenght == maxLen).ToList();
+                                pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", pView.SupposedManufactory.Count);
+
                             }
-                        
+
                         }
 
 
@@ -303,6 +382,7 @@ namespace Estimator.Helpers
         {
             //среди всех ключей с максимальным весом только 1 производитель 
             view.Manufactory.Code = item.ManufactutureCode;
+            view.Manufactory.Note = item.ManufactutureNote;
             view.Desc = item.VniirItemName;
             view.VniirItemId = item.VniirItemID;
 
@@ -316,8 +396,8 @@ namespace Estimator.Helpers
 
             if (manufacture.Count > 0)
             {
-                view.Manufactory.Name = manufacture[0].Name;
-                view.Manufactory.Id = manufacture[0].Id;
+                view.Manufactory = manufacture[0];  
+           
             }
             else
             {

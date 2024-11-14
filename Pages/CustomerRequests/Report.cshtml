@@ -1048,7 +1048,8 @@
                                 <th>@Html.DisplayNameFor(model => model.ElementImport.DefectedTypes[0].DefectCount)</th>
                                 <th>Тип несоответствия</th>
                             </tr>
-                            @if (Model.ElementImport != null)
+
+                            @if (Model.ElementImport != null && Model.UseAsu)
                             {
 
                                 @foreach (var item in Model.ElementImport.DefectedTypes)

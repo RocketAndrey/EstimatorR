@@ -69,7 +69,7 @@ namespace Estimator.Pages.CustomerRequests
             SelectedYear = YearOfNoms;
 
             await  base.SetCustomerReguest((int)id, YearOfNoms);
-        
+            ElementImport = CustomerRequest.ElementImport;  
             if (CustomerRequest == null)
             {
                 return NotFound();

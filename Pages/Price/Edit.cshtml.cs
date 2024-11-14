@@ -62,7 +62,7 @@ namespace Estimator.Pages.Price
 
                 _isSimple = PricePropertyName.ElementAt(0).PricePropertyNames.IsNullOrEmpty();
 
-                System.Diagnostics.Debug.WriteLine("213213123123_" + _isSimple);
+                //System.Diagnostics.Debug.WriteLine("213213123123_" + _isSimple);
 
                 var PropertyName = _context.PriceItemType.Include(e => e.PricePropertyNames).Where(c => c.PriceItemTypeID == priceItemType); //Получаем свойства элемента по ID
                 foreach (var x in PropertyName)

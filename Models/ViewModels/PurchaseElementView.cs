@@ -41,6 +41,7 @@ namespace Estimator.Models.ViewModels
         public PurchaseElementView() 
         { 
             Manufactory = new Company();
+            IndexDeflator = 1;
         }    
        public int ID { get; set; }  
         public bool Included { get; set; }
@@ -58,7 +59,7 @@ namespace Estimator.Models.ViewModels
         {
             get
             {
-                return (ElementName.Trim().Length > 0 && ElementPrice> 0 &&  Manufactory.Id > 0 && DeliveryTime> 0 
+                return (ElementName?.Trim().Length > 0 && ElementPrice> 0 &&  Manufactory.Id > 0 && DeliveryTime> 0 
                     && MinPackingSize> 0 && PackingSample >0 );
             }
         }
@@ -89,7 +90,8 @@ namespace Estimator.Models.ViewModels
          
 
         }
-        public string QualityLevel {  get; set; }   
+        public string QualityLevel {  get; set; }
+        [Display(Name = "Цена по прейскуранту производителя, 1 шт. без НДС")]
         public decimal ElementPrice
         {
             get
@@ -101,17 +103,28 @@ namespace Estimator.Models.ViewModels
                 _elementPrice = value.Round (2);    
             }
         }
-
+        /// <summary>
+        /// Цена 1 шт с учетом индекса дефлятором
+        /// </summary>
+        [Display(Name = "Цена с индексом-дефлятором, 1 шт. без НДС")]
+        public decimal CalculatedElementPrice 
+        {
+            get
+            {
+                return (_elementPrice * IndexDeflator).Round(2);
+            }
+            
+        }
      
         [Display(Name = "Цена, 1 шт. без НДС")]
         [Required(ErrorMessage = "Введитe число с плавающей точкой")]
         [RegularExpression("^[-+]?[0-9]*[,]?[0-9]+(?:[eE][-+]?[0-9]+)?$", ErrorMessage = "Введите число в формате числа с плавающей запятой")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
-        public string StringElementPrice
+        public string StringСalculatedElementPrice
         {
             get
             {
-                return string.Format("{0:f2}", ElementPrice);
+                return string.Format("{0:f2}", CalculatedElementPrice);
 
             }
             set
@@ -140,10 +153,12 @@ namespace Estimator.Models.ViewModels
         /// <summary>
         /// Производитель
         /// </summary>
-        public Company Manufactory { get; set; }   
-      /// <summary>
-      /// Срок поставки дней
-      /// </summary>
+        [Display(Name = "Изготовитель")]
+        public Company Manufactory { get; set; }
+        /// <summary>
+        /// Срок поставки дней
+        /// </summary>
+        [Display(Name = "Срок поставки, дней")]
         public int DeliveryTime { get; set; }
         public string Desc { get; set; }
         /// <summary>
@@ -174,10 +189,14 @@ namespace Estimator.Models.ViewModels
         public string MаnufactorySearchErrorString { get; set; }
 
         public ElementPriceType PriceType { get; set; }
-
+        
         public int? VniirItemId { get; set; }
-        public RuChipsDB VniirItem { get; set; }  
-
+        [Display(Name = "По справочнику ВНИИР")]
+        public RuChipsDB VniirItem { get; set; }
+        [Display(Name = "Прейскурант")]
         public Price Price { get; set; }
+
+        [Display(Name = "Расчетный индекс-дефлятор")]
+        public decimal IndexDeflator { get; set; }
     }
 }

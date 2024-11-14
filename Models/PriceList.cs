@@ -24,6 +24,8 @@ namespace Estimator.Models
         [Display(Name = "Виды изделий в прайсе,через точку с запятой")]
         public string ElementName { get; set; }
 
+        [Display(Name = "Шаблон наименования элемента (для разбора)")]
+        public string Template { get; set; }
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Введите начало действия прейскуранта!")]

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/462/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-select/css/bootstrap-select.min.css" />
     <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/docs.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -49,11 +50,12 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/help/index">Как этим пользоваться?</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/CustomerRequests/Index">Заявки</a>
-                        </li>
+                      
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/CustomerRequests/Index">Заявки</a>
+                            </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                                 Справочники
@@ -66,34 +68,36 @@
                                     @if (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator")
                                     {
                                         <a class="dropdown-item" asp-area="" asp-page="/Program/Index">Программы</a>
+
+                                        <a class="dropdown-item" asp-area="" asp-page="/Users/Index">Пользователи</a>
                                     }
-
-
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-page="/Price/Index">Прейскуранты</a>
-                                    <a class="dropdown-item" asp-page="/Manufacturer/Index"> Заводы изготовители </a>
-                                    <a class="dropdown-item" asp-page="/RuChips/Index">ЭКБ ОП</a>
-
 
                                 </div>
 
                                 </li>
                             }
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                ЭКБ ОП
+                            </a>
 
-                            @if (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator")
-                            {
+                            <div class="dropdown-menu">
 
-                               
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-page="/Users/Index">Пользователи</a>
-                                </li>
+                                <a class="dropdown-item" asp-page="/Price/ElementPrice">Узнать цену</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-page="/Price/Index">Прейскуранты</a>
 
-                            }
-                        }
+                                <a class="dropdown-item" asp-page="/Manufacturer/Index"> Заводы изготовители </a>
+                                <a class="dropdown-item" asp-page="/RuChips/Index">Справочник ЭКБ 01-22</a>
+
+
+                            </div>
+
+                        </li>
                     </ul>
+
                     </div>
                
                     <partial name="_LoginPartial" />

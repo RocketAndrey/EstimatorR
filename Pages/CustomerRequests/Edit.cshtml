@@ -544,8 +544,12 @@
     function ShowImport()
     {
         var chk = document.getElementById('customSwitchUseImport').checked;
-        
-         document.getElementById('PurchaseCard').style.display = (chk) ? 'block' : 'none';
+
+        var elem = document.getElementById('PurchaseCard');
+          if(typeof elem !== 'undefined' && elem !== null) {
+            elem.style.display = (chk) ? 'block' : 'none';
+          }
+
         document.getElementById('PanelImport').style.display = (chk) ? 'block' : 'none';
     
         if (!chk) 

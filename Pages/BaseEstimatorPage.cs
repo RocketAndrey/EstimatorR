@@ -86,7 +86,7 @@ namespace Estimator.Pages
         {
             get
             {
-                return (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "Administrator"); 
+                return (User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType)?.Value == "Administrator"); 
             }
         }
        
