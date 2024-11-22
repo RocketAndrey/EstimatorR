@@ -15,8 +15,7 @@ namespace Estimator.Models.Elements
             this.Template = template; ;
             this.Parce(resistorName);
         }
-       
-        /// <summary>
+        /// <summary
         /// Емкость в пФ
         /// </summary>
         public decimal Capacity { get; set; }
@@ -30,8 +29,17 @@ namespace Estimator.Models.Elements
         /// Обозначение группы ТКЕ
         /// </summary>
         public string TCGroup { get; set; }
+        /// <summary>
+        /// Точность конденсатора
+        /// </summary>
+        public string Accuracy {  get; set; }   
 
-      
+        /// <summary>
+        /// Гальваническое покрытие N
+        /// </summary>
+        public string Electroplating { get; set; }
+
+
         public void Parce(string capName)
         {
             string parcedValue = "";
@@ -120,7 +128,7 @@ namespace Estimator.Models.Elements
                 parcedLenght++;
             }
             TCGroup = parcedValue;
-            //todo разбор имени конденсатора
+
 
             // номинальное напряжение 
             leftPart = leftPart.Substring(0, leftPart.Length - parcedLenght);
@@ -166,55 +174,36 @@ namespace Estimator.Models.Elements
 
             this.Type = leftPart;
 
-            //    ///точность резистора
-            //    int indexP = rightPart.IndexOf('±');
-            //    int indexZ = rightPart.IndexOf('%');
+            ///точность конденсатора
+            int indexP = rightPart.IndexOf('±');
+            int indexZ = rightPart.IndexOf('%');
+            //Если нашли точность 
+            if (indexP > -1 & indexZ > -1)
+            {
+                parcedValue = rightPart.Substring(indexP + 1, indexZ - indexP - 1);
+                this.Accuracy = parcedValue.Trim();
+                rightPart = rightPart.Substring(indexZ + 1).Trim();
+            }
 
-            //    parcedValue = rightPart.Substring(indexP + 1, indexZ - indexP - 1);
-            //    this.TRR = parcedValue.Trim();
 
             //    //а теерь разбираем все остльное 
-            //    rightPart = rightPart.Substring(indexZ + 1).Trim();
 
-            //    //удаляем первое тире если необходимо
-            //    if (rightPart.Substring(0, 1) == "-")
-            //    {
-            //        rightPart = rightPart.Substring(1);
-            //    }
 
-            //    rightPart = rightPart.Replace(' ', '-');
+            //удаляем первое тире если необходимо
+            if (rightPart.Substring(0, 1) == "-")
+            {
+                rightPart = rightPart.Substring(1);
+            }
 
-            //    string[] words = rightPart.Split('-');
+            rightPart = rightPart.Replace(' ', '-');
 
-            //    ///Зазбирам шаблон 
-            //    string[] templates = Template.Split('-');
+            string[] words = rightPart.Split('-');
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (words[i] == "N") { Electroplating = words[i]; }
+                if (words[i] == "А") { Automat = words[i]; }
 
-            //    for (int i = 0; i < words.Length; i++)
-            //    {
-            //        words[i] = words[i].Trim();
-            //        for (int j = 0; j < templates.Length; j++)
-            //        {
-            //            //Уровень шумов
-            //            if (j == i & templates[j] == "NL") { NoiseLevel = words[i]; }
-            //            // ТКС
-            //            if (j == i & templates[j] == "TCR") { TCR = words[i][0].ToString(); }
-            //            //Автомонтаж
-            //            if (j == i & templates[j] == "AUTO" & words[i][0] == 'А')
-            //            {
-            //                Automat = "A";
-            //            }
-            //            //Упаковка
-            //            if (j == i & templates[j] == "PC")
-            //            {
-            //                Packing = words[i][0].ToString();
-            //            }
-            //            //Маркировка
-            //            if (j == i & templates[j] == "MR" & words[i][0] == 'М')
-            //            {
-            //                Marking = words[i][0].ToString();
-            //            }
-            //        }
-            //    }
+            }
         }
     }
 }

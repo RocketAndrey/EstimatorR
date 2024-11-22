@@ -32,11 +32,7 @@ namespace Estimator.Models.Elements
         /// </summary>
         /// 
         public string TCR { get; set; }
-        /// <summary>
-        /// Обозначение резисторв для автоматического монтажа
-        /// </summary>
-        public string Automat { get; set; }
-
+   
         /// <summary>
         /// Вид упаковки
         /// </summary>
@@ -151,9 +147,11 @@ namespace Estimator.Models.Elements
 
             // а теперь тип 
             leftPart = leftPart.Substring(0, leftPart.Length - parcedLenght);
-            if (leftPart.Substring(leftPart.Length - 1, 1) == "-") ;
-            leftPart = leftPart.Substring(0, leftPart.Length - 1);
 
+            if (leftPart.Substring(leftPart.Length - 1, 1) == "-")
+            {
+                leftPart = leftPart.Substring(0, leftPart.Length - 1);
+            }
             this.Type = leftPart;
 
             ///точность резистора

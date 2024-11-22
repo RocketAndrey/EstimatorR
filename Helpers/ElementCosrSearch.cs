@@ -32,7 +32,7 @@ namespace Estimator.Helpers
         { 
         }   
         
-        public override async Task<Price> GetCost(PurchaseElementView elementView, PriceList currentPrice)
+        public override async Task<Price> GetCost(PurchaseElementView elementView, List<PriceList> currentPrice)
 
         {
 

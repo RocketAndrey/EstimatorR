@@ -96,10 +96,12 @@ namespace Estimator.Pages.Price
                 ErrorMessage = GetModelStateErrors (ModelState);   
                 return Page();
             }
+            PriceList.Manufacture.Id = PriceList.CompanyId;
+
             if (PriceList.PriceListId == 0)
             {
 
-              
+                PriceList.CompanyId = PriceList.Manufacture.Id;
 
                 _context.PriceLists.Add(PriceList);
             }

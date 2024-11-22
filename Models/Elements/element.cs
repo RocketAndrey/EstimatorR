@@ -13,6 +13,11 @@
         /// </summary>
         public string Template { get; set; }
 
-       
+        /// <summary>
+        /// Обозначение  для автоматического монтажа
+        /// </summary>
+        public string Automat { get; set; }
+
+
     }
 }

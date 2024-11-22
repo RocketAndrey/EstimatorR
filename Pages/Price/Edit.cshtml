@@ -318,6 +318,12 @@
             .Empty("Нет данных")
             .Filterable(GridFilterType.Double)
             .Sortable()
+                    .Pageable(pager =>
+                    {
+                        pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 10, "10" }, { 50, "50" }, { 100, "100" }, { 1000, "1000" } };
+                        pager.ShowPageSizes = true;
+                        pager.RowsPerPage = 10;
+                    })
             )
 
     </div>

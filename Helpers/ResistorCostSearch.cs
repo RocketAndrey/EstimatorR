@@ -34,9 +34,15 @@ namespace Estimator.Helpers
         {
         }
 
-        public override async Task<Price> GetCost(PurchaseElementView elementView, PriceList currentPrice)
+        public override async Task<Price> GetCost(PurchaseElementView elementView,List<PriceList> currentPrices)
 
         {
+
+            if (currentPrices == null) { return null; }
+            if (currentPrices.Count == 0) { return null; }
+
+            PriceList currentPrice= currentPrices.OrderByDescending(r => r.DateEnd).FirstOrDefault();
+
             currentPrice.PriceItems = await _context.Prices
                     .Where(e => e.PriceListId == currentPrice.PriceListId)
                     .OrderByDescending(r => r.PriceList.DateEnd).ToListAsync();

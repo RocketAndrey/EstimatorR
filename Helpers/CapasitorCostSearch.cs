@@ -20,6 +20,7 @@ using NPOI.SS.Formula.Functions;
 using Microsoft.IdentityModel.Tokens;
 using NPOI.XSSF.Streaming.Values;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Estimator.Models.Elements;
 
 
 namespace Estimator.Helpers
@@ -30,9 +31,45 @@ namespace Estimator.Helpers
         {
         }
 
-        public override async Task<Price> GetCost(PurchaseElementView elementView, PriceList currentPrice)
+        public override async Task<Price> GetCost(PurchaseElementView elementView, List<PriceList> currentPrices)
 
         {
+            if (currentPrices == null) { return null; }
+            if (currentPrices.Count == 0) { return null; }
+
+            PriceList currentPrice = currentPrices.OrderByDescending(r => r.DateEnd).FirstOrDefault();
+
+            currentPrice.PriceItems = await _context.Prices
+                    .Where(e => e.PriceListId == currentPrice.PriceListId)
+                    .OrderByDescending(r => r.PriceList.DateEnd).ToListAsync();
+
+            Resistor resistor = new Resistor(elementView.ElementName, currentPrice.Template);
+            //сопротивление 
+            List<Price> priceList = currentPrice.PriceItems.Where(e => Funct.InRange(e.Property0, resistor.Resistance)).ToList();
+            //Мощность
+            priceList = priceList.Where(e => e.Property1.ToUpper() == resistor.Power).ToList();
+            //Точность 
+            priceList = priceList.Where(e => e.Property3.ToUpper() == resistor.TRR).ToList();
+            //ТКС
+            if (!String.IsNullOrEmpty(resistor.TCR))
+            {
+                //ТКС
+                priceList = priceList.Where(e => e.Property2.ToUpper() == resistor.TCR).ToList();
+            }
+
+            priceList = priceList.OrderByDescending(e => e.Cost).ToList();
+
+            if (priceList.Count > 0)
+            {
+                elementView.ElementPrice = (decimal)priceList[0].Cost;
+                elementView.IndexDeflator = base.GetDeflatorFactor(priceList[0].PriceList.DateEnd);
+                elementView.DeliveryTime = (int)priceList[0].DeliveryTime;
+                elementView.PriceType = ElementPriceType.Price;
+                elementView.Price = priceList[0];
+
+                return priceList[0];
+            }
+
             return null;
         }
     }

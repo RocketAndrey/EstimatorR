@@ -17,7 +17,7 @@ namespace Estimator.Helpers
             _asuContext = asuContext;
 
         }
-        public virtual async Task <Price> GetCost(PurchaseElementView elementView, PriceList currentPrice)
+        public virtual async Task <Price> GetCost(PurchaseElementView elementView, List<PriceList> currentPrice)
         {
             return null;   
         }

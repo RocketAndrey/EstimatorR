@@ -48,7 +48,7 @@ namespace Estimator.Helpers
             XLSXElementType item = null;
 
             baseCostSearch costSearcher = null;
-            PriceList currentPrice = null;
+           List<PriceList> currentPrice = new();
 
             if (pView.ID != 0)
             {
@@ -97,7 +97,7 @@ namespace Estimator.Helpers
                                     if (words[j]== pView.VniirItem.Name)
                                     {
                                         //УРА Мы нашли тот самый прайс
-                                        currentPrice = specialPriceList[i]; 
+                                        currentPrice.Add(specialPriceList[i]); 
                                         break;
                                     }
                                 }
@@ -111,9 +111,10 @@ namespace Estimator.Helpers
                             costSearcher = new ElementCostSearch(_context,_asuContext); 
                         }
                         ///определяем тип прайса и создаем сооответствующий класс для обработки цены 
-                        if (currentPrice != null)
+                        if (currentPrice.Count > 0 )
                         {
-                            switch (currentPrice.PriceItemType.PriceItemTypeName) 
+                            //считаем что все найтенные прайсы имеют один тип 
+                            switch (currentPrice[0].PriceItemType.PriceItemTypeName) 
                             {
                                 case "Резисторы постоянные непроволочные":
                                     costSearcher = new ResistorCostSearch(_context, _asuContext);
