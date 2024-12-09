@@ -64,12 +64,12 @@ namespace Estimator.Helpers
                 
               
                 //для позиций найденных в справочнике
-                if (pView.VniirItemId != null)
+                if (pView.VniirItemId != 0)
                 {
                     //определяем тип прайса 
-                    pView.VniirItem= await _context.DirVniir.FirstOrDefaultAsync(e => e.Id == (pView.VniirItemId ?? 0));
+                    pView.VniirItem= await _context.DirVniir.FirstOrDefaultAsync(e => e.Id == pView.VniirItemId);
 
-                    if (pView.VniirItemId != null)
+                    if (pView.VniirItemId != 0)
                     {
 
                         //находим все прайсы производителя 
@@ -98,10 +98,10 @@ namespace Estimator.Helpers
                                     {
                                         //УРА Мы нашли тот самый прайс
                                         currentPrice.Add(specialPriceList[i]); 
-                                        break;
+                                       // break;
                                     }
                                 }
-                                if (currentPrice != null) { break; }
+                              //  if (currentPrice != null) { break; }
                             }
                         
                         }
@@ -128,15 +128,23 @@ namespace Estimator.Helpers
 
 
                             }
+
+                            elementPriceItem = await costSearcher.GetCost(pView, currentPrice);
                         }
                     }
-                    elementPriceItem = await costSearcher.GetCost(pView,  currentPrice); 
+                    
                 }
                 else
                 {
-                    elementPriceItem = await  costSearcher.GetCost(pView,  currentPrice);
+                    // для позиций не найденных в справочнике?
+                    //        elementPriceItem = await  costSearcher.GetCost(pView,  currentPrice);
+                    pView.MаnufactorySearchErrorString = "Элемент не найден в  справочнике ВНИИР";
                 }
-               
+                //прайсы были, а ничего в них не нашли
+                if (currentPrice?.Count > 0 & elementPriceItem == null) 
+                {
+                    pView.MаnufactorySearchErrorString = "Элемент с такин именем не найден в прайсах производителя. Возможна ошибка в наименовании";
+                }
                 //нашли 
                 if (elementPriceItem !=null)
                 {
@@ -210,6 +218,7 @@ namespace Estimator.Helpers
         /// <returns></returns>
         public async Task SetXSLXViewManufactory(PurchaseElementView pView, bool fullRefresh =false )
         {
+            string  selectedManufactoryCode = String.Empty;
             //БД ВНИИР
             if (_dirVniir == null)
             {
@@ -223,6 +232,17 @@ namespace Estimator.Helpers
                   .AsNoTracking()
                   .ToListAsync();
             }
+            //если выбран производитель из возможных 
+            if (!string.IsNullOrEmpty(pView.MаnufactorySearchString))
+            {
+                pView.MаnufactorySearchErrorString = string.Empty;
+                List<Company> coms = _manufactures
+                    .Where(j => Funct.PrepareStr(j.Name).Contains(Funct.PrepareStr(pView.MаnufactorySearchString)))
+                    .ToList();
+                //нашли производителя по имени
+                if (coms.Count == 1) { selectedManufactoryCode = coms[0].Code; }
+            }
+
             List<VniirSearchItem> searchItems = new();
             string result = string.Empty;
 
@@ -294,6 +314,7 @@ namespace Estimator.Helpers
                 //найдено несколько элементов 
                 if (searchItems.Count > 1)
                 {
+                
 
                     //Вес первого ключа
                     int maxLen = searchItems[0].KeyLenght;
@@ -345,10 +366,34 @@ namespace Estimator.Helpers
                               
                             else
                             {
-                            
-                                //оставляем значения только с максимальным ключем
-                                pView.SupposedManufactory = searchItems.Where(p => p.KeyLenght == maxLen).ToList();
-                                pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", pView.SupposedManufactory.Count);
+                                //производитель выбран  пользователем 
+                              
+                                if(!String.IsNullOrEmpty (selectedManufactoryCode))
+                                {
+                                    // вот здесь  установить заданного пользователелем производителя
+                                    var selectedByVId = searchItems.Where(p => p.ManufactutureCode == selectedManufactoryCode & p.KeyLenght == maxLen).FirstOrDefault();
+                                    if (selectedByVId != null)
+                                    {
+                                        fillPurchaseViewManufacture(pView, selectedByVId);
+                                    }
+                                    else 
+                                    {
+
+                                        //оставляем значения только с максимальным ключем
+                                        pView.SupposedManufactory = searchItems.Where(p => p.KeyLenght == maxLen).ToList();
+                                        pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", pView.SupposedManufactory.Count);
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    //оставляем значения только с максимальным ключем
+                                    pView.SupposedManufactory = searchItems.Where(p => p.KeyLenght == maxLen).ToList();
+                                    pView.MаnufactorySearchErrorString = string.Format("Найдено производителей: {0}", pView.SupposedManufactory.Count);
+
+                                }
+
 
                             }
 

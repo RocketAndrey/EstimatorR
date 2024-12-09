@@ -1,6 +1,7 @@
 ﻿using System;
 
 using System.Text;
+using Estimator.Helpers;
 
 namespace Estimator.Models.Elements
 {
@@ -10,15 +11,15 @@ namespace Estimator.Models.Elements
         {
             this.Template = "NL-TCR";
         }
-        public Capasitor(string resistorName, string template)
+        public Capasitor(string capasitorName, string template)
         {
             this.Template = template; ;
-            this.Parce(resistorName);
+            this.Parce(capasitorName);
         }
         /// <summary
         /// Емкость в пФ
         /// </summary>
-        public decimal Capacity { get; set; }
+        public double Capacity { get; set; }
 
         /// <summary>
         /// Номинальное напряжение,В 
@@ -28,7 +29,10 @@ namespace Estimator.Models.Elements
         /// <summary>
         /// Обозначение группы ТКЕ
         /// </summary>
-        public string TCGroup { get; set; }
+        public string TCGroup 
+        { get; 
+          set; 
+        }
         /// <summary>
         /// Точность конденсатора
         /// </summary>
@@ -39,6 +43,10 @@ namespace Estimator.Models.Elements
         /// </summary>
         public string Electroplating { get; set; }
 
+        /// <summary>
+        ///Видоразмер
+        /// </summary>
+        public string TypeSize { get; set; }
 
         public void Parce(string capName)
         {
@@ -47,15 +55,19 @@ namespace Estimator.Models.Elements
             string leftPart = "";
             string rightPart = "";
 
-            decimal multiplier = 1;
+            double multiplier = 1;
             int parcedLenght = 0;
 
             //подготовка наименования,  удаление лишних данных  
             capName = capName.Trim();
-
-            if (capName.Substring(0, 8).ToUpper() == "КОНДЕНСАТОР") { capName = capName.Substring(11, capName.Length - 8); }
-            if (capName.Substring(0, 12).ToUpper() == "ЧИП-КОНДЕНСАТОР") { capName = capName.Substring(15, capName.Length - 12); }
-
+            if (capName.Length > 10)
+            {
+                if (capName.Substring(0, 11).ToUpper() == "КОНДЕНСАТОР") { capName = capName.Substring(11, capName.Length - 11); }
+            }
+            if (capName.Length > 14)
+            {
+                if (capName.Substring(0, 15).ToUpper() == "ЧИП-КОНДЕНСАТОР") { capName = capName.Substring(15, capName.Length - 15); }
+            }
             capName = capName.Trim();
 
             if (capName.ToUpper().Contains("Ф"))
@@ -72,8 +84,8 @@ namespace Estimator.Models.Elements
 
                 if (!(Char.IsWhiteSpace(leftPart[i]) || leftPart[i] == '-'))
                 {
-                    if (Char.ToUpper(leftPart[i]) == 'Н') { multiplier = 1000M; }// нанофарады
-                    if (Char.ToUpper(leftPart[i]) == 'К' & Char.ToUpper(leftPart[i - 1]) == 'М') { multiplier = 1000000M; }//микрофарады
+                    if (Char.ToUpper(leftPart[i]) == 'Н') { multiplier = 1000; }// нанофарады
+                    if (Char.ToUpper(leftPart[i]) == 'К' & Char.ToUpper(leftPart[i - 1]) == 'М') { multiplier = 1000000; }//микрофарады
 
                     if (Char.IsDigit(leftPart[i]) || leftPart[i] == ',' || leftPart[i] == '.')
                     {
@@ -97,9 +109,9 @@ namespace Estimator.Models.Elements
                 parcedLenght++;
             }
 
-            decimal resultValue = 0;
+            Double resultValue = 0;
 
-            if (Decimal.TryParse(parcedValue, out resultValue)) { Capacity = resultValue * multiplier; }
+            if (Double.TryParse(parcedValue, out resultValue)) { Capacity = resultValue * multiplier; }
 
 
 
@@ -127,7 +139,7 @@ namespace Estimator.Models.Elements
                 }
                 parcedLenght++;
             }
-            TCGroup = parcedValue;
+            TCGroup = Funct.ReplaceEngChar( parcedValue);
 
 
             // номинальное напряжение 
@@ -180,7 +192,7 @@ namespace Estimator.Models.Elements
             //Если нашли точность 
             if (indexP > -1 & indexZ > -1)
             {
-                parcedValue = rightPart.Substring(indexP + 1, indexZ - indexP - 1);
+                parcedValue = rightPart.Substring(indexP , indexZ - indexP);
                 this.Accuracy = parcedValue.Trim();
                 rightPart = rightPart.Substring(indexZ + 1).Trim();
             }
@@ -202,6 +214,10 @@ namespace Estimator.Models.Elements
             {
                 if (words[i] == "N") { Electroplating = words[i]; }
                 if (words[i] == "А") { Automat = words[i]; }
+
+                int value = 0; 
+
+                if (int.TryParse (words[i],out value)) { TypeSize = value.ToString(); }
 
             }
         }

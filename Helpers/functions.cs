@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Razor.Language;
 
 namespace Estimator.Helpers
 {
@@ -114,7 +115,7 @@ namespace Estimator.Helpers
             string rus = "аАвВсСеЕкКмМнНоОрРтТхХ";
             string eng = "aAbBcCeEkKmMnHoOpPtTxX";
             string newstr = "";
-
+            if (string.IsNullOrEmpty(word)) { return string.Empty ; }   
             for (int i = 0; i < word.Length; i++)
             {
                 bool replaced= false;   
@@ -147,17 +148,25 @@ namespace Estimator.Helpers
             bool greaterOrEqual = false;
 
             int indexOfLetter = 0;
+            if (string.IsNullOrEmpty(range)) { return false; }
             
           
             range = RemoveWhiteSpaces(range);
-            if(string.IsNullOrEmpty(range)) { return false; }
+
+
             ///ищем букву
+            bool isLetterIntext = false;
             for (int i = 0; i < range.Length; i++)
             {
-                if (char.IsLetter(range[i])) { indexOfLetter = i; break; }
+                if (char.IsLetter(range[i]))
+                { indexOfLetter = i;
+                    isLetterIntext = true;
+                    break; 
+                }
             }
+         
             /// буквы нет !
-            if (indexOfLetter == 0)
+            if (!isLetterIntext)
             {
                 //тогда наверно проверим на равенсттво
                 if (double.TryParse(range, out textValue))
@@ -168,6 +177,23 @@ namespace Estimator.Helpers
                 {
                     return false;
                 }
+            }
+            // вот это условие явно тоже что и следующее, надо поправить
+            //выражения типа К>10, K<10
+            if (indexOfLetter  == 0 & range.Length > 2)
+            {
+               
+
+                if (range.Substring(indexOfLetter + 1, 2) == ">=" | range.Substring(indexOfLetter + 1, 2) == "=>")
+                {
+                    minValue = double.Parse(range.Substring(indexOfLetter + 3, range.Length - 3));
+                    lessOrEqual = true;
+                }
+                else if (range.Substring(indexOfLetter + 1, 1) == ">")
+                {
+                    minValue = double.Parse(range.Substring(indexOfLetter + 2, range.Length - 2));
+                }
+
             }
             //нижняя граница
             if (indexOfLetter > 1)
@@ -181,7 +207,7 @@ namespace Estimator.Helpers
                 {
                     minValue = double.Parse(range.Substring(0, indexOfLetter - 1));
                 }
-            }
+            } 
             //верхняя граница
             if ((range.Length - indexOfLetter) > 1)
             {
@@ -198,7 +224,11 @@ namespace Estimator.Helpers
             bool result = false;
 
             if (lessOrEqual) { result = (value >= minValue); } else { result = (value > minValue); }
-            if (greaterOrEqual) { result = (value <= maxValue); } else { result = (value < maxValue); }
+            
+            if (result)
+            {
+                if (greaterOrEqual) { result = (value <= maxValue); } else { result = (value < maxValue); }
+            }
 
             return result;
         }

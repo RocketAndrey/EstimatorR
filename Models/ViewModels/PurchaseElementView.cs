@@ -30,7 +30,7 @@ namespace Estimator.Models.ViewModels
             PriceType= item.PriceType;
             PriceHistorySourceID= item.PriceHistorySourceID;
             PriceHistoryItem = item.PriceHistorySource;
-            VniirItemId = item.VniirItemId;
+            VniirItemId =(int) item.VniirItemId;
             Price = item.Price;
             VniirItem = item.VniirItem;
             Manufactory = new Company { Id = item.Company?.Id ?? 0, Name = item.Company?.Name ?? "", Code = item.Company?.Code ?? "" } ;
@@ -190,7 +190,7 @@ namespace Estimator.Models.ViewModels
 
         public ElementPriceType PriceType { get; set; }
         
-        public int? VniirItemId { get; set; }
+        public int VniirItemId { get; set; }
         [Display(Name = "По справочнику ВНИИР")]
         public RuChipsDB VniirItem { get; set; }
         [Display(Name = "Прейскурант")]
@@ -198,5 +198,7 @@ namespace Estimator.Models.ViewModels
 
         [Display(Name = "Расчетный индекс-дефлятор")]
         public decimal IndexDeflator { get; set; }
+        [Display(Name = "Колличество закупаемых изделий")]
+        public int ItemsCount { get; set; } = 1; 
     }
 }

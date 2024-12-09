@@ -281,6 +281,7 @@ namespace Estimator.Pages.CustomerRequests
                             }
                         }
                     }
+                    //todo сдесь что то сделать с поиском , он уже в PriceMachine
                      //если производитель не установлен
                     //поиск производителя по имени 
                     if (view.Manufactory.Id == 0 && !string.IsNullOrEmpty(view.MаnufactorySearchString))
