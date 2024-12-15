@@ -9,14 +9,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System;
-using Microsoft.AspNetCore.Authorization;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Globalization;
-using Microsoft.AspNetCore.Http.Connections;
-using System.IO;
-using Estimator.Helpers;
-
+using KBRocket.Text;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics; 
 
 namespace Estimator.Pages.CustomerRequests
 {

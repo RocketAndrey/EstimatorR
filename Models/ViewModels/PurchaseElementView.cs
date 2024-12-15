@@ -1,9 +1,8 @@
 ﻿using MathNet.Numerics;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Estimator.Helpers;
+using KBRocket.Text;
+
 
 namespace Estimator.Models.ViewModels
 {

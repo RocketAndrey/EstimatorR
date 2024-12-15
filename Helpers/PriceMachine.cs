@@ -14,12 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Security.Policy;
-using NPOI.SS.Formula.Functions;
-using Microsoft.IdentityModel.Tokens;
-using NPOI.XSSF.Streaming.Values;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using KBRocket.Text; 
 
 namespace Estimator.Helpers
 {

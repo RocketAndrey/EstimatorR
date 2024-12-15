@@ -5,13 +5,8 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel;
-using Estimator.Migrations;
-using MathNet.Numerics;
-using NuGet.Packaging.Signing;
-using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Math.EC.Multiplier;
-using Estimator.Helpers;
-using NPOI.OpenXml4Net.OPC.Internal;
+using KBRocket.Text;
+
 
 namespace Estimator.Models
 {

@@ -42,6 +42,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Models\Elements\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
 
@@ -49,6 +50,10 @@
     <None Include="Pages\Shared\MvcGrid\_Grid.cshtml" />
     <None Include="Pages\Shared\MvcGrid\_Pager.cshtml" />
     <None Include="wwwroot\js\form-validation.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KBRocket.ElectonParts\KBRocket.ElectonParts.csproj" />
   </ItemGroup>
 
 

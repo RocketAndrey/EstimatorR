@@ -324,11 +324,14 @@ namespace Estimator.Helpers
                 for (int row = _selRow - 2; row <= rowCount; row++)
                 {
                     IRow row_Line = worksheet.GetRow(row);
+
                     if (row_Line.GetCell(_selName - 1) != null)
                     {
 
                         int tmp_VniirId;
 
+                        //проверяем не кончились ли имена?
+                        if (string.IsNullOrEmpty (row_Line.GetCell(_selName - 1).ToString())) { break; }
                         //Проверка на существоание компании в "Справочнике ВНИИР"
                         if (context.DirVniir.FirstOrDefault(x => x.Name == row_Line.GetCell(_selName - 1).ToString()) != null)
                             tmp_VniirId = context.DirVniir.FirstOrDefault(x => x.Name == row_Line.GetCell(_selName - 1).ToString()).Id;
@@ -337,12 +340,12 @@ namespace Estimator.Helpers
                         int tmp_SD;
                         if (_selStandartDelivery == 0)
                             tmp_SD = 1;
-                        else int.TryParse(row_Line.GetCell(_selStandartDelivery - 1).ToString(), out tmp_SD);
+                        else int.TryParse(row_Line.GetCell(_selStandartDelivery - 1)?.ToString(), out tmp_SD);
 
                         int tmp_SP;
                         if (_selStandartPack == 0)
                             tmp_SP = 1;
-                        else int.TryParse(row_Line.GetCell(_selStandartPack - 1).ToString(), out tmp_SP);
+                        else int.TryParse(row_Line.GetCell(_selStandartPack - 1)?.ToString(), out tmp_SP);
 
                         double tmp_Price;
                         if (row_Line.GetCell(_selCost - 1).CellType == CellType.Formula)

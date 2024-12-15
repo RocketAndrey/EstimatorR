@@ -96,22 +96,25 @@ namespace Estimator.Pages.Price
                 ErrorMessage = GetModelStateErrors (ModelState);   
                 return Page();
             }
-            if (PriceList.Manufacture == null)
-            {
-                PriceList.Manufacture = new(); 
-                PriceList.Manufacture.Id = PriceList.CompanyId;
-            }
+            //if (PriceList.Manufacture == null)
+            //{
+            //    PriceList.Manufacture = new(); 
+               
+            //}
+            //
 
             if (PriceList.PriceListId == 0)
             {
 
-                PriceList.CompanyId = PriceList.Manufacture.Id;
+                //PriceList.CompanyId = PriceList.Manufacture.Id;
 
                 _context.PriceLists.Add(PriceList);
             }
             else
             {
+                PriceList.Manufacture.Id = PriceList.CompanyId;
                 PriceList.PriceItemType.PriceItemTypeID = PriceList.PriceItemTypeID;
+
                 _context.Attach(PriceList).State = EntityState.Modified;
         }
             try

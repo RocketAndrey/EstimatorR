@@ -5,17 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using Estimator.Models.ViewModels;
-using Estimator.Helpers;
-using System;
-using Estimator.Models;
-using System.Collections.Generic;
-
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-
-using Microsoft.AspNetCore.Authorization;
-using System.Diagnostics;
+using KBRocket.Text;
 
 
 namespace Estimator.Pages.Price

@@ -13,7 +13,8 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Estimator.Models.AsuViews;
-using Estimator.Migrations;
+using KBRocket.Text;
+
 
 namespace Estimator.Pages.CustomerRequests
 

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
-using Estimator.Migrations;
-using Estimator.Helpers;
+using KBRocket.Text;
+
 
 namespace Estimator.Pages.ElementKey
 {

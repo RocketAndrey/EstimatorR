@@ -5,6 +5,13 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Estimator", "Estimator.csproj", "{9101FA48-11ED-4DD7-A345-FE94A5974F81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KBRocket.ElectonParts", "..\KBRocket.ElectonParts\KBRocket.ElectonParts.csproj", "{B04BAF87-44C4-418B-A9FD-14900DF1202A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E88F714A-0BE3-497B-AC73-0E2FC64C4C3B} = {E88F714A-0BE3-497B-AC73-0E2FC64C4C3B}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KBRocket.Text", "..\KBRocket.Text\KBRocket.Text.csproj", "{E88F714A-0BE3-497B-AC73-0E2FC64C4C3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,14 @@ Global
 		{9101FA48-11ED-4DD7-A345-FE94A5974F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9101FA48-11ED-4DD7-A345-FE94A5974F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9101FA48-11ED-4DD7-A345-FE94A5974F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04BAF87-44C4-418B-A9FD-14900DF1202A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04BAF87-44C4-418B-A9FD-14900DF1202A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04BAF87-44C4-418B-A9FD-14900DF1202A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04BAF87-44C4-418B-A9FD-14900DF1202A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E88F714A-0BE3-497B-AC73-0E2FC64C4C3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E88F714A-0BE3-497B-AC73-0E2FC64C4C3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E88F714A-0BE3-497B-AC73-0E2FC64C4C3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E88F714A-0BE3-497B-AC73-0E2FC64C4C3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

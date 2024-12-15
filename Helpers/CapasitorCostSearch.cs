@@ -20,8 +20,8 @@ using NPOI.SS.Formula.Functions;
 using Microsoft.IdentityModel.Tokens;
 using NPOI.XSSF.Streaming.Values;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Estimator.Models.Elements;
-
+using KBRocket.ElectronParts;
+using KBRocket.Text; 
 
 namespace Estimator.Helpers
 {
